@@ -18,18 +18,23 @@
 	
 	<form class="vote" action="<?php echo $html->url(array('controller' => 'Votes', 'action' => 'confirm'));?>" method="post">
 		<input type="hidden" name="votes_step" value="review" />
+<?php 	if (count($votes) > 0) { ?>
 		<ul>
-<?php 	foreach ($votes as $vote) {
-			$proposal = $proposals[$vote->getProposalId()];
-			$id = $proposal->getId();
-			$selected = Vote::isVoted($proposal)?'checked="checked"':''; ?>
+<?php 		foreach ($votes as $vote) {
+				$proposal = $proposals[$vote->getProposalId()];
+				$id = $proposal->getId();
+				$selected = Vote::isVoted($proposal)?'checked="checked"':''; ?>
 			<li>
-				<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> /><label for="proposal<?php echo $id; ?>"><?php echo $proposal->getLabel(); ?></label>
+				<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> />
+				<label for="proposal<?php echo $id; ?>"><?php echo $proposal->getLabel(); ?></label>
 			</li>
-<?php 	} ?>
+<?php 		} ?>
 		</ul>
+<?php 	} else { ?>
+		<p>Nenhuma proposta selecionada.</p>
+<?php 	} ?>
 	
 		<button type="button" class="back">Voltar</button>
-		<button type="submit">Próximo</button>
+		<button type="submit">Confirmar</button>
 	</form>
 <?php endblock() ?>
