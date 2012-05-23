@@ -2,7 +2,7 @@
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
 <?php startblock('main'); ?>
 	<h1>Cédula de Votação : Passo <?php echo $step; ?></h1>
-	
+
 	<form class="vote" action="<?php echo $nextURL;?>" method="post">
 		<input type="hidden" name="votes_step" value="<?php echo $step; ?>" />
 		<ul>

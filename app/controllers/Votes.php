@@ -13,6 +13,8 @@ class Votes extends AppController {
 	}
 	
 	public static function step() {
+		self::registerVotes();
+		
 		$step = self::getParam('step');
 		$page = Proposal::getStep($step);
 		$nextStep = $page['pages']==$step?NULL:$step+1;
@@ -29,12 +31,12 @@ class Votes extends AppController {
 		self::setJavascriptVar('nextStep', $nextStep);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step - 1)));
 		
-		self::registerVotes();
-		
 		self::render(compact('step', 'proposals', 'nextURL'));
 	}
 	
 	public static function review() {
+		self::registerVotes();
+		
 		$html = new HTMLHelper();
 		
 		$step1 = Proposal::getStep(1);
@@ -43,8 +45,6 @@ class Votes extends AppController {
 		
 		self::setJavascriptVar('previousStep', $step1['pages']);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step1['pages'])));
-		
-		self::registerVotes();
 		
 		$proposals = array();
 		foreach ($proposalsS as $proposal) {
@@ -66,14 +66,22 @@ class Votes extends AppController {
 		if (is_numeric($previousStep)) {
 			$options = Proposal::getStep($previousStep);
 			$options = $options['content'];
-		} else
+			
+			foreach ($options as $proposal) {
+				if (array_search($proposal->getId(), $selected) !== FALSE)
+					Vote::addVote($proposal->getId());
+				else
+					Vote::remVote($proposal->getId());
+			}
+		} else {
 			$options = Vote::getSessionVotes();
-		
-		foreach ($options as $proposal) {
-			if (array_search($proposal->getId(), $selected) !== FALSE)
-				Vote::addVote($proposal->getId());
-			else
-				Vote::remVote($proposal->getId());
+			
+			foreach ($options as $proposal) {
+				if (array_search($proposal->getProposalId(), $selected) !== FALSE)
+					Vote::addVote($proposal->getProposalId());
+				else
+					Vote::remVote($proposal->getProposalId());
+			}
 		}
 		
 	}
