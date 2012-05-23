@@ -1,0 +1,80 @@
+<?php
+class Votes extends AppController {
+	public static function start() {
+		$proposals = Proposal::getShuffledProposals();
+		
+		self::render(compact('proposals'));
+	}
+	
+	public static function step() {
+		$step = self::getParam('step');
+		$page = Proposal::getStep($step);
+		$nextStep = $page['pages']==$step?NULL:$step+1;
+		$proposals = $page['content'];
+		
+		$html = new HTMLHelper();
+		
+		if (!is_null($nextStep))
+			$nextURL = $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $nextStep));
+		else
+			$nextURL = $html->url(array('controller' => 'Votes', 'action' => 'review'));
+		
+		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
+		self::addJavascript('/js/vote.js');
+		self::setJavascriptVar('previousStep', $step-1);
+		self::setJavascriptVar('nextStep', $nextStep);
+		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step - 1)));
+		
+		if (self::isPost()) {
+			$previousStep = self::getParam('votes_step');
+			$selected = self::getParam('selected');
+			if (is_null($selected)) $selected = array();
+			
+			$previousProposals = Proposal::getStep($previousStep);
+			self::registerVotes($previousProposals['content'], $selected);
+		}
+		
+		self::render(compact('step', 'proposals', 'nextURL'));
+	}
+	
+	public static function review() {
+		$html = new HTMLHelper();
+		
+		$step1 = Proposal::getStep(1);
+		$proposalsS = Proposal::getShuffledProposals();
+		$votes = Vote::getSessionVotes();
+		
+		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
+		self::addJavascript('/js/vote.js');
+		self::setJavascriptVar('previousStep', $step1['pages']);
+		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step1['pages'])));
+		
+		if (self::isPost()) {
+			$previousStep = self::getParam('votes_step');
+			if (!is_null($previousStep)) {
+				$selected = self::getParam('selected');
+				if (is_null($selected)) $selected = array();
+					
+				$previousProposals = Proposal::getStep($previousStep);
+				self::registerVotes($previousProposals['content'], $selected);
+			}
+		}
+		
+		$proposals = array();
+		foreach ($proposalsS as $proposal) {
+			$proposals[$proposal->getId()] = $proposal;
+		}
+		
+		self::render(compact('votes', 'proposals'));
+	}
+	
+	private static function registerVotes($options, $selected = array()) {
+		
+		foreach ($options as $proposal) {
+			if (array_search($proposal->getId(), $selected) !== FALSE)
+				Vote::addVote($proposal->getId());
+			else
+				Vote::remVote($proposal->getId());
+		}
+	}
+}
