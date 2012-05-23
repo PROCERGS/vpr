@@ -4,6 +4,7 @@
 	<h1>Cédula de Votação : Verificação</h1>
 	
 	<form class="vote" action="<?php echo $html->url(array('controller' => 'Votes', 'action' => 'confirm'));?>" method="post">
+		<input type="hidden" name="votes_step" value="review" />
 		<ul>
 <?php 	foreach ($votes as $vote) {
 			$proposal = $proposals[$vote->getProposalId()];

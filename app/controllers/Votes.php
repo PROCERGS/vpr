@@ -1,5 +1,11 @@
 <?php
 class Votes extends AppController {
+	
+	protected static function setDefaultJavascripts() {
+		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
+		self::addJavascript('/js/vote.js');
+	}
+	
 	public static function start() {
 		$proposals = Proposal::getShuffledProposals();
 		
@@ -19,20 +25,11 @@ class Votes extends AppController {
 		else
 			$nextURL = $html->url(array('controller' => 'Votes', 'action' => 'review'));
 		
-		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
-		self::addJavascript('/js/vote.js');
 		self::setJavascriptVar('previousStep', $step-1);
 		self::setJavascriptVar('nextStep', $nextStep);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step - 1)));
 		
-		if (self::isPost()) {
-			$previousStep = self::getParam('votes_step');
-			$selected = self::getParam('selected');
-			if (is_null($selected)) $selected = array();
-			
-			$previousProposals = Proposal::getStep($previousStep);
-			self::registerVotes($previousProposals['content'], $selected);
-		}
+		self::registerVotes();
 		
 		self::render(compact('step', 'proposals', 'nextURL'));
 	}
@@ -44,21 +41,10 @@ class Votes extends AppController {
 		$proposalsS = Proposal::getShuffledProposals();
 		$votes = Vote::getSessionVotes();
 		
-		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
-		self::addJavascript('/js/vote.js');
 		self::setJavascriptVar('previousStep', $step1['pages']);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step1['pages'])));
 		
-		if (self::isPost()) {
-			$previousStep = self::getParam('votes_step');
-			if (!is_null($previousStep)) {
-				$selected = self::getParam('selected');
-				if (is_null($selected)) $selected = array();
-					
-				$previousProposals = Proposal::getStep($previousStep);
-				self::registerVotes($previousProposals['content'], $selected);
-			}
-		}
+		self::registerVotes();
 		
 		$proposals = array();
 		foreach ($proposalsS as $proposal) {
@@ -68,7 +54,20 @@ class Votes extends AppController {
 		self::render(compact('votes', 'proposals'));
 	}
 	
-	private static function registerVotes($options, $selected = array()) {
+	private static function registerVotes() {
+		if (!self::isPost()) return;
+		
+		$previousStep = self::getParam('votes_step');
+		if (is_null($previousStep)) return;
+		
+		$selected = self::getParam('selected');
+		if (is_null($selected)) $selected = array();
+		
+		if (is_numeric($previousStep)) {
+			$options = Proposal::getStep($previousStep);
+			$options = $options['content'];
+		} else
+			$options = Vote::getSessionVotes();
 		
 		foreach ($options as $proposal) {
 			if (array_search($proposal->getId(), $selected) !== FALSE)
@@ -76,5 +75,6 @@ class Votes extends AppController {
 			else
 				Vote::remVote($proposal->getId());
 		}
+		
 	}
 }

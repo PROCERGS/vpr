@@ -9,8 +9,9 @@ class AppController extends Controller {
 	}
 	
 	public static function before() {
-		self::setDefaultStylesheets();
-		self::setDefaultJavascripts();
+		$class = get_called_class();
+		$class::setDefaultStylesheets();
+		$class::setDefaultJavascripts();
 	}
 	
 	public static function beforeRender($values = array()) {
