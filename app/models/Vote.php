@@ -3,6 +3,11 @@ class Vote extends Model {
 	protected $id;
 	protected $proposal_id;
 	
+	/**
+	 * @return Vote
+	 */
+	public static function cast($o) { return $o; }
+	
 	public static function getSessionVotes() {
 		$votes = Session::get('votes');
 		if (is_null($votes)) {

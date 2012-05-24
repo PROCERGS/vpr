@@ -3,6 +3,11 @@ class Proposal extends Model {
 	protected $id;
 	protected $label;
 	
+	/**
+	 * @return Proposal
+	 */
+	public static function cast($o) { return $o; }
+	
 	private static function getShuffled() {
 		$proposals = Proposal::findAll();
 		shuffle($proposals);

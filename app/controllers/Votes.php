@@ -2,17 +2,21 @@
 class Votes extends AppController {
 	
 	protected static function setDefaultJavascripts() {
+		parent::setDefaultJavascripts();
 		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
 		self::addJavascript('/js/vote.js');
 	}
 	
 	public static function start() {
+		Voter::requireCurrentUser();
 		$proposals = Proposal::getShuffledProposals();
 		
 		self::render(compact('proposals'));
 	}
 	
 	public static function step() {
+		$currentUser = Voter::requireCurrentUser();
+		
 		self::registerVotes();
 		
 		$step = self::getParam('step');
@@ -35,6 +39,8 @@ class Votes extends AppController {
 	}
 	
 	public static function review() {
+		$currentUser = Voter::requireCurrentUser();
+		
 		self::registerVotes();
 		
 		$html = new HTMLHelper();

@@ -1,4 +1,4 @@
 <?php
 PDOUtils::setDefaultDatabase('pvp');
 
-Config::set('votes.pageSize', 5);
+Config::set('votes.pageSize', 15);
