@@ -12,6 +12,9 @@ class AppController extends Controller {
 		$class = get_called_class();
 		$class::setDefaultStylesheets();
 		$class::setDefaultJavascripts();
+		
+		$detector = new Mobile_Detect();
+		Config::set('isMobile', $detector->isMobile());
 	}
 	
 	public static function beforeRender($values = array()) {
