@@ -22,8 +22,11 @@ class AppController extends Controller {
 		$isMobile = $detector->isMobile();
 		$subDomainMobile = Util::startsWith($_SERVER['HTTP_HOST'], 'm.');
 		
-		if ($isMobile || $subDomainMobile)
+		Session::set('detector', $detector);
+		if ($isMobile || $subDomainMobile) {
+			Config::set('isMobile', TRUE);
 			Config::set('votes.pageSize', 5);
+		}
 	}
 	
 	public static function beforeRender($values = array()) {
@@ -35,7 +38,8 @@ class AppController extends Controller {
 			$values = array_merge($values, compact('currentUser'));
 		
 		$html = new HTMLHelper();
-		$values = array_merge($values, compact('html', 'currentUser'));
+		$detector = Session::get('detector');
+		$values = array_merge($values, compact('html', 'detector'));
 		
 		return $values;
 	}

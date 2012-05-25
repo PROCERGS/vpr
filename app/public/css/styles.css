@@ -6,6 +6,8 @@
 		
 	}
 	
+	ul { list-style: none; }
+	
 	input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 	form label[for=titulo]:after { content: ':'; }
 	
@@ -20,7 +22,25 @@
 		
 	}
 	
+	.row.header { background-color: #ddd; }
+	
+	h1 { font-size: 80%; text-align: center; }
+	h2 { font-size: 100%; margin-bottom: 10px; }
+	
 	form label[for=titulo]:after { content: none; }
+	
+	form.vote li { margin: 5px 0; }
+	form.vote li label { display: block; border-bottom: 1px solid #aaa; }
+	form.vote li:last-child label { border-bottom: none; }
+	form.vote li input[type=checkbox] { display: none; }
+	form.vote li input[type=checkbox]:checked + label { background-color: #eee; color: inherit; }
+	form.vote li input[type=checkbox] + label { padding: 10px; }
+	
+	form.vote button { width: 40%; padding: 10px 0; }
+	form.vote button[type=submit] { float: right; }
+	
+	form.vote.review li input[type=checkbox]:checked + label { background-color: #A6D392; }
+	form.vote.review li input[type=checkbox] + label { background-color: #F28D8D; color: #666; }
 
 }
 
@@ -35,5 +55,27 @@
 		background: url(logo2x.jpg) no-repeat;
 		background-size: 212px 303px;
 	}*/
-
+	
+	body { }
+	
+	.row.header { background-color: #ddd; }
+	
+	h1 { font-size: 80%; text-align: center; }
+	h2 { font-size: 100%; margin-bottom: 10px; }
+	
+	form label[for=titulo]:after { content: none; }
+	
+	form.vote li { margin: 5px 0; }
+	form.vote li label { display: block; border-bottom: 1px solid #aaa; }
+	form.vote li:last-child label { border-bottom: none; }
+	form.vote li input[type=checkbox] { display: none; }
+	form.vote li input[type=checkbox]:checked + label { background-color: #eee; color: inherit; }
+	form.vote li input[type=checkbox] + label { padding: 10px; }
+	
+	form.vote button { width: 40%; height: 1cm; }
+	form.vote button[type=submit] { float: right; }
+	
+	form.vote.review li input[type=checkbox]:checked + label { background-color: #A6D392; }
+	form.vote.review li input[type=checkbox] + label { background-color: #F28D8D; color: #666; }
+	
 }

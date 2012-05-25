@@ -3,7 +3,7 @@
 <?php startblock('main'); ?>
 <div class="row">
 	<div class="twelvecol last">
-		<h1>Cédula de Votação : Verificação</h1>
+		<h2>Verificação do Voto</h2>
 
 <?php 	$exceeded = '';
 		if (count($votes) > 5) {
@@ -22,7 +22,7 @@
 
 <div class="row">
 	<div class="twelvecol last">
-		<form class="vote" action="<?php echo $html->url(array('controller' => 'Votes', 'action' => 'confirm'));?>" method="post">
+		<form class="vote review" action="<?php echo $html->url(array('controller' => 'Votes', 'action' => 'confirm'));?>" method="post">
 			<input type="hidden" name="votes_step" value="review" />
 <?php 	if (count($votes) > 0) { ?>
 			<ul>
