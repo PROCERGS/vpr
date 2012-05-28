@@ -23,6 +23,7 @@ class Votes extends AppController {
 		$page = Proposal::getStep($step);
 		$nextStep = $page['pages']==$step?NULL:$step+1;
 		$proposals = $page['content'];
+		$totalSteps = $page['pages'];
 		
 		$html = new HTMLHelper();
 		
@@ -34,8 +35,9 @@ class Votes extends AppController {
 		self::setJavascriptVar('previousStep', $step-1);
 		self::setJavascriptVar('nextStep', $nextStep);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step - 1)));
+		self::setJavascriptVar('reviewURL', $nextURL = $html->url(array('controller' => 'Votes', 'action' => 'review'))); 
 		
-		self::render(compact('step', 'proposals', 'nextURL'));
+		self::render(compact('step', 'proposals', 'nextURL', 'totalSteps'));
 	}
 	
 	public static function review() {

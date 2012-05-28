@@ -13,6 +13,10 @@ $(document).ready(function() {
 		});
 	}
 	
+	$("button.finish").on('click', function(event) {
+		$("form.vote").attr('action', reviewURL).submit();
+	});
+	
 	if (previousStep > 0)
 		$("button.back").on('click', function(event) {
 			$("form.vote").attr('action', previousStepURL).submit();
