@@ -1,9 +1,8 @@
 <?php
 class VoteRegistry extends Model {
 
-	protected static $__schema = pvp;
+	protected static $__schema = 'pvp';
 
-	protected $__schema = 'pvp';
 	protected $vote_registry_id;
 	protected $voter_id;
 	protected $group_id;

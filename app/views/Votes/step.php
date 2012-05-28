@@ -19,7 +19,7 @@
 				<legend>Propostas Disponíveis</legend>
 				<ul>
 <?php 	foreach ($proposals as $proposal) {
-			$id = $proposal->getId();
+			$id = $proposal->getOptionId();
 			$selected = Vote::isVoted($proposal)?'checked="checked"':''; ?>
 					<li>
 						<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> /><label for="proposal<?php echo $id; ?>"><?php echo $proposal->getLabel(); ?></label>

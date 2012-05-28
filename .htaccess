@@ -1,0 +1,8 @@
+php_value session.save_handler memcached
+php_value session.save_path "localhost:11211"
+php_value session.hash_strategy "consistent"
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]

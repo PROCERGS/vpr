@@ -6,7 +6,7 @@
 		<h2>Verificação do Voto</h2>
 
 <?php 	$exceeded = '';
-		if (count($votes) > 5) {
+		if (count($votes) > $group->getMaxSelections()) {
 			$exceeded = " e remova propostas excedentes"; ?>
 		<div class="error">
 			<p>Você precisa escolher, <strong>no máximo</strong>, 5 propostas para votar.</p>
@@ -27,8 +27,8 @@
 <?php 	if (count($votes) > 0) { ?>
 			<ul>
 <?php 		foreach ($votes as $vote) {
-				$proposal = $proposals[$vote->getProposalId()];
-				$id = $proposal->getId();
+				$proposal = $proposals[$vote->getOptionId()];
+				$id = $proposal->getOptionId();
 				$selected = Vote::isVoted($proposal)?'checked="checked"':''; ?>
 				<li>
 					<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> />

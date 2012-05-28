@@ -9,18 +9,20 @@ class Votes extends AppController {
 	
 	public static function start() {
 		Voter::requireCurrentUser();
-		$proposals = Proposal::getShuffledProposals();
 		
-		self::render(compact('proposals'));
+		$group = Group::getCurrentGroup();
+		
+		self::render();
 	}
 	
 	public static function step() {
 		$currentUser = Voter::requireCurrentUser();
+		$group = Group::getCurrentGroup();
 		
 		self::registerVotes();
 		
 		$step = self::getParam('step');
-		$page = Proposal::getStep($step);
+		$page = $group->getStep($step);
 		$nextStep = $page['pages']==$step?NULL:$step+1;
 		$proposals = $page['content'];
 		$totalSteps = $page['pages'];
@@ -35,20 +37,21 @@ class Votes extends AppController {
 		self::setJavascriptVar('previousStep', $step-1);
 		self::setJavascriptVar('nextStep', $nextStep);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step - 1)));
-		self::setJavascriptVar('reviewURL', $nextURL = $html->url(array('controller' => 'Votes', 'action' => 'review'))); 
+		self::setJavascriptVar('reviewURL', $html->url(array('controller' => 'Votes', 'action' => 'review'))); 
 		
 		self::render(compact('step', 'proposals', 'nextURL', 'totalSteps'));
 	}
 	
 	public static function review() {
 		$currentUser = Voter::requireCurrentUser();
+		$group = Group::getCurrentGroup();
 		
 		self::registerVotes();
 		
 		$html = new HTMLHelper();
 		
-		$step1 = Proposal::getStep(1);
-		$proposalsS = Proposal::getShuffledProposals();
+		$step1 = $group->getStep(1);
+		$proposalsS = $group->getShuffledOptions();
 		$votes = Vote::getSessionVotes();
 		
 		self::setJavascriptVar('previousStep', $step1['pages']);
@@ -56,14 +59,16 @@ class Votes extends AppController {
 		
 		$proposals = array();
 		foreach ($proposalsS as $proposal) {
-			$proposals[$proposal->getId()] = $proposal;
+			$proposals[$proposal->getOptionId()] = $proposal;
 		}
 		
-		self::render(compact('votes', 'proposals'));
+		self::render(compact('votes', 'proposals', 'group'));
 	}
 	
 	private static function registerVotes() {
 		if (!self::isPost()) return;
+		
+		$group = Group::getCurrentGroup();
 		
 		$previousStep = self::getParam('votes_step');
 		if (is_null($previousStep)) return;
@@ -72,23 +77,23 @@ class Votes extends AppController {
 		if (is_null($selected)) $selected = array();
 		
 		if (is_numeric($previousStep)) {
-			$options = Proposal::getStep($previousStep);
+			$options = $group->getStep($previousStep);
 			$options = $options['content'];
 			
 			foreach ($options as $proposal) {
-				if (array_search($proposal->getId(), $selected) !== FALSE)
-					Vote::addVote($proposal->getId());
+				if (array_search($proposal->getOptionId(), $selected) !== FALSE)
+					Vote::addVote($proposal->getOptionId());
 				else
-					Vote::remVote($proposal->getId());
+					Vote::remVote($proposal->getOptionId());
 			}
 		} else {
 			$options = Vote::getSessionVotes();
 			
 			foreach ($options as $proposal) {
-				if (array_search($proposal->getProposalId(), $selected) !== FALSE)
-					Vote::addVote($proposal->getProposalId());
+				if (array_search($proposal->getOptionId(), $selected) !== FALSE)
+					Vote::addVote($proposal->getOptionId());
 				else
-					Vote::remVote($proposal->getProposalId());
+					Vote::remVote($proposal->getOptionId());
 			}
 		}
 		

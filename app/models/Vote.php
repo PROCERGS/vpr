@@ -1,7 +1,7 @@
 <?php
 class Vote extends Model {
 	protected $id;
-	protected $proposal_id;
+	protected $option_id;
 	
 	/**
 	 * @return Vote
@@ -17,29 +17,29 @@ class Vote extends Model {
 		return $votes;
 	}
 	
-	public static function isVoted($proposal) {
+	public static function isVoted($option) {
 		$votes = self::getSessionVotes();
-		if (is_object($proposal))
-			$voted = isset($votes[$proposal->getId()]) && $votes[$proposal->getId()] instanceof Vote;
+		if (is_object($option))
+			$voted = isset($votes[$option->getOptionId()]) && $votes[$option->getOptionId()] instanceof Vote;
 		else
-			$voted = isset($votes[$proposal]) && $votes[$proposal] instanceof Vote;
+			$voted = isset($votes[$option]) && $votes[$option] instanceof Vote;
 		
 		return $voted;
 	}
-	public static function addVote($proposal_id) {
-		if (!self::isVoted($proposal_id)) {
+	public static function addVote($option_id) {
+		if (!self::isVoted($option_id)) {
 			$votes = self::getSessionVotes();
 			$vote = new Vote();
-			$vote->setProposalId($proposal_id);
-			$votes[$proposal_id] = $vote;
+			$vote->setOptionId($option_id);
+			$votes[$option_id] = $vote;
 			
 			Session::set('votes', $votes);
 		}
 	}
-	public static function remVote($proposal_id) {
-		if (self::isVoted($proposal_id)) {
+	public static function remVote($option_id) {
+		if (self::isVoted($option_id)) {
 			$votes = self::getSessionVotes();
-			unset($votes[$proposal_id]);
+			unset($votes[$option_id]);
 			Session::set('votes', $votes);
 		}
 	}
