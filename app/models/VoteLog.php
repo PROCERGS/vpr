@@ -8,6 +8,7 @@ class VoteLog extends Model {
 	protected $group_id;
 	protected $start;
 	protected $finish;
+	protected $ip;
 
 	/**
 	 * @return VoteLog
@@ -20,6 +21,7 @@ class VoteLog extends Model {
 		$voteLog->setGroupId($group_id);
 		$voteLog->setVoterId($voter_id);
 		$voteLog->setStart(new DateTime());
+		$voteLog->setIp($_SERVER['REMOTE_ADDR']);
 		
 		$logId = $voteLog->insert();
 		$voteLog = reset(VoteLog::findByVoteLogId($logId));
