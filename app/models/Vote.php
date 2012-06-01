@@ -8,6 +8,10 @@ class Vote extends Model {
 	 */
 	public static function cast($o) { return $o; }
 	
+	public static function resetVotes() {
+		Session::delete('votes');
+	}
+	
 	public static function getSessionVotes() {
 		$votes = Session::get('votes');
 		if (is_null($votes)) {

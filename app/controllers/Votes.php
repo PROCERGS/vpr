@@ -8,9 +8,12 @@ class Votes extends AppController {
 	}
 	
 	public static function start() {
-		Voter::requireCurrentUser();
+		$voter = Voter::requireCurrentUser();
 		
+		Vote::resetVotes();
 		$group = Group::getCurrentGroup();
+		$voteLog = VoteLog::start($voter->getVoterId(), $group->getGroupId());
+		Session::set('voteLog', $voteLog);
 		
 		self::render();
 	}
@@ -54,6 +57,12 @@ class Votes extends AppController {
 		$proposalsS = $group->getShuffledOptions();
 		$votes = Vote::getSessionVotes();
 		
+		$next_group = $group->getNextGroup();
+		if ($next_group instanceof Group)
+			$next_group = TRUE;
+		else
+			$next_group = FALSE;
+		
 		self::setJavascriptVar('previousStep', $step1['pages']);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Votes', 'action' => 'step', 'step' => $step1['pages'])));
 		
@@ -62,7 +71,24 @@ class Votes extends AppController {
 			$proposals[$proposal->getOptionId()] = $proposal;
 		}
 		
-		self::render(compact('votes', 'proposals', 'group'));
+		self::render(compact('votes', 'proposals', 'group', 'next_group'));
+	}
+	
+	public static function confirm() {
+		$currentUser = Voter::requireCurrentUser();
+		$group = Group::getCurrentGroup();
+		
+		self::registerVotes();
+		
+		$voteLog = VoteLog::cast(Session::get('voteLog'));
+		$voteLog->setFinish(new DateTime());
+		$voteLog->update();
+		
+		$next_group = $group->getNextGroup(TRUE);
+		if ($next_group instanceof Group)
+			self::redirect(array('controller' => 'Votes', 'action' => 'start'));
+		else
+			echo "FIM";
 	}
 	
 	private static function registerVotes() {

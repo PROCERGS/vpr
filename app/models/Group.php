@@ -56,10 +56,22 @@ class Group extends Model {
 		}
 	}
 	
-	public static function findByActiveGroupId($group_id) {
+	public static function findStartGroup() {
 		$sql = GroupQueries::SQL_FIND_START_GROUP;
 		$query = PDOUtils::getConn()->prepare($sql);
-		$query->bindValue('group_id', $group_id);
+		if ($query->execute() === TRUE) {
+			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+			if (count($result) > 0)
+				return $result;
+			else return array();
+		} else
+			return array();
+	}
+	
+	public static function findNextGroup($current_sequence) {
+		$sql = GroupQueries::SQL_FIND_NEXT_GROUP;
+		$query = PDOUtils::getConn()->prepare($sql);
+		$query->bindValue('sequence', $current_sequence);
 		if ($query->execute() === TRUE) {
 			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
 			if (count($result) > 0)
@@ -74,11 +86,22 @@ class Group extends Model {
 	 */
 	public static function getCurrentGroup() {
 		if (is_null(Session::get('currentGroup'))) {
-			$group = Group::cast(Group::findByActiveGroupId(0));
+			$group = Group::cast(Group::findStartGroup(0));
 			if (count($group) > 0)
 				Session::set('currentGroup', reset($group));
 		}
 		return Session::get('currentGroup');
 	}
 	
+	public function getNextGroup($updateSession = FALSE) {
+		$next_group = self::findNextGroup($this->getSequence());
+		
+		if (count($next_group) > 0) {
+			$next_group = reset($next_group);
+			if ($updateSession)
+				Session::set('currentGroup', $next_group);
+		} else
+			$next_group = NULL;
+		return $next_group;
+	}
 }

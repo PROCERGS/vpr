@@ -41,7 +41,7 @@
 <?php 	} ?>
 	
 			<button type="button" class="back">Voltar</button>
-			<button type="submit">Confirmar</button>
+			<button type="submit">Confirmar<?php echo $next_group?' e continuar votação':''; ?></button>
 		</form>
 	</div>
 </div>
