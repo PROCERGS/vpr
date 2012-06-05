@@ -8,15 +8,11 @@ class Vote extends Model {
 	 */
 	public static function cast($o) { return $o; }
 	
-	public static function resetVotes() {
-		Session::delete('votes');
-	}
-	
 	public static function getSessionVotes() {
-		$votes = Session::get('votes');
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$votes = $votingSession->getVotes();
 		if (is_null($votes)) {
-			$votes = array();
-			Session::set('votes', $votes);
+			$votingSession->setVotes(array());
 		}
 		return $votes;
 	}
@@ -37,14 +33,19 @@ class Vote extends Model {
 			$vote->setOptionId($option_id);
 			$votes[$option_id] = $vote;
 			
-			Session::set('votes', $votes);
+			self::setVotes($votes);
 		}
 	}
 	public static function remVote($option_id) {
 		if (self::isVoted($option_id)) {
 			$votes = self::getSessionVotes();
 			unset($votes[$option_id]);
-			Session::set('votes', $votes);
+			self::setVotes($votes);
 		}
+	}
+	
+	private static function setVotes($votes) {
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$votingSession->setVotes($votes);
 	}
 }

@@ -85,7 +85,8 @@ class Group extends Model {
 	 * @return Group
 	 */
 	public static function getCurrentGroup() {
-		if (is_null(Session::get('currentGroup'))) {
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		if (is_null($votingSession->getCurrentGroup())) {
 			$group = Group::cast(Group::findStartGroup(0));
 			if (count($group) > 0)
 				Session::set('currentGroup', reset($group));
@@ -103,5 +104,19 @@ class Group extends Model {
 		} else
 			$next_group = NULL;
 		return $next_group;
+	}
+	
+	public static function findNextAvailableGroup() {
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$sql = GroupQueries::SQL_FIND_NEXT_AVAILABLE_GROUP;
+		$query = PDOUtils::getConn()->prepare($sql);
+		$query->bindValue('voter_id', $votingSession->requireCurrentUser()->getVoterId());
+		if ($query->execute() === TRUE) {
+			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+			if (count($result) > 0)
+				return $result;
+			else return array();
+		} else
+			return array();
 	}
 }

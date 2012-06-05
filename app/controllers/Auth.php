@@ -8,7 +8,9 @@ class Auth extends AppController {
 			$voter = Voter::auth($voter->getVoterRegistration(), $voter->getBirthDate());
 			
 			if ($voter instanceof Voter) {
-				Session::set('currentUser', $voter);
+				$votingSession = new VotingSession();
+				$votingSession->setCurrentUser($voter);
+				//Session::set('currentUser', $voter);
 				self::redirect(array('controller' => 'Votes', 'action' => 'start'));
 			} else
 				echo "Acesso negado!";

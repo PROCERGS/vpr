@@ -24,4 +24,17 @@ WHERE
 ORDER BY g.`sequence` ASC
 LIMIT 1
 EOD;
+	
+	const SQL_FIND_NEXT_AVAILABLE_GROUP = <<<EOD
+SELECT
+	*
+FROM
+	`group` g
+WHERE
+	g.`active` = 'Y'
+	AND (SELECT COUNT(*) FROM `option` o WHERE o.`group_id` = g.`group_id`) > 0
+	AND :voter_id NOT IN (SELECT `voter_id` FROM `vote_log` WHERE `group_id` = g.`group_id` AND `finish` IS NOT NULL)
+ORDER BY g.`sequence` ASC
+LIMIT 1
+EOD;
 }

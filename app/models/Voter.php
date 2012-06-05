@@ -14,7 +14,8 @@ class Voter extends Model {
 	public static function cast($o) { return $o; }
 	
 	public static function requireCurrentUser() {
-		$currentUser = Session::get('currentUser');
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$currentUser = $votingSession->getCurrentUser();
 		if (!($currentUser instanceof Voter)) {
 			AppController::setDestinationAfterLogin(Router::getInstance()->getFullRequestURI());
 			AppController::redirect(array('controller' => 'Auth', 'action' => 'login'));
@@ -23,7 +24,8 @@ class Voter extends Model {
 	}
 	
 	public static function isAuthenticated() {
-		$currentUser = Session::get('currentUser');
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$currentUser = $votingSession->getCurrentUser();
 	
 		return ($currentUser instanceof Voter);
 	}

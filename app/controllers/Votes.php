@@ -8,19 +8,36 @@ class Votes extends AppController {
 	}
 	
 	public static function start() {
-		$voter = Voter::requireCurrentUser();
 		
-		Vote::resetVotes();
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$votingSession->resetVotes();
+		$group = $votingSession->getCurrentGroup();
+		if (is_null($group)) {
+			$group = Group::findNextAvailableGroup();
+			$votingSession->setCurrentGroup($group);
+		}
+		$voter = $votingSession->requireCurrentUser();
+		$voteLog = $votingSession->getVoteLog();
+		if ($voteLog instanceof VoteLog) {
+			if (!is_null($voteLog->getFinish())) {
+				$votingSession->setVoteLog(VoteLog::start($voter->getVoterId(), $group->getGroupId()));
+			}
+		} else
+			$votingSession->setVoteLog(VoteLog::start($voter->getVoterId(), $group->getGroupId()));
+		
+		/*$voter = Voter::requireCurrentUser();
+		
 		$group = Group::getCurrentGroup();
 		$voteLog = VoteLog::start($voter->getVoterId(), $group->getGroupId());
-		Session::set('voteLog', $voteLog);
+		Session::set('voteLog', $voteLog);*/
 		
 		self::render();
 	}
 	
 	public static function step() {
-		$currentUser = Voter::requireCurrentUser();
-		$group = Group::getCurrentGroup();
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$currentUser = $votingSession->requireCurrentUser();
+		$group = $votingSession->getCurrentGroup();
 		
 		self::registerVotes();
 		
@@ -46,8 +63,9 @@ class Votes extends AppController {
 	}
 	
 	public static function review() {
-		$currentUser = Voter::requireCurrentUser();
-		$group = Group::getCurrentGroup();
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$currentUser = $votingSession->requireCurrentUser();
+		$group = $votingSession->getCurrentGroup();
 		
 		self::registerVotes();
 		
@@ -75,8 +93,9 @@ class Votes extends AppController {
 	}
 	
 	public static function confirm() {
-		$currentUser = Voter::requireCurrentUser();
-		$group = Group::getCurrentGroup();
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$currentUser = $votingSession->requireCurrentUser();
+		$group = $votingSession->getCurrentGroup();
 		
 		self::registerVotes();
 		
@@ -93,8 +112,8 @@ class Votes extends AppController {
 	
 	private static function registerVotes() {
 		if (!self::isPost()) return;
-		
-		$group = Group::getCurrentGroup();
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$group = $votingSession->getCurrentGroup();
 		
 		$previousStep = self::getParam('votes_step');
 		if (is_null($previousStep)) return;

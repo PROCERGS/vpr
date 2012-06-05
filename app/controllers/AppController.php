@@ -32,8 +32,11 @@ class AppController extends Controller {
 	public static function beforeRender($values = array()) {
 		$values = parent::beforeRender($values);
 		
-		
-		$currentUser = Session::get('currentUser');
+		$votingSession = VotingSession::getCurrentVotingSession();
+		if (!is_null($votingSession))
+			$currentUser = $votingSession->getCurrentUser();
+		else
+			$currentUser = NULL;
 		if (!is_null($currentUser))
 			$values = array_merge($values, compact('currentUser'));
 		
