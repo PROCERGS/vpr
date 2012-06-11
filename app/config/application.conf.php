@@ -1,4 +1,4 @@
 <?php
-PDOUtils::setDefaultDatabase('pvp');
+PDOUtils::setDefaultDatabase('seplag_vpr');
 
 Config::set('votes.pageSize', 15);

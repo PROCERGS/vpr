@@ -1,7 +1,7 @@
 <?php
-$databases['SOME_DATABASE_NAME'] = array(
-	'dsn' => 'mysql:host=example.of.mysql.dsn.com.br;dbname=SOME_DATABASE_NAME',
-	'user' => 'SOME_USER_NAME',
-	'password' => 'SOME_PASSWORD',
+$databases['seplag_vpr'] = array(
+	'dsn' => 'mysql:host=seplag_vpr.mysql-teste.procergs.reders;dbname=seplag_vpr',
+	'user' => 't_seplag_vpr_si',
+	'password' => 'vprs1!',
 	'charset' => 'latin1'
 );

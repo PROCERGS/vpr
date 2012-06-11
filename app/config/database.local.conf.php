@@ -1,6 +1,6 @@
 <?php
-$databases['pvp'] = array(
-	'dsn' => 'mysql:host=127.0.0.1;dbname=pvp',
+$databases['seplag_vpr'] = array(
+	'dsn' => 'mysql:host=localhost;dbname=seplag_vpr',
 	'user' => 'pvp',
 	'password' => 'pvp',
 	'charset' => 'latin1'
