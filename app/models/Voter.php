@@ -35,7 +35,6 @@ class Voter extends Model {
 		
 		$voter = reset(Voter::findByVoterRegistration($voter_registration));
 		if ($voter instanceof Voter) {
-			printr($voter);
 			if ($voter->getBirthDate() == $birth_date)
 				return $voter;
 		}

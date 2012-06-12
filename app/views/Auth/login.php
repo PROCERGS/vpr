@@ -6,13 +6,13 @@
 		<div class="row">
 			<div class="twelvecol last">
 				<label for="titulo">Número do Título de Eleitor</label>
-				<input type="number" name="Voter[voter_registration]" id="titulo" min="0" />
+				<input type="number" name="Cidadao[nro_titulo]" id="titulo" min="0" />
 			</div>
 		</div>
 		<div class="row">
 			<div class="twelvecol last">
-				<label for="titulo">Data de Nascimento</label>
-				<input type="date" name="Voter[birth_date]" id="titulo" min="0" />
+				<label for="titulo">Número do RG</label>
+				<input type="number" name="Cidadao[rg]" id="titulo" min="0" />
 			</div>
 		</div>
 	</fieldset>
@@ -22,4 +22,5 @@
 		</div>
 	</div>
 </form>
+<?php var_dump(Cidadao::validateRG_RS(4084575556)); ?>
 <?php endblock() ?>

@@ -7,6 +7,15 @@ class VotingSession extends Model {
 	protected $votes;
 	
 	/**
+	 * 
+	 * @param Cidadao $currentUser
+	 */
+	public function __construct($currentUser) {
+		
+		$this->setCurrentUser($currentUser);
+	}
+	
+	/**
 	 * @return VotingSession
 	 */
 	public static function getCurrentVotingSession() {

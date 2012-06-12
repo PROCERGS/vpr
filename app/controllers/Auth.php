@@ -3,15 +3,16 @@ class Auth extends AppController {
 	public static function login() {
 		if ($_POST) {
 			
-			$voter = self::getParam('Voter');
-			$voter = Voter::cast(Voter::getFromArray($voter));
-			$voter = Voter::auth($voter->getVoterRegistration(), $voter->getBirthDate());
+			$cidadao = self::getParam('Cidadao');
+			$cidadao = Cidadao::cast(Cidadao::getFromArray($cidadao));
+			$cidadao = Cidadao::auth($cidadao->getNroTitulo(), $cidadao->getRg());
 			
-			if ($voter instanceof Voter) {
+			if ($cidadao instanceof Cidadao) {
 				$votingSession = new VotingSession();
-				$votingSession->setCurrentUser($voter);
+				$votingSession->setCurrentUser($cidadao);
 				//Session::set('currentUser', $voter);
-				self::redirect(array('controller' => 'Votes', 'action' => 'start'));
+				//self::redirect(array('controller' => 'Votes', 'action' => 'start'));
+				printr($cidadao);
 			} else
 				echo "Acesso negado!";
 		}
