@@ -11,8 +11,10 @@ class VotingSession extends Model {
 	 * @param Cidadao $currentUser
 	 */
 	public function __construct($currentUser) {
-		
-		$this->setCurrentUser($currentUser);
+		if ($currentUser instanceof Cidadao)
+			$this->setCurrentUser($currentUser);
+		else
+			throw new ErrorException("Invalid Cidadao.");
 	}
 	
 	/**
@@ -30,9 +32,10 @@ class VotingSession extends Model {
 	 * @return VotingSession
 	 */
 	public static function requireCurrentVotingSession() {
-		if (!(Session::get('currentVotingSession') instanceof VotingSession)) {
-			$currentSession = new VotingSession();
-			$currentSession->save();
+		if (!(self::getCurrentVotingSession() instanceof VotingSession)) {
+			//$currentSession = new VotingSession();
+			//$currentSession->save();
+			return AppController::redirect(array('controller' => 'Auth', 'action' => 'login'));
 		}
 		return Session::get('currentVotingSession');
 	}
@@ -49,7 +52,7 @@ class VotingSession extends Model {
 	public function setCurrentGroup($group) { $this->current_group = $group; $this->save(); }
 	public function getCurrentGroup() {
 		if (is_null($this->current_group)) {
-			$group = Group::cast(Group::findNextAvailableGroup());
+			$group = GrupoDemanda::findNextAvailableGroup();
 			if (count($group) > 0)
 				$this->setCurrentGroup(reset($group));
 		}
@@ -57,10 +60,11 @@ class VotingSession extends Model {
 	}
 	
 	public function requireCurrentUser() {
-		$voter = Voter::requireCurrentUser();
-		return $voter;
+		$currentUser = $this->getCurrentUser();
+		return $currentUser instanceof Cidadao;
 	}
 	public function setCurrentUser($currentUser) {
+		$currentUser->fetchEleitorTre();
 		$this->current_user = $currentUser;
 		$this->save();
 	}

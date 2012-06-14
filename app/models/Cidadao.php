@@ -8,6 +8,8 @@ class Cidadao extends Model {
 	protected $rg;
 	protected $ds_email;
 	protected $nro_telefone;
+	private $eleitor_tre;
+	private $regiao;
 
 	/**
 	 * @return Cidadao
@@ -20,12 +22,16 @@ class Cidadao extends Model {
 			$eleitor_tre = reset(EleitorTre::findByNroTitulo($nro_titulo));
 			if ($eleitor_tre instanceof EleitorTre) {
 				$cidadao = new Cidadao();
+				$cidadao->setEleitorTre($eleitor_tre);
+				$cidadao->fetchRegiao();
 				$cidadao->setNroTitulo($eleitor_tre->getNroTitulo());
 				$cidadao->setRg($rg);
 				$cidadao->insert();
 			}
 		} elseif (count($cidadao) == 1) {
-			$cidadao = reset($cidadao);
+			$cidadao = Cidadao::cast(reset($cidadao));
+			$cidadao->fetchEleitorTre();
+			$cidadao->fetchRegiao();
 			if ($cidadao->getRg() != $rg || $cidadao->getNroTitulo() != $nro_titulo)
 				throw new DocumentsMismatchException();
 		} elseif (count($cidadao) > 1) {
@@ -84,5 +90,29 @@ class Cidadao extends Model {
 		else $dcd = 10 - $dcd;
 		
 		return ($dce == $rg[0] && $dcd == $rg[strlen($rg) - 1]);
+	}
+	
+	public function setEleitorTre($eleitor_tre) { $this->eleitor_tre = $eleitor_tre; }
+	public function getEleitorTre() { return $this->eleitor_tre; }
+	public function fetchEleitorTre() {
+		$eleitor_tre = $this->getEleitorTre();
+		if ($eleitor_tre instanceof EleitorTre)
+			return $eleitor_tre;
+		
+		$eleitor_tre = reset(EleitorTre::findByNroTitulo($this->getNroTitulo()));
+		$this->setEleitorTre($eleitor_tre);
+		return $eleitor_tre;
+	}
+	
+	public function setRegiao($regiao) { $this->regiao = $regiao; }
+	public function getRegiao() { return $this->regiao; }
+	public function fetchRegiao() {
+		$regiao = $this->getRegiao();
+		if ($regiao instanceof Regiao)
+			return $regiao;
+	
+		$regiao = reset(Regiao::findByCodMunTre($this->getEleitorTre()->getCodMunTre()));
+		$this->setRegiao($regiao);
+		return $regiao;
 	}
 }
