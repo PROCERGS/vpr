@@ -19,4 +19,19 @@ class Cedula extends Model {
 	 * @return Cedula
 	 */
 	public static function cast($o) { return $o; }
+	
+	public static function findByGrupoDemandaVotacaoRegiao($grupo_demanda, $votacao, $regiao) {
+		$query = PDOUtils::getConn()->prepare(CedulaQueries::SQL_FIND_BY_GRUPO_DEMANDA_AND_VOTACAO_AND_REGIAO);
+		$query->bindValue('grupo_demanda', $grupo_demanda);
+		$query->bindValue('votacao', $votacao);
+		$query->bindValue('regiao', $regiao);
+		
+		if ($query->execute() === TRUE) {
+			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+			if (count($result) > 0)
+				return $result;
+			else return array();
+		} else
+			return array();
+	}
 }
