@@ -88,7 +88,7 @@ class AppController extends Controller {
 		$html = new HTMLHelper();
 		$after_login = self::getDestinationAfterLogin();
 	
-		if (Voter::isAuthenticated() && $after_login !== FALSE) {
+		if (Cidadao::isAuthenticated() && $after_login !== FALSE) {
 			if (strlen($after_login) > 0) {
 				self::clearDestinationAfterLogin();
 				self::redirect($after_login);

@@ -8,11 +8,10 @@ class Auth extends AppController {
 			$cidadao = Cidadao::auth($cidadao->getNroTitulo(), $cidadao->getRg());
 			
 			if ($cidadao instanceof Cidadao) {
-				$votingSession = new VotingSession();
-				$votingSession->setCurrentUser($cidadao);
-				//Session::set('currentUser', $voter);
-				//self::redirect(array('controller' => 'Votes', 'action' => 'start'));
-				printr($cidadao);
+				$votingSession = new VotingSession($cidadao);
+				$votingSession->save();
+				printr($votingSession->getCurrentUser());
+				//self::redirect(array('controller' => 'Election', 'action' => 'start'));
 			} else
 				echo "Acesso negado!";
 		}
