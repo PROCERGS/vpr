@@ -10,8 +10,7 @@ class Auth extends AppController {
 			if ($cidadao instanceof Cidadao) {
 				$votingSession = new VotingSession($cidadao);
 				$votingSession->save();
-				printr($votingSession->getCurrentUser());
-				//self::redirect(array('controller' => 'Election', 'action' => 'start'));
+				self::redirect(array('controller' => 'Election', 'action' => 'start'));
 			} else
 				echo "Acesso negado!";
 		}
