@@ -1,7 +1,7 @@
 <?php
 class Vote extends Model {
 	protected $id;
-	protected $option_id;
+	protected $id_cedula;
 	
 	/**
 	 * @return Vote
@@ -20,7 +20,7 @@ class Vote extends Model {
 	public static function isVoted($option) {
 		$votes = self::getSessionVotes();
 		if (is_object($option))
-			$voted = isset($votes[$option->getOptionId()]) && $votes[$option->getOptionId()] instanceof Vote;
+			$voted = isset($votes[$option->getIdCedula()]) && $votes[$option->getIdCedula()] instanceof Vote;
 		else
 			$voted = isset($votes[$option]) && $votes[$option] instanceof Vote;
 		
@@ -30,7 +30,7 @@ class Vote extends Model {
 		if (!self::isVoted($option_id)) {
 			$votes = self::getSessionVotes();
 			$vote = new Vote();
-			$vote->setOptionId($option_id);
+			$vote->setIdCedula($option_id);
 			$votes[$option_id] = $vote;
 			
 			self::setVotes($votes);

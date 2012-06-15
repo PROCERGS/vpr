@@ -20,7 +20,7 @@ class GrupoDemanda extends Model {
 		$votingSession = VotingSession::requireCurrentVotingSession();
 		$sql = GrupoDemandaQueries::SQL_FIND_NEXT_AVAILABLE_GROUP;
 		$query = PDOUtils::getConn()->prepare($sql);
-		$query->bindValue('voter_id', $votingSession->requireCurrentUser()->getVoterId());
+		$query->bindValue('id_cidadao', $votingSession->requireCurrentUser()->getIdCidadao());
 		if ($query->execute() === TRUE) {
 			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
 			if (count($result) > 0)
@@ -28,5 +28,14 @@ class GrupoDemanda extends Model {
 			else return array();
 		} else
 			return array();
+	}
+	
+	public function shuffleOptions() {
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$region = $votingSession->requireCurrentUser()->getRegiao();
+		$options = Cedula::findByGrupoDemandaVotacaoRegiao($this->getIdGrupoDemanda(), $this->getIdVotacao(), $region->getIdRegiao());
+		shuffle($options);
+		
+		return $options;
 	}
 }

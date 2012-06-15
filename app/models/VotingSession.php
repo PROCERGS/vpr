@@ -5,6 +5,7 @@ class VotingSession extends Model {
 	protected $current_group;
 	protected $vote_log;
 	protected $votes;
+	protected $options;
 	
 	/**
 	 * 
@@ -50,6 +51,9 @@ class VotingSession extends Model {
 	}
 	
 	public function setCurrentGroup($group) { $this->current_group = $group; $this->save(); }
+	/**
+	 * @return GrupoDemanda
+	 */
 	public function getCurrentGroup() {
 		if (is_null($this->current_group)) {
 			$group = GrupoDemanda::findNextAvailableGroup();
@@ -61,7 +65,10 @@ class VotingSession extends Model {
 	
 	public function requireCurrentUser() {
 		$currentUser = $this->getCurrentUser();
-		return $currentUser instanceof Cidadao;
+		if ($currentUser instanceof Cidadao) {
+			return $currentUser;
+		} else
+			AppController::redirect(array('controller' => 'Auth', 'action' => 'login'));
 	}
 	public function setCurrentUser($currentUser) {
 		$currentUser->fetchEleitorTre();
@@ -71,4 +78,27 @@ class VotingSession extends Model {
 	
 	public function setVoteLog($voteLog) { $this->vote_log = $voteLog; $this->save(); }
 	public function setVotes($votes) { $this->votes = $votes; $this->save(); }
+	
+	public function setOptions($id_grupo_demanda, $options) { $this->options[$id_grupo_demanda] = $options; $this->save(); }
+	public function getOptions($id_grupo_demanda) {
+		if (!is_array($this->options) || is_null($this->options) || !array_key_exists($id_grupo_demanda, $this->options)) {
+			$options = $this->getCurrentGroup()->shuffleOptions();
+			$this->setOptions($id_grupo_demanda, $options);
+		}
+		return $this->options[$id_grupo_demanda];
+	}
+	
+	public function getStep($step) {
+		$options = $this->getOptions($this->getCurrentGroup()->getIdGrupoDemanda());
+		$pageSize = Config::get('votes.pageSize');
+		$pages = array_chunk($options, $pageSize);
+		
+		if ($step > 0 && $step <= count($pages)) {
+			return array(
+					'content' => $pages[$step-1],
+					'pages' => count($pages),
+					'pageSize' => $pageSize
+			);
+		}
+	}
 }

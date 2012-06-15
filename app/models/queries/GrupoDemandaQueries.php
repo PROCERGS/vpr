@@ -9,7 +9,7 @@ FROM
     `grupo_demanda` gd
     INNER JOIN `votacao_grupo_demanda` vgd ON vgd.`id_grupo_demanda` = gd.`id_grupo_demanda`
     INNER JOIN `votacao` v ON v.`id_votacao` = vgd.`id_votacao`
-    LEFT JOIN `voto_log` vl ON vl.`id_votacao` = v.`id_votacao` AND vl.`id_grupo_demanda` = gd.`id_grupo_demanda` AND vl.`id_cidadao` = 3 AND vl.`dth_fim` IS NOT NULL
+    LEFT JOIN `voto_log` vl ON vl.`id_votacao` = v.`id_votacao` AND vl.`id_grupo_demanda` = gd.`id_grupo_demanda` AND vl.`id_cidadao` = :id_cidadao AND vl.`dth_fim` IS NOT NULL
 WHERE
     v.`fg_ativo` = 1
     AND vgd.`fg_ativo` = 1
