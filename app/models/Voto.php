@@ -14,4 +14,12 @@ class Voto extends Model {
 	 * @return Voto
 	 */
 	public static function cast($o) { return $o; }
+	
+	public function __construct($id_cedula, $id_municipio, $id_meio_votacao, $nro_ip_inc) {
+		$this->setIdCedula($id_cedula);
+		$this->setIdMunicipio($id_municipio);
+		$this->setIdMeioVotacao($id_meio_votacao);
+		$this->setNroIpInc($nro_ip_inc);
+		$this->setDthVoto(new DateTime());
+	}
 }

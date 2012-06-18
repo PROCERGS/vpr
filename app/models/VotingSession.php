@@ -3,7 +3,7 @@ class VotingSession extends Model {
 	
 	protected $current_user;
 	protected $current_group;
-	protected $vote_log;
+	protected $voto_log;
 	protected $votes;
 	protected $options;
 	
@@ -76,7 +76,7 @@ class VotingSession extends Model {
 		$this->save();
 	}
 	
-	public function setVoteLog($voteLog) { $this->vote_log = $voteLog; $this->save(); }
+	public function setVotoLog($votoLog) { $this->voto_log = $votoLog; $this->save(); }
 	public function setVotes($votes) { $this->votes = $votes; $this->save(); }
 	
 	public function setOptions($id_grupo_demanda, $options) { $this->options[$id_grupo_demanda] = $options; $this->save(); }
@@ -100,5 +100,12 @@ class VotingSession extends Model {
 					'pageSize' => $pageSize
 			);
 		}
+	}
+	
+	public function finishGroup() {
+		$this->setVotoLog(NULL);
+		$this->setVotes(NULL);
+		$this->setCurrentGroup(NULL);
+		$this->save();
 	}
 }

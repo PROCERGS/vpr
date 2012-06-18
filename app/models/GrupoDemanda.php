@@ -30,6 +30,21 @@ class GrupoDemanda extends Model {
 			return array();
 	}
 	
+	public function findNextGroup() {
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$sql = GrupoDemandaQueries::SQL_FIND_NEXT_GROUP;
+		$query = PDOUtils::getConn()->prepare($sql);
+		$query->bindValue('id_cidadao', $votingSession->requireCurrentUser()->getIdCidadao());
+		$query->bindValue('id_grupo_demanda', $this->getIdGrupoDemanda());
+		if ($query->execute() === TRUE) {
+			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+			if (count($result) > 0)
+				return $result;
+			else return array();
+		} else
+			return array();
+	}
+	
 	public function shuffleOptions() {
 		$votingSession = VotingSession::requireCurrentVotingSession();
 		$region = $votingSession->requireCurrentUser()->getRegiao();

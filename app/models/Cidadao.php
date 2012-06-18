@@ -26,7 +26,7 @@ class Cidadao extends Model {
 				$cidadao->fetchRegiao();
 				$cidadao->setNroTitulo($eleitor_tre->getNroTitulo());
 				$cidadao->setRg($rg);
-				$cidadao->insert();
+				$cidadao->setIdCidadao($cidadao->insert());
 			}
 		} elseif (count($cidadao) == 1) {
 			$cidadao = Cidadao::cast(reset($cidadao));
@@ -39,7 +39,6 @@ class Cidadao extends Model {
 		} else {
 			throw new ErrorException('Unknown error.');
 		}
-		
 		if ($cidadao instanceof Cidadao)
 			return $cidadao;
 		

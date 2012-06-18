@@ -17,4 +17,13 @@ class VotoLog extends Model {
 	 * @return VotoLog
 	 */
 	public static function cast($o) { return $o; }
+	
+	public function __construct($id_cidadao, $id_votacao, $id_grupo_demanda, $id_meio_votacao, $nro_ip) {
+		$this->setDthInicio(new DateTime());
+		$this->setIdCidadao($id_cidadao);
+		$this->setIdVotacao($id_votacao);
+		$this->setIdGrupoDemanda($id_grupo_demanda);
+		$this->setIdMeioVotacao($id_meio_votacao);
+		$this->setNroIp($nro_ip);
+	}
 }
