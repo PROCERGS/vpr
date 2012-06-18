@@ -3,7 +3,7 @@
 <?php startblock('main'); ?>
 <div class="row">
 	<div class="twelvecol last">
-		<?php echo $html->link('Votar!', array('controller' => 'Votes', 'action' => 'start')); ?>
+		<?php echo $html->link('Votar!', array('controller' => 'Election', 'action' => 'start')); ?>
 	</div>
 </div>
 <?php endblock() ?>
