@@ -5,7 +5,7 @@ class Auth extends AppController {
 			
 			$cidadao = self::getParam('Cidadao');
 			$cidadao = Cidadao::cast(Cidadao::getFromArray($cidadao));
-			$cidadao = Cidadao::auth($cidadao->getNroTitulo(), $cidadao->getRg());
+			$cidadao = Cidadao::auth(trim($cidadao->getNroTitulo()), trim($cidadao->getRg()));
 			
 			if ($cidadao instanceof Cidadao) {
 				$votingSession = new VotingSession($cidadao);
