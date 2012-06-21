@@ -9,6 +9,8 @@ class SmsVote extends Model {
 	protected $msg;
 	protected $account;
 	
+	protected $cidadao;
+	
 	protected $titulo;
 	protected $rg;
 	protected $options;
@@ -45,6 +47,8 @@ class SmsVote extends Model {
 		
 		if (!($cidadao instanceof Cidadao))
 			throw new InvalidArgumentException("Título de Eleitor inválido.");
+		
+		$this->setCidadao($cidadao);
 		
 		return TRUE;
 	}

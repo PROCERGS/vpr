@@ -32,5 +32,12 @@ class Sms extends AppController {
 				printr("\t".$group->getNmGrupoDemanda());
 			}
 		}
+		
+		$votacao = Votacao::cast($votacao);
+		$g1 = reset($votacao->findGruposDemanda());
+		$sms_vote->getCidadao()->fetchRegiao();
+		$regiao = $sms_vote->getCidadao()->getRegiao();
+		//printr($g1->getOptions($regiao->getIdRegiao()));
+		printr($g1->getAreasTematicas($regiao->getIdRegiao()));
 	}
 }

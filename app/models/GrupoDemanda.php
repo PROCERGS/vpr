@@ -32,6 +32,7 @@ class GrupoDemanda extends Model {
 			return array();
 	}
 	
+	// TODO: tornar independente de VotingSession
 	public function findNextGroup() {
 		$votingSession = VotingSession::requireCurrentVotingSession();
 		$sql = GrupoDemandaQueries::SQL_FIND_NEXT_GROUP;
@@ -54,5 +55,27 @@ class GrupoDemanda extends Model {
 		shuffle($options);
 		
 		return $options;
+	}
+	
+	public function getOptions($id_regiao) {
+		$values = array(
+				'id_grupo_demanda' => $this->getIdGrupoDemanda(), 
+				'id_votacao' => $this->getIdVotacao(), 
+				'id_regiao' => $id_regiao);
+		$options = Cedula::findByGrupoDemandaVotacaoRegiao($values);
+		return $options;
+	}
+	
+	public function getAreasTematicas($id_regiao) {
+		$values = array(
+				'id_grupo_demanda' => $this->getIdGrupoDemanda(),
+				'id_votacao' => $this->getIdVotacao(),
+				'id_regiao' => $id_regiao);
+		$areasRaw = AreaTematica::findByGrupoDemandaVotacaoRegiao($values);
+		$areas = array();
+		foreach ($areasRaw as $area)
+			$areas[$area->getIdAreaTematica()] = $area;
+		
+		return $areas;
 	}
 }
