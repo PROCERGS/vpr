@@ -2,6 +2,7 @@
 class Application extends AppController {
 	
 	public static function index() {
+		self::addCSS('/css/estilos_capa.css');
 		self::render();
 	}
 	

@@ -1,0 +1,136 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	background-color: #360;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:10px;
+	color: #333;
+}
+
+a {
+	text-decoration: none;
+	color: #333;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #666;
+}
+
+hr {
+	margin-top: 23px;
+	width: 90%;
+	color: #CCC;
+	height: 1px;
+}
+
+#conteiner {
+	margin-left: -380px;
+	margin-top: -310px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 760px;
+	height: 620px; 
+	padding: 0px; 
+}
+
+#identificacao {
+	background-image: url(../images/fundo_capa.jpg);
+	width: 760px;
+	height: 535px; 
+	padding: 0px; 
+	-moz-box-shadow: 0 0 20px black; 
+	-webkit-box-shadow: 0 0 20px black; 
+	box-shadow: 0 0 20px black; /* for IE */ 
+}
+
+#logotipo img {
+	left: 50%;
+	position: absolute;
+	width: 667px;
+	height: 131px;
+	margin-left: -330px;
+	margin-top: 20px;
+}
+
+#versao {
+	left: 50%;
+	position: absolute;
+	width: 760px;
+	height: 35px;
+	margin-left: -380px;
+	margin-top: 175px;
+	text-align:center;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+#votar {
+	left: 50%;
+	position: absolute;
+	width: 760px;
+	height: 84px;
+	margin-left: -380px;
+	margin-top: 235px;
+	padding-top: 20px;
+	padding-left: 230px;
+	font-size: 24px;
+	font-weight: bold;
+	background-image: url(imagens/fundo_votar.png);
+}
+
+#votar a {
+	color: #360;
+	font-size: 24px;
+}
+
+#votar img{
+	margin: 0 20px 0 20px;
+}
+
+#cedula {
+	position: absolute;
+	width: 380px;
+	height: 64px;
+	margin-top: 384px;
+	font-size: 14px;
+	font-weight: bold;
+	line-height:64px;
+}
+
+#cedula img{
+	margin: 0 10px 0 40px;
+}
+
+#locais {
+	left: 50%;
+	position: absolute;
+	width: 380px;
+	height: 64px;
+	margin-top: 384px;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 64px;
+}
+
+#locais img{
+	margin: 0 10px 0 40px;
+}
+
+#rodape {
+	left: 50%;
+	position: absolute;
+	width: 760px;
+	height: 35px;
+	margin-left: -380px;
+	margin-top: 510px;
+	text-align:center;
+}
+
+#procergs {
+	width: 120px;
+	height: 36px;
+	margin: 0 320px 0 320px;
+}
