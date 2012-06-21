@@ -42,4 +42,11 @@ ORDER BY
     vgd.`sequencia` ASC
 LIMIT 1
 EOD;
+
+	const SQL_FIND_BY_ID_VOTACAO = <<<EOD
+SELECT *
+FROM
+	`grupo_demanda` gd
+	INNER JOIN `votacao_grupo_demanda` vgd ON vgd.`id_grupo_demanda` = gd.`id_grupo_demanda` AND vgd.`id_votacao` = :id_votacao
+EOD;
 }

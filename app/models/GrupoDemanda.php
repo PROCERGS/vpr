@@ -10,6 +10,8 @@ class GrupoDemanda extends Model {
 	protected $qtd_max_escolha;
 	protected $nm_grupo_demanda;
 	protected $nm_grupo_abrev;
+	protected $nro_inicial;
+	protected $nro_final;
 
 	/**
 	 * @return GrupoDemanda

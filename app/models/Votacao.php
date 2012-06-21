@@ -12,4 +12,8 @@ class Votacao extends Model {
 	 * @return Votacao
 	 */
 	public static function cast($o) { return $o; }
+	
+	public function findGruposDemanda() {
+		return GrupoDemanda::findByIdVotacao($this->getIdVotacao());
+	}
 }
