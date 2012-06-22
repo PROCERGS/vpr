@@ -5,32 +5,44 @@ echo self::getTitle();
 endblock();
 ?>
 <?php startblock('main'); ?>
-<div id="conteiner">
-	<div id="identificacao"> 
-		<a href="#">
-			<div id="logotipo">
-				<img src="../images/logotipo.png" alt="Votação de Prioridades - Orçamento 2013" border="0" />
+		<div class="container home">
+			<div class="row header">
+				<div class="sixcol">
+					<h1>Sistema Estadual de Participação Popular e Cidadã</h1>
+				</div>
+				<div class="sixcol last">
+					<h2>Votação de Prioridades</h2>
+				</div>
 			</div>
-		</a>
-		<div id="versao">Período de Votação Online: dia 4 de julho de 2012
-			<!--hr noshade=”noshade” !--> </div>
-		<div id="votar">
-			<a href="<?= $html->url(array('controller' => 'Election', 'action' => 'start')); ?>">
-				<img src="../images/icone_votar.png" alt="Ícone para Votar" border="0" align="left" />
-				Para votar,<br />clique aqui!
-			</a>
+			<div class="row online_voting_dates">
+				<div class="twelvecol last">
+					<p>Período de Votação Online: dias 4 e 5 de julho de 2012</p>
+				</div>
+			</div>
+			<div class="row vote_now">
+				<div class="twelvecol last">
+					<?php echo $html->link("Para votar, clique aqui!", array('controller' => 'Election', 'action' => 'start')); ?>
+				</div>
+			</div>
+			<div class="row queries">
+				<div class="sixcol">
+					<?php echo $html->link("Consulte a cédula de sua região", array('controller' => 'Application', 'action' => 'index')); ?>
+				</div>
+				<div class="sixcol last">
+					<?php echo $html->link("Consulte os locais de votação", array('controller' => 'Locais', 'action' => 'index')); ?>
+				</div>
+			</div>
+			<div class="row menu">
+				<div class="twelvecol last">
+					<ul>
+						<li><?php echo $html->link("Como Votar", array('controller' => 'Locais', 'action' => 'index')); ?></li>
+						<li><?php echo $html->link("Portal da Participação", "http://www.participa.rs.gov.br/"); ?></li>
+						<li><?php echo $html->link("Site do Governo do Estado do RS", "http://www.estado.rs.gov.br/"); ?></li>
+					</ul>
+				</div>
+			</div>
 		</div>
-		<div id="cedula"><a href="<?= $html->url(array('controller' => 'Cedulas', 'action' => 'index')); ?>"><img src="../images/icone_cedula.png" alt="Ícone para Consulta de Cédula" border="0" align="left" />Consulte a cédula de sua região</a></div>
-		<div id="locais">
-			<a href="<?= $html->url(array('controller' => 'Locais', 'action' => 'index')); ?>">
-				<img src="../images/icone_locais.png" alt="Ícone para Locais de Votação" border="0" align="left" />
-				Consulte os locais de votação
-			</a>
+		<div class="footer">
+			<a class="procergs" href="http://www.procergs.rs.gov.br/" target="_blank"><img src="/images/procergs_branco.png" border="0" /></a>
 		</div>
-		<div id="rodape"><a href="<?= $html->url(array('controller' => 'Cedulas', 'action' => 'comoVotar')); ?>">Como Votar</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.participa.rs.gov.br/" target="_blank">Portal da Participação</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="http://www.estado.rs.gov.br/" target="_blank">Site Governo do Estado do RS</a></div>
-	</div>
-	<div id="procergs"> <a href="http://www.procergs.rs.gov.br/"><img src="../images/procergs_branco.png" border="0" /></a>
-	</div>
-</div>
-<?php endblock() ?>
-
+<?php endblock(); ?>

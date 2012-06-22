@@ -10,15 +10,17 @@
 <?php startblock('css'); require_once 'stylesheets.php'; endblock('css'); ?>
 	</head>
 	<body>
-	<div class="container">
-		<div class="row header">
-			<div class="threecol"></div>
-			<div class="fivecol">
-				<h1><?php startblock('header_title') ?>Votação de Prioridades do Orçamento 2013<?php endblock() ?></h1>
+<?php startblock('main'); ?>
+		<div class="container">
+			<div class="row header">
+				<div class="threecol"></div>
+				<div class="fivecol">
+					<h1><?php startblock('header_title') ?>Votação de Prioridades do Orçamento 2013<?php endblock() ?></h1>
+				</div>
 			</div>
+<?php emptyblock('content') ?>
 		</div>
-<?php emptyblock('main') ?>
-	</div>
+<?php endblock('main'); ?>
 <?php startblock('javascript'); require_once 'javascripts.php'; endblock('javascript'); ?>
 	</body>
 </html>
