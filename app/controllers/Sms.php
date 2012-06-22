@@ -41,7 +41,9 @@ class Sms extends AppController {
 			throw new ErrorException("As seguintes opção são inválidas: $invalid");
 		}
 		
-		$sms_vote->registerVotes();
+		if ($sms_vote->registerVotes()) {
+			printr("Votos registrados!");
+		}
 		
 	}
 }

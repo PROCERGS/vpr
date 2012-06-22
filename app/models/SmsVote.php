@@ -164,5 +164,7 @@ class SmsVote extends Model {
 			PDOUtils::getConn()->rollBack();
 			throw $e;
 		}
+		
+		return TRUE;
 	}
 }
