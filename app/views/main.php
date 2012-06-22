@@ -13,9 +13,18 @@
 <?php startblock('main'); ?>
 		<div class="container">
 			<div class="row header">
-				<div class="threecol"></div>
-				<div class="fivecol">
-					<h1><?php startblock('header_title') ?>Votação de Prioridades do Orçamento 2013<?php endblock() ?></h1>
+				<div class="sixcol">
+					<?php echo $html->link('<img src="/images/logotipo_internas.png" alt="Sistema Estadual de Participação Popular e Cidadã" />', array('controller' => 'Application', 'action' => 'index'), array('title' => 'Sistema Estadual de Participação Popular e Cidadã')); ?>
+				</div>
+				<div class="sixcol last gov">
+					<?php echo $html->link('<img src="/images/logoGoverno.png" alt="Governo do Estado" />', "http://www.estado.rs.gov.br/", array('title' => 'Governo do Estado')); ?>
+				</div>
+			</div>
+			<div class="row identification">
+				<div class="sixcol">
+					<h1>Votação de Prioridades - Orçamento 2013</h1>
+					<p class="name"><?php echo Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()); ?></p>
+					<p class="region"><?php echo $currentUser->getRegiao()->getNmRegiao(); ?></p>
 				</div>
 			</div>
 <?php emptyblock('content') ?>

@@ -4,7 +4,13 @@ startblock('title');
 echo self::getTitle();
 endblock();
 ?>
-<?php startblock('main'); ?>
+<?php startblock('content'); ?>
+<div class="ui-widget">
+	<label for="municipio">Digite o município correspondente&nbsp;</label>
+	<input class="municipio" />
+	<div class="descricao">&nbsp;</div>
+</div>
+<?php endblock('content'); die() ?>
 <div id="conteiner">
 	<div id="cabecalho">
 		<div id="logotipo">
@@ -37,4 +43,4 @@ endblock();
 		</ul>
 	</div>
 </div>
-<?php endblock('main'); ?>
+<?php endblock('content'); ?>

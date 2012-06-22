@@ -4,7 +4,7 @@ class Locais extends AppController {
 
 	public static function index() {
 		self::setTitle("Locais de votação");
-		self::addCSS('/css/estilos_internas.css');
+		//self::addCSS('/css/estilos_internas.css');
 		self::addCSS('/css/jquery-ui-1.8.21.custom.css');
 
 		$city_id = -1;
