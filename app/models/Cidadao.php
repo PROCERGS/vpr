@@ -114,4 +114,12 @@ class Cidadao extends Model {
 		$this->setRegiao($regiao);
 		return $regiao;
 	}
+	
+	public function voted($id_votacao) {
+		$voto_logs = VotoLog::findByIdCidadaoIdVotacaoCompleted(array(
+					'id_cidadao' => $this->getIdCidadao(),
+					'id_votacao' => $id_votacao
+				));
+		return (is_array($voto_logs) && count($voto_logs) > 0);
+	}
 }

@@ -16,4 +16,12 @@ class Votacao extends Model {
 	public function findGruposDemanda() {
 		return GrupoDemanda::findByIdVotacao($this->getIdVotacao());
 	}
+	
+	/**
+	 * 
+	 * @param Cidadao $cidadao
+	 */
+	public function checkAllowedToVote($cidadao) {
+		return !$cidadao->voted($this->getIdVotacao());
+	}
 }

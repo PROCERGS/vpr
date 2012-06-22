@@ -48,9 +48,16 @@ class SmsVote extends Model {
 		if (!($cidadao instanceof Cidadao))
 			throw new InvalidArgumentException("Título de Eleitor inválido.");
 		
+		if (!$this->checkAllowedToVote($cidadao))
+			throw new ErrorException("Você já votou.");
+		
 		$this->setCidadao($cidadao);
 		
 		return TRUE;
+	}
+	
+	public function checkAllowedToVote($cidadao) {
+		return $this->getVotacao()->checkAllowedToVote($cidadao);
 	}
 	
 	public function getVotesByGroup() {
@@ -124,16 +131,38 @@ class SmsVote extends Model {
 			return $sanitized;
 	}
 	
-	public function registerVotes($id_municipio) {
-		$cidadao = $this->getCidadao();
-		$regiao = $cidadao->getRegiao();
-		$votacao = $this->getVotacao();
-		$id_municipio = $regiao->getIdMunicipio();
-		$options = Cedula::findByCodProjeto($this->getValidOptions(), $votacao->getIdVotacao(), $regiao->getIdRegiao());
-		
-		foreach ($options as $option) {
-			$voto = new Voto($option->getIdCedula(), $id_municipio, MeioVotacao::SMS, $_SERVER['REMOTE_ADDR']);
-			printr($voto);
+	public function registerVotes() {
+		PDOUtils::getConn()->beginTransaction();
+		try {
+			$cidadao = $this->getCidadao();
+			$regiao = $cidadao->getRegiao();
+			$votacao = $this->getVotacao();
+			$id_municipio = $regiao->getIdMunicipio();
+			$options = Cedula::findByCodProjeto($this->getValidOptions(), $votacao->getIdVotacao(), $regiao->getIdRegiao());
+			
+			$groups_voted = array();
+			
+			foreach ($options as $option) {
+				$id_group = $option->getIdGrupoDemanda();
+				if (!array_key_exists($id_group, $groups_voted))
+					$groups_voted[$id_group] = 0;
+				
+				$voto = new Voto($option->getIdCedula(), $id_municipio, MeioVotacao::SMS, $_SERVER['REMOTE_ADDR']);
+				$groups_voted[$id_group]++;
+				$voto->setIdVoto($voto->insert());
+			}
+			
+			foreach ($groups_voted as $group => $count) {
+				$voto_log = new VotoLog($cidadao->getIdCidadao(), $votacao->getIdVotacao(), $group, MeioVotacao::SMS, $_SERVER['REMOTE_ADDR']);
+				$voto_log->setDthFim(new DateTime());
+				$voto_log->setQtdSelecoes($count);
+				$voto_log->setIdVotoLog($voto_log->insert());
+			}
+			
+			PDOUtils::getConn()->commit();
+		} catch (Exception $e) {
+			PDOUtils::getConn()->rollBack();
+			throw $e;
 		}
 	}
 }
