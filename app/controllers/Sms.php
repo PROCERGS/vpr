@@ -27,17 +27,21 @@ class Sms extends AppController {
 		$exceeded = $sms_vote->getExceededGruposLimit();
 		
 		if (count($exceeded) > 0) {
-			printr("Quantidade de votos excedida para os grupos:");
+			$exceeded_groups = array();
 			foreach ($exceeded as $group) {
-				printr("\t".$group->getNmGrupoDemanda());
+				$exceeded_groups[] = $group->getNmGrupoDemanda();
 			}
+			$exceeded_groups = join(', ', $exceeded_groups);
+			throw new ErrorException("Quantidade de votos excedida para os grupos: $exceeded_groups");
 		}
 		
-		$votacao = Votacao::cast($votacao);
-		$g1 = reset($votacao->findGruposDemanda());
-		$sms_vote->getCidadao()->fetchRegiao();
-		$regiao = $sms_vote->getCidadao()->getRegiao();
-		//printr($g1->getOptions($regiao->getIdRegiao()));
-		printr($g1->getAreasTematicas($regiao->getIdRegiao()));
+		$invalid = $sms_vote->getInvalidOptions();
+		if (count($invalid) > 0) {
+			$invalid = join(', ', $invalid);
+			throw new ErrorException("As seguintes opção são inválidas: $invalid");
+		}
+		
+		$sms_vote->registerVotes();
+		
 	}
 }

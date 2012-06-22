@@ -19,4 +19,24 @@ class Cedula extends Model {
 	 * @return Cedula
 	 */
 	public static function cast($o) { return $o; }
+	
+	public static function findByCodProjeto($cod_projeto, $id_votacao, $id_regiao) {
+		if (!is_array($cod_projeto)) return parent::findByCodProjeto($cod_projeto);
+		
+		foreach ($cod_projeto as $k => $v)
+			$cod_projeto[$k] = PDOUtils::getConn()->quote($v, PDO::PARAM_INT);
+		
+		$cod_projeto = join(', ', $cod_projeto);
+		
+		$sql = str_replace(':cod_projeto:', $cod_projeto, CedulaQueries::SQL_FIND_BY_COD_PROJ_IN);
+		$query = PDOUtils::getConn()->prepare($sql);
+		
+		if ($query->execute(compact('id_votacao', 'id_regiao')) === TRUE) {
+			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+			if (count($result) > 0)
+				return $result;
+			else return array();
+		} else
+			return array();
+	}
 }

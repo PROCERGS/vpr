@@ -15,4 +15,16 @@ ORDER BY
 	at.`int_ordem` ASC,
 	c.`cod_projeto` ASC
 EOD;
+	
+	const SQL_FIND_BY_COD_PROJ_IN = <<<EOD
+SELECT
+	*
+FROM
+	`cedula` c
+WHERE
+	c.`fg_ativo` = 1
+    AND c.`id_votacao` = :id_votacao
+    AND c.`id_regiao` = :id_regiao
+	AND c.`cod_projeto` IN (:cod_projeto:)
+EOD;
 }

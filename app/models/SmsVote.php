@@ -123,4 +123,17 @@ class SmsVote extends Model {
 		else
 			return $sanitized;
 	}
+	
+	public function registerVotes($id_municipio) {
+		$cidadao = $this->getCidadao();
+		$regiao = $cidadao->getRegiao();
+		$votacao = $this->getVotacao();
+		$id_municipio = $regiao->getIdMunicipio();
+		$options = Cedula::findByCodProjeto($this->getValidOptions(), $votacao->getIdVotacao(), $regiao->getIdRegiao());
+		
+		foreach ($options as $option) {
+			$voto = new Voto($option->getIdCedula(), $id_municipio, MeioVotacao::SMS, $_SERVER['REMOTE_ADDR']);
+			printr($voto);
+		}
+	}
 }
