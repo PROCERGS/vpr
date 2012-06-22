@@ -20,7 +20,7 @@ endblock();
 				Para votar,<br />clique aqui!
 			</a>
 		</div>
-		<div id="cedula"><a href="<?= $html->url(array('controller' => 'Cedulas', 'action' => 'consulte')); ?>"><img src="../images/icone_cedula.png" alt="Ícone para Consulta de Cédula" border="0" align="left" />Consulte a cédula de sua região</a></div>
+		<div id="cedula"><a href="<?= $html->url(array('controller' => 'Cedulas', 'action' => 'index')); ?>"><img src="../images/icone_cedula.png" alt="Ícone para Consulta de Cédula" border="0" align="left" />Consulte a cédula de sua região</a></div>
 		<div id="locais">
 			<a href="<?= $html->url(array('controller' => 'Locais', 'action' => 'index')); ?>">
 				<img src="../images/icone_locais.png" alt="Ícone para Locais de Votação" border="0" align="left" />

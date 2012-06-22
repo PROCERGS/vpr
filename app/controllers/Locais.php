@@ -72,8 +72,8 @@ EOT;
 
 		return $string . "</table>";
 	}
-	
-	public static function comoVotar(){
+
+	public static function comoVotar() {
 		echo "Como votar!";
 	}
 

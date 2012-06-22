@@ -16,16 +16,34 @@ endblock();
 		</div>
 	</div>
 	<div id="identificacao">    
-		<h2>Locais de votação - Orçamento 2013</h2>
-		<b>Procure pelo município os locais de votação</b>
+		<h2>Votação de Prioridades - Orçamento 2013</h2>
+		<!--		<b>Airton Jordani Jardim Filho</b><br />Região Central-->
 	</div>
-	<div class="main"> 
-		<div class="ui-widget">
-			<label for="municipio">Digite o município correspondente&nbsp;</label>
-			<input class="municipio" />
-			<div class="descricao">
-				&nbsp;
-			</div>
+	<div id="conteudo">
+		<div id="colunaA"><br />
+
+			<h2>Instruções</h2>
+			<p>Selecione até 4 (quatro) opções da lista abaixo.<br />Clique na proposta para visualizar o seu detalhamento.</p>
+			<hr />
+			<?php foreach ($grupos as $grupo) { ?>
+				<h3><?php echo $grupo->getNmGrupoDemanda(); ?></h3>
+				<ul>
+					<?php
+					$last_area_id = 0;
+					foreach ($options[$grupo->getIdGrupoDemanda()] as $option) {
+						$html_id = 'proposal' . $option->getIdCedula();
+						if ($last_area_id != $option->getIdAreaTematica()) {
+							$last_area_id = $option->getIdAreaTematica();
+							?>
+							<h4><?php echo $areas[$last_area_id]->getNmAreaTematica(); ?></h4>
+						<?php } ?>
+						<li><input type="checkbox" disabled="" id="<?php echo $html_id; ?>" />
+							<label for="<?php echo $html_id; ?>"><strong><?php echo $option->getCodProjeto(); ?></strong> - <?php echo $option->getNmDemanda(); ?></label>
+						</li>
+					<?php } ?>
+					<hr />
+				<?php } ?>
+			</ul>
 		</div>
 	</div>
 	<div id="rodape">

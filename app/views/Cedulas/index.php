@@ -16,17 +16,13 @@ endblock();
 		</div>
 	</div>
 	<div id="identificacao">    
-		<h2>Locais de votação - Orçamento 2013</h2>
-		<b>Procure pelo município os locais de votação</b>
+		<h2>Escolha sua Região - Orçamento 2013</h2>
 	</div>
-	<div class="main"> 
-		<div class="ui-widget">
-			<label for="municipio">Digite o município correspondente&nbsp;</label>
-			<input class="municipio" />
-			<div class="descricao">
-				&nbsp;
-			</div>
-		</div>
+	<div class="select_regiao">
+		<label>Para seguir&nbsp;</label>
+		<?php
+		echo $select_regiao;
+		?>
 	</div>
 	<div id="rodape">
 		<ul>
