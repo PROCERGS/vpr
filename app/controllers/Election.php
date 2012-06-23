@@ -48,8 +48,12 @@ class Election extends AppController {
 		
 		if (!is_null($nextStep))
 			$nextURL = $html->url(array('controller' => 'Election', 'action' => 'step', 'step' => $nextStep));
-		else
-			$nextURL = $html->url(array('controller' => 'Election', 'action' => 'review'));
+		else {
+			if (Config::get('isMobile'))
+				$nextURL = $html->url(array('controller' => 'Election', 'action' => 'review'));
+			else
+				$nextURL = $html->url(array('controller' => 'Election', 'action' => 'confirm'));
+		}
 		
 		self::setJavascriptVar('previousStep', $step-1);
 		self::setJavascriptVar('nextStep', $nextStep);
@@ -116,24 +120,7 @@ class Election extends AppController {
 		$next_group = $group->findNextGroup(TRUE);
 		$votingSession->finishGroup();
 		
-		if ($next_group instanceof GrupoDemanda)
-			echo "Redirect p/ Election::start()"; //self::redirect(array('controller' => 'Election', 'action' => 'start'));
-		else
-			echo "FIM";
-		
-		printr($votoLog);
-		
-		//$votoLog = VotoLog::cast($votingSession->getVotoLog());
-		
-/*		$voteLog = VoteLog::cast(Session::get('voteLog'));
-		$voteLog->setFinish(new DateTime());
-		$voteLog->update();
-	
-		$next_group = $group->getNextGroup(TRUE);
-		if ($next_group instanceof Group)
-			self::redirect(array('controller' => 'Votes', 'action' => 'start'));
-		else
-			echo "FIM";*/
+		self::redirect(array('controller' => 'Election', 'action' => 'start'));
 	}
 	
 	private static function registerVotes() {
@@ -167,6 +154,5 @@ class Election extends AppController {
 					Vote::remVote($cedula->getIdCedula());
 			}
 		}
-	
 	}
 }

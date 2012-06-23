@@ -50,7 +50,7 @@
 	.home .queries .last a { background-image: url('/images/icone_locais.png'); }
 	.home .queries a { display: inline-block; color: #333; font-weight: bold; font-size: 14px; text-align: left; padding: 0 0 0 75px; line-height: 64px; background: no-repeat; }
 	
-	.container .footer { margin-top: 35px; }
+	.container .row.footer { margin-top: 35px; }
 	.container .footer ul li { display: inline-block; }
 	.container .footer ul li a { font-size: 10px; text-decoration: none; color: #333; border-left: 1px solid #333; }
 	.container .footer ul li a { padding-left: 28px; margin-right: 35px; }
