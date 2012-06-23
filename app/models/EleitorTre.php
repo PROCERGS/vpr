@@ -7,8 +7,6 @@ class EleitorTre extends Model {
 	protected $nm_mun_tre;
 	protected $cod_mun_tre;
 	protected $int_zona;
-	protected $int_secao;
-	protected $ds_local_votacao;
 	protected $nro_titulo;
 	protected $nm_eleitor;
 
