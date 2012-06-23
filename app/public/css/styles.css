@@ -14,12 +14,12 @@
 	.container .identification h1 { font-size: 14px; color: #C30; margin-bottom: 10px; }
 	.container .identification p.name { font-weight: bold; }
 	
-	.container { max-width: 940px; margin: 8px auto 0; background-color: #fff; }
+	.container.internal { max-width: 940px; margin: 8px auto 0; background-color: #fff; }
 	
 	.container .header .gov { text-align: right; }
 	.container .header { padding: 20px 12px 0; }
 	
-	.container.home { text-align: center; max-width: 760px; margin: 4% auto 0; }
+	.container.home { text-align: center; max-width: 760px; margin: 4% auto 0; background-color: transparent; }
 	.container .static_bg { background: url('/images/fundo_capa.jpg') no-repeat; height: 535px; overflow: visible; }
 	.container .static_bg { padding: 0; -webkit-box-shadow: 0px 0px 20px 0px #000; box-shadow: 0px 0px 20px 0px #000; }
 	.container.home .header h1 { margin-left: 50px; background: url('/images/logotipo.png') no-repeat left; width: 330px; height: 171px; text-indent: -9999px; }
@@ -36,7 +36,7 @@
 	.home .queries .last a { background-image: url('/images/icone_locais.png'); }
 	.home .queries a { display: inline-block; color: #333; font-weight: bold; font-size: 14px; text-align: left; padding: 0 0 0 75px; line-height: 64px; background: no-repeat; }
 	
-	.home .row.menu { margin-top: 55px; }
+	.home .row.menu { margin-top: 35px; }
 	.home .row.menu ul li { display: inline-block; }
 	.home .row.menu ul li a { color: #333; border-left: 1px solid #333; padding-left: 7px; margin-right: 3px; }
 	.home .row.menu ul li:first-child a { border: none; }

@@ -11,7 +11,7 @@
 	</head>
 	<body>
 <?php startblock('main'); ?>
-		<div class="container">
+		<div class="container internal">
 			<div class="row header">
 				<div class="sixcol">
 					<?php echo $html->link('<img src="/images/logotipo_internas.png" alt="Sistema Estadual de Participação Popular e Cidadã" />', array('controller' => 'Application', 'action' => 'index'), array('title' => 'Sistema Estadual de Participação Popular e Cidadã')); ?>
