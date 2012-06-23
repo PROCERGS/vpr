@@ -83,6 +83,11 @@ class Election extends AppController {
 			$selection[$option->getIdCedula()] = $option;
 		}
 		
+		$html = new HTMLHelper();
+		$lastStep = $votingSession->getLastStep();
+		self::setJavascriptVar('previousStep', $lastStep);
+		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Election', 'action' => 'step', 'step' => $lastStep)));
+		
 		self::render(compact('options', 'votes', 'group', 'selection', 'next_group'));
 	}
 	

@@ -22,5 +22,6 @@ $(document).ready(function() {
 			$("form.vote").attr('action', previousStepURL).submit();
 		});
 	else
-		$("button.back").attr("disabled", "disabled");
+		$("button.back").hide();
+		//$("button.back").attr("disabled", "disabled");
 });

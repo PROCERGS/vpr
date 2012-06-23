@@ -109,4 +109,9 @@ class VotingSession extends Model {
 		$this->setCurrentGroup(NULL);
 		$this->save();
 	}
+	
+	public function getLastStep() {
+		$first = $this->getStep(1);
+		return $first['pages'];
+	}
 }
