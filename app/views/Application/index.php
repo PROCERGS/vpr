@@ -31,7 +31,7 @@ endblock();
 				</div>
 				<div class="row footer menu">
 					<ul class="twelvecol last">
-						<li><?php echo $html->link("Como Votar", array('controller' => 'Cedulas', 'action' => '')); ?></li>
+						<li><?php echo $html->link("Como Votar", "www"); ?></li>
 						<li><?php echo $html->link("Portal da Participação", "http://www.participa.rs.gov.br/"); ?></li>
 						<li><?php echo $html->link("Site do Governo do Estado do RS", "http://www.estado.rs.gov.br/"); ?></li>
 					</ul>
