@@ -38,10 +38,10 @@ endblock();
 							<h4><?php echo $areas[$last_area_id]->getNmAreaTematica(); ?></h4>
 						<?php } ?>
 						<li><input type="checkbox" disabled="" id="<?php echo $html_id; ?>" />
-							<label for="<?php echo $html_id; ?>"><strong><?php echo $option->getCodProjeto(); ?></strong> - <?php echo $option->getNmDemanda(); ?></label>
+							<label for="<?php echo $html_id; ?>"><strong><?php echo $option->getIntOrdem(); ?></strong> - <?php echo $option->getNmDemanda(); ?></label>
 						</li>
+						<hr />
 					<?php } ?>
-					<hr />
 				<?php } ?>
 			</ul>
 		</div>

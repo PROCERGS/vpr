@@ -14,12 +14,10 @@ jQuery(document).ready(function($) {
 //			}
 //		});
 //	}
-	
 	var array_produtos = grupo_urnas.split("|");
 	
 	$(".municipio").autocomplete({	
 		source: array_produtos
 	});
-	
 //	$(".municipio").change(tec);
 });

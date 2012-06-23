@@ -33,17 +33,18 @@ class Cedulas extends AppController {
 			$regiao_id = self::getParam('regiao_id');
 
 		if (isset($regiao_id) && $regiao_id != -1) {
-			$votacao = reset(Votacao::findByActiveVotacao());
-			$grupos = $votacao->findGruposDemanda();
-			$areas = $votacao->findAreasTematicas($regiao_id);
-			$options = array();
-			foreach ($grupos as $grupo) {
-				$options[$grupo->getIdGrupoDemanda()] = $grupo->getOptions($regiao_id);
+			$votacao = Votacao::findByActiveVotacao();
+			if (!empty($votacao)) {
+				$grupos = $votacao->findGruposDemanda();
+				$areas = $votacao->findAreasTematicas($regiao_id);
+				$options = array();
+				foreach ($grupos as $grupo) {
+					$options[$grupo->getIdGrupoDemanda()] = $grupo->getOptions($regiao_id);
+				}
 			}
 		}
 
 		self::render(compact('grupos', 'areas', 'options'));
 	}
-
 
 }
