@@ -7,6 +7,8 @@ class Votacao extends Model {
 	protected $id_situacao;
 	protected $int_exercicio;
 	protected $nm_votacao;
+	protected $dth_inicio;
+	protected $dth_fim;
 
 	/**
 	 * @return Votacao
