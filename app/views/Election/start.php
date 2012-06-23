@@ -1,6 +1,6 @@
 <?php require VIEWS_PATH . 'main.php'; ?>
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
-<?php startblock('main'); $html = HTMLHelper::cast($html); ?>
+<?php startblock('content'); $html = HTMLHelper::cast($html); ?>
 <div class="row">
 	<div class="twelvecol last">
 		<p>Bem-vindo(a), <?php echo $currentUser->getEleitorTre()->getNmEleitor(); ?></p>

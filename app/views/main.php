@@ -1,3 +1,4 @@
+<?php $html = new HTMLHelper(); ?>
 <?php header('Content-Type: text/html; charset=utf-8'); ?>
 <!DOCTYPE html>
 <html>
@@ -20,6 +21,7 @@
 					<?php echo $html->link('<img src="/images/logoGoverno.png" alt="Governo do Estado" />', "http://www.estado.rs.gov.br/", array('title' => 'Governo do Estado')); ?>
 				</div>
 			</div>
+<?php if (isset($currentUser) && $currentUser instanceof Cidadao) { ?>
 			<div class="row identification">
 				<div class="sixcol">
 					<h1>Votação de Prioridades - Orçamento 2013</h1>
@@ -27,6 +29,7 @@
 					<p class="region"><?php echo $currentUser->getRegiao()->getNmRegiao(); ?></p>
 				</div>
 			</div>
+<?php } ?>
 <?php emptyblock('content') ?>
 		</div>
 <?php endblock('main'); ?>

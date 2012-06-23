@@ -24,13 +24,17 @@ class Election extends AppController {
 			$votingSession->setVotoLog($votoLog);
 		}
 		
-		self::render();
+		self::redirect(array('controller' => 'Election', 'action' => 'step', 'step' => 1));
 	}
 	
 	public static function step() {
 		$votingSession = VotingSession::requireCurrentVotingSession();
 		$currentUser = $votingSession->requireCurrentUser();
+		$regiao = $currentUser->getRegiao();
 		$group = $votingSession->getCurrentGroup();
+		$areasTematicas = $group->getAreasTematicas($regiao->getIdRegiao());
+		
+		$maxSelections = $group->getQtdMaxEscolha();
 		
 		self::registerVotes();
 		
@@ -52,7 +56,11 @@ class Election extends AppController {
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Election', 'action' => 'step', 'step' => $step - 1)));
 		self::setJavascriptVar('reviewURL', $html->url(array('controller' => 'Election', 'action' => 'review'))); 
 		
-		self::render(compact('step', 'cedulas', 'nextURL', 'totalSteps'));
+		$areas = array();
+		foreach ($cedulas as $option)
+			$areas[$option->getIdAreaTematica()][] = $option;
+		
+		self::render(compact('step', 'areas', 'nextURL', 'totalSteps', 'maxSelections', 'group', 'areasTematicas'));
 	}
 	
 	public static function review() {

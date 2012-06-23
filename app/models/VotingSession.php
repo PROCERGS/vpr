@@ -82,7 +82,8 @@ class VotingSession extends Model {
 	public function setOptions($id_grupo_demanda, $options) { $this->options[$id_grupo_demanda] = $options; $this->save(); }
 	public function getOptions($id_grupo_demanda) {
 		if (!is_array($this->options) || is_null($this->options) || !array_key_exists($id_grupo_demanda, $this->options)) {
-			$options = $this->getCurrentGroup()->shuffleOptions();
+			$id_regiao = $this->getCurrentUser()->getRegiao()->getIdRegiao();
+			$options = $this->getCurrentGroup()->getOptions($id_regiao);
 			$this->setOptions($id_grupo_demanda, $options);
 		}
 		return $this->options[$id_grupo_demanda];
