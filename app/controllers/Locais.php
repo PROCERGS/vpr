@@ -13,7 +13,8 @@ class Locais extends AppController {
 
 		$html = new HTMLHelper();
 
-		$grupo_urnas = Urna::findByTxtLocalizacao();
+		$grupo_urnas = Urna::findByTxtLocalizacaoAgrup();
+//		var_dump($grupo_urnas);
 
 		$array = array();
 		foreach ($grupo_urnas as $urna) {
