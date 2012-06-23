@@ -9,12 +9,14 @@
 		color: #333;
 	}
 	
-	.container .identification { height: 100px; margin-top: 10px; background: url('/images/fundo_identificacao_central.png') no-repeat; }
-	.container .identification>div { margin: 15px 0 0 25px; }
-	.container .identification h1 { font-size: 14px; color: #C30; margin-bottom: 10px; }
-	.container .identification p.name { font-weight: bold; }
+	.container.internal .identification { height: 100px; margin-top: 10px; background: url('/images/fundo_identificacao_central.png') no-repeat; }
+	.container.internal .identification>div { margin: 15px 0 0 25px; }
+	.container.internal .identification h1 { font-size: 14px; color: #C30; margin-bottom: 10px; }
+	.container.internal .identification p.name { font-weight: bold; }
 	
-	.internal { max-width: 940px; margin: 8px auto 0; background-color: #fff; }
+	.container.internal .footer { margin-top: 50px; min-height: 25px; }
+	
+	.internal { max-width: 940px; margin: 8px auto 50px; background: #fff url('/images/fundo_rodape_interna.png') repeat-x bottom; }
 	.internal .content_head { margin: 15px 0; padding-bottom: 10px; border-bottom: 1px solid #ccc; }
 	.internal .content_head h3 { font-size: 14px; margin: 10px 0; }
 	
@@ -48,10 +50,13 @@
 	.home .queries .last a { background-image: url('/images/icone_locais.png'); }
 	.home .queries a { display: inline-block; color: #333; font-weight: bold; font-size: 14px; text-align: left; padding: 0 0 0 75px; line-height: 64px; background: no-repeat; }
 	
-	.home .row.menu { margin-top: 35px; }
-	.home .row.menu ul li { display: inline-block; }
-	.home .row.menu ul li a { color: #333; border-left: 1px solid #333; padding-left: 7px; margin-right: 3px; }
-	.home .row.menu ul li:first-child a { border: none; }
+	.container .footer { margin-top: 35px; }
+	.container .footer ul li { display: inline-block; }
+	.container .footer ul li a { font-size: 10px; text-decoration: none; color: #333; border-left: 1px solid #333; }
+	.container .footer ul li a { padding-left: 28px; margin-right: 35px; }
+	.container .footer ul li:first-child a { border: none; }
+	
+	.home.container .footer ul li a { padding-left: 7px; margin-right: 3px; }
 	
 	.footer { text-align: center; }
 

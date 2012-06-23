@@ -33,7 +33,7 @@ endblock();
 						<?php echo $html->link("Consulte os locais de votação", array('controller' => 'Locais', 'action' => 'index')); ?>
 					</div>
 				</div>
-				<div class="row menu">
+				<div class="row footer menu">
 					<ul class="twelvecol last">
 						<li><?php echo $html->link("Como Votar", array('controller' => 'Locais', 'action' => 'index')); ?></li>
 						<li><?php echo $html->link("Portal da Participação", "http://www.participa.rs.gov.br/"); ?></li>

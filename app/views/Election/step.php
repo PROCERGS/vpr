@@ -2,7 +2,7 @@
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
 <?php startblock('content'); ?>
 <form class="vote" action="<?php echo $nextURL;?>" method="post">
-	<div class="container internal">
+	<div class="container">
 		<div class="row content_head">
 			<div class="sixcol">
 				<h3>Instruções</h3>

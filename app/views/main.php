@@ -31,6 +31,14 @@
 			</div>
 <?php } ?>
 <?php emptyblock('content') ?>
+			<div class="row footer">
+				<ul class="twelvecol">
+					<li><?php echo $html->link("Como Votar", array('controller' => 'Locais', 'action' => 'index')); ?></li>
+					<li><?php echo $html->link("Portal da Participação", "http://www.participa.rs.gov.br/"); ?></li>
+					<li><?php echo $html->link("PROCERGS", "http://www.procergs.rs.gov.br/"); ?></li>
+					<li><?php echo $html->link("Site do Governo do Estado do RS", "http://www.estado.rs.gov.br/"); ?></li>
+				</ul>
+			</div>
 		</div>
 <?php endblock('main'); ?>
 <?php startblock('javascript'); require_once 'javascripts.php'; endblock('javascript'); ?>
