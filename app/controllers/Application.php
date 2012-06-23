@@ -5,9 +5,10 @@ class Application extends AppController {
 	public static function index() {
 
 		$string_alt_img = null;
+		$button = null;
 		setlocale(LC_TIME, "portuguese");
 		$data_completa = strftime("São %H horas e %m minutos");
-		echo $data_completa;
+		//echo $data_completa;
 
 		self::addCSS('/css/estilos_capa.css');
 
@@ -86,27 +87,54 @@ EOD;
 
 		if ($current_mk <= $data_fim) {
 			try {
+				/**
+				 * 	Se dias diferentes 
+				 */
 				if ($data_ini < $data_fim && (strftime("%d", $data_ini) < strftime("%d", $data_fim))) {
-
+					/**
+					 * 	Se dias diferentes e votação ocorrendo 
+					 */
 					if (self::votacaoOcorrendo($data_ini, $data_fim)) {
 						$string_data = strftime("A votação está ocorrendo, você pode votar até às %H horas do dia %d de %B", $data_fim);
-					} else {
+					}
+					/**
+					 * 	Se dias diferentes e votação ainda não está ocrrendo 
+					 */ else {
 						$string_data = strftime("Dia %d de %B  às %H horas", $data_ini);
 						$string_data .= " até ";
 						$string_data .= strftime("dia %d de %B às %H horas de %Y", $data_fim);
 					}
-				} else if ((strftime("%d", $data_ini) == strftime("%d", $data_fim))) {
+				}
+				/**
+				 * 	Se dias iguais 
+				 */ else if ((strftime("%d", $data_ini) == strftime("%d", $data_fim))) {
+					/**
+					 * 	Se dias iguais e votação ocorrendo 
+					 */
 					if (self::votacaoOcorrendo($data_ini, $data_fim)) {
 						$string_data = strftime("A votação está ocorrendo, você pode votar até às %H horas", $data_fim);
-					}else
-						$string_data = strftime("Dia %d de %B de %Y a partir das %H horas", $data_ini);
+					}
+					/**
+					 * 	Se dias iguais e votação ainda não está ocrrendo  
+					 */
+					else
+						$string_data = strftime("Dia %d de %B de %Y a partir das %H horas e ocorrerá até às ", $data_ini) . strftime("%H horas", $data_fim);
 				}
 			} catch (Exception $e) {
 				$e->getMessage();
 			}
 		} else {
-			$string_data = "A votação, já ocorreu em " . strftime("Dia %d de %B de %Y", $data_fim);
+			$string_data = "A votação, já ocorreu em " . strftime("%d de %B de %Y", $data_ini);
 		}
+
+		/**
+		 * 	Caso queira utilizar um formato padrão de data 
+		 * 	descomente as linhas de baixo
+		 */
+//		$string_data = strftime("Dia %d de %B  às %H horas", $data_ini);
+//		$string_data .= " até ";
+//		$string_data .= strftime("às %H horas de %Y", $data_fim);
+
 		return $string_data;
 	}
 
