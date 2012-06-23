@@ -42,7 +42,7 @@
 	.home .online_voting_dates { font-size: 12px; font-weight: bold; }
 	
 	.home .vote_now { background: url('/images/fundo_votar.png'); padding: 20px 0 15px; margin-top: 50px; }
-	.home .vote_now a { display: inline-block; color: #360; font-weight: bold; font-size: 24px; text-align: left; padding: 3px 0 0 75px; width: 145px; height: 70px; background: url('/images/icone_votar.png') no-repeat; }
+	.home .vote_now a { display: inline-block; color: #360; font-weight: bold; font-size: 24px; text-align: left; padding: 3px 0 0 75px; height: 70px; background: url('/images/icone_votar.png') no-repeat; }
 	
 	.home .queries { margin-top: 50px; }
 	

@@ -36,4 +36,11 @@ class Votacao extends Model {
 		
 		return $areas;
 	}
+	
+	public function isOpen() {
+		$now = new DateTime();
+		$inicio = Util::createDateTime($this->getDthInicio(), 'Y-m-d H:i:s');
+		$fim = Util::createDateTime($this->getDthFim(), 'Y-m-d H:i:s');
+		return ($inicio <= $now && $fim > $now);
+	}
 }

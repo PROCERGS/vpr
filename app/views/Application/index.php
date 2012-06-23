@@ -12,15 +12,20 @@ endblock();
 						<h1>Sistema Estadual de Participação Popular e Cidadã</h1>
 					</div>
 					<div class="sixcol last">
-						<h2><?= $string_alt_img ?></h2>
+						<h2><?php echo $string_alt_img; ?></h2>
 					</div>
 				</div>
 				<div class="row online_voting_dates">
 					<div class="twelvecol last">
-						<p><?= $string_data ?></p>
+						<p><?php echo $string_data; ?></p>
 					</div>
 				</div>
-				<?= $button ?>
+				<div class="row vote_now">
+					<div class="fourcol"></div>
+					<div class="fourcol last">
+						<?php if ($show_vote_now) echo $html->link("Para votar, clique aqui!", array('controller' => 'Election', 'action' => 'start')); ?>
+					</div>
+				</div>
 				<div class="row queries">
 					<div class="sixcol">
 						<?php echo $html->link("Consulte a cédula de sua região", array('controller' => 'Cedulas', 'action' => '')); ?>
