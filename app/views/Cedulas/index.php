@@ -9,7 +9,7 @@ endblock();
 	<div id="cabecalho">
 		<div id="logotipo">
 			<h1>Sistema Estadual de Participação Popular e Cidadã</h1>
-			<img src="../images/logotipo_internas.png" alt="Votação de Prioridades - Orçamento 2013" width="265" height="104" border="0" />
+			<a href="/"><img src="../images/logotipo_internas.png" alt="Votação de Prioridades - Orçamento 2013" width="265" height="104" border="0" /></a>
 		</div>
 		<div id="brasaoEstadoBG">
             <a href="http://www.estado.rs.gov.br/" target="_blank"><img src="../images/logoGoverno.png" alt="Logotipo do Governo" title="Governo do Estado"  border="0"/></a>
