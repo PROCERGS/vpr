@@ -38,7 +38,7 @@ class Locais extends AppController {
 
 	public static function municipio() {
 		$nome_municipio = self::getParam('nome_municipio');
-		$urna_municipios = Urna::findByTxtLocalizacao();
+		$urna_municipios = Urna::findByTxtLocalizacao($nome_municipio);
 		$string = self::descricaoMunicipios($urna_municipios, $nome_municipio);
 		self::setJavascriptVar('nome_municipio', $nome_municipio);
 
