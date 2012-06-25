@@ -52,7 +52,7 @@
 	
 	.container .row.footer { margin-top: 35px; }
 	.container .footer ul li:first-child { border: none; }
-	.container .footer ul li { display: inline-block; border-left: 1px solid #333; padding: 0 20px; }
+	.container .footer ul li { display: inline-block; *display: inline; border-left: 1px solid #333; padding: 0 20px; }
 	.container .footer ul li a { font-size: 10px; text-decoration: none; color: #333; padding: 0 3px; margin: 0; }
 	
 	.home.container .footer ul li a { padding-left: 7px; margin-right: 3px; }
