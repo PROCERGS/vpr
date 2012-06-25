@@ -29,8 +29,9 @@ endblock();
 				<h3><?php echo $grupo->getNmGrupoDemanda(); ?></h3>
 				<ul>
 					<?php
-					$last_area_id = 0;
+//					$last_area_id = 0;
 					foreach ($options[$grupo->getIdGrupoDemanda()] as $option) {
+						$last_area_id = $option->getIdAreaTematica();
 						$html_id = 'proposal' . $option->getIdCedula();
 						if ($last_area_id != $option->getIdAreaTematica()) {
 							$last_area_id = $option->getIdAreaTematica();
@@ -40,8 +41,8 @@ endblock();
 						<li><input type="checkbox" disabled="" id="<?php echo $html_id; ?>" />
 							<label for="<?php echo $html_id; ?>"><strong><?php echo $option->getIntOrdem(); ?></strong> - <?php echo $option->getNmDemanda(); ?></label>
 						</li>
-						<hr />
 					<?php } ?>
+					<hr />
 				<?php } ?>
 			</ul>
 		</div>
