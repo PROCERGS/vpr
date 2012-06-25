@@ -27,8 +27,9 @@ class Votacao extends Model {
 	
 	public function findAreasTematicas($id_regiao) {
 		$values = array(
-				'id_votacao' => $this->getIdVotacao(),
-				'id_regiao' => $id_regiao);
+					'id_votacao' => $this->getIdVotacao(),
+					'id_regiao' => $id_regiao
+				);
 		$areasRaw = AreaTematica::findByVotacaoRegiao($values);
 		$areas = array();
 		foreach ($areasRaw as $area)

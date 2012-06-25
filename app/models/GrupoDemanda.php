@@ -78,4 +78,13 @@ class GrupoDemanda extends Model {
 		
 		return $areas;
 	}
+	
+	public function getOptionsGroupByAreaTematica($id_regiao, $options = NULL) {
+		if (is_null($options))
+			$options = $this->getOptions($id_regiao);
+		$result = array();
+		foreach ($options as $option)
+			$result[$option->getIdAreaTematica()][] = $option;
+		return $result;
+	}
 }

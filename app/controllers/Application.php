@@ -86,7 +86,7 @@ class Application extends AppController {
 				}
 				/**
 				 * 	Se dias iguais 
-				 */ else if ((strftime("%d", $data_ini) == strftime("%d", $data_fim))) {
+				 */ else if ((strftime("%d", $data_ini->getTimestamp()) == strftime("%d", $data_fim->getTimestamp()))) {
 					/**
 					 * 	Se dias iguais e votação ocorrendo 
 					 */
@@ -103,7 +103,7 @@ class Application extends AppController {
 				$e->getMessage();
 			}
 		} else {
-			$string_data = "A votação, já ocorreu em " . strftime("%d de %B de %Y", $data_ini);
+			$string_data = "A votação, já ocorreu em " . strftime("%d de %B de %Y", $data_ini->getTimestamp());
 		}
 
 		/**

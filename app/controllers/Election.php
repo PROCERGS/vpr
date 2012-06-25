@@ -34,8 +34,6 @@ class Election extends AppController {
 		$group = $votingSession->getCurrentGroup();
 		$areasTematicas = $group->getAreasTematicas($regiao->getIdRegiao());
 		
-		$maxSelections = $group->getQtdMaxEscolha();
-		
 		self::registerVotes();
 		
 		$step = self::getParam('step');
@@ -60,11 +58,15 @@ class Election extends AppController {
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Election', 'action' => 'step', 'step' => $step - 1)));
 		self::setJavascriptVar('reviewURL', $html->url(array('controller' => 'Election', 'action' => 'review'))); 
 		
-		$areas = array();
-		foreach ($cedulas as $option)
-			$areas[$option->getIdAreaTematica()][] = $option;
+		$areas = $group->getOptionsGroupByAreaTematica($regiao->getIdRegiao(), $cedulas);
 		
-		self::render(compact('step', 'areas', 'nextURL', 'totalSteps', 'maxSelections', 'group', 'areasTematicas'));
+		$groups[$group->getIdGrupoDemanda()] = array(
+					'areas' => $areas,
+					'group' => $group,
+					'areasTematicas' => $areasTematicas
+				);
+		
+		self::render(compact('step', 'nextURL', 'totalSteps', 'groups'));
 	}
 	
 	public static function review() {

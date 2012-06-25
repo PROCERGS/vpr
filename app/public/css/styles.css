@@ -9,7 +9,7 @@
 		color: #333;
 	}
 	
-	.container.internal .identification { height: 100px; margin-top: 10px; background: url('/images/fundo_identificacao_central.png') no-repeat; }
+	.container.internal .identification { height: 100px; margin: 10px 0 25px; background: url('/images/fundo_identificacao_central.png') no-repeat; }
 	.container.internal .identification>div { margin: 15px 0 0 25px; }
 	.container.internal .identification h1 { font-size: 14px; color: #C30; margin-bottom: 10px; }
 	.container.internal .identification p.name { font-weight: bold; }

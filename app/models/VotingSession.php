@@ -59,6 +59,8 @@ class VotingSession extends Model {
 			$group = GrupoDemanda::findNextAvailableGroup();
 			if (count($group) > 0)
 				$this->setCurrentGroup(reset($group));
+			else
+				throw new ErrorException("Nenhum item disponível para votação.");
 		}
 		return $this->current_group;
 	}
@@ -71,7 +73,8 @@ class VotingSession extends Model {
 			AppController::redirect(array('controller' => 'Auth', 'action' => 'login'));
 	}
 	public function setCurrentUser($currentUser) {
-		$currentUser->fetchEleitorTre();
+		if (!($currentUser->getEleitorTre() instanceof EleitorTre))
+			$currentUser->fetchEleitorTre();
 		$this->current_user = $currentUser;
 		$this->save();
 	}
