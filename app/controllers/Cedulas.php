@@ -37,10 +37,8 @@ class Cedulas extends AppController {
 			$votacao = Votacao::findByActiveVotacao();
 
 			if (!empty($votacao)) {
-//				var_dump($votacao);
 				$votacao = reset($votacao);
 				$grupos = $votacao->findGruposDemanda();
-//				var_dump($grupos);
 				$areas = $votacao->findAreasTematicas($regiao_id);
 				$options = array();
 				foreach ($grupos as $grupo) {
