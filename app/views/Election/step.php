@@ -30,7 +30,8 @@
 						<dt><?php echo $areasTematicas[$options[0]->getIdAreaTematica()]->getNmAreaTematica(); ?></dt>
 <?php 			foreach ($options as $option) { ?>
 <?php 				$id = $option->getIdCedula();
-					$selected = Vote::isVoted($option)?'checked="checked"':''; ?>
+					if (!$readonly)
+						$selected = Vote::isVoted($option)?'checked="checked"':''; ?>
 						<dd>
 							<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> />
 							<label for="proposal<?php echo $id; ?>">
