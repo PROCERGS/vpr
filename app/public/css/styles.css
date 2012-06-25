@@ -51,10 +51,9 @@
 	.home .queries a { display: inline-block; color: #333; font-weight: bold; font-size: 14px; text-align: left; padding: 0 0 0 75px; line-height: 64px; background: no-repeat; }
 	
 	.container .row.footer { margin-top: 35px; }
-	.container .footer ul li { display: inline-block; }
-	.container .footer ul li a { font-size: 10px; text-decoration: none; color: #333; border-left: 1px solid #333; }
-	.container .footer ul li a { padding-left: 28px; margin-right: 35px; }
-	.container .footer ul li:first-child a { border: none; }
+	.container .footer ul li:first-child { border: none; }
+	.container .footer ul li { display: inline-block; border-left: 1px solid #333; padding: 0 20px; }
+	.container .footer ul li a { font-size: 10px; text-decoration: none; color: #333; padding: 0 3px; margin: 0; }
 	
 	.home.container .footer ul li a { padding-left: 7px; margin-right: 3px; }
 	
