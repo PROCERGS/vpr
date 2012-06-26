@@ -18,18 +18,18 @@
 					<?php echo $html->link('<img src="/images/logotipo_internas.png" alt="Sistema Estadual de Participação Popular e Cidadã" />', array('controller' => 'Application', 'action' => 'index'), array('title' => 'Sistema Estadual de Participação Popular e Cidadã')); ?>
 				</div>
 				<div class="sixcol last gov">
-					<?php echo $html->link('<img src="/images/logoGoverno.png" alt="Governo do Estado" />', "http://www.estado.rs.gov.br/", array('title' => 'Governo do Estado')); ?>
+					<?php echo $html->link('<img src="/images/logoGovernoCoredes.png" alt="Governo do Estado" />', "http://www.estado.rs.gov.br/", array('title' => 'Governo do Estado')); ?>
 				</div>
 			</div>
-<?php if (isset($currentUser) && $currentUser instanceof Cidadao) { ?>
 			<div class="row identification">
-				<div class="sixcol">
-					<h1>Votação de Prioridades - Orçamento 2013</h1>
+				<div class="sixcol" data-corede="00">
+					<h1><?php startblock('page_name'); ?>Votação de Prioridades<?php endblock('page_name'); ?> - Orçamento 2013</h1>
+<?php if (isset($currentUser) && $currentUser instanceof Cidadao) { ?>
 					<p class="name"><?php echo Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()); ?></p>
 					<p class="region"><?php echo $currentUser->getRegiao()->getNmRegiao(); ?></p>
+<?php } ?>
 				</div>
 			</div>
-<?php } ?>
 <?php emptyblock('content') ?>
 			<div class="row footer">
 				<ul class="twelvecol">

@@ -1,7 +1,9 @@
 /* ============================== */
 /* ! Layout for desktop version   */
 /* ============================== */
-
+	
+	html, body { height: 100%; }
+	
 	body {
 		font-size: 11px;
 		background-color: #360;
@@ -9,7 +11,7 @@
 		color: #333;
 	}
 	
-	.container.internal .identification { height: 100px; margin: 10px 0 25px; background: url('/images/fundo_identificacao_central.png') no-repeat; }
+	.container.internal .identification { height: 100px; margin: 10px 0 25px; background: url('/images/fundo_identificacao_00.png') no-repeat; }
 	.container.internal .identification>div { margin: 15px 0 0 25px; }
 	.container.internal .identification h1 { font-size: 14px; color: #C30; margin-bottom: 10px; }
 	.container.internal .identification p.name { font-weight: bold; }
@@ -31,13 +33,17 @@
 	.internal .row.group dl dd label .cod_projeto { font-weight: bold; }
 	
 	.container .header .gov { text-align: right; }
-	.container .header { padding: 20px 12px 0; }
 	
-	.container.home { text-align: center; max-width: 760px; margin: 4% auto 0; background-color: transparent; }
+	
+	#top { position: relative; float: right; width: 100%; text-align: center; }
+	#floater { height: 50%; margin-bottom: -287px; position: relative; }
+	.home.container { clear: both; height: 535px; position: relative; margin: 0 auto; }
+	
+	.container.home { text-align: center; max-width: 760px; /*margin: 4% auto 0;*/ background-color: transparent; }
 	.container .static_bg { background: url('/images/fundo_capa.jpg') no-repeat; height: 535px; overflow: visible; }
 	.container .static_bg { padding: 0; -webkit-box-shadow: 0px 0px 20px 0px #000; box-shadow: 0px 0px 20px 0px #000; }
-	.container.home .header h1 { margin-left: 50px; background: url('/images/logotipo.png') no-repeat left; width: 330px; height: 171px; text-indent: -9999px; }
-	.container.home .header h2 { border-left: 2px solid green; padding-left: 35px; margin-top: 77px; background: url('/images/logotipo.png') no-repeat right bottom; width: 290px; height: 73px; text-indent: -9999px; }
+	.container.home .header h1 { background: url('/images/logotipo.png') no-repeat 40px center; width: 440px; height: 171px; text-indent: -9999px; }
+	.container.home .header h2 { background: url('/images/logotipo.png') no-repeat -413px center; width: 290px; height: 171px; text-indent: -9999px; }
 	
 	.home .online_voting_dates { font-size: 12px; font-weight: bold; }
 	
@@ -55,7 +61,8 @@
 	.container .footer ul li { display: inline-block; *display: inline; border-left: 1px solid #333; padding: 0 20px; }
 	.container .footer ul li a { font-size: 10px; text-decoration: none; color: #333; padding: 0 3px; margin: 0; }
 	
-	.home.container .footer ul li a { padding-left: 7px; margin-right: 3px; }
+	.home.container .row.footer { margin-top: 55px; }
+	.home.container .footer ul li { padding: 0 3px; }
 	
 	.footer { text-align: center; }
 
@@ -73,8 +80,8 @@
 	.container .header .gov { text-align: center; }
 	.container .identification { background-image: none; }
 	
-	.container.home .header h1 { margin-left: 0; }
-	.container.home .header h2 { border-left: none; margin-top: 0; }
+	.container.home .header h1 { margin: 0 auto; }
+	.container.home .header h2 { margin: 0 auto; }
 	
 	.home .vote_now , .home .queries, .home .queries .last { margin-top: 10px; }
 	.home .queries div a { margin-left: 13px; }
