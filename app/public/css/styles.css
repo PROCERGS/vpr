@@ -11,6 +11,8 @@
 		color: #333;
 	}
 	
+	.container.internal .header { padding-top: 20px; }
+	
 	.container.internal .identification { height: 100px; margin: 10px 0 25px; background: url('/images/fundo_identificacao_00.png') no-repeat; }
 	.container.internal .identification>div { margin: 15px 0 0 25px; }
 	.container.internal .identification h1 { font-size: 14px; color: #C30; margin-bottom: 10px; }
