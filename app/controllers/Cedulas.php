@@ -40,10 +40,14 @@ class Cedulas extends AppController {
 				$groups = array();
 				foreach ($grupos as $grupo) {
 					$groups[$grupo->getIdGrupoDemanda()] = array(
-								'areas' => $grupo->getOptionsGroupByAreaTematica($regiao_id),
-								'group' => $grupo,
-								'areasTematicas' => $grupo->getAreasTematicas($regiao_id)
-							);
+							'group' => $grupo,
+							'areasTematicas' => $grupo->getAreasTematicas($regiao_id)
+					);
+					
+					if ($grupo->getFgTituloSimples() != 1)
+						$groups[$grupo->getIdGrupoDemanda()]['areas'] = $grupo->getOptionsGroupByAreaTematica($regiao_id);
+					else
+						$groups[$grupo->getIdGrupoDemanda()]['options'] = $grupo->getOptions($regiao_id);
 				}
 			}
 			

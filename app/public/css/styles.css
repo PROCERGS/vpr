@@ -4,12 +4,8 @@
 	
 	html, body { height: 100%; }
 	
-	body {
-		font-size: 11px;
-		background-color: #360;
-		font-family: Verdana, Geneva, sans-serif;
-		color: #333;
-	}
+	body { font-size: 11px; background-color: #360; font-family: Verdana, Geneva, sans-serif; color: #333; }
+	body:after { visibility: hidden; display: block; content: ' '; height: 25px; }
 	
 	.container.internal .header { padding-top: 20px; }
 	

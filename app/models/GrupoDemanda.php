@@ -12,6 +12,7 @@ class GrupoDemanda extends Model {
 	protected $nm_grupo_abrev;
 	protected $nro_inicial;
 	protected $nro_final;
+	protected $fg_titulo_simples;
 
 	/**
 	 * @return GrupoDemanda

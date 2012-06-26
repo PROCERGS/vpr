@@ -5,9 +5,6 @@ class Application extends AppController {
 	public static function index() {
 
 		$string_alt_img = null;
-		setlocale(LC_TIME, "portuguese");
-		$data_completa = strftime("São %H horas e %m minutos");
-		//echo $data_completa;
 
 		self::addCSS('/css/estilos_capa.css');
 

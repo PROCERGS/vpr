@@ -24,29 +24,10 @@
 <?php 		if (!$readonly) { ?>				<input type="hidden" name="votes_step" value="<?php echo $step; ?>" /><?php } ?>
 				<fieldset>
 					<legend>Propostas Disponíveis</legend>
-					<dl>
-<?php 		foreach ($currentGroup['areas'] as $options) {
-				$areasTematicas = $currentGroup['areasTematicas']; ?>
-						<dt><?php echo $areasTematicas[$options[0]->getIdAreaTematica()]->getNmAreaTematica(); ?></dt>
-<?php 			foreach ($options as $option) { ?>
-<?php 				$id = $option->getIdCedula();
-					if (!$readonly)
-						$selected = Vote::isVoted($option)?'checked="checked"':'';
-					$label = array();
-					$label[] = $option->getNmDemanda();
-					if (strlen($option->getVlrDemanda()) > 0)
-						$label[] = 'Valor: R$'.$option->getVlrDemanda();
-					if (strlen($option->getDsAbrangencia()) > 0)
-						$label[] = 'Abrangência: '.$option->getDsAbrangencia();
-					$label = join(' - ', $label); ?>
-						<dd>
-							<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> />
-							<label for="proposal<?php echo $id; ?>">
-								<span class="cod_projeto"><?php echo $option->getCodProjeto(); ?></span> - <?php echo $label; ?></label>
-						</dd>
-<?php 			}
-			} ?>
-					</dl>
+<?php 		if ($group->getFgTituloSimples() == 1)
+				include VIEWS_PATH.'Election/titulo_simples.php';
+			else
+				include VIEWS_PATH.'Election/titulo_agrupado.php'; ?>
 				</fieldset>
 <?php 		if (!$readonly) { ?>
 				<button type="button" class="back">Voltar</button>
