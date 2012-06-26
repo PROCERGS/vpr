@@ -9,7 +9,6 @@ class Cedulas extends AppController {
 		$html = new HTMLHelper();
 
 		self::setJavascriptVar('regiao', $html->url(array('controller' => 'Cedulas', 'action' => 'consulte')));
-		self::addJavascript('/js/jquery-1.7.2.min.js');
 
 		$options_regiao = Regiao::findAll();
 		$regiao_attr = array("class" => "regiao", 'name' => 'regiao_id', 'id' => 'regiao_id');
@@ -47,6 +46,8 @@ class Cedulas extends AppController {
 							);
 				}
 			}
+			
+			self::setJavascriptVar('current_id_regiao', $regiao_id);
 		}
 		
 		$readonly = TRUE;

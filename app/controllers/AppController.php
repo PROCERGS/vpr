@@ -6,7 +6,9 @@ class AppController extends Controller {
 		self::addCSS('/css/styles.css');
 	}
 	protected static function setDefaultJavascripts() {
+		self::addJavascript('/js/jquery-1.7.2.min.js');
 		self::addJavascript('/js/css3-mediaqueries.js');
+		self::addJavascript('/js/default.js');
 	}
 	
 	public static function before() {
