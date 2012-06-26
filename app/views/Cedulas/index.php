@@ -1,5 +1,6 @@
 <?php require VIEWS_PATH . 'main.php'; ?>
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
+<?php startblock('page_name'); ?>Consulta de Cédulas de Votação<?php endblock('page_name'); ?>
 <?php startblock('content'); ?>
 <div class="row">
 	<div class="twelvecol last select_regiao">
