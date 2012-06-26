@@ -14,6 +14,7 @@ class Cedula extends Model {
 	protected $cod_projeto;
 	protected $nm_projeto_cedula;
 	protected $int_ordem;
+	protected $ds_abrangencia;
 
 	/**
 	 * @return Cedula
