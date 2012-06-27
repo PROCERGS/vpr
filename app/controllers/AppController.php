@@ -2,6 +2,7 @@
 class AppController extends Controller {
 	
 	private static $page_name = '';
+	private static $regiao = NULL;
 
 	protected static function setDefaultStylesheets() {
 		self::addCSS('/css/1140.css');
@@ -44,9 +45,19 @@ class AppController extends Controller {
 		if (!is_null($currentUser))
 			$values = array_merge($values, compact('currentUser'));
 		
+		$regiao = self::getRegiao();
+		$current_nm_regiao = '';
+		if (!is_null($regiao)) {
+			self::setJavascriptVar('current_id_regiao', $regiao->getIdRegiao());
+			$current_nm_regiao = $regiao->getNmRegiao();
+		} elseif (!is_null($currentUser)) {
+			self::setJavascriptVar('current_id_regiao', $currentUser->getRegiao()->getIdRegiao());
+			$current_nm_regiao = $currentUser->getRegiao()->getNmRegiao();
+		}
+		
 		$html = new HTMLHelper();
 		$detector = Session::get('detector');
-		$values = array_merge($values, compact('html', 'detector'));
+		$values = array_merge($values, compact('html', 'detector', 'current_nm_regiao'));
 		
 		return $values;
 	}
@@ -100,6 +111,19 @@ class AppController extends Controller {
 		}
 	}
 	
-	protected static function setPageName($page_name) { self::$page_name = $page_name; }
+	protected static function setPageName($page_name) { self::$page_name = "$page_name - "; }
 	protected static function getPageName() { return self::$page_name; }
+	
+	/**
+	 * @return Regiao
+	 */
+	public static function getRegiao() { return self::$regiao; }
+	public static function setRegiao($regiao) {
+		if ($regiao instanceof Regiao)
+			self::$regiao = $regiao;
+		elseif (is_numeric($regiao))
+			self::$regiao = reset(Regiao::findByIdRegiao($regiao));
+		else
+			throw new InvalidArgumentException('Formato de região não reconhecido.');
+	}
 }

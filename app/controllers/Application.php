@@ -3,13 +3,11 @@
 class Application extends AppController {
 
 	public static function index() {
-
+		
 		$string_alt_img = null;
-
-		self::addCSS('/css/estilos_capa.css');
-
+		
 		$html = new HTMLHelper();
-
+		
 		$votacao = Votacao::findAll();
 		
 		$show_vote_now = FALSE;
@@ -28,15 +26,15 @@ class Application extends AppController {
 			if (is_string($nome) && is_string($orçamento))
 				$string_alt_img = $nome + " - " + $orçamento;
 		}
-
-
+		
+		
 		self::render(compact("string_data", "string_alt_img", "show_vote_now"));
 	}
 
 	public static function make_class() {
 		$className = self::getParam('class');
 		$tableName = self::getParam('table');
-
+		
 		if (is_null($className))
 			$className = Util::parseControllerName($tableName);
 

@@ -56,7 +56,7 @@ class Cedulas extends AppController {
 				}
 			}
 			
-			self::setJavascriptVar('current_id_regiao', $regiao_id);
+			AppController::setRegiao($regiao_id);
 		}
 		
 		$readonly = TRUE;

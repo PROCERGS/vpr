@@ -27,7 +27,8 @@ class Cidadao extends Model {
 				$cidadao->setNroTitulo($eleitor_tre->getNroTitulo());
 				$cidadao->setRg($rg);
 				$cidadao->setIdCidadao($cidadao->insert());
-			}
+			} else
+				throw new ErrorException("Eleitor não encontrado.");
 		} elseif (count($cidadao) == 1) {
 			$cidadao = Cidadao::cast(reset($cidadao));
 			$cidadao->fetchEleitorTre();

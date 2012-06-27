@@ -1,7 +1,7 @@
 <?php
 class Election extends AppController {
 	
-	protected static function before() {
+	public static function before() {
 		parent::before();
 		self::setPageName("Votação de Prioridades");
 	}
