@@ -1,7 +1,7 @@
 					<dl>
 <?php 		foreach ($currentGroup['areas'] as $options) {
 				$areasTematicas = $currentGroup['areasTematicas']; ?>
-						<dt><?php echo $areasTematicas[$options[0]->getIdAreaTematica()]->getNmAreaTematica(); ?></dt>
+						<dt><?php if(isset($areasTematicas[$options[0]->getIdAreaTematica()])) echo $areasTematicas[$options[0]->getIdAreaTematica()]->getNmAreaTematica(); ?></dt>
 <?php 			foreach ($options as $option) { ?>
 <?php 				$id = $option->getIdCedula();
 					if (!$readonly)

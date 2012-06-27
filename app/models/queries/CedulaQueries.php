@@ -5,15 +5,15 @@ SELECT
     *
 FROM 
     `cedula` c
-    INNER JOIN `area_tematica` at ON at.`id_area_tematica` = c.`id_area_tematica` AND at.`fg_ativo` = 1
+    LEFT JOIN `area_tematica` at ON at.`id_area_tematica` = c.`id_area_tematica` AND at.`fg_ativo` = 1
 WHERE
     c.`fg_ativo` = 1
     AND c.`id_grupo_demanda` = :id_grupo_demanda
     AND c.`id_votacao` = :id_votacao
     AND c.`id_regiao` = :id_regiao
 ORDER BY
-	at.`int_ordem` ASC,
-	c.`cod_projeto` ASC
+	c.`cod_projeto` ASC,
+	at.`int_ordem` ASC
 EOD;
 	
 	const SQL_FIND_BY_COD_PROJ_IN = <<<EOD

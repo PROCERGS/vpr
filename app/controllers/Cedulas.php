@@ -27,7 +27,7 @@ class Cedulas extends AppController {
 
 	public static function consultar() {
 
-		self::setTitle("Cédula da Região");
+		self::setTitle("Consulta Cédula de Votação de Prioridades - Orçamento 2013");
 
 		$regiao_id = -1;
 		if (self::getParam('regiao_id'))
