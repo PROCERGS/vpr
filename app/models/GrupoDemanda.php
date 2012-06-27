@@ -84,8 +84,12 @@ class GrupoDemanda extends Model {
 		if (is_null($options))
 			$options = $this->getOptions($id_regiao);
 		$result = array();
-		foreach ($options as $option)
-			$result[$option->getIdAreaTematica()][] = $option;
+		foreach ($options as $option) {
+			$id = $option->getIdAreaTematica();
+			$id = (is_numeric($id) && $option->getIdAreaTematica() > 0)?$id:0;
+			
+			$result[$id][] = $option;
+		}
 		return $result;
 	}
 }

@@ -1,7 +1,12 @@
 					<dl>
-<?php 		foreach ($currentGroup['areas'] as $options) {
-				$areasTematicas = $currentGroup['areasTematicas']; ?>
-						<dt><?php if(isset($areasTematicas[$options[0]->getIdAreaTematica()])) echo $areasTematicas[$options[0]->getIdAreaTematica()]->getNmAreaTematica(); ?></dt>
+<?php 		foreach ($currentGroup['areas'] as $idArea => $options) {
+				$areasTematicas = $currentGroup['areasTematicas'];
+				if ($idArea > 0)
+					$nm_area_tematica = $areasTematicas[$idArea]->getNmAreaTematica();
+				else
+					$nm_area_tematica = 'SEM ÁREA TEMÁTICA LERO LERO! LA LA LA!';
+				?>
+						<dt><?php echo $nm_area_tematica ?></dt>
 <?php 			foreach ($options as $option) { ?>
 <?php 				$id = $option->getIdCedula();
 					if (!$readonly)
