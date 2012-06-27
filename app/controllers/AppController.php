@@ -2,6 +2,7 @@
 class AppController extends Controller {
 	
 	private static $page_name = '';
+	private static $page_subname = '';
 	private static $regiao = NULL;
 
 	protected static function setDefaultStylesheets() {
@@ -111,8 +112,11 @@ class AppController extends Controller {
 		}
 	}
 	
-	protected static function setPageName($page_name) { self::$page_name = "$page_name - "; }
+	protected static function setPageName($page_name) { self::$page_name = $page_name; }
 	protected static function getPageName() { return self::$page_name; }
+	
+	protected static function setPageSubName($page_subname) { self::$page_subname = $page_subname; }
+	protected static function getPageSubName() { return self::$page_subname; }
 	
 	/**
 	 * @return Regiao

@@ -23,10 +23,8 @@
 			</div>
 			<div class="row identification">
 				<div class="sixcol" data-corede="00">
-					<h1><?php echo AppController::getPageName(); ?>Orçamento 2013</h1>
-<?php if (isset($currentUser) && $currentUser instanceof Cidadao) { ?>
-					<p class="name"><?php echo Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()); ?></p>
-<?php } ?>
+					<h1><?php echo AppController::getPageName(); ?></h1>
+					<p class="name"><?php echo AppController::getPageSubName(); ?></p>
 					<p class="region"><?php if (isset($current_nm_regiao)) echo $current_nm_regiao; ?></p>
 				</div>
 			</div>
