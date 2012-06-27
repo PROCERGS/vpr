@@ -1,5 +1,7 @@
 <?php
 class AppController extends Controller {
+	
+	private static $page_name = '';
 
 	protected static function setDefaultStylesheets() {
 		self::addCSS('/css/1140.css');
@@ -97,4 +99,7 @@ class AppController extends Controller {
 			}
 		}
 	}
+	
+	protected static function setPageName($page_name) { self::$page_name = $page_name; }
+	protected static function getPageName() { return self::$page_name; }
 }

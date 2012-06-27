@@ -1,6 +1,11 @@
 <?php
 class Election extends AppController {
 	
+	protected static function before() {
+		parent::before();
+		self::setPageName("Votação de Prioridades");
+	}
+	
 	protected static function setDefaultJavascripts() {
 		parent::setDefaultJavascripts();
 		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');

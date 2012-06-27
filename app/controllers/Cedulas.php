@@ -2,6 +2,11 @@
 
 class Cedulas extends AppController {
 
+	public static function before() {
+		parent::before();
+		self::setPageName("Consulta de Cédulas de Votação");
+	}
+	
 	public static function index() {
 
 		self::setTitle("Cédulas por Região");
