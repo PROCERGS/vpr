@@ -25,7 +25,6 @@ class Cedula extends Model {
 		if (!is_null($nm_area_tematica))
 			$nm_area_tematica = trim($nm_area_tematica);
 		$valor = trim($this->getVlrDemanda());
-		$abrangencia = trim($this->getDsAbrangencia());
 		
 		$label = array();
 		if (!is_null($nm_area_tematica))
@@ -34,8 +33,6 @@ class Cedula extends Model {
 			
 		if (strlen($valor) > 0 && floatval($valor) > 0)
 			$label[] = 'Valor: R$'.number_format($valor, 2, ',', '.');
-		if (strlen($abrangencia) > 0)
-			$label[] = 'Abrangência: '.$abrangencia;
 			
 		return join(' - ', $label);
 	}
@@ -58,5 +55,11 @@ class Cedula extends Model {
 			else return array();
 		} else
 			return array();
+	}
+	
+	public function isExpandable() {
+		$descricao = trim($this->getDsDemanda());
+		$abrangencia = trim($this->getDsAbrangencia());
+		return (strlen($abrangencia) > 0 || strlen($descricao) > 0);
 	}
 }

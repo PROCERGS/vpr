@@ -24,10 +24,25 @@
 <?php 		if (!$readonly) { ?>				<input type="hidden" name="votes_step" value="<?php echo $step; ?>" /><?php } ?>
 				<fieldset>
 					<legend>Propostas Disponíveis</legend>
-<?php 		if ($group->getFgTituloSimples() == 1)
-				include VIEWS_PATH.'Election/titulo_simples.php';
-			else
-				include VIEWS_PATH.'Election/titulo_agrupado.php'; ?>
+					<dl>
+<?php 		$areasTematicas = $currentGroup['areasTematicas'];
+			if ($group->getFgTituloSimples() == 1) {
+				$groupByAreaTematica = FALSE;
+				$options = $currentGroup['options'];
+				
+				include VIEWS_PATH.'Election/option.php';
+			} else {
+				foreach ($currentGroup['areas'] as $idArea => $options) {
+					if ($idArea > 0)
+						$nm_area_tematica = $areasTematicas[$idArea]->getNmAreaTematica();
+					else
+						throw new ErrorException("Inconsistent database: Cedula[".$option->getIdCedula()."] has no id_area_tematica!"); ?>
+						<dt><?php echo $nm_area_tematica ?></dt>
+<?php 				$groupByAreaTematica = TRUE;
+					include VIEWS_PATH.'Election/option.php';
+				}
+			} ?>
+					</dl>
 				</fieldset>
 <?php 		if (!$readonly) { ?>
 				<button type="button" class="back">Voltar</button>

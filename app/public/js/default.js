@@ -3,4 +3,10 @@ $(document).ready(function() {
 	
 	current_id_regiao = current_id_regiao.length<2?"0"+current_id_regiao:current_id_regiao;
 	$(".container.internal .identification").css('background-image', "url('/images/fundo_identificacao_" + current_id_regiao + ".png')");
+	
+	$(".group dl dd .toggleDetails").click(function(){
+		$(this).siblings(".details").slideToggle();
+		return false;
+	});
+	$(".group dl dd .details").hide();
 });

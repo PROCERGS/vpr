@@ -29,6 +29,10 @@
 	.internal .row.group dl dd { padding: 1px 0; }
 	.internal .row.group dl dd label { display: inline-table; }
 	.internal .row.group dl dd label .cod_projeto { font-weight: bold; }
+	.internal .row.group dl dd .toggleDetails:before { display: inline-table; content: '-'; margin: 0 4px 0 2px; color: #333; }
+	.internal .row.group dl dd .toggleDetails { display: inline-table; color: #c30; text-decoration: none; font-style: italic; font-size: 10px; padding: 1px 0; }
+	.internal .row.group dl dd .toggleDetails:hover { color: #900; }
+	.internal .row.group dl dd .details { border-bottom: 1px solid #ddd; padding: 0 0 0 40px; }
 	
 	.container .header .gov { text-align: right; }
 	
