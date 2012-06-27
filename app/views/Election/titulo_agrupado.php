@@ -4,7 +4,7 @@
 				if ($idArea > 0)
 					$nm_area_tematica = $areasTematicas[$idArea]->getNmAreaTematica();
 				else
-					$nm_area_tematica = 'SEM ÁREA TEMÁTICA LERO LERO! LA LA LA!';
+					throw new ErrorException("Inconsistent database: Cedula[".$option->getIdCedula()."] has no id_area_tematica!");
 				?>
 						<dt><?php echo $nm_area_tematica ?></dt>
 <?php 			foreach ($options as $option) { ?>
