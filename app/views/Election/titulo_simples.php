@@ -5,17 +5,15 @@
 <?php 			$id = $option->getIdCedula();
 				if (!$readonly)
 					$selected = Vote::isVoted($option)?'checked="checked"':'';
+				else 
+					$selected = 'disabled="disabled"';
 				
-				$label = array();
-				$label[] = $areasTematicas[$option->getIdAreaTematica()]->getNmAreaTematica();
-				$label[] = $option->getNmDemanda();
-				
-				if (strlen($option->getVlrDemanda()) > 0 && floatval($option->getVlrDemanda()) > 0)
-					$label[] = 'Valor: R$'.$option->getVlrDemanda();
-				if (strlen($option->getDsAbrangencia()) > 0)
-					$label[] = 'Abrangência: '.$option->getDsAbrangencia();
-				
-				$label = join(' - ', $label); ?>
+				$id_area_tematica = $option->getIdAreaTematica();
+				if (is_numeric($id_area_tematica) && $id_area_tematica > 0)
+					$nm_area_tematica = $areasTematicas[$option->getIdAreaTematica()]->getNmAreaTematica();
+				else
+					$nm_area_tematica = NULL;
+				$label = $option->getLabel($nm_area_tematica); ?>
 						<dd>
 							<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> />
 							<label for="proposal<?php echo $id; ?>">

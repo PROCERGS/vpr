@@ -21,6 +21,25 @@ class Cedula extends Model {
 	 */
 	public static function cast($o) { return $o; }
 	
+	public function getLabel($nm_area_tematica = NULL) {
+		if (!is_null($nm_area_tematica))
+			$nm_area_tematica = trim($nm_area_tematica);
+		$valor = trim($this->getVlrDemanda());
+		$abrangencia = trim($this->getDsAbrangencia());
+		
+		$label = array();
+		if (!is_null($nm_area_tematica))
+			$label[] = $nm_area_tematica;
+		$label[] = trim($this->getNmDemanda());
+			
+		if (strlen($valor) > 0 && floatval($valor) > 0)
+			$label[] = 'Valor: R$'.number_format($valor, 2, ',', '.');
+		if (strlen($abrangencia) > 0)
+			$label[] = 'Abrangência: '.$abrangencia;
+			
+		return join(' - ', $label);
+	}
+	
 	public static function findByCodProjeto($cod_projeto, $id_votacao, $id_regiao) {
 		if (!is_array($cod_projeto)) return parent::findByCodProjeto($cod_projeto);
 		

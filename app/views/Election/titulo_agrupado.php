@@ -11,18 +11,10 @@
 <?php 				$id = $option->getIdCedula();
 					if (!$readonly)
 						$selected = Vote::isVoted($option)?'checked="checked"':'';
-					else
-						$selected = '';
+				else 
+					$selected = 'disabled="disabled"';
 					
-					$label = array();
-					$label[] = $option->getNmDemanda();
-					
-					if (strlen($option->getVlrDemanda()) > 0 && floatval($option->getVlrDemanda()) > 0)
-						$label[] = 'Valor: R$'.number_format($option->getVlrDemanda(), 2, ',', '.');
-					if (strlen($option->getDsAbrangencia()) > 0)
-						$label[] = 'Abrangência: '.$option->getDsAbrangencia();
-					
-					$label = join(' - ', $label); ?>
+					$label = $option->getLabel(); ?>
 						<dd>
 							<input type="checkbox" name="selected[]" value="<?php echo $id; ?>" id="proposal<?php echo $id; ?>" <?php echo $selected; ?> />
 							<label for="proposal<?php echo $id; ?>">
