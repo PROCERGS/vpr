@@ -9,7 +9,6 @@ class Locais extends AppController {
 	
 	public static function index() {
 		self::setTitle("Locais de votação");
-		self::addCSS('/css/jquery-ui-1.8.21.custom.css');
 
 		$city_id = -1;
 		if (self::getParam('city_id'))
@@ -26,14 +25,11 @@ class Locais extends AppController {
 
 		$string_array = implode("|", $array);
 
-
+		self::addCSS('/css/jquery-ui-1.8.21.custom.css');
 		self::setJavascriptVar('grupo_urnas', $string_array);
 		self::setJavascriptVar('municipio', $html->url(array('controller' => 'Locais', 'action' => 'municipio')));
 		self::addJavascript('/js/jquery-1.7.2.min.js');
 		self::addJavascript('/js/jquery-ui-1.8.21.custom.min.js');
-		self::addJavascript('/js/jquery.ui.core.js');
-		self::addJavascript('/js/jquery.ui.widget.js');
-		self::addJavascript('/js/jquery.ui.position.js');
 		self::addJavascript('/js/jquery.ui.autocomplete.js');
 		self::addJavascript('/js/locais.js');
 
@@ -75,10 +71,6 @@ EOT;
 		}
 
 		return $string . "</table>";
-	}
-
-	public static function comoVotar() {
-		echo "Como votar!";
 	}
 
 }

@@ -8,14 +8,24 @@ jQuery(document).ready(function($) {
 
 });
 
-
-function completed(){
+/**
+ *	Diego Giacobbo
+ *	Para Cedulas
+ */
+function fillin(){
 	$.ajax({
 		type: "POST",
-		url: municipio,
+		url: regiao_municipio,
 		data:  "nome_municipio="+ $(".municipio").val(),
 		success: function(data) {
-			$('.descricao').html(data);
+			$('.descricao').html("<div class='vaivem'>"+data+"</div>");
+			$('.regiao').each(function(){
+				if($(this).val() == $('.descricao').text()){
+					$(this).attr('selected',true);
+				}
+			});
+			
+			$('.vaivem').remove();
 		}
 	});
 }
@@ -42,9 +52,7 @@ function completed(){
 				
 				
 				
-				
-				
-				completed();
+				fillin();
 				
 			});
 			this.refresh();
@@ -197,13 +205,11 @@ function completed(){
 				item: this.active
 			});
 		
-			
-			
-			
-			
-			
-			
-			completed();
+		
+		
+		
+		
+			fillin();
 		}
 	});
 
