@@ -2,6 +2,8 @@
 class SmsVote extends Model {
 	
 	const DELIMITER = '#';
+	const ALLOW = 'ALLOW';
+	const DENY = 'DENY';
 	
 	protected $id_sms;
 	protected $from;
@@ -37,6 +39,15 @@ class SmsVote extends Model {
 		$this->setOptions($msg);
 		
 		$this->checkDocs();
+		
+		$smsPolicy = Config::get('sms.policy');
+		$allowedRegionsId = Config::get('sms.allowedRegionsId');
+		if ($smsPolicy == self::ALLOW) {
+			if (array_search($this->getCidadao()->getRegiao()->getIdRegiao(), $allowedRegionsId) === FALSE)
+				throw new ErrorException("Votação não disponível para sua região.");
+		} elseif ($smsPolicy == self::DENY)
+			if (array_search($this->getCidadao()->getRegiao()->getIdRegiao(), $allowedRegionsId) !== FALSE)
+				throw new ErrorException("Votação não disponível para sua região.");
 	}
 	
 	public function checkDocs() {
