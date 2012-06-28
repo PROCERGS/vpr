@@ -24,7 +24,7 @@
 <?php 				if (strlen($scope) > 0) { ?>
 								<p class="scope"><strong>Abrangência:</strong> <?php echo $scope; ?></p>
 <?php 				}
-					if (strlen($abrangencia) > 0) { ?>
+					if (strlen($description) > 0) { ?>
 								<p class="description"><strong>Descrição:</strong> <?php echo $description; ?></p>
 <?php 				} ?>
 							</div>
