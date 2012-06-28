@@ -27,11 +27,6 @@ class Application extends AppController {
 				$string_alt_img = $nome + " - " + $orçamento;
 		}
 
-//		if (gethostbyaddr($_SERVER['REMOTE_ADDR']) == "PRO-PAE-5226.PROCERGS.REDERS" || gethostbyaddr($_SERVER['REMOTE_ADDR']) == "PRO-PAE-5226.PROCERGS.REDERS") {
-//			$show_vote_now = true;
-//		}
-
-
 		self::render(compact("string_data", "string_alt_img", "show_vote_now"));
 	}
 
@@ -63,56 +58,11 @@ class Application extends AppController {
 		setlocale(LC_ALL, "ptb");
 		$now = new DateTime();
 		$current_mk = time();
-
-//		if ($now <= $data_fim) {
-//			try {
-//				/**
-//				 * 	Se dias diferentes 
-//				 */
-//				if ($data_ini < $data_fim && $data_ini->diff($data_fim)->days > 0) {
-//					/**
-//					 * 	Se dias diferentes e votação ocorrendo 
-//					 */
-//					if ($data_ini <= $now && $data_fim >= $now) {
-//						$string_data = strftime("A votação está ocorrendo, você pode votar até às %H horas do dia %d de %B", $data_fim->getTimestamp());
-//					}
-//					/**
-//					 * 	Se dias diferentes e votação ainda não está ocrrendo 
-//					 */ else {
-//						$string_data = strftime("Dia %d de %B de %Y, das %H horas", $data_ini->getTimestamp());
-//						$string_data .= " até ";
-//						$string_data .= strftime("às %H horas", $data_fim->getTimestamp());
-//					}
-//				}
-//				/**
-//				 * 	Se dias iguais 
-//				 */ else if ((strftime("%d", $data_ini->getTimestamp()) == strftime("%d", $data_fim->getTimestamp()))) {
-//					/**
-//					 * 	Se dias iguais e votação ocorrendo 
-//					 */
-//					if ($data_ini <= $now && $data_fim >= $now) {
-//						$string_data = strftime("A votação está ocorrendo, você pode votar até às %H horas", $data_fim->getTimestamp());
-//					}
-//					/**
-//					 * 	Se dias iguais e votação ainda não está ocrrendo  
-//					 */
-//					else
-//						$string_data = strftime("Dia %d de %B de %Y a partir das %H horas e ocorrerá até às ", $data_ini->getTimestamp()) . strftime("%H horas", $data_fim->getTimestamp());
-//				}
-//			} catch (Exception $e) {
-//				$e->getMessage();
-//			}
-//		} else {
-//			$string_data = "A votação, já ocorreu em " . strftime("%d de %B de %Y", $data_ini->getTimestamp());
-//		}
-
+		
 		/**
 		 * 	Caso queira utilizar um formato padrão de data 
 		 * 	descomente as linhas de baixo
 		 */
-//		$string_data = strftime("Período de Votação Online: dia %d de %B de %Y - das %H", $data_ini->getTimestamp());
-//		$string_data .= " até ";
-//		$string_data .= strftime(" às %H", $data_fim->getTimestamp());
 
 		$string_data = "Período de Votação Online: dia 4 de julho de 2012 - das 8 às 24h";
 		
