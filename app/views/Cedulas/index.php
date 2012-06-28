@@ -5,12 +5,6 @@ echo self::getTitle();
 endblock();
 ?>
 <?php startblock('content'); ?>
-<style>
-	h2 {font-size: 14px; margin: 20px 0 20px 0;}
-	p{margin: 10px 0 10px 0}
-	form{margin: 20px 0 20px 0;}
-	a{text-decoration:none; }
-</style>
 <div class="row">
 	<div class="twelvecol last select_regiao">
 		<h2>Consulta de Cédulas</h2>
@@ -20,13 +14,15 @@ endblock();
 		<form action="<?php echo $html->url(array('controller' => 'Cedulas', 'action' => 'consultar')); ?>" method="get">
 			<p>
 				<label for="regiao_id">Região: </label> <?php echo $select_regiao; ?>
-				<button type="submit">Consultar</button>
+				<button type="submit">Consultar</button></br></br>
+				<label for="municipio"> Busque a região pelo munícipio, digitando a seguir... &nbsp; </label>
+				<input class="municipio" /><div class="descricao" style="visibility: hidden"></div>
 			</p>
 		</form>
 		<br>
 		<hr><br>
 		<center><a href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento 2013" name="Envia"></a></center>
-<!--		<input class="municipio" /><div class="descricao" style="visibility: hidden"></div>-->
+		
 	</div>
 </div>
 <?php endblock(); ?>

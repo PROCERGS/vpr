@@ -19,17 +19,17 @@ function fillin(){
 		data:  "nome_municipio="+ $(".municipio").val(),
 		success: function(data) {
 			$('.descricao').html("<div class='vaivem'>"+data+"</div>");
-			$('.regiao').each(function(){
-				if($(this).val() == $('.descricao').text()){
-					$(this).attr('selected',true);
-				}
-			});
 			
+			var combo = jQuery("select[name='regiao_id']");
+			combo.find("option").each(function(){  
+				if( jQuery( this ).val()==$('.descricao').text()){  
+					combo.val( jQuery( this ).val() );        
+				}  
+			});   
 			$('.vaivem').remove();
 		}
 	});
 }
-
 (function($) {
 
 	$.widget("ui.menu", {
@@ -48,10 +48,9 @@ function fillin(){
 				// temporary
 				event.preventDefault();
 				self.select( event );
-				
-				
-				
-				
+
+
+
 				fillin();
 				
 			});

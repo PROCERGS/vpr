@@ -22,6 +22,7 @@ class Cedulas extends AppController {
 		$string_array = implode("|", $array);
 
 		self::addCSS('/css/jquery-ui-1.8.21.custom.css');
+		self::addCSS('/css/cedulas.css');
 		self::setJavascriptVar('grupo_urnas', $string_array);
 		self::setJavascriptVar('regiao_municipio', $html->url(array('controller' => 'Cedulas', 'action' => 'regiao_municipio')));
 		self::addJavascript('/js/jquery-1.7.2.min.js');
@@ -45,6 +46,7 @@ class Cedulas extends AppController {
 	public static function consultar() {
 
 		self::setTitle("Consulta Cédula de Votação de Prioridades - Orçamento 2013");
+		self::addCSS('/css/cedulas.css');
 
 		$regiao_id = -1;
 		if (self::getParam('regiao_id'))

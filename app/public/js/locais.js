@@ -8,7 +8,6 @@ jQuery(document).ready(function($) {
 
 });
 
-
 function completed(){
 	$.ajax({
 		type: "POST",

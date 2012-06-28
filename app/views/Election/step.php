@@ -54,5 +54,8 @@
 	</div>
 <?php 		if (!$readonly) { ?>
 </form>
+<?php }else{ ?>
+	<br /><br />
+      <center><a href="<?= $html->url(array('controller' => 'Cedulas', 'action' => 'index')) ?>"><input name="Envia" type="button" value="Consultar cédula de outra Região" /></a>&nbsp;&nbsp;&nbsp;<a href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input name="Envia" type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento 2013" /></a></center>
 <?php } ?>
 <?php endblock() ?>
