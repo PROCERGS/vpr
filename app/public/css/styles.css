@@ -83,8 +83,8 @@
 	}
 	
 	.container .header { text-align: center; }
-	.container .header .gov { text-align: center; }
-	.container .identification { background-image: none; }
+	.container .header .gov { text-align: center; display: none; }
+	.container .identification { background-position: -605px 0 !important; }
 	
 	.container.home .header h1 { margin: 0 auto; }
 	.container.home .header h2 { margin: 0 auto; }
@@ -92,6 +92,14 @@
 	.home .vote_now , .home .queries, .home .queries .last { margin-top: 10px; }
 	.home .queries div a { margin-left: 13px; }
 	.home .queries .last a { margin-left: 0; }
+	
+	.internal .row.group dl dd label { }
+	.internal .row.group dl dd .toggleDetails:before { content: none; }
+	.internal .row.group dl dd .toggleDetails { text-align: right; margin: -20px 0 0; display: block; }
+	
+	.internal .row.group dl dd input[type=checkbox] { display: none; }
+	.internal .row.group dl dd input[type=checkbox]:checked + label { background-color: #eee; color: inherit; }
+	.internal .row.group dl dd input[type=checkbox] + label { padding: 10px; }
 }
 
 

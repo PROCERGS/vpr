@@ -15,7 +15,6 @@
 				<p>Clique na proposta para visualizar o seu detalhamento.</p>
 			</div>
 			<div class="sixcol last">
-<?php 		if (!$readonly) { ?>				<button type="button" class="finish">Pular para o fim</button><?php } ?>
 			</div>
 		</div>
 		<div class="row group">

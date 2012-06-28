@@ -68,10 +68,14 @@ class Election extends AppController {
 		$areas = $group->getOptionsGroupByAreaTematica($regiao->getIdRegiao(), $cedulas);
 		
 		$groups[$group->getIdGrupoDemanda()] = array(
-					'areas' => $areas,
 					'group' => $group,
 					'areasTematicas' => $areasTematicas
 				);
+		
+		if ($group->getFgTituloSimples() != 1)
+			$groups[$group->getIdGrupoDemanda()]['areas'] = $areas;
+		else
+			$groups[$group->getIdGrupoDemanda()]['options'] = $cedulas;
 		
 		self::render(compact('step', 'nextURL', 'totalSteps', 'groups'));
 	}
