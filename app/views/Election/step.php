@@ -12,7 +12,7 @@
 			<div class="sixcol">
 				<h3>Instruções</h3>
 				<p>Selecione até <?php echo $group->getQtdMaxEscolha(); ?> opções da lista abaixo.</p>
-				<p>Clique na proposta para visualizar o seu detalhamento.</p>
+				<p>Clique em "ver mais" para visualizar o seu detalhamento.</p>
 			</div>
 			<div class="sixcol last">
 			</div>
