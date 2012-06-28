@@ -52,7 +52,7 @@ class Cedulas extends AppController {
 
 		if (isset($regiao_id) && $regiao_id != -1) {
 
-			$votacao = Votacao::findByActiveVotacao();
+			$votacao = Votacao::findByActiveVotacaoRead();
 
 			if (!empty($votacao)) {
 				$votacao = Votacao::cast(reset($votacao));
