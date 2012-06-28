@@ -21,7 +21,10 @@
 			<div class="row vote_now">
 				<div class="fourcol"></div>
 				<div class="fourcol last">
-					<?php if ($show_vote_now) echo $html->link("Para votar, clique aqui!", array('controller' => 'Election', 'action' => 'start')); ?>
+<?php 				if ($show_vote_now)
+						echo $html->link("Para votar, clique aqui!", array('controller' => 'Election', 'action' => 'start'));
+					else
+						echo '<span class="unavailable">Votação não disponível</span>'; ?>
 				</div>
 			</div>
 			<div class="row queries">
