@@ -15,7 +15,7 @@ endblock();
 			<p>
 				<label for="regiao_id">Região: </label> <?php echo $select_regiao; ?>
 				<button type="submit">Consultar</button></br></br>
-				<label for="municipio"> Busque a região pelo munícipio, digitando a seguir... &nbsp; </label>
+				<label for="municipio"> ou busque a região pelo munícipio, digitando a seguir: &nbsp; </label>
 				<input class="municipio" /><div class="descricao" style="visibility: hidden"></div>
 			</p>
 		</form>
