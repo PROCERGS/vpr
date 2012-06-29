@@ -17,6 +17,9 @@ class Cidadao extends Model {
 	public static function cast($o) { return $o; }
 	
 	public static function auth($nro_titulo, $rg) {
+		if (!$this->validateRG_RS($rg))
+			throw new InvalidArgumentException("RG inválido.");
+		
 		$cidadao = Cidadao::findByNroTituloOrRg($nro_titulo, $rg);
 		if (count($cidadao) <= 0) {
 			$eleitor_tre = reset(EleitorTre::findByNroTitulo($nro_titulo));
