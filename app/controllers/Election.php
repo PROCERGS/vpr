@@ -15,12 +15,18 @@ class Election extends AppController {
 	}
 	
 	public static function start() {
-		$votingSession = VotingSession::requireCurrentVotingSession();
-		$currentUser = $votingSession->requireCurrentUser();
-		$group = $votingSession->getCurrentGroup();
-		
-		if (!($group instanceof GrupoDemanda)) {
-			throw new ErrorException("Você já votou em todos grupos disponíveis.");
+		try {
+			$votingSession = VotingSession::requireCurrentVotingSession();
+			$currentUser = $votingSession->requireCurrentUser();
+			$group = $votingSession->getCurrentGroup();
+			
+			if (!($group instanceof GrupoDemanda)) {
+				throw new ErrorException("Você já votou em todos grupos disponíveis.");
+			}
+		} catch (Exception $e) {
+			Session::delete('currentUser');
+			Session::destroy();
+			throw $e;
 		}
 		
 		$votoLog = $votingSession->getVotoLog();
@@ -49,6 +55,8 @@ class Election extends AppController {
 		$cedulas = $page['content'];
 		$totalSteps = $page['pages'];
 		
+		$qtdMaxEscolha = $group->getQtdMaxEscolha();
+		
 		$html = new HTMLHelper();
 		
 		if (!is_null($nextStep))
@@ -63,7 +71,8 @@ class Election extends AppController {
 		self::setJavascriptVar('previousStep', $step-1);
 		self::setJavascriptVar('nextStep', $nextStep);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Election', 'action' => 'step', 'step' => $step - 1)));
-		self::setJavascriptVar('reviewURL', $html->url(array('controller' => 'Election', 'action' => 'review'))); 
+		self::setJavascriptVar('reviewURL', $html->url(array('controller' => 'Election', 'action' => 'review')));
+		self::setJavascriptVar('qtdMaxEscolha', $qtdMaxEscolha);
 		
 		$areas = $group->getOptionsGroupByAreaTematica($regiao->getIdRegiao(), $cedulas);
 		
@@ -77,7 +86,7 @@ class Election extends AppController {
 		else
 			$groups[$group->getIdGrupoDemanda()]['options'] = $cedulas;
 		
-		self::render(compact('step', 'nextURL', 'totalSteps', 'groups'));
+		self::render(compact('step', 'nextURL', 'totalSteps', 'groups', 'qtdMaxEscolha'));
 	}
 	
 	public static function review() {
@@ -118,13 +127,13 @@ class Election extends AppController {
 		$votoLog = VotoLog::cast($votingSession->getVotoLog());
 		
 		if (count($votes) > $group->getQtdMaxEscolha()) {
-			throw new UnexpectedValueException("Excedido o número de $group->getQtdMaxEscolha() opções.");
+			self::redirect(array('controller' => 'Election', 'action' => 'review'));
+			throw new UnexpectedValueException("Excedido o número de ".$group->getQtdMaxEscolha()." opções.");
 		}
 		
 		foreach ($votes as $vote) {
 			$voto = new Voto($vote->getIdCedula(), $currentUser->getRegiao()->getIdMunicipio(), $votoLog->getIdMeioVotacao(), $_SERVER['REMOTE_ADDR']);
 			$voto->setIdVoto($voto->insert());
-			printr($voto);
 		}
 		
 		$votoLog->setDthFim(new DateTime());

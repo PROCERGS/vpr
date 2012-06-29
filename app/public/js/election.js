@@ -24,4 +24,14 @@ $(document).ready(function() {
 	else
 		$("button.back").hide();
 		//$("button.back").attr("disabled", "disabled");
+	
+	if (typeof qtdMaxEscolha !== 'undefined' && qtdMaxEscolha != null) {
+		$("form dl input[type=checkbox]").change(function () {
+			var selectedCount = $("form dl input[type=checkbox]:checked").length;
+			if (selectedCount >= qtdMaxEscolha)
+				$("form dl input[type=checkbox]").not(":checked").attr('disabled', 'disabled');
+			if (selectedCount < qtdMaxEscolha)
+				$("form dl input[type=checkbox]").removeAttr('disabled');
+		});
+	}
 });
