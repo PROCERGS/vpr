@@ -8,11 +8,15 @@ $(document).ready(function() {
 		$(this).siblings(".details").slideToggle();
 		return false;
 	});
+	
 	$(".group dl dd .details").hide();
 	
-	$("a input[type=button]").each(function() {
-		$(this).click(function() { 
-			location.href=$(this).closest("a").attr("href");
-		});
-	}); 
+	if (navigator.appName === 'Microsoft Internet Explorer')
+	{
+		$("a input[type=button]").each(function() {
+			$(this).click(function() { 
+				location.href=$(this).closest("a").attr("href");
+			});
+		}); 
+	} 
 });
