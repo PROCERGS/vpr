@@ -13,31 +13,27 @@ class Cedulas extends AppController {
 		self::setTitle("Cédulas por Região");
 
 		$html = new HTMLHelper();
-
+		
 		$grupo_urnas = Urna::findByTxtLocalizacaoAgrup();
 		$array = array();
 		foreach ($grupo_urnas as $urna) {
 			array_push($array, $urna->getNmMunicipio());
 		}
 		$string_array = implode("|", $array);
-
+		
 		self::addCSS('/css/jquery-ui-1.8.21.custom.css');
-		self::addCSS('/css/cedulas.css');
-		self::setJavascriptVar('grupo_urnas', $string_array);
-		self::setJavascriptVar('regiao_municipio', $html->url(array('controller' => 'Cedulas', 'action' => 'regiao_municipio')));
 		self::addJavascript('/js/jquery-1.7.2.min.js');
 		self::addJavascript('/js/jquery-ui-1.8.21.custom.min.js');
 		self::addJavascript('/js/jquery.ui.autocomplete.js');
 		self::addJavascript('/js/cedulas.js');
-
-
-		self::setJavascriptVar('regiao', $html->url(array('controller' => 'Cedulas', 'action' => 'consulte')));
-
-		$options_regiao = Regiao::findAll();
+		
+		self::setJavascriptVar('municipiosSearchURL', $html->url(array('controller' => 'Municipios', 'action' => 'search_id_regiao')));
+		
+		$options_regiao = Regiao::findAll(array('nm_regiao ASC'));
 		$regiao_attr = array("class" => "regiao", 'name' => 'regiao_id', 'id' => 'regiao_id');
 		$regiao_settings = array('default_option' => '--------------', 'id_name' => 'id_regiao', 'label_name' => 'nm_regiao');
 		$default = -1;
-
+		
 		$select_regiao = $html->select($options_regiao, $default, $regiao_settings, $regiao_attr);
 
 		self::render(compact("select_regiao"));
