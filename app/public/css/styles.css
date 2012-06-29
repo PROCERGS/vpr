@@ -54,7 +54,7 @@
 	.home .vote_now { background: url('/images/fundo_votar.png'); padding: 20px 0 15px; margin-top: 50px; }
 	.home .vote_now a, .home .vote_now .unavailable { display: inline-block; font-weight: bold; font-size: 24px; text-align: left; padding: 3px 0 0 75px; height: 70px; }
 	.home .vote_now a { color: #360; background: url('/images/icone_votar.png') no-repeat; }
-	.home .vote_now .unavailable { color: #999; background: url('/images/icone_votar_off.png') no-repeat; }
+	.home .vote_now .unavailable { color: #999; background: url('/images/icone_votar_off.png') no-repeat; width: 200px; }
 	
 	.home .queries { margin-top: 50px; }
 	

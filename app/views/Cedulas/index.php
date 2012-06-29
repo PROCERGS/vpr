@@ -21,7 +21,7 @@ endblock();
 		</form>
 		<br>
 		<hr><br>
-		<center><a href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento 2013" name="Envia"></a></center>
+		<center><a href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento 2013" name="Envia">&nbsp;</a></center>
 		
 	</div>
 </div>

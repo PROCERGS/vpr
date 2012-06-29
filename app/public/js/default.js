@@ -9,4 +9,10 @@ $(document).ready(function() {
 		return false;
 	});
 	$(".group dl dd .details").hide();
+	
+	$("a input[type=button]").each(function() {
+		$(this).click(function() { 
+			location.href=$(this).closest("a").attr("href");
+		});
+	}); 
 });
