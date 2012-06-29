@@ -15,7 +15,7 @@
 		<div class="container internal">
 			<div class="row header">
 				<div class="sixcol">
-					<?php echo $html->link('<img src="/images/logotipo_internas.png" alt="Sistema Estadual de Participação Popular e Cidadã" />', array('controller' => 'Application', 'action' => 'index'), array('title' => 'Sistema Estadual de Participação Popular e Cidadã')); ?>
+					<?php echo $html->link('<img src="/images/logotipo_internas.png" alt="Sistema Estadual de Participação Popular e Cidadã" />', 'http://www.participa.rs.gov.br/capa.php', array('title' => 'Sistema Estadual de Participação Popular e Cidadã')); ?>
 				</div>
 				<div class="sixcol last gov">
 					<?php echo $html->link('<img src="/images/logoGovernoCoredes.png" alt="Governo do Estado" />', "http://www.estado.rs.gov.br/", array('title' => 'Governo do Estado')); ?>
