@@ -17,8 +17,9 @@ class Cidadao extends Model {
 	public static function cast($o) { return $o; }
 	
 	public static function auth($nro_titulo, $rg) {
+		$previous = array('controller' => 'Auth', 'action' => 'login');
 		if (!self::validateRG_RS($rg))
-			throw new InvalidArgumentException("RG inválido.");
+			throw new AppException("RG inválido.", AppException::ERROR, $previous);
 		
 		$cidadao = Cidadao::findByNroTituloOrRg($nro_titulo, $rg);
 		if (count($cidadao) <= 0) {
@@ -31,15 +32,15 @@ class Cidadao extends Model {
 				$cidadao->setRg($rg);
 				$cidadao->setIdCidadao($cidadao->insert());
 			} else
-				throw new ErrorException("Eleitor não encontrado.");
+				throw new AppException("Eleitor não encontrado.");
 		} elseif (count($cidadao) == 1) {
 			$cidadao = Cidadao::cast(reset($cidadao));
 			$cidadao->fetchEleitorTre();
 			$cidadao->fetchRegiao();
 			if ($cidadao->getRg() != $rg || $cidadao->getNroTitulo() != $nro_titulo)
-				throw new DocumentsMismatchException();
+				throw new DocumentsMismatchException('Um dos documentos parece pertencer a outra pessoa. Verifique seus dados.', $previous);
 		} elseif (count($cidadao) > 1) {
-			throw new DocumentsMismatchException();
+			throw new DocumentsMismatchException('Um dos documentos parece pertencer a outra pessoa. Verifique seus dados.', $previous);
 		} else {
 			throw new ErrorException('Unknown error.');
 		}

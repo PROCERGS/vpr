@@ -72,6 +72,8 @@ class Cedulas extends AppController {
 			}
 
 			AppController::setRegiao($regiao_id);
+		} else {
+			throw new InvalidArgumentException("");
 		}
 
 		$readonly = TRUE;

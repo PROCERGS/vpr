@@ -1,7 +1,7 @@
 <?php
-class DocumentsMismatchException extends ErrorException {
-	public function __construct($message = NULL, $code = NULL, $previous = NULL) {
+class DocumentsMismatchException extends AppException {
+	public function __construct($message = NULL, $previous = NULL) {
 		if (is_null($message)) $message = 'Documents Mismatch!';
-		parent::__construct($message, $code, $previous);
+		parent::__construct($message, AppException::ERROR, $previous);
 	}
 }
