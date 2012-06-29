@@ -5,7 +5,11 @@ class Auth extends AppController {
 			
 			$cidadao = self::getParam('Cidadao');
 			$cidadao = Cidadao::cast(Cidadao::getFromArray($cidadao));
-			$cidadao = Cidadao::auth(trim($cidadao->getNroTitulo()), trim($cidadao->getRg()));
+			
+			$nro_titulo = trim($cidadao->getNroTitulo());
+			$nro_titulo = str_pad($nro_titulo, 12, '0', STR_PAD_LEFT);
+			
+			$cidadao = Cidadao::auth($nro_titulo, trim($cidadao->getRg()));
 			
 			if ($cidadao instanceof Cidadao) {
 				$votingSession = new VotingSession($cidadao);
