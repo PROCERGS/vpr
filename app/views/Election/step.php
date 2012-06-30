@@ -45,7 +45,7 @@
 				</fieldset>
 <?php 		if (!$readonly) { ?>
 				<button type="button" class="back">Voltar</button>
-				<button type="submit">Confirmar Voto em <?php echo $group->getNmGrupoDemanda(); ?></button>
+				<button type="submit">Confirmar Voto nas Demandas</button>
 <?php 		} ?>
 			</div>
 		</div>
