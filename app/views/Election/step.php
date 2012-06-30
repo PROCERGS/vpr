@@ -45,7 +45,7 @@
 				</fieldset>
 <?php 		if (!$readonly) { ?>
 				<button type="button" class="back">Voltar</button>
-				<button type="submit"><?php echo is_null($nextStep)?"Confirmar voto nas demandas":"Próxima Página"; ?></button>
+				<button type="submit"><?php echo is_null($nextStep)?"Confirmar voto nas ".$group->getNmGrupoAbrev():"Próxima Página"; ?></button>
 <?php 		} ?>
 			</div>
 		</div>

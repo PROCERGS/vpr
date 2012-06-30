@@ -149,7 +149,7 @@
 	.internal .row.group dl dd .toggleDetails { text-align: right; margin: -20px 5px 0; display: block; float: right; }
 	
 	.internal .row.group dl dd input[type=checkbox] { display: none; }
-	.internal .row.group dl dd input[type=checkbox]:checked + label { background-color: #eee; color: inherit; }
+	.internal .row.group dl dd input[type=checkbox]:checked + label { background-color: #ddd; color: inherit; }
 	.internal .row.group dl dd input[type=checkbox] + label { padding: 10px; }
 	.internal .row.group dl dd input[type=checkbox][disabled=disabled] + label { color: #ccc !important; }
 	

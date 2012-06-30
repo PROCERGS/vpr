@@ -32,7 +32,7 @@ class Cidadao extends Model {
 				$cidadao->setRg($rg);
 				$cidadao->setIdCidadao($cidadao->insert());
 			} else
-				throw new AppException("Eleitor não encontrado.");
+				throw new AppException("Eleitor não encontrado.", AppException::ERROR, $previous);
 		} elseif (count($cidadao) == 1) {
 			$cidadao = Cidadao::cast(reset($cidadao));
 			$cidadao->fetchEleitorTre();
