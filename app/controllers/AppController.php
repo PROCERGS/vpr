@@ -131,13 +131,14 @@ class AppController extends Controller {
 			throw new InvalidArgumentException('Formato de região não reconhecido.');
 	}
 	
-	public static function flash($message = NULL, $type = AppException::ERROR) {
-		if (is_null($message))
-			return !is_null(Session::get('flash'));
-		else {
-			$flash = new AppException($message, $type);
-			Session::set('flash', $flash);
+	public static function flash($flash = NULL, $type = AppException::ERROR) {
+		if (!($flash instanceof AppException)) {
+			if (is_null($flash))
+				return !is_null(Session::get('flash'));
+			else
+				$flash = new AppException($flash, $type);
 		}
+		Session::set('flash', $flash);
 	}
 	public static function getFlash() {
 		$flash = Session::get('flash');

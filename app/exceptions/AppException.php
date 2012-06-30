@@ -17,7 +17,7 @@ class AppException extends Exception {
 	}
 	
 	public function render() {
-		AppController::flash($this->getMessage(), $this->getType());
+		AppController::flash($this);
 		
 		if (!is_null($this->getPreviousPage()))
 			AppController::redirect($this->getPreviousPage());

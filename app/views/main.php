@@ -29,7 +29,6 @@
 					<p class="region"><?php if (isset($current_nm_regiao)) echo $current_nm_regiao; ?></p>
 				</div>
 			</div>
-<?php include_once VIEWS_PATH.'flash.php'; ?>
 <?php emptyblock('content') ?>
 			<div class="row footer">
 				<ul class="twelvecol">

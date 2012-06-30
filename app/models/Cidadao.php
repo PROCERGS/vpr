@@ -66,6 +66,7 @@ class Cidadao extends Model {
 	// TODO: implementar também em javascript.
 	public static function validateRG_RS($rg) {
 		$rg = (string) $rg;
+		$rg = str_pad($rg, 10, '0', STR_PAD_LEFT);
 		// Cálculo do DCE
 		$dce = 0;
 		for ($i = 1; $i < 9; $i++) {

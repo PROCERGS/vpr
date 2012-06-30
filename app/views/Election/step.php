@@ -19,7 +19,7 @@
 		</div>
 		<div class="row group">
 			<div class="twelvecol last">
-				<h2><?php echo $group->getNmGrupoDemanda(); ?></h2>
+				<h2><?php echo $group->getNmGrupoAbrev(); ?></h2>
 <?php 		if (!$readonly) { ?>				<input type="hidden" name="votes_step" value="<?php echo $step; ?>" /><?php } ?>
 				<fieldset>
 					<legend>Propostas Disponíveis</legend>
@@ -45,7 +45,7 @@
 				</fieldset>
 <?php 		if (!$readonly) { ?>
 				<button type="button" class="back">Voltar</button>
-				<button type="submit">Confirmar Voto nas Demandas</button>
+				<button type="submit"><?php echo is_null($nextStep)?"Confirmar voto nas demandas":"Próxima Página"; ?></button>
 <?php 		} ?>
 			</div>
 		</div>

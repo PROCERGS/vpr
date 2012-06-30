@@ -49,7 +49,7 @@
 	
 	/** Flashes **/
 	.flash { text-align: center; padding: 10px }
-	.flash.error { background: #f00; }
+	.flash.error { background: #c30; color: #fff; }
 	.flash.warning { background: #FAF7A5; }
 	.flash.info { background: #A5CDFA; }
 	/** /Flashes **/
@@ -121,7 +121,7 @@
 	
 	.container .header { text-align: center; }
 	.container .header .gov { text-align: center; display: none; }
-	.container .identification { background-position: -605px 0 !important; }
+	.container .identification { background: none !important; }
 	
 	.container.home .header h1 { margin: 0 auto; }
 	.container.home .header h2 { margin: 0 auto; }
@@ -130,6 +130,7 @@
 	.home .queries div a { margin-left: 13px; }
 	.home .queries .last a { margin-left: 0; }
 	
+	.internal { background-image: none; }
 	.internal .row.group dl dd label { display: block; max-width: none; }
 	.internal .row.group dl dd .toggleDetails:before { content: none; }
 	.internal .row.group dl dd .toggleDetails { text-align: right; margin: -20px 0 0; display: block; }
@@ -138,6 +139,8 @@
 	.internal .row.group dl dd input[type=checkbox]:checked + label { background-color: #eee; color: inherit; }
 	.internal .row.group dl dd input[type=checkbox] + label { padding: 10px; }
 	.internal .row.group dl dd input[type=checkbox][disabled=disabled] + label { color: #ccc !important; }
+	
+	.container.internal .footer { display: none; }
 }
 
 

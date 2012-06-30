@@ -86,7 +86,7 @@ class Election extends AppController {
 		else
 			$groups[$group->getIdGrupoDemanda()]['options'] = $cedulas;
 		
-		self::render(compact('step', 'nextURL', 'totalSteps', 'groups', 'qtdMaxEscolha'));
+		self::render(compact('step', 'nextURL', 'totalSteps', 'groups', 'qtdMaxEscolha', 'nextStep'));
 	}
 	
 	public static function review() {
