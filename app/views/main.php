@@ -15,7 +15,7 @@
 <?php startblock('main'); ?>
 		<div class="container internal">
 			<div class="row header">
-				<div class="sixcol">
+				<div class="sixcol logo">
 					<?php echo $html->link('<img src="/images/logotipo_internas.png" alt="Sistema Estadual de Participação Popular e Cidadã" />', '/', array('title' => 'Sistema Estadual de Participação Popular e Cidadã')); ?>
 				</div>
 				<div class="sixcol last gov">
@@ -39,6 +39,7 @@
 				</ul>
 			</div>
 		</div>
+		<p class="by_procergs">Desenvolvido pela PROCERGS</p>
 <?php endblock('main'); ?>
 <?php startblock('javascript'); require_once 'javascripts.php'; endblock('javascript'); ?>
 	</body>

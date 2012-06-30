@@ -27,7 +27,10 @@ class Application extends AppController {
 				$string_alt_img = $nome + " - " + $orçamento;
 		}
 
-		self::render(compact("string_data", "string_alt_img", "show_vote_now"));
+		if (Config::get('isMobile'))
+			self::render(compact("string_data", "string_alt_img", "show_vote_now"), array('controller' => 'Application', 'action' => 'index_mobile'));
+		else
+			self::render(compact("string_data", "string_alt_img", "show_vote_now"));
 	}
 
 	public static function make_class() {

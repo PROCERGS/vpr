@@ -19,6 +19,7 @@
 	.container .footer ul li:first-child { border: none; }
 	.container .footer ul li { display: inline-block; *display: inline; border-left: 1px solid #333; padding: 0 20px; }
 	.container .footer ul li a { font-size: 10px; text-decoration: none; color: #333; padding: 0 3px; margin: 0; }
+	.by_procergs { display: none; }
 	
 	/* HOME */
 	.home a { text-decoration: none; }
@@ -119,21 +120,33 @@
 		
 	}
 	
+	/* topo_inteiro.png */
+	.container .header .sixcol:first-child { padding-right: 0 !important; }
+	.container .header .sixcol:last-child { padding-left: 0 !important; }
+	.container .header .logo { float: left; }
+	.container .header .logo a { display: block; background: url('/images/topo_esq.png') no-repeat; width: 132px; height: 49px; }
+	.container .header .logo img { display: none; }
+	.container .header .gov { float: right; }
+	.container .header .gov a { display: block; background: url('/images/topo_dir.png') no-repeat; width: 103px; height: 49px; }
+	.container .header .gov img { display: none; }
+	
 	.container .header { text-align: center; }
-	.container .header .gov { text-align: center; display: none; }
-	.container .identification { background: none !important; }
+	.container.internal .identification { margin: 10px 0 0 !important; height: auto !important; background: none !important; }
+	.container.internal .identification>div { margin: 0; }
 	
 	.container.home .header h1 { margin: 0 auto; }
 	.container.home .header h2 { margin: 0 auto; }
 	
 	.home .vote_now , .home .queries, .home .queries .last { margin-top: 10px; }
+	.home .vote_now { background: none; padding: 0; }
+	.home .vote_now a { color: #360; background: none; height: auto; padding: 25px 0; }
 	.home .queries div a { margin-left: 13px; }
 	.home .queries .last a { margin-left: 0; }
 	
 	.internal { background-image: none; }
 	.internal .row.group dl dd label { display: block; max-width: none; }
 	.internal .row.group dl dd .toggleDetails:before { content: none; }
-	.internal .row.group dl dd .toggleDetails { text-align: right; margin: -20px 0 0; display: block; }
+	.internal .row.group dl dd .toggleDetails { text-align: right; margin: -20px 5px 0; display: block; float: right; }
 	
 	.internal .row.group dl dd input[type=checkbox] { display: none; }
 	.internal .row.group dl dd input[type=checkbox]:checked + label { background-color: #eee; color: inherit; }
@@ -141,6 +154,7 @@
 	.internal .row.group dl dd input[type=checkbox][disabled=disabled] + label { color: #ccc !important; }
 	
 	.container.internal .footer { display: none; }
+	.by_procergs { display: block; text-align: center; margin-top: -45px; color: #fff; }
 }
 
 

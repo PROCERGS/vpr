@@ -19,6 +19,20 @@ class AppException extends Exception {
 	public function render() {
 		AppController::flash($this);
 		
+		$votingSession = VotingSession::getCurrentVotingSession();
+		if ($votingSession instanceof VotingSession && $votingSession->getCurrentUser() instanceof Cidadao)
+			$cidadao = $votingSession->getCurrentUser();
+		else {
+			$extra = $this->getExtra();
+			if ($extra['cidadao'] instanceof Cidadao)
+				$cidadao = $extra['cidadao'];
+			else
+				$cidadao = NULL;
+		}
+		
+		$log = new LogErros($cidadao, $this);
+		$log->insert();
+		
 		if (!is_null($this->getPreviousPage()))
 			AppController::redirect($this->getPreviousPage());
 	}

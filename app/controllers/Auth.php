@@ -15,7 +15,8 @@ class Auth extends AppController {
 							'titulo' => $cidadao->getNroTitulo(),
 							'rg' => $cidadao->getRg(),
 							'celular' => $cidadao->getNroTelefone(),
-							'email' => $cidadao->getDsEmail()
+							'email' => $cidadao->getDsEmail(),
+							'cidadao' => $cidadao
 						);
 				$e->setExtra($extra);
 				throw $e;
