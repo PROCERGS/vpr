@@ -19,9 +19,9 @@
 					<?php echo $html->link("Consultar Título", "http://www.tse.jus.br/eleitor/titulo-e-local-de-votacao/consulta-por-nome", array('target' => '_blank')); ?>
 				</label>
 				
-				<label for="titulo">
+				<label for="rg">
 					RG (Carteira de Identidade):
-					<input type="number" name="Cidadao[rg]" id="titulo" min="0" value="" />
+					<input type="number" name="Cidadao[rg]" id="rg" min="0" value="" />
 				</label>
 			</fieldset>
 			
