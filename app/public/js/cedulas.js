@@ -18,7 +18,9 @@ $(document).ready(function() {
 		select: function (event, ui) {
 			$("#regiao_id").val(ui.item.id);
 		}
-	});
+	}).show();
+	$("label[for=nm_municipio]").show();
+	
 	$("#regiao_id").change(function() {
 		$(".municipio").val("");
 	});

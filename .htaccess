@@ -2,6 +2,8 @@
 #php_value session.save_path "localhost:11211"
 #php_value session.hash_strategy "consistent"
 
+php_flag zlib.output_compression on
+
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
