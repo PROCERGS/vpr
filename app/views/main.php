@@ -4,6 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" value="IE=9">
 <?php if (isset($detector) && is_object($detector) && $detector->isiPhone()) { ?>
 		<meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0" />
 <?php } ?>
