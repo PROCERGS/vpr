@@ -7,7 +7,7 @@
 		<div class="static_bg">
 			<div class="row header">
 				<div class="sevencol">
-					<h1><a href="http://www.participa.rs.gov.br">Sistema Estadual de Participação Popular e Cidadã</a></h1>
+					<h1><a href="http://vpr.rs.gov.br">Sistema Estadual de Participação Popular e Cidadã</a></h1>
 				</div>
 				<div class="fivecol last">
 					<h2><?php echo $string_alt_img; ?></h2>
