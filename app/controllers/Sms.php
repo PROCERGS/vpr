@@ -17,6 +17,11 @@ class Sms extends AppController {
 		$msg = SmsVote::sanitizeMessage($msg);
 		$votacao = reset(Votacao::findByActiveVotacao());
 		
+		$dump = compact('id_sms', 'from', 'to', 'msg', 'account');
+		$log_cidadao = new Cidadao();
+		$log = new LogErros($log_cidadao, new AppException("SMS RECEBIDA"), $dump);
+		$log->insert();
+		
 		try {
 			$sms_vote = new SmsVote($votacao, $id_sms, $from, $to, $msg, $account);
 		} catch (Exception $e) {
