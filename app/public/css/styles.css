@@ -24,7 +24,6 @@
 	/* HOME */
 	.home a { text-decoration: none; }
 	.home.container { clear: both; height: 535px; position: relative; margin: 0 auto; }
-	
 	.container.home { text-align: center; max-width: 760px; /*margin: 4% auto 0;*/ background-color: transparent; }
 	.container .static_bg { background: url('/images/fundo_capa.jpg') no-repeat; height: 535px; overflow: visible; }
 	.container .static_bg { padding: 0; -webkit-box-shadow: 0px 0px 20px 0px #000; box-shadow: 0px 0px 20px 0px #000; }
@@ -33,6 +32,7 @@
 	
 	.home .online_voting_dates { font-size: 12px; font-weight: bold; }
 	
+	.titulo_pagina { display:none; }
 	.home .vote_now { background: url('/images/fundo_votar.png'); padding: 20px 0 15px; margin-top: 50px; }
 	.home .vote_now a, .home .vote_now .unavailable { display: inline-block; font-weight: bold; font-size: 24px; text-align: left; padding: 3px 0 0 75px; height: 70px; }
 	.home .vote_now a { color: #360; background: url('/images/icone_votar.png') no-repeat; }
@@ -87,6 +87,7 @@
 	.internal .row.group dl dd .toggleDetails:hover { color: #900; }
 	.internal .row.group dl dd .details { padding: 0 0 0 40px; }
 	.internal .row.group button[type=submit] { margin: 40px 0 20px; }
+	.internal .row.group button[type=submit] { margin: 40px 0 20px; }
 	
 	/** Login **/
 	.container .login form { background: #EAEFE5; margin: 10px 0; padding: 20px 20px 30px; }
@@ -129,7 +130,6 @@
 	.container .header .gov { float: right; }
 	.container .header .gov a { display: block; background: url('/images/topo_dir.png') no-repeat; width: 103px; height: 49px; }
 	.container .header .gov img { display: none; }
-	
 	.container .header { text-align: center; }
 	.container.internal .identification { margin: 10px 0 0 !important; height: auto !important; background: none !important; }
 	.container.internal .identification>div { margin: 0; }
@@ -137,27 +137,47 @@
 	.container.home .header h1 { margin: 0 auto; }
 	.container.home .header h2 { margin: 0 auto; }
 	
+	.home .titulo_pagina { display: block; !important; text-align: center; width: 100%; background-color: #eb6947; font-size: 1.4em !important; font-weight: bold; padding: 5px 0 5px 0; color: #FFFFFF; background: #eb6947; text-shadow: #254F7A 0px -1px 1px; }
+	.home .online_voting_dates { font-size: 12px; font-weight: bold; }
 	.home .vote_now , .home .queries, .home .queries .last { margin-top: 10px; }
-	.home .vote_now { background: none; padding: 0; }
-	.home .vote_now a { color: #360; background: none; height: auto; padding: 25px 0; }
+	.home .vote_now {  background: none; width: 98%; margin: 0 !important; height: 44px; padding: 15% 0 20% 0; }
+	.home .vote_now a { display: block; width: 92%; margin: 0 5px 0 5px !important; height: 48px; font-size: 1.2em; font-weight: bold; border: 1px solid #999999; text-align: left; cursor: pointer; -webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px; line-height: 44px; margin-left: 0; padding-left: 20px; background: url('/images/setadir.png') no-repeat !important; background-color: #F0F0F0 !important; background-position:center right !important; color: #333 !important;}
 	.home .queries div a { margin-left: 13px; }
 	.home .queries .last a { margin-left: 0; }
-	
+	.twelvecol { padding: 0 !important; background-image: none; }
 	.internal { background-image: none; }
+	.internal .titulo_pagina { display: block; !important; text-align: center; width: 100%; background-color: #eb6947; font-size: 1em !important; font-weight: bold; padding: 5px 0 5px 0; color: #FFFFFF; background: #eb6947; text-shadow: #254F7A 0px -1px 1px; }
+	.internal h2 { margin: 20px 0 20px 10px; }
+	.internal .row.group dl dt { padding-top: 10px; margin: 10px 10px 4px; color: #666; font-size: 10px; text-transform: uppercase; font-weight: bold; border-top: 1px solid #ccc; }
 	.internal .row.group dl dd label { display: block; max-width: none; }
 	.internal .row.group dl dd .toggleDetails:before { content: none; }
 	.internal .row.group dl dd .toggleDetails { text-align: right; margin: -20px 5px 0; display: block; float: right; }
-	
 	.internal .row.group dl dd input[type=checkbox] { display: none; }
 	.internal .row.group dl dd input[type=checkbox]:checked + label { background-color: #ddd; color: inherit; }
 	.internal .row.group dl dd input[type=checkbox] + label { padding: 10px; }
 	.internal .row.group dl dd input[type=checkbox][disabled=disabled] + label { color: #ccc !important; }
-	
+	.internal .row.group button[type=submit] { margin-top: 20px; height: 44px;	width: 35%; font-size: 1.5em !important; }
+	.internal .row.group .back { margin-top: 20px; height: 44px; width: 35%; font-size: 1.5em !important; }
 	.container.internal .footer { display: none; }
 	.by_procergs { display: block; text-align: center; margin-top: -45px; color: #fff; }
+
+
+/** Login **/
+	.container .login h2 { margin: 20px 0 20px 10px; }
+	.container .login p { margin: 0 10px 0px 10px; }
+	.container .login form { background: none; margin: 10px 0; padding: 0 3% 0 3%; }
+	.container .login form fieldset { width: 100%; margin: 0 auto; }
+	.container .login form fieldset legend { display: none; }
+	.container .login form fieldset.required label { font-weight: bold; }
+	.container .login form fieldset.required label:before { content: '* '; }
+	.container .login form fieldset.required label a { color: #c30; font-size: 1.2em; text-decoration: none; font-style:normal !important; font-weight: normal; }
+	.container .login form fieldset.required label a:before { content: '[ '; }
+	.container .login form fieldset.required label a:after { content: ' ]'; }
+	.container .login form fieldset label { display: block; margin: 10px 0; }
+	.container .login form button { margin-top: 20px; height: 44px;	width: 50%; font-size: 1.5em !important; }
+	.container .login legend>* { display: block; }
+	input, select {	font-size: 1.6em; height: 25px; width: 95%;}
 }
-
-
 /* ========================================== */
 /* ! Provide higher res assets for iPhone 4   */
 /* ========================================== */
