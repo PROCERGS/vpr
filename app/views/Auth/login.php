@@ -2,13 +2,13 @@
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
 <?php startblock('content'); ?>
 <div class="row">
+	<div class="titulo_pagina">Votação de Prioridades - Orçamento 2013</div>
 	<div class="twelvecol last login">
 		<h2>Identificação</h2>
 		
 		<p><strong>Importante:</strong></p>
-		<p>O título de eleitor e a carteira de identidade devem pertencer ao estado do Rio Grande do Sul.</p>
+		<p>O título de eleitor e o RG devem pertencer ao RS.</p>
 		<p>Os campos marcados com (*) são obrigatórios</p>
-		<p>Ao inserir seu número de telefone celular e/ou endereço de e-mail, você concorda em receber mensagens do Sistema Estadual de Participação Popular e Cidadã (sem nenhum custo para o cidadão)</p>
 <?php include_once VIEWS_PATH.'flash.php'; ?>
 		<form action="<?php echo $html->url(array('controller' => 'Auth', 'action' => 'login')) ?>" method="post">
 			<fieldset class="required">
