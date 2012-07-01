@@ -32,6 +32,7 @@ class SmsVote extends Model {
 		$this->setMsg($msg);
 		$this->setAccount($account);
 		
+		$msg = str_replace(" ", "",$msg);
 		$msg = explode('#', $msg);
 		
 		$this->setTitulo(array_shift($msg));
@@ -44,23 +45,23 @@ class SmsVote extends Model {
 		$allowedRegionsId = Config::get('sms.allowedRegionsId');
 		if ($smsPolicy == self::ALLOW) {
 			if (array_search($this->getCidadao()->getRegiao()->getIdRegiao(), $allowedRegionsId) === FALSE)
-				throw new ErrorException("Votação não disponível para sua região.");
+				throw new ErrorException("Votação SMS não disponível para sua região.");
 		} elseif ($smsPolicy == self::DENY)
 			if (array_search($this->getCidadao()->getRegiao()->getIdRegiao(), $allowedRegionsId) !== FALSE)
-				throw new ErrorException("Votação não disponível para sua região.");
+				throw new ErrorException("Votação SMS não disponível para sua região.");
 	}
 	
 	public function checkDocs() {
 		if (!Cidadao::validateRG_RS($this->getRg()))
-			throw new InvalidArgumentException("RG inválido.");
+			throw new InvalidArgumentException("N�mero de Identidde (RG) inválido.");
 		
 		$cidadao = Cidadao::auth($this->getTitulo(), $this->getRg());
 		
 		if (!($cidadao instanceof Cidadao))
-			throw new InvalidArgumentException("Título de Eleitor inválido.");
+			throw new InvalidArgumentException("Título de Eleitor não encontrado.");
 		
 		if (!$this->checkAllowedToVote($cidadao))
-			throw new ErrorException("Você já votou.");
+			throw new ErrorException("Título já votou.");
 		
 		$this->setCidadao($cidadao);
 		
