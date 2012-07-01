@@ -26,7 +26,7 @@
 				<div class="sixcol" data-corede="00">
 					<h1><?php echo AppController::getPageName(); ?></h1>
 					<p class="name"><?php echo AppController::getPageSubName(); ?></p>
-					<p class="region"><?php if (isset($current_nm_regiao)) echo $current_nm_regiao; ?></p>
+					<p class="region"><?php if (isset($current_nm_regiao)) { if (!empty($current_nm_regiao)) echo "Região "; echo $current_nm_regiao; }?></p>
 				</div>
 			</div>
 <?php emptyblock('content') ?>
