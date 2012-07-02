@@ -2,7 +2,6 @@
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
 <?php startblock('content'); ?>
 <div class="row">
-	<div class="titulo_pagina">Votação de Prioridades - Orçamento 2013</div>
 	<div class="twelvecol last login">
 		<h2>Identificação</h2>
 		
