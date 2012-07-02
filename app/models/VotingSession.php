@@ -41,9 +41,8 @@ class VotingSession extends Model {
 		return Session::get('currentVotingSession');
 	}
 	
-	public function save() {
-		Session::set('currentVotingSession', $this);
-	}
+	public function save() { Session::set('currentVotingSession', $this); }
+	public function destroy() { Session::delete('currentVotingSession'); }
 	
 	public function resetVotes() {
 		$this->votes = NULL;
@@ -111,6 +110,15 @@ class VotingSession extends Model {
 		$this->setVotes(NULL);
 		$this->setCurrentGroup(NULL);
 		$this->save();
+	}
+	
+	public function finish() {
+		$this->setVotoLog(NULL);
+		$this->setVotes(NULL);
+		$this->setCurrentGroup(NULL);
+		$this->setCurrentUser(NULL);
+		$this->save();
+		$this->destroy();
 	}
 	
 	public function getLastStep() {

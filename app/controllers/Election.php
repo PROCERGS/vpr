@@ -156,8 +156,10 @@ class Election extends AppController {
 		
 		if (is_array($next_group) && reset($next_group) instanceof GrupoDemanda)
 			self::redirect(array('controller' => 'Election', 'action' => 'start'));
-		else
+		else {
+			$votingSession->finish();
 			self::redirect(array('controller' => 'Election', 'action' => 'success'));
+		}
 	}
 	
 	public static function success() {
