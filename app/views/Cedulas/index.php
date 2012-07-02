@@ -25,10 +25,8 @@ endblock();
 			<button type="submit">Consultar</button>
 		</form>
 
-		<a class="btLink" href="<?php echo $html->url(array('controller' => 'Application', 'action' => 'index')); ?>">
-			<button type="button">Voltar para a Página Inicial da Votação de Prioridades - Orçamento 2013</button>
-		</a>
-
+		<center><a style="text-decoration: none" href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input name="Envia" type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento 2013" /></a>
+			</center>
 	</div>
 </div>
 <?php endblock(); ?>
