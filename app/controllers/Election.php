@@ -28,7 +28,11 @@ class Election extends AppController {
 		} catch (Exception $e) {
 			Session::delete('currentUser');
 			Session::destroy();
-			throw new AppException($e->getMessage(), AppException::INFO, array('controller' => 'Auth', 'action' => 'login'), array('cidadao' => $currentUser));
+			if ($e instanceof AppException)
+				$type = $e->getType();
+			else
+				$type = AppException::INFO;
+			throw new AppException($e->getMessage(), $type, array('controller' => 'Auth', 'action' => 'login'), array('cidadao' => $currentUser));
 		}
 		
 		$votoLog = $votingSession->getVotoLog();

@@ -6,6 +6,10 @@ class Auth extends AppController {
 		self::setPageName("Votação de Prioridades - Orçamento 2013");
 		if ($_POST) {
 			try {
+				$votacao = Votacao::findByActiveVotacao();
+				if (count($votacao) == 0)
+					throw new AppException("A votação não está aberta.", AppException::INFO);
+				
 				$cidadao = self::getParam('Cidadao');
 				$cidadao = Cidadao::cast(Cidadao::getFromArray($cidadao));
 				$phone = $cidadao->getNroTelefone();

@@ -14,13 +14,13 @@
 				<legend>Campos obrigatórios</legend>
 				<label for="titulo">
 					Título de Eleitor:
-					<input type="number" name="Cidadao[nro_titulo]" id="titulo" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['titulo']:''; ?>" />
+					<input tabindex="1" type="number" name="Cidadao[nro_titulo]" id="titulo" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['titulo']:''; ?>" />
 					<?php echo $html->link("Consultar Título", "http://www.tse.jus.br/eleitor/titulo-e-local-de-votacao/consulta-por-nome", array('target' => '_blank')); ?>
 				</label>
 				
 				<label for="rg">
 					RG (Carteira de Identidade):
-					<input type="number" name="Cidadao[rg]" id="rg" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['rg']:''; ?>" />
+					<input tabindex="2" type="number" name="Cidadao[rg]" id="rg" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['rg']:''; ?>" />
 				</label>
 			</fieldset>
 			
@@ -28,12 +28,12 @@
 				<legend>Estes campos são opcionais, porém ao informar seu número de celular e/ou e-mail, você concorda em receber mensagens, sem nenhum custo para o cidadão, do Sistema Estadual de Participação Popular e Cidadã.</legend>
 				<label for="celular">
 					Celular:
-					<input type="tel" name="Cidadao[nro_telefone]" id="celular" value="<?php echo isset($flash_extra)?@$flash_extra['celular']:''; ?>" />
+					<input tabindex="3" type="tel" name="Cidadao[nro_telefone]" id="celular" value="<?php echo isset($flash_extra)?@$flash_extra['celular']:''; ?>" />
 				</label>
 				
 				<label for="email">
 					Email:
-					<input type="email" name="Cidadao[ds_email]" id="email" value="<?php echo isset($flash_extra)?@$flash_extra['email']:''; ?>" />
+					<input tabindex="4" type="email" name="Cidadao[ds_email]" id="email" value="<?php echo isset($flash_extra)?@$flash_extra['email']:''; ?>" />
 				</label>
 			
 				<button type="submit">Prosseguir</button>

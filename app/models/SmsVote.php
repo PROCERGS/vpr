@@ -138,7 +138,7 @@ class SmsVote extends Model {
 		$sanitized = preg_replace("/(^#|[^#0-9])/", '', $sanitized);
 
 		if (is_null($sanitized))
-			throw new ErrorException("Error sanitizing SMS vote message.");
+			throw new AppException("Formato de mensagem inválido.");
 		else
 			return $sanitized;
 	}

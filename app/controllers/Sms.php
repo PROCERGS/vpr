@@ -31,6 +31,7 @@ class Sms extends AppController {
 		try {
 			$sms_vote = new SmsVote($votacao, $id_sms, $from, $to, $msg, $account);
 		} catch (Exception $e) {
+			echo "RETORNO: ".$e->getMessage().". Informe apenas titulo, rg e códigos dos projetos separados por #.";
 			printr($e);
 			self::logError(new Cidadao(), new AppException($e->getMessage()), $e);
 			return;
@@ -54,7 +55,7 @@ class Sms extends AppController {
 			}
 			
 			if ($sms_vote->registerVotes()) {
-				printr("Votos registrados!");
+				printr("Votos registrados! Obrigado por participar.");
 			}
 		} catch (Exception $e) {
 			self::logError($sms_vote->getCidadao(), new AppException($e->getMessage()), $e);

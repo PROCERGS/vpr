@@ -59,7 +59,7 @@ class VotingSession extends Model {
 			if (count($group) > 0)
 				$this->setCurrentGroup(reset($group));
 			else
-				throw new ErrorException("Nenhum item disponível para votação.");
+				throw new AppException("Nenhum item disponível para votação.", AppException::WARNING);
 		}
 		return $this->current_group;
 	}
