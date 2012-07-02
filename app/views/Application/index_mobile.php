@@ -1,5 +1,6 @@
 <?php require VIEWS_PATH . 'main.php'; ?>
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
+<?php startblock('page_class') ?>home_mobile<?php endblock() ?>
 <?php startblock('content'); ?>
 <div class="row">
 	<div class="twelvecol last home">

@@ -13,7 +13,7 @@
 	</head>
 	<body>
 <?php startblock('main'); ?>
-		<div class="container internal">
+		<div class="container internal <?php emptyblock('page_class'); ?>">
 			<div class="row header">
 				<div class="sixcol logo">
 					<?php echo $html->link('<img src="/images/logotipo_internas.png" alt="Sistema Estadual de Participação Popular e Cidadã" />', '/', array('title' => 'Sistema Estadual de Participação Popular e Cidadã')); ?>

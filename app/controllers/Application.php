@@ -4,6 +4,8 @@ class Application extends AppController {
 
 	public static function index() {
 
+		self::setPageName("Votação de Prioridades<br />Orçamento 2013");
+		
 		$string_alt_img = null;
 
 		$html = new HTMLHelper();
