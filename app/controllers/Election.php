@@ -3,9 +3,12 @@ class Election extends AppController {
 	
 	public static function before() {
 		parent::before();
-		$currentUser = VotingSession::requireCurrentVotingSession()->requireCurrentUser();
+		$action = self::getParam('action');
+		if ($action != 'success') {
+			$currentUser = VotingSession::requireCurrentVotingSession()->requireCurrentUser();
+			self::setPageSubName(Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()));
+		}
 		self::setPageName("Votação de Prioridades - Orçamento 2013");
-		self::setPageSubName(Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()));
 	}
 	
 	protected static function setDefaultJavascripts() {
@@ -92,6 +95,7 @@ class Election extends AppController {
 	public static function review() {
 		$votingSession = VotingSession::requireCurrentVotingSession();
 		$currentUser = $votingSession->requireCurrentUser();
+		$regiao = $currentUser->getRegiao();
 		$group = $votingSession->getCurrentGroup();
 		$options = $votingSession->getOptions($group->getIdGrupoDemanda());
 		
@@ -109,12 +113,19 @@ class Election extends AppController {
 			$selection[$option->getIdCedula()] = $option;
 		}
 		
+		$areasTematicas = $group->getAreasTematicas($regiao->getIdRegiao());
+		$selectedOptions = array();
+		foreach ($votes as $vote) {
+			$option = $selection[$vote->getIdCedula()];
+			$selectedOptions[] = $option;
+		}
+		
 		$html = new HTMLHelper();
 		$lastStep = $votingSession->getLastStep();
 		self::setJavascriptVar('previousStep', $lastStep);
 		self::setJavascriptVar('previousStepURL', $html->url(array('controller' => 'Election', 'action' => 'step', 'step' => $lastStep)));
 		
-		self::render(compact('options', 'votes', 'group', 'selection', 'next_group'));
+		self::render(compact('options', 'votes', 'group', 'selection', 'next_group', 'areasTematicas', 'selectedOptions'));
 	}
 	
 	public static function confirm() {
@@ -127,8 +138,9 @@ class Election extends AppController {
 		$votoLog = VotoLog::cast($votingSession->getVotoLog());
 		
 		if (count($votes) > $group->getQtdMaxEscolha()) {
-			self::redirect(array('controller' => 'Election', 'action' => 'review'));
-			throw new UnexpectedValueException("Excedido o número de ".$group->getQtdMaxEscolha()." opções.");
+			$e = new AppException("Excedido o número de ".$group->getQtdMaxEscolha()." opções.", AppException::ERROR, array('controller' => 'Election', 'action' => 'review'));
+			self::flash($e);
+			throw $e;
 		}
 		
 		foreach ($votes as $vote) {
@@ -142,7 +154,14 @@ class Election extends AppController {
 		$next_group = $group->findNextGroup(TRUE);
 		$votingSession->finishGroup();
 		
-		self::redirect(array('controller' => 'Election', 'action' => 'start'));
+		if ($next_group instanceof GrupoDemanda)
+			self::redirect(array('controller' => 'Election', 'action' => 'start'));
+		else
+			self::redirect(array('controller' => 'Election', 'action' => 'success'));
+	}
+	
+	public static function success() {
+		self::render();
 	}
 	
 	private static function registerVotes() {
