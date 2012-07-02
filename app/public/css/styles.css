@@ -92,6 +92,9 @@
 	/** Success votação **/
 	.internal .row.poll { border-top: 1px solid #ccc; margin-top: 20px; padding-top: 20px; }
 	.internal .row.poll a { display: block; text-align: center; }
+	a.pesquisa { color: #360; background: url('/images/icone_pesquisa.png') no-repeat; display: inline-block; font-weight: bold; font-size: 20px; text-align: left !important; padding: 3px 0 0 75px; height: 75px; width: 200px; text-decoration: none; margin-top: 30px; margin-left: 360px; margin-bottom: 30px; }
+	
+	 }
 	
 	/** Login **/
 	.container .login form { background: #EAEFE5; margin: 10px 0; padding: 20px 20px 30px; }
