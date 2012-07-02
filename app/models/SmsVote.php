@@ -84,7 +84,10 @@ class SmsVote extends Model {
 					$this->valid_options[] = $option;
 				}
 			}
-			$groupsVotes[$grupo->getIdGrupoDemanda()] = array_keys($groupsVotes[$grupo->getIdGrupoDemanda()]);
+			if (isset($groupsVotes[$grupo->getIdGrupoDemanda()]))
+				$groupsVotes[$grupo->getIdGrupoDemanda()] = array_keys($groupsVotes[$grupo->getIdGrupoDemanda()]);
+			else
+				$groupsVotes[$grupo->getIdGrupoDemanda()] = array();
 		}
 
 		foreach ($options as $option) {
