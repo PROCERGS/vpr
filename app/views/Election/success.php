@@ -12,8 +12,8 @@
 	<div class="twelvecol last">
 		<h2>Pesquisa Opcional</h2>
 		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo lacus at metus sollicitudin scelerisque. In et lectus diam. In convallis mollis ante, sit amet placerat sem ullamcorper eget. Curabitur euismod egestas nisl, sit amet tristique lorem euismod ac. Duis fermentum, nisl et varius molestie, ipsum sapien molestie nibh, vel tincidunt sapien nisl ac elit. Integer ac tempus purus.</p>
-		<?php echo $html->link('<button type="button">Responder à pesquisa</button>', '#'); ?>
-		<?php echo $html->link('<button type="button">Voltar para a Página inicial</button>', array('controller' => 'Application', 'action' => 'index')); ?>
+		<?php echo $html->link('Responder à pesquisa', '#', array('class' => 'pesquisa')); ?>
+		<?php echo $html->link('>Voltar para a Página inicial', array('controller' => 'Application', 'action' => 'index'), array('class' => 'home')); ?>
 	</div>
 </div>
 <?php endblock('content'); ?>
