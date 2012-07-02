@@ -5,10 +5,11 @@ class Auth extends AppController {
 		
 		self::setPageName("Votação de Prioridades - Orçamento 2013");
 		if ($_POST) {
+			$previous = array('controller' => 'Auth', 'action' => 'login');
 			try {
 				$votacao = Votacao::findByActiveVotacao();
 				if (count($votacao) == 0)
-					throw new AppException("A votação não está aberta.", AppException::INFO);
+					throw new AppException("A votação não está aberta.", AppException::INFO, $previous);
 				
 				$cidadao = self::getParam('Cidadao');
 				$cidadao = Cidadao::cast(Cidadao::getFromArray($cidadao));
@@ -16,7 +17,7 @@ class Auth extends AppController {
 				$email = $cidadao->getDsEmail();
 				
 				if (strlen($cidadao->getNroTitulo()) <= 0 || strlen($cidadao->getRg()) <= 0)
-					throw new AppException("Informe o Título de Eleitor e o Número da Identidade (RG)", AppException::ERROR, array('controller' => 'Auth', 'action' => 'login'));
+					throw new AppException("Informe o Título de Eleitor e o Número da Identidade (RG)", AppException::ERROR, $previous);
 				
 				$cidadao = Cidadao::auth($cidadao->getNroTitulo(), $cidadao->getRg());
 				
@@ -29,6 +30,9 @@ class Auth extends AppController {
 					$cidadao->update();
 				
 			} catch (AppException $e) {
+				if (!isset($cidadao) || !($cidadao instanceof Cidadao))
+					$cidadao = new Cidadao();
+				
 				$extra = array(
 							'titulo' => $cidadao->getNroTitulo(),
 							'rg' => $cidadao->getRg(),
