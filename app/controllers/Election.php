@@ -37,7 +37,7 @@ class Election extends AppController {
 		
 		$votoLog = $votingSession->getVotoLog();
 		if (!($votoLog instanceof VotoLog)) {
-			$id_meio_votacao = Config::get('isMobile')===TRUE?2:1;
+			$id_meio_votacao = Config::get('isMobile')===TRUE?MeioVotacao::MOBILE:MeioVotacao::WEB;
 			$votoLog = new VotoLog($currentUser->getIdCidadao(), $group->getIdVotacao(), $group->getIdGrupoDemanda(), $id_meio_votacao, $_SERVER['REMOTE_ADDR']);
 			$votoLog->setIdVotoLog($votoLog->insert());
 			$votingSession->setVotoLog($votoLog);
