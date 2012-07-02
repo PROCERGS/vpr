@@ -6,3 +6,5 @@ $router->map('/', array('controller' => 'Application'));
 $router->map('/voto/passo/:step', array('controller' => 'Election', 'action' => 'step'), array('step' => '[0-9]+'));
 $router->map('/votar/passo/:step', array('controller' => 'Election', 'action' => 'step'), array('step' => '[0-9]+'));
 $router->map('/voto/revisao', array('controller' => 'Election', 'action' => 'review'));
+
+$router->map('/receive/sms', array('controller' => 'Sms', 'action' => 'receive'));
