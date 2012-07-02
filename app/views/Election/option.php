@@ -1,6 +1,6 @@
 <?php 		foreach ($options as $option) {
 				$id = $option->getIdCedula();
-				if (!$readonly)
+				if (!@$readonly)
 					$selected = Vote::isVoted($option)?'checked="checked"':'';
 				else 
 					$selected = 'disabled="disabled"';

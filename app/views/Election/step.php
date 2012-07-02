@@ -45,7 +45,14 @@
 				</fieldset>
 <?php 		if (!$readonly) { ?>
 				<button type="button" class="back">Voltar</button>
-				<button type="submit"><?php echo is_null($nextStep)?"Confirmar voto nas ".$group->getNmGrupoAbrev():"Próxima Página"; ?></button>
+<?php 			if (is_null($nextStep)) {
+					if (Config::get('isMobile'))
+						$nextText = 'Revisar';
+					else
+						$nextText = 'Confirmar voto nas '.$group->getNmGrupoAbrev();
+				} else
+					$nextText = 'Próxima'; ?>
+				<button type="submit"><?php echo $nextText; ?></button>
 <?php 		} ?>
 			</div>
 		</div>
