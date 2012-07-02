@@ -11,7 +11,7 @@
 		<div class="row content_head">
 			<div class="sixcol">
 				<h3>Instruções</h3>
-				<p>Selecione até <?php echo $group->getQtdMaxEscolha(); ?> opções da lista abaixo.</p>
+				<p>Selecione até <?php echo $group->getQtdMaxEscolha().' '.strtolower($group->getNmGrupoAbrev()); ?>.</p>
 				<p>Clique em "ver mais" para visualizar o seu detalhamento.</p>
 			</div>
 			<div class="sixcol last">
@@ -47,7 +47,7 @@
 				<button type="button" class="back">Voltar</button>
 <?php 			if (is_null($nextStep)) {
 					if (Config::get('isMobile'))
-						$nextText = 'Revisar';
+						$nextText = 'Conferir';
 					else
 						$nextText = 'Confirmar voto nas '.$group->getNmGrupoAbrev();
 				} else

@@ -11,9 +11,9 @@
 <div class="row poll">
 	<div class="twelvecol last">
 		<h2>Pesquisa Opcional</h2>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo lacus at metus sollicitudin scelerisque. In et lectus diam. In convallis mollis ante, sit amet placerat sem ullamcorper eget. Curabitur euismod egestas nisl, sit amet tristique lorem euismod ac. Duis fermentum, nisl et varius molestie, ipsum sapien molestie nibh, vel tincidunt sapien nisl ac elit. Integer ac tempus purus.</p>
+		<p>Ajude a melhorar o processo de votação, dedicando alguns poucos minutos para responder um pequeno questionário. Suas respostas ficarão totalmente anônimas e serão utilizadas apenas para avaliar o processo de votação de prioridades no Estado do Rio Grande do Sul, Orcamento 2013.</p>
 		<?php echo $html->link('Responder à pesquisa', '#', array('class' => 'pesquisa')); ?>
-		<?php echo $html->link('Voltar para a Página inicial', array('controller' => 'Application', 'action' => 'index'), array('class' => 'home')); ?>
+		<?php echo $html->link('<button type="button">Voltar para a Página inicial</button>', array('controller' => 'Application', 'action' => 'index'), array('class' => 'home')); ?>
 	</div>
 </div>
 <?php endblock('content'); ?>
