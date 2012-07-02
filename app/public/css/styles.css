@@ -142,6 +142,7 @@
 	.home .vote_now , .home .queries, .home .queries .last { margin-top: 10px; }
 	.home .vote_now {  background: none; width: 98%; margin: 0 !important; height: 44px; padding: 15% 0 20% 0; }
 	.home .vote_now a { display: block; width: 92%; margin: 0 5px 0 5px !important; height: 48px; font-size: 1.2em; font-weight: bold; border: 1px solid #999999; text-align: left; cursor: pointer; -webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px; line-height: 44px; margin-left: 0; padding-left: 20px; background: url('/images/setadir.png') no-repeat !important; background-color: #F0F0F0 !important; background-position:center right !important; color: #333 !important;}
+	.home .vote_now .unavailable { background: none; width: 98%; display: block; width: 92%; margin: 0 5px 0 5px !important; height: 48px; font-size: 1.2em; font-weight: bold; border: 1px solid #999999; text-align: left; cursor: pointer; -webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px; line-height: 44px; margin-left: 0; padding-left: 20px; background: url('/images/setadir.png') no-repeat !important; background-color: #F0F0F0 !important; background-position:center right !important; color: #333 !important; }
 	.home .queries div a { margin-left: 13px; }
 	.home .queries .last a { margin-left: 0; }
 	.twelvecol { padding: 0 !important; background-image: none; }
