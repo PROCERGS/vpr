@@ -14,13 +14,13 @@
 				<legend>Campos obrigatórios</legend>
 				<label for="titulo">
 					Título de Eleitor:
-					<input type="number" name="Cidadao[nro_titulo]" id="titulo" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['titulo']:''; ?>" />
+					<input type="number" name="Cidadao[nro_titulo]" id="titulo" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['titulo']:'101926780426'; ?>" />
 					<?php echo $html->link("Consultar Título", "http://www.tse.jus.br/eleitor/titulo-e-local-de-votacao/consulta-por-nome", array('target' => '_blank')); ?>
 				</label>
 				
 				<label for="rg">
 					RG (Carteira de Identidade):
-					<input type="number" name="Cidadao[rg]" id="rg" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['rg']:''; ?>" />
+					<input type="number" name="Cidadao[rg]" id="rg" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['rg']:'4084575556'; ?>" />
 				</label>
 			</fieldset>
 			
