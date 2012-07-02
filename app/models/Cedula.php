@@ -45,9 +45,9 @@ class Cedula extends Model {
 		
 		$cod_projeto = join(', ', $cod_projeto);
 		
+		
 		$sql = str_replace(':cod_projeto:', $cod_projeto, CedulaQueries::SQL_FIND_BY_COD_PROJ_IN);
 		$query = PDOUtils::getConn()->prepare($sql);
-		
 		if ($query->execute(compact('id_votacao', 'id_regiao')) === TRUE) {
 			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
 			if (count($result) > 0)
