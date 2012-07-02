@@ -12,7 +12,9 @@ $(document).ready(function() {
 			lastXhr  = $.getJSON(municipiosSearchURL, request, function (data, status, xhr) {
 				console.log(data);
 				municipioCache[nm_municipio] = data;
-				if (xhr === lastXhr) { response(data); }
+				if (xhr === lastXhr) {
+					response(data);
+				}
 			});
 		},
 		select: function (event, ui) {
@@ -25,4 +27,11 @@ $(document).ready(function() {
 		$(".municipio").val("");
 	});
 	
+	$("form").submit(function () {
+		if($("#regiao_id").val() == -1){
+			$('.flash').html("<p>Informe a região ou escreva um município correspondente!</p>");
+			$('.flash').addClass('error');
+			return false;
+		}
+	});	
 });
