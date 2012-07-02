@@ -72,7 +72,7 @@ class VotingSession extends Model {
 			AppController::redirect(array('controller' => 'Auth', 'action' => 'login'));
 	}
 	public function setCurrentUser($currentUser) {
-		if (!($currentUser->getEleitorTre() instanceof EleitorTre))
+		if (!is_null($currentUser) && !($currentUser->getEleitorTre() instanceof EleitorTre))
 			$currentUser->fetchEleitorTre();
 		$this->current_user = $currentUser;
 		$this->save();
