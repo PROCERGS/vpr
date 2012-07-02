@@ -53,7 +53,7 @@ class SmsVote extends Model {
 	
 	public function checkDocs() {
 		if (!Cidadao::validateRG_RS($this->getRg()))
-			throw new InvalidArgumentException("N�mero de Identidde (RG) inválido.");
+			throw new InvalidArgumentException("N�mero de Identidde (RG) inválido.");
 		
 		$cidadao = Cidadao::auth($this->getTitulo(), $this->getRg());
 		
@@ -137,6 +137,7 @@ class SmsVote extends Model {
 		$count = 0;
 		$regex = "/(".self::DELIMITER."){2,}/";
 		$sanitized = preg_replace($regex, '$1', $msg);
+		$sanitized = preg_replace("/(^#|[^#0-9])/", '', $sanitized);
 		if (is_null($sanitized))
 			throw new ErrorException("Error sanitizing SMS vote message.");
 		else
