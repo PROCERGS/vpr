@@ -34,7 +34,11 @@
 			</fieldset>
 			
 			<button type="button" class="back">Voltar</button>
-			<button type="submit">Confirmar<?php echo $next_group?' e continuar votação':''; ?></button>
+<?php		if (Config::get('isMobile'))
+				$nextText = 'Confirmar';
+			else
+				$nextText = 'Confirmar'.($next_group?' e continuar votação':''); ?>
+			<button type="submit"><?php echo $nextText; ?></button>
 		</div>
 	</div>
 </form>
