@@ -1,6 +1,7 @@
 <?php 
 class Auth extends AppController {
 	public static function login() {
+		self::setPageName("Votação de Prioridades - Orçamento 2013");
 		if ($_POST) {
 			try {
 				$cidadao = self::getParam('Cidadao');

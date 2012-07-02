@@ -146,7 +146,7 @@
 	.home .queries .last a { margin-left: 0; }
 	.twelvecol { padding: 0 !important; background-image: none; }
 	.internal { background-image: none; }
-	.internal .titulo_pagina { display: block; !important; text-align: center; width: 100%; background-color: #eb6947; font-size: 1em !important; font-weight: bold; padding: 5px 0 5px 0; color: #FFFFFF; background: #eb6947; text-shadow: #254F7A 0px -1px 1px; }
+	.internal h1 { display: block; margin: 0 -20px 10px; text-align: center; width: 100%; background-color: #eb6947; font-size: 1em !important; font-weight: bold; padding: 5px 20px 5px 20px; color: #FFFFFF !important; background: #eb6947; text-shadow: #254F7A 0px -1px 1px; }
 	.internal h2 { margin: 20px 0 20px 10px; }
 	.internal .row.group dl dt { padding-top: 10px; margin: 10px 10px 4px; color: #666; font-size: 10px; text-transform: uppercase; font-weight: bold; border-top: 1px solid #ccc; }
 	.internal .row.group dl dd label { display: block; max-width: none; }

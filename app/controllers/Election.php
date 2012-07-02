@@ -4,7 +4,7 @@ class Election extends AppController {
 	public static function before() {
 		parent::before();
 		$currentUser = VotingSession::requireCurrentVotingSession()->requireCurrentUser();
-		self::setPageName("Votação de Prioridades");
+		self::setPageName("Votação de Prioridades - Orçamento 2013");
 		self::setPageSubName(Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()));
 	}
 	
