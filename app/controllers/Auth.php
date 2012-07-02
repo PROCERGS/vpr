@@ -1,6 +1,8 @@
 <?php 
 class Auth extends AppController {
 	public static function login() {
+		self::addJavascript('/js/login.js');
+		
 		self::setPageName("Votação de Prioridades - Orçamento 2013");
 		if ($_POST) {
 			try {

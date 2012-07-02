@@ -44,8 +44,10 @@ class Cidadao extends Model {
 			$cidadao = Cidadao::cast(reset($cidadao));
 			$cidadao->fetchEleitorTre();
 			$cidadao->fetchRegiao();
-			if ($cidadao->getRg() != $rg || $cidadao->getNroTitulo() != $nro_titulo)
-				throw new DocumentsMismatchException('Um dos documentos parece pertencer a outra pessoa. Verifique seus dados.', $previous);
+			if ($cidadao->getRg() != $rg)
+				throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous);
+			if ($cidadao->getNroTitulo() != $nro_titulo)
+				throw new DocumentsMismatchException('Esse RG já foi usado nessa votação', $previous);
 		} elseif (count($cidadao) > 1) {
 			throw new DocumentsMismatchException('Um dos documentos parece pertencer a outra pessoa. Verifique seus dados.', $previous);
 		} else {

@@ -100,6 +100,7 @@
 	.container .login form { background: #EAEFE5; margin: 10px 0; padding: 20px 20px 30px; }
 	.container .login form fieldset { width: 50%; margin: 0 auto; }
 	.container .login form fieldset legend { display: none; }
+	.container .login form fieldset.optional legend { display: block; padding: 10px 0 0; }
 	.container .login form fieldset.required label { font-weight: bold; }
 	.container .login form fieldset.required label:before { content: '* '; }
 	.container .login form fieldset.required label a { color: #c30; font-size: 10px; font-style: italic; text-decoration: none; font-weight: normal; }
@@ -170,7 +171,7 @@
 	.by_procergs { display: block; text-align: center; margin-top: -45px; color: #fff; }
 
 	a.pesquisa { background: none; width: 98%; display: block; width: 92%; margin: 20px 0px 5px 0px !important; height: 48px; font-size: 1.2em; font-weight: bold; border: 1px solid #999999; text-align: left !important; cursor: pointer; -webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px; line-height: 44px; margin-left: 0; padding-left: 20px; background: url('/images/setadir.png') no-repeat !important; background-color: #F0F0F0 !important; background-position:center right !important; color: #333 !important; text-decoration:none; }
-	a.home { background: none; width: 98%; display: block; width: 92%; margin: 0 0px 20px 0px !important; height: 48px; font-size: 1.2em; font-weight: bold; border: 1px solid #999999; text-align: left !important; cursor: pointer; -webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px; line-height: 44px; margin-left: 0; padding-left: 20px; background: url('/images/setadir.png') no-repeat !important; background-color: #F0F0F0 !important; background-position:center right !important; color: #333 !important; text-decoration:none; }
+	a.home button { background: none; width: 99%; display: block; width: 92%; margin: 0 0px 20px 0px !important; height: 48px; font-size: 1.2em; font-weight: bold; border: 1px solid #999999; text-align: left !important; cursor: pointer; -webkit-border-radius: 7px; -moz-border-radius: 7px; border-radius: 7px; line-height: 44px; margin-left: 0; padding-left: 20px; background: url('/images/setadir.png') no-repeat !important; background-color: #F0F0F0 !important; background-position:center right !important; color: #333 !important; text-decoration:none; }
 	.last { margin: 10px 10px 0 20px !important; }
 
 /** Login **/
