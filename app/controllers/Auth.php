@@ -7,13 +7,10 @@ class Auth extends AppController {
 				$cidadao = self::getParam('Cidadao');
 				$cidadao = Cidadao::cast(Cidadao::getFromArray($cidadao));
 				
-				$nro_titulo = trim($cidadao->getNroTitulo());
-				$nro_titulo = str_pad($nro_titulo, 12, '0', STR_PAD_LEFT);
-				
 				if (strlen($nro_titulo) <= 0 || strlen($cidadao->getRg()) <= 0)
 					throw new AppException("Informe o Título de Eleitor e o Número da Identidade (RG)", AppException::ERROR, array('controller' => 'Auth', 'action' => 'login'));
 				
-				$cidadao = Cidadao::auth($nro_titulo, trim($cidadao->getRg()));
+				$cidadao = Cidadao::auth($nro_titulo, $cidadao->getRg());
 			} catch (AppException $e) {
 				$extra = array(
 							'titulo' => $cidadao->getNroTitulo(),
