@@ -89,6 +89,10 @@
 	.internal .row.group button[type=submit] { margin: 40px 0 20px; }
 	.internal .row.group button[type=submit] { margin: 40px 0 20px; }
 	
+	/** Success votação **/
+	.internal .row.poll { border-top: 1px solid #ccc; margin-top: 20px; padding-top: 20px; }
+	.internal .row.poll a { display: block; text-align: center; }
+	
 	/** Login **/
 	.container .login form { background: #EAEFE5; margin: 10px 0; padding: 20px 20px 30px; }
 	.container .login form fieldset { width: 50%; margin: 0 auto; }
