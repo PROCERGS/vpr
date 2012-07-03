@@ -22,7 +22,9 @@ class Sms extends AppController {
 		$msg    = self::getParam('msg');
 		
 		$return = self::registerSMS($from, $to, $msg);
-		$sms->sendMessage($return['id_sms'], $from, utf8_decode($return['message']));
+		$sms_return = $sms->sendMessage($return['id_sms'], $from, utf8_decode($return['message']));
+		$log = new LogErros(new Cidadao(), new AppException("RESPOSTA SMS"), compact('return', 'sms_return'));
+		$log->insert();
 	}
 	
 	public static function fetch_messages() {
@@ -46,7 +48,7 @@ class Sms extends AppController {
 			
 			printr("Processando: [$from] $msg");
 			try {
-				$return = self::registerSMS($id_sms, $from, $to, $msg, $account);
+				$return = self::registerSMS($from, $to, $msg);
 				$sms->sendMessage($return['id_sms'], $from, utf8_decode($return['message']));
 			} catch (Exception $e) {
 				printr($e->getMessage());
