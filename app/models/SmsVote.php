@@ -20,10 +20,10 @@ class SmsVote extends Model {
 	private $invalid_options = array();
 	private $valid_options = array();
 
-	public function __construct($votacao, $id_sms, $from, $to, $msg, $account) {
+	public function __construct($votacao, $from, $to, $msg) {
 		$this->setVotacao($votacao);
 
-		$this->setIdSms($id_sms);
+		$this->setIdSms($from.date("His"));
 		$this->setFrom($from);
 		$this->setTo($to);
 		$this->setMsg($msg);

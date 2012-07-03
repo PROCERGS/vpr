@@ -15,13 +15,14 @@ class Sms extends AppController {
 	public static function receive() {
 		header("Content-Type:   text/html; charset=utf-8");
 		
-		$id_sms = self::getParam('id');
+		$sms = new SMSAPI(Config::get('sms.user'), Config::get('sms.password'));
+		
 		$from   = self::getParam('from');
 		$to     = self::getParam('to');
 		$msg    = self::getParam('msg');
-		$account= self::getParam('account');
 		
-		self::registerSMS($id_sms, $from, $to, $msg, $account);
+		$return = self::registerSMS($from, $to, $msg);
+		$sms->sendMessage($return['id_sms'], $from, utf8_decode($return['message']));
 	}
 	
 	public static function fetch_messages() {
@@ -34,15 +35,19 @@ class Sms extends AppController {
 		$to = self::SMS_NUMBER;
 		$account = 0;
 		
+		printr("Processando ".count($messages)." mensagens...");
 		foreach ($messages as $message) {
 			$message = explode("\t", $message);
 			
 			$from = $message[0];
 			$msg = $message[2];
 			
+			$id_sms = $from.date("His");
+			
 			printr("Processando: [$from] $msg");
 			try {
-				self::registerSMS($id_sms, $from, $to, $msg, $account);
+				$return = self::registerSMS($id_sms, $from, $to, $msg, $account);
+				$sms->sendMessage($return['id_sms'], $from, utf8_decode($return['message']));
 			} catch (Exception $e) {
 				printr($e->getMessage());
 			}
@@ -58,25 +63,27 @@ class Sms extends AppController {
 		printr($return);
 	}
 	
-	private static function registerSMS($id_sms, $from, $to, $msg, $account) {
+	private static function registerSMS($from, $to, $msg) {
 		
+		$return = array('id_sms' => 0, 'message' => 'Não foi possível processar o voto.');
 		
 		$msg = SmsVote::sanitizeMessage($msg);
 		$votacao = reset(Votacao::findByActiveVotacao());
 		
 		$req = $_REQUEST;
-		$dump = compact('id_sms', 'from', 'to', 'msg', 'account', 'req');
+		$dump = compact('id_sms', 'from', 'to', 'msg', 'req');
 		$log_cidadao = new Cidadao();
 		$log = new LogErros($log_cidadao, new AppException("SMS RECEBIDA"), $dump);
 		$log->insert();
 		
 		try {
-			$sms_vote = new SmsVote($votacao, $id_sms, $from, $to, $msg, $account);
+			$sms_vote = new SmsVote($votacao, $from, $to, $msg);
+			$return['id_sms'] = $sms_vote->getIdSms();
 		} catch (Exception $e) {
-			echo "RETORNO: ".$e->getMessage()." Informe apenas titulo, rg e códigos dos projetos separados por #.";
-			printr($e);
+			$return['message'] = $e->getMessage()." Informe apenas titulo, RG e códigos dos projetos separados por #";
+			printr($return);
 			self::logError(new Cidadao(), new AppException($e->getMessage()), $e);
-			return;
+			return $return;
 		}
 		
 		$exceeded = $sms_vote->getExceededGruposLimit();
@@ -101,6 +108,10 @@ class Sms extends AppController {
 			}
 		} catch (Exception $e) {
 			self::logError($sms_vote->getCidadao(), new AppException($e->getMessage()), $e);
+			$return['message'] = $e->getMessage();
+			return $return;
 		}
+		
+		return $return;
 	}
 }
