@@ -18,16 +18,16 @@ class SMSAPI {
 		$url = $this->getURL();
 		$url .= "$method.php$params";
 		
-		if (Util::getEnvironmentName() == 'local')
+		if (Util::getEnvironmentName() == 'local') {
 			$context = array('http' => array(
 				'proxy' => 'tcp://proxy.procergs.reders:3128',
 				'request_fulluri' => true,
 				'header' => "Proxy-Authorization: Basic ".Config::get('proxy.auth')
 			));
-		else
-			$context = array();
+			$return = file_get_contents($url, NULL, stream_context_create($context));
+		} else
+			$return = self::cURLGet($url);
 		
-		$return = file_get_contents($url, NULL, stream_context_create($context));
 		$return = explode("\n", $return);
 		
 		$this->checkResult(reset($return));
@@ -92,5 +92,34 @@ class SMSAPI {
 		$return = $this->apiCall('user_message_send', $params);
 		
 		return $return;
+	}
+	
+	private static function cURLGet($url) {
+		
+		$options = array(
+				CURLOPT_RETURNTRANSFER => true,     // return web page
+				CURLOPT_HEADER         => false,    // don't return headers
+				CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+				CURLOPT_ENCODING       => "",       // handle all encodings
+				CURLOPT_USERAGENT      => "spider", // who am i
+				CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+				CURLOPT_CONNECTTIMEOUT => 30,      // timeout on connect
+				CURLOPT_TIMEOUT        => 30,      // timeout on response
+				CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+		);
+	
+		$ch      = curl_init( $url );
+		curl_setopt_array( $ch, $options );
+		$content = curl_exec( $ch );
+		$err     = curl_errno( $ch );
+		$errmsg  = curl_error( $ch );
+		$header  = curl_getinfo( $ch );
+		curl_close( $ch );
+	
+		$header['errno']   = $err;
+		$header['errmsg']  = $errmsg;
+		$header['content'] = $content;
+		printr($header);
+		return $content;
 	}
 }
