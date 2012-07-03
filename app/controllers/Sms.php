@@ -27,7 +27,7 @@ class Sms extends AppController {
 	public static function fetch_messages() {
 		header("Content-Type:   text/html; charset=utf-8");
 		
-		$sms = new SMSAPI('seplag', 'ckxx55');
+		$sms = new SMSAPI(Config::get('sms.user'), Config::get('sms.password'));
 		$messages = $sms->fetchMessages();
 		
 		$id_sms = 0;
@@ -50,7 +50,7 @@ class Sms extends AppController {
 	}
 	
 	public static function send_messages() {
-		$sms = new SMSAPI('seplag', 'ckxx55');
+		$sms = new SMSAPI(Config::get('sms.user'), Config::get('sms.password'));
 		$id = self::getParam('id');
 		if (is_numeric($id) && $id > 0)
 			$return = $sms->sendMessage($id, "555199674527", "Testando! :)");
