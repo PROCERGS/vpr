@@ -21,6 +21,10 @@ class Sms extends AppController {
 		$to     = self::getParam('to');
 		$msg    = self::getParam('msg');
 		
+		// Fix para o problema da Comunika enviar números com 55 (duplicado) na frente.
+		if (strlen($from) > 12 && preg_match('/([0-9]{12}$)/', $from, $m) == 1)
+			$from = $m[1];
+		
 		$return = self::registerSMS($from, $to, $msg);
 		$sms_return = $sms->sendMessage($return['id_sms'], $from, utf8_decode($return['message']));
 		$log = new LogErros(new Cidadao(), new AppException("RESPOSTA SMS"), compact('return', 'sms_return'));
