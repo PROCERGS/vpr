@@ -74,5 +74,9 @@ class Application extends AppController {
 		
 		return $string_data;
 	}
+	
+	public static function pesquisa() {
+		self::render();
+	}
 
 }

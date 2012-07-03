@@ -6,6 +6,7 @@ class VotingSession extends Model {
 	protected $voto_log;
 	protected $votes;
 	protected $options;
+	protected $captcha;
 	
 	/**
 	 * 
@@ -125,4 +126,5 @@ class VotingSession extends Model {
 		$first = $this->getStep(1);
 		return $first['pages'];
 	}
+	public function setCaptcha($captcha) { $this->captcha = $captcha; $this->save(); }
 }

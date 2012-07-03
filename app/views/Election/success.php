@@ -11,7 +11,7 @@
 	<div class="twelvecol last">
 		<h2>Pesquisa Opcional</h2>
 		<p>Ajude a melhorar o processo Votação de Prioridades - Orcamento 2013 dedicando alguns minutos para responder a pesquisa abaixo. Todas as respostas são tratadas estatisticamente e, em hipótese alguma, o respondente é identificado.</p>
-		<?php echo $html->link('Responder à pesquisa', '#', array('class' => 'pesquisa')); ?>
+		<?php echo $html->link('Responder à pesquisa', array('controller' => 'Application', 'action' => 'pesquisa'), array('class' => 'pesquisa')); ?>
 	</div>
 </div>
 <div class="row home">
