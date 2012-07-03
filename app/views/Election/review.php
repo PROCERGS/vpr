@@ -14,7 +14,7 @@
 				</div>
 <?php 	} ?>
 				<div class="info">
-					<p>Por favor, revise suas opções na lista a baixo<?php echo $exceeded; ?>. Quando estiverem de acordo, clique em Confirmar.</p>
+					<p>Por favor, revise suas opções na lista abaixo<?php echo $exceeded; ?>. Quando estiverem de acordo, clique em Confirmar.</p>
 				</div>
 			</div>
 		</div>

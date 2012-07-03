@@ -11,7 +11,7 @@
 		<div class="row content_head">
 			<div class="sixcol">
 				<h3>Instruções</h3>
-				<p>Selecione até <?php echo $group->getQtdMaxEscolha().' '.strtolower($group->getNmGrupoAbrev()); ?>.</p>
+				<p>Clique em até <?php echo $group->getQtdMaxEscolha().' '.strtolower($group->getNmGrupoAbrev()); ?>.</p>
 				<p>Clique em "ver mais" para visualizar o seu detalhamento.</p>
 			</div>
 			<div class="sixcol last">
