@@ -17,6 +17,7 @@
 <div class="row home">
 	<div class="twelvecol last">
 		<?php echo $html->link('<button type="button">Voltar para a Página inicial</button>', array('controller' => 'Application', 'action' => 'index'), array('class' => 'home')); ?>
+		<?php echo $html->link('<button type="button">RS Móvel</button>', "http://m.rs.gov.br/", array('class' => 'rs_movel')); ?>
 	</div>
 </div>
 <?php endblock('content'); ?>
