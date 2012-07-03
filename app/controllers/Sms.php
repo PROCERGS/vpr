@@ -110,7 +110,7 @@ class Sms extends AppController {
 			}
 				
 			if ($sms_vote->registerVotes()) {
-				printr("Votos registrados! Obrigado por participar.");
+				$return['message'] = "Votos registrados! Obrigado por participar.";
 			}
 		} catch (Exception $e) {
 			self::logError($sms_vote->getCidadao(), new AppException($e->getMessage()), $e);
