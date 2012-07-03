@@ -40,6 +40,7 @@ while( $regCor = mysql_fetch_row( $selCorede ) ) {
 			$reg .= "', ".$cod_projeto.", ".$id_corede.", 2012, sysdate,  44396, null, null);". "\r\n";
 			//$limpar = fputs( $abrir , $reg . "\r\n" );
 			fwrite($arquivo, $reg);
+		} //os comandos abaixo executaram dentro do loop, mas acho que teria que ser fora porque gerou muitos duplicados
 			$reg = "INSERT INTO  POP_DEMANDA "
 				. "select  pop_seq_cod_desc_cedula.nextval, "
         		. "TXT_DESC_CEDULA, "
@@ -55,7 +56,7 @@ while( $regCor = mysql_fetch_row( $selCorede ) ) {
         		. "pop_demanda de on(de.nro_controle_temp = dc.cod_corede * 100 + nro_ordem) "
   				. "where dc.nro_ano_corrente = 2012 and dc.cod_corede = ".$id_corede." and de.nro_controle_temp = dc.cod_corede * 100 + nro_ordem and de.nro_ano_corrente = 2012; \r\n";
 			fwrite($arquivo, $reg);
-		}
+		//}
 		$reg = "INSERT INTO  POP_ARQUIVO_COREDE "
 				. "select pop_seq_cod_arquivo.nextval,'Processo espec 2012', ".$id_corede.", sysdate, 999999, 2012, sysdate, 999999, 1, NULL FROM pop_coredes where nro_int_corede = ".$id_corede."; \r\n";
 		fwrite($arquivo, $reg);
