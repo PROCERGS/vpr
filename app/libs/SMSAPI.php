@@ -119,7 +119,7 @@ class SMSAPI {
 		$header['errno']   = $err;
 		$header['errmsg']  = $errmsg;
 		$header['content'] = $content;
-		printr($header);
+		
 		return $content;
 	}
 }
