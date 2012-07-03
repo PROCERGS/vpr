@@ -5,6 +5,7 @@ echo self::getTitle();
 endblock();
 ?>
 <?php startblock('content'); ?>
+<?php include_once VIEWS_PATH.'flash.php'; ?>
 <div class="row">
 	<div class="twelvecol last select_regiao">
 		<h2>Consulta de Cédulas</h2>

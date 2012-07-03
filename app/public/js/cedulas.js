@@ -29,7 +29,7 @@ $(document).ready(function() {
 	
 	$("form").submit(function () {
 		if($("#regiao_id").val() == -1){
-			$('.flash').html("<p>Informe a região ou escreva um município correspondente!</p>");
+			$('.flash').html("<p>Informe a região ou escreva um município correspondente.</p>");
 			$('.flash').addClass('error');
 			return false;
 		}

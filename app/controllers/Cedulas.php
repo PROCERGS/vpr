@@ -72,9 +72,8 @@ class Cedulas extends AppController {
 			}
 
 			AppController::setRegiao($regiao_id);
-		} else {
-			throw new InvalidArgumentException("");
-		}
+		} else
+			throw new AppException("Informe a região ou escreva um município correspondente.", AppException::ERROR, array('controller' => 'Cedulas', 'action' => 'index'));
 
 		$readonly = TRUE;
 
