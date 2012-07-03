@@ -8,6 +8,7 @@ class Cidadao extends Model {
 	protected $rg;
 	protected $ds_email;
 	protected $nro_telefone;
+	protected $id_municipio;
 	private $eleitor_tre;
 	private $regiao;
 
@@ -37,6 +38,13 @@ class Cidadao extends Model {
 				$cidadao->fetchRegiao();
 				$cidadao->setNroTitulo($eleitor_tre->getNroTitulo());
 				$cidadao->setRg($rg);
+				
+				$municipio = reset(Municipio::findByCodMunTre($eleitor_tre->getCodMunTre()));
+				if ($municipio instanceof Municipio)
+					$cidadao->setIdMunicipio($municipio->getIdMunicipio());
+				else
+					throw new AppException("Município não encontrado.", AppException::ERROR, $previous);
+				
 				$cidadao->setIdCidadao($cidadao->insert());
 			} else
 				throw new AppException("Eleitor não encontrado.", AppException::ERROR, $previous);
@@ -44,6 +52,7 @@ class Cidadao extends Model {
 			$cidadao = Cidadao::cast(reset($cidadao));
 			$cidadao->fetchEleitorTre();
 			$cidadao->fetchRegiao();
+			
 			if ($cidadao->getRg() != $rg)
 				throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous);
 			if ($cidadao->getNroTitulo() != $nro_titulo)
