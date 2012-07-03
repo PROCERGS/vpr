@@ -1,7 +1,8 @@
 <?php require VIEWS_PATH . 'main.php'; ?>
 <?php startblock('title'); echo self::getTitle(); endblock(); ?>
 <?php startblock('content'); ?>
-<?php $readonly = !isset($nextURL) || (isset($readonly) && $readonly); ?>
+<?php $readonly = !isset($nextURL) || (isset($readonly) && $readonly); 
+var_dump($nextURL);?>
 <?php if (!$readonly) { ?>
 <form class="vote" action="<?php echo $nextURL;?>" method="post">
 <?php } ?>
@@ -30,6 +31,7 @@
 				$options = $currentGroup['options'];
 				
 				include VIEWS_PATH.'Election/option.php';
+				include VIEWS_PATH.'Election/recaptcha.php'; 
 			} else {
 				foreach ($currentGroup['areas'] as $idArea => $options) {
 					if ($idArea > 0)
@@ -52,6 +54,7 @@
 						$nextText = 'Confirmar voto nas '.$group->getNmGrupoAbrev();
 				} else
 					$nextText = 'Próxima'; ?>
+				
 				<button type="submit"><?php echo $nextText; ?></button>
 <?php 		} ?>
 			</div>
