@@ -86,7 +86,7 @@ class Sms extends AppController {
 			$sms_vote = new SmsVote($votacao, $from, $to, $msg);
 			$return['id_sms'] = $sms_vote->getIdSms();
 		} catch (Exception $e) {
-			$return['message'] = $e->getMessage()." Informe apenas titulo, RG e códigos dos projetos separados por #";
+			$return['message'] = $e->getMessage();
 			printr($return);
 			self::logError(new Cidadao(), new AppException($e->getMessage()), $e);
 			return $return;

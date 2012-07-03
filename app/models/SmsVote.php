@@ -55,7 +55,7 @@ class SmsVote extends Model {
 			throw new InvalidArgumentException("Título de Eleitor não encontrado.");
 
 		if (!$this->checkAllowedToVote($cidadao))
-			throw new ErrorException("Título já votou.");
+			throw new ErrorException("Esse título de eleitor já votou.");
 
 		$this->setCidadao($cidadao);
 
@@ -138,7 +138,7 @@ class SmsVote extends Model {
 		$sanitized = preg_replace("/(^#|[^#0-9])/", '', $sanitized);
 
 		if (is_null($sanitized))
-			throw new AppException("Formato de mensagem inválido.");
+			throw new AppException("Formato de mensagem inválido. Informe apenas titulo, RG e códigos dos projetos separados por #");
 		else
 			return $sanitized;
 	}
@@ -155,7 +155,7 @@ class SmsVote extends Model {
 			$groups_voted = array();
 
 			if (empty($options))
-				throw new AppException("Erro na escolha das opções.");
+				throw new AppException("Erro na escolha das opções. Informe apenas titulo, RG e códigos dos projetos separados por #");
 			
 			foreach ($options as $option) {
 				$id_group = $option->getIdGrupoDemanda();
@@ -166,7 +166,7 @@ class SmsVote extends Model {
 				$groups_voted[$id_group]++;
 				$voto->setIdVoto($voto->insert());
 				if ($voto->getIdVoto() <= 0)
-					throw new AppException("Erro ao registrar voto.");
+					throw new AppException("Erro ao registrar voto. Informe apenas titulo, RG e códigos dos projetos separados por #");
 			}
 
 			foreach ($groups_voted as $group => $count) {
@@ -175,7 +175,7 @@ class SmsVote extends Model {
 				$voto_log->setQtdSelecoes($count);
 				$voto_log->setIdVotoLog($voto_log->insert());
 				if ($voto_log->getIdVotoLog() <= 0)
-					throw new AppException("Erro ao registrar controle do voto.");
+					throw new AppException("Erro ao registrar controle do voto. Informe apenas titulo, RG e códigos dos projetos separados por #");
 			}
 
 			PDOUtils::getConn()->commit();
