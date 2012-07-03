@@ -25,7 +25,7 @@
 			</fieldset>
 			
 			<fieldset class="optional">
-				<legend>Estes campos são opcionais, porém ao informar seu número de celular e/ou e-mail, você concorda em receber mensagens, sem nenhum custo para o cidadão, do Sistema Estadual de Participação Popular e Cidadã.</legend>
+				<legend>Estes campos são opcionais. Ao informar seu número de celular e/ou e-mail, você concorda em receber mensagens, sem nenhum custo para o cidadão, do Sistema Estadual de Participação Popular e Cidadã.</legend>
 				<label for="celular">
 					Celular:
 					<input tabindex="3" type="tel" name="Cidadao[nro_telefone]" id="celular" value="<?php echo isset($flash_extra)?@$flash_extra['celular']:''; ?>" />
