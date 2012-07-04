@@ -20,6 +20,7 @@ class Cidadao extends Model {
 	public static function auth($nro_titulo, $rg) {
 		$previous = array('controller' => 'Auth', 'action' => 'login');
 		
+		$nro_titulo = preg_replace("/([^0-9])/", '', $nro_titulo);
 		$nro_titulo = trim($nro_titulo);
 		$nro_titulo = str_pad($nro_titulo, 12, '0', STR_PAD_LEFT);
 		
