@@ -1,6 +1,9 @@
 <?php
 class Stats extends AppController {
 	public static function summary() {
+		self::setPageName("Acompanhamento da Votação");
+		self::setPageSubName("Parciais atualizadas por tipo de mídia online");
+		
 		$totalVotos = reset(Stat::findByQtdVotos());
 		$totalVotosByMeioVotacaoRaw = Stat::findByQtdVotosByMeioVotacao();
 		
