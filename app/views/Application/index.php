@@ -32,7 +32,7 @@
 					<?php echo $html->link("Consulte a cédula de sua região", array('controller' => 'Cedulas', 'action' => '')); ?>
 				</div>
 				<div class="sixcol last">
-					
+					<?php echo $html->link("Consulte os locais de votação", array('controller' => 'Locais', 'action' => '')); ?>
 				</div>
 			</div>
 			<div class="row footer menu">
