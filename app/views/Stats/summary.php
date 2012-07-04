@@ -20,7 +20,18 @@
 					</tr>
 				</thead>
 				<tbody>
-<?php $i = 0;
+<?php $i = 0; $odd = $i++%2==0?' odd':''; ?>
+					<tr class="total <?php echo $odd; ?>">
+						<td>Total</td>
+<?php 	$rowTotal = 0;
+		foreach ($meios_votacao as $meio) {
+			$rowTotal += $eleitores['totais'][$meio]; ?>
+						<td><?php echo str_pad(number_format(@$eleitores['totais'][$meio], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
+<?php 	} ?>
+						<td><?php echo str_pad(number_format($rowTotal, 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
+					</tr>
+					
+<?php 
 		foreach ($eleitores as $regiao => $meios) {
 			if ($regiao == 'totais') continue;
 			$odd = $i++%2==0?' class="odd"':''; ?>
@@ -33,12 +44,15 @@
 					</tr>
 <?php 	}
 		$odd = $i++%2==0?' odd':''; ?>
+
 					<tr class="total <?php echo $odd; ?>">
 						<td>Total</td>
-<?php foreach ($meios_votacao as $meio) { ?>
+<?php 	$rowTotal = 0;
+		foreach ($meios_votacao as $meio) {
+			$rowTotal += $eleitores['totais'][$meio]; ?>
 						<td><?php echo str_pad(number_format(@$eleitores['totais'][$meio], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
-<?php } ?>
-						<td>-</td>
+<?php 	} ?>
+						<td><?php echo str_pad(number_format($rowTotal, 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -58,7 +72,18 @@
 					</tr>
 				</thead>
 				<tbody>
-<?php $i = 0;
+<?php $i = 0; $odd = $i++%2==0?' odd':''; ?>
+					<tr class="total <?php echo $odd; ?>">
+						<td>Total</td>
+<?php 	$rowTotal = 0;
+		foreach ($meios_votacao as $meio) {
+			$rowTotal += $votos['totais'][$meio];?>
+						<td><?php echo str_pad(number_format(@$votos['totais'][$meio], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
+<?php 	} ?>
+						<td><?php echo str_pad(number_format($rowTotal, 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
+					</tr>
+					
+<?php 
 		foreach ($votos as $regiao => $meios) {
 			if ($regiao == 'totais') continue;
 			$odd = $i++%2==0?' class="odd"':''; ?>
@@ -73,10 +98,12 @@
 		$odd = $i++%2==0?' odd':''; ?>
 					<tr class="total <?php echo $odd; ?>">
 						<td>Total</td>
-<?php foreach ($meios_votacao as $meio) { ?>
+<?php 	$rowTotal = 0;
+		foreach ($meios_votacao as $meio) {
+			$rowTotal += $votos['totais'][$meio];?>
 						<td><?php echo str_pad(number_format(@$votos['totais'][$meio], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
-<?php } ?>
-						<td>-</td>
+<?php 	} ?>
+						<td><?php echo str_pad(number_format($rowTotal, 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
 					</tr>
 				</tbody>
 			</table>
