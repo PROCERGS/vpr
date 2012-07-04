@@ -69,8 +69,10 @@ class Application extends AppController {
 		 * 	Caso queira utilizar um formato padrão de data 
 		 * 	descomente as linhas de baixo
 		 */
-
-		$string_data = "Período de Votação Online: dia 4 de julho de 2012 - das 8 às 24h";
+		
+//		$string_data = "Período de Votação Online: dia 4 de julho de 2012 - das 8 às 24h";
+		$string_data = strftime("Período de Votação Online: dia %d de %B de %Y - das %H", $data_ini->getTimestamp());
+		$string_data .= strftime(" às %H", $data_fim->getTimestamp());
 		
 		return $string_data;
 	}
