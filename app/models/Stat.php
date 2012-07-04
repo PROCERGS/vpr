@@ -1,8 +1,8 @@
 <?php
 class Stat extends Model {
 	public static function __callStatic($name, $arguments) {
-		if (Util::startsWith($name, 'findBy')) {
-			$column = str_replace('findBy', '', $name);
+		if (Util::startsWith($name, 'find')) {
+			$column = str_replace('find', '', $name);
 			$column = Util::camelToUnderline($column);
 			$value = NULL;
 			if (is_array($arguments) && count($arguments) > 0)
@@ -18,7 +18,7 @@ class Stat extends Model {
 	private static function findBy($column, $value = NULL, $order = NULL) {
 		$class = get_called_class();
 		$queries = $class.'Queries';
-		$sql_query = strtoupper("SQL_FIND_BY_$column");
+		$sql_query = strtoupper("SQL_FIND_$column");
 	
 		if (class_exists($queries, TRUE) && defined("$queries::$sql_query") && !is_null($sql_c = constant("$queries::$sql_query"))) {
 			$sql = $sql_c;

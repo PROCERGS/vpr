@@ -4,26 +4,37 @@ class Stats extends AppController {
 		self::setPageName("Acompanhamento da Votação");
 		self::setPageSubName("Parciais atualizadas por tipo de mídia online");
 		
-		$totalVotos = reset(Stat::findByQtdVotos());
-		$totalVotosByMeioVotacaoRaw = Stat::findByQtdVotosByMeioVotacao();
-		
-		$totalCidadaos = reset(Stat::findByQtdCidadaos());
-		$totalCidadaosByMeioVotacaoRaw = Stat::findByQtdCidadaosByMeioVotacao();
-		
-		$totalVotosByMeioVotacao = array();
-		$totalCidadaosByMeioVotacao = array();
 		$meios_votacao = array();
-		foreach ($totalVotosByMeioVotacaoRaw as $stat) {
-			$meios_votacao[$stat['nm_meio_votacao']] = 1;
-			$totalVotosByMeioVotacao[$stat['nm_meio_votacao']] = $stat['total'];
+		
+		$eleitores = array('totais' => array());
+		$votos = array('totais' => array());
+		
+		$cidadaosPorRegiaoMeioVotacao = Stat::findCidadaosPorRegiaoMeioVotacao();
+		foreach ($cidadaosPorRegiaoMeioVotacao as $stat) {
+			$meio = $stat['nm_meio_votacao'];
+			$regiao = $stat['nm_regiao'];
+			$total = $stat['total'];
+			
+			$meios_votacao[$meio] = 1;
+			@$eleitores[$regiao][$meio] = $total;
+			@$eleitores[$regiao]['total'] += $total;
+			@$eleitores['totais'][$meio] += $total;
 		}
-		foreach ($totalCidadaosByMeioVotacaoRaw as $stat) {
-			$meios_votacao[$stat['nm_meio_votacao']] = 1;
-			$totalCidadaosByMeioVotacao[$stat['nm_meio_votacao']] = $stat['total'];
+		
+		$votosPorRegiaoMeioVotacao = Stat::findVotosPorRegiaoMeioVotacao();
+		foreach ($votosPorRegiaoMeioVotacao as $stat) {
+			$meio = $stat['nm_meio_votacao'];
+			$regiao = $stat['nm_regiao'];
+			$total = $stat['total'];
+			
+			$meios_votacao[$meio] = 1;
+			@$votos[$regiao][$meio] = $total;
+			@$votos[$regiao]['total'] += $total;
+			@$votos['totais'][$meio] += $total;
 		}
 		$meios_votacao = array_keys($meios_votacao);
 		
-		$values = compact('totalVotos', 'totalVotosByMeioVotacao', 'totalCidadaos', 'totalCidadaosByMeioVotacao', 'meios_votacao');
+		$values = compact('meios_votacao', 'eleitores', 'votos');
 		
 		self::render($values);
 	}
