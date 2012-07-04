@@ -28,7 +28,7 @@ class Application extends AppController {
 			if (is_string($nome) && is_string($orçamento))
 				$string_alt_img = $nome + " - " + $orçamento;
 		}
-		$show_vote_now = FALSE;
+		//$show_vote_now = FALSE;
 
 		if (Config::get('isMobile'))
 			self::render(compact("string_data", "string_alt_img", "show_vote_now"), array('controller' => 'Application', 'action' => 'index_mobile'));
