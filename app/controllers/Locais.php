@@ -26,6 +26,7 @@ class Locais extends AppController {
 		$string_array = implode("|", $array);
 
 		self::addCSS('/css/jquery-ui-1.8.21.custom.css');
+		self::addCSS('/css/locais.css');
 		self::setJavascriptVar('grupo_urnas', $string_array);
 		self::setJavascriptVar('municipio', $html->url(array('controller' => 'Locais', 'action' => 'municipio')));
 		self::addJavascript('/js/jquery-1.7.2.min.js');
@@ -49,8 +50,8 @@ class Locais extends AppController {
 		$string = <<<EOT
 					<table>
 						<tr class="top_locais">
-						<td>Localização da urna</td>
-						<td>Município</td>
+						<td><b>Localização da urna</b></td>
+						<td><b>Município</b></td>
 						</tr>
 EOT;
 
