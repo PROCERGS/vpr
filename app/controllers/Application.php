@@ -61,7 +61,7 @@ class Application extends AppController {
 	}
 
 	private static function stringDate($data_ini, $data_fim) {
-		setlocale(LC_ALL, "ptb");
+		setlocale(LC_ALL, "pt_BR", "pt_BR.utf-8", "pt_BR.iso-8859-1", "portuguese", "ptb");
 		$now = new DateTime();
 		$current_mk = time();
 		
@@ -71,8 +71,7 @@ class Application extends AppController {
 		 */
 		
 //		$string_data = "Período de Votação Online: dia 4 de julho de 2012 - das 8 às 24h";
-		$string_data = strftime("Período de Votação Online: dia %d de %B de %Y - das %H", $data_ini->getTimestamp());
-		$string_data .= strftime(" às %H", $data_fim->getTimestamp());
+		$string_data = strftime("Votação Online: até as %Hh do dia %d/%m/%Y", $data_fim->getTimestamp());
 		
 		return $string_data;
 	}
