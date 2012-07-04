@@ -2,7 +2,7 @@
 class CacheFS {
 	
 	public static function prepareFolder() {
-		$path = sys_get_temp_dir();
+		$path = ini_get("upload_tmp_dir");
 		if (file_exists($path) && is_dir($path)) {
 			return TRUE;
 		} else {
@@ -46,6 +46,6 @@ class CacheFS {
 	}
 	
 	private static function getFileName($key) {
-		return sys_get_temp_dir() ."/$key";
+		return ini_get("upload_tmp_dir") ."/$key";
 	}
 }
