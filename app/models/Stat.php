@@ -1,0 +1,50 @@
+<?php
+class Stat extends Model {
+	public static function __callStatic($name, $arguments) {
+		if (Util::startsWith($name, 'findBy')) {
+			$column = str_replace('findBy', '', $name);
+			$column = Util::camelToUnderline($column);
+			$value = NULL;
+			if (is_array($arguments) && count($arguments) > 0)
+				$value = $arguments[0];
+			$order = NULL;
+			if (array_key_exists(1, $arguments))
+				$order = $arguments[1];
+				
+			return self::findBy($column, $value, $order);
+		}
+	}
+	
+	private static function findBy($column, $value = NULL, $order = NULL) {
+		$class = get_called_class();
+		$queries = $class.'Queries';
+		$sql_query = strtoupper("SQL_FIND_BY_$column");
+	
+		if (class_exists($queries, TRUE) && defined("$queries::$sql_query") && !is_null($sql_c = constant("$queries::$sql_query"))) {
+			$sql = $sql_c;
+		} else
+			throw new AppException("Consulta não encontrada.", AppException::ERROR);
+		
+		if (!is_null($order))
+			$sql .= ' ORDER BY '.join(', ', $order);
+		
+		$query = PDOUtils::getConn()->prepare($sql);
+		if (!is_null($value)) {
+			if (is_array($value)) {
+				$execute = $query->execute($value);
+			} else {
+				$query->bindValue($column, $value);
+				$execute = $query->execute();
+			}
+		} else
+			$execute = $query->execute();
+	
+		if ($execute === TRUE) {
+			$result = $query->fetchAll(PDO::FETCH_ASSOC);
+			if (count($result) > 0)
+				return $result;
+			else return array();
+		} else
+			return array();
+	}
+}
