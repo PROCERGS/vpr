@@ -16,3 +16,7 @@ define('DAY', 24 * HOUR);
 
 /** Cache Configuration **/
 Config::set('cache.timeout', 3 * MINUTE);
+if (Util::getEnvironmentName() == 'local')
+	Config::set('cache.path', sys_get_temp_dir() . '/');
+else
+	Config::set('cache.path', ini_get("upload_tmp_dir").'/');

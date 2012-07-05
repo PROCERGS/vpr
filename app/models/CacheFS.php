@@ -2,7 +2,7 @@
 class CacheFS {
 	
 	public static function prepareFolder() {
-		$path = ini_get("upload_tmp_dir");
+		$path = Config::get('cache.path');
 		if (file_exists($path) && is_dir($path)) {
 			return TRUE;
 		} else {
@@ -46,6 +46,6 @@ class CacheFS {
 	}
 	
 	private static function getFileName($key) {
-		return ini_get("upload_tmp_dir") ."/$key";
+		return Config::get('cache.path') . $key;
 	}
 }
