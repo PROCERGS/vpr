@@ -29,6 +29,10 @@ class Sms extends AppController {
 		$sms_return = $sms->sendMessage($return['id_sms'], $from, utf8_decode($return['message']));
 		$log = new LogErros(new Cidadao(), new AppException("RESPOSTA SMS"), compact('return', 'sms_return'));
 		$log->insert();
+		
+		printr($return);
+		printr($sms_return);
+		printr($log);
 	}
 	
 	public static function fetch_messages() {
