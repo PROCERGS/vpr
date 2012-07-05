@@ -48,6 +48,8 @@
 <?php 	} ?>
 				</tbody>
 			</table>
+			
+			<?php echo $html->link("Estatísticas por região", array('controller' => 'Stats', 'action' => 'by_region')); ?>
 		</div>
 	</div>
 <?php endblock('content'); ?>

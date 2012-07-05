@@ -121,7 +121,7 @@
 	
 	/** Stats **/
 	.internal .stats p.meiosVotacao { border-top: 1px solid #ccc; padding: 20px 0 0; }
-	.internal .stats table { margin: 20px 0; width: 45%; border-spacing: 0; }
+	.internal .stats table { margin: 20px 0; width: 48%; border-spacing: 0; }
 	.internal .stats table thead { background: #fc9; }
 	.internal .stats table.votos thead,
 	.internal .stats table.meiosVotacao thead { background: #d8e6c4; }
