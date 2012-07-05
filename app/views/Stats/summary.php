@@ -17,11 +17,11 @@
 				<tbody>
 					<tr class="odd">
 						<td>Total de Eleitores</td>
-						<td><?php echo number_format($totalCidadaos['total'], 0, ',', '.') + 0; ?></td>
+						<td><?php echo str_pad(number_format($totalCidadaos['total'], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
 					</tr>
 					<tr>
 						<td>Total de Votos</td>
-						<td><?php echo number_format($totalVotos['total'], 0, ',', '.') + 0; ?></td>
+						<td><?php echo str_pad(number_format($totalVotos['total'], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
 					</tr>
 				</tbody>
 			</table>
@@ -42,8 +42,8 @@
 			$odd = $i++%2==0?' class="odd"':''; ?>
 					<tr<?php echo $odd; ?>>
 						<td><?php echo $meio_votacao; ?> </td>
-						<td><?php echo number_format(@$totalVotosByMeioVotacao[$meio_votacao], 0, ',', '.') + 0; ?></td>
-						<td><?php echo number_format(@$totalCidadaosByMeioVotacao[$meio_votacao], 0, ',', '.') + 0; ?></td>
+						<td><?php echo str_pad(number_format(@$totalVotosByMeioVotacao[$meio_votacao], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
+						<td><?php echo str_pad(number_format(@$totalCidadaosByMeioVotacao[$meio_votacao], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
 					</tr>
 <?php 	} ?>
 				</tbody>
