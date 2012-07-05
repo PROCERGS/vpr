@@ -120,17 +120,20 @@
 	.container .select_regiao form fieldset { margin-bottom: 20px; }
 	
 	/** Stats **/
-	.internal .stats p.votos { border-top: 1px solid #ccc; padding: 20px 0 0; }
-	.internal .stats table { margin: 20px 0; width: 45%; border-spacing: 0; float: left; }
+	.internal .stats p.meiosVotacao { border-top: 1px solid #ccc; padding: 20px 0 0; }
+	.internal .stats table { margin: 20px 0; width: 45%; border-spacing: 0; }
 	.internal .stats table thead { background: #fc9; }
-	.internal .stats table.votos { float: right; }
-	.internal .stats table.votos thead { background: #d8e6c4; }
+	.internal .stats table.votos thead,
+	.internal .stats table.meiosVotacao thead { background: #d8e6c4; }
 	.internal .stats table th, .internal .stats table td { padding: 10px; }
 	.internal .stats table thead th[colspan='5'] { text-align: center; padding: 10px; }
 	.internal .stats table thead th, .internal .stats table thead td { font-weight: bold; text-align: left; }
 	.internal .stats table tbody tr { background: #ddd; }
 	.internal .stats table tbody tr.total { font-weight: bold; }
 	.internal .stats table tbody tr.odd { background: #efefef; }
+	
+	.internal .stats.by_region table.votos { float: right; }
+	.internal .stats.by_region table { float: left; }
 
 /* ============================= */
 /* ! Layout for mobile version   */

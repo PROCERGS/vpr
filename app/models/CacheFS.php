@@ -20,27 +20,50 @@ class CacheFS {
 		
 		$entry = array(
 			'expires' => $expires,
+			'created' => new DateTime(),
 			'content' => serialize($value)
 		);
 		return file_put_contents($file, serialize($entry));
 	}
 	
-	public static function get($key) {
+	private static function getEntry($key) {
 		self::prepareFolder();
 		$now = time();
 		$file = self::getFileName($key);
-		$value = NULL;
+		$return = NULL;
 		
-		if (file_exists($file)) {
-			$entry = file_get_contents($file);
-			$entry = unserialize($entry);
-			
-			if ((int) $now > (int) $entry['expires']) {
-				unlink($file);
-			} else {
-				$value = unserialize($entry['content']);
+		try {
+			if (file_exists($file)) {
+				$entry = file_get_contents($file);
+				$entry = unserialize($entry);
+		
+				if ((int) $now > (int) $entry['expires']) {
+					unlink($file);
+				} else {
+					$return = $entry;
+				}
 			}
+		} catch (Exception $e) {
+			$return = NULL;
 		}
+		
+		return $return;
+	}
+	
+	public static function info($key) {
+		$entry = self::getEntry($key);
+		if (!is_null($entry))
+			unset($entry['content']);
+		return $entry;
+	}
+	
+	public static function get($key) {
+		$entry = self::getEntry($key);
+		
+		if (!is_null($entry))
+			$value = unserialize($entry['content']);
+		else
+			$value = NULL;
 		
 		return $value;
 	}

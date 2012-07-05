@@ -1,12 +1,14 @@
 <?php
 class Stats extends AppController {
-	public static function summary() {
+	public static function by_region() {
+		$cache = self::getParam('cache');
+		
 		self::setPageName("Acompanhamento da Votação");
 		self::setPageSubName("Parciais atualizadas por tipo de mídia online");
 		
 		$values = CacheFS::get('statsSummary');
 		
-		if (is_null($values)) {
+		if (is_null($values) || $cache == 'off') {
 			$meios_votacao = array();
 			
 			$eleitores = array('totais' => array());
@@ -37,11 +39,41 @@ class Stats extends AppController {
 			}
 			$meios_votacao = array_keys($meios_votacao);
 			
-			$values = compact('meios_votacao', 'eleitores', 'votos');
+			$date = new DateTime();
+			
+			$values = compact('meios_votacao', 'eleitores', 'votos', 'date');
 			
 			CacheFS::set('statsSummary', $values);
 			$values = CacheFS::get('statsSummary');
 		}
+		
+		self::render($values);
+	}
+	
+	public static function summary() {
+		self::setPageName("Acompanhamento da Votação");
+		self::setPageSubName("Parciais atualizadas por tipo de mídia online");
+		
+		$totalVotos = reset(Stat::findByQtdVotos());
+		$totalVotosByMeioVotacaoRaw = Stat::findByQtdVotosByMeioVotacao();
+		
+		$totalCidadaos = reset(Stat::findByQtdCidadaos());
+		$totalCidadaosByMeioVotacaoRaw = Stat::findByQtdCidadaosByMeioVotacao();
+		
+		$totalVotosByMeioVotacao = array();
+		$totalCidadaosByMeioVotacao = array();
+		$meios_votacao = array();
+		foreach ($totalVotosByMeioVotacaoRaw as $stat) {
+			$meios_votacao[$stat['nm_meio_votacao']] = 1;
+			$totalVotosByMeioVotacao[$stat['nm_meio_votacao']] = $stat['total'];
+		}
+		foreach ($totalCidadaosByMeioVotacaoRaw as $stat) {
+			$meios_votacao[$stat['nm_meio_votacao']] = 1;
+			$totalCidadaosByMeioVotacao[$stat['nm_meio_votacao']] = $stat['total'];
+		}
+		$meios_votacao = array_keys($meios_votacao);
+		
+		$values = compact('totalVotos', 'totalVotosByMeioVotacao', 'totalCidadaos', 'totalCidadaosByMeioVotacao', 'meios_votacao');
 		
 		self::render($values);
 	}
