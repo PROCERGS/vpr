@@ -41,11 +41,12 @@ while( $regVotos = mysql_fetch_row( $selVotos ) ) {
     	echo "<p>O Município ".$id_municipio." nao foi encontrado</p>";
     	exit;
   	}
-    $reg = "INSERT INTO POP_CIDADAO (NRO_TITULO_ELEITOR, NRO_RG, COD_MUNICIPIO,TXT_NOME_CIDADAO, TXT_EMAIL_CIDADAO, CTR_DTH_INC, CTR_IP_INC, TXT_UF_RG, NRO_ANO_CORRENTE, IND_PESQUISA) "
-					 . " VALUES (".$nro_titulo.", ".$rg.", ".$cod_mun_pop.", '".$nm_eleitor."', '".$ds_email."', sysdate, NULL, 'RS', 2012, 0);";
-	$reg .= "". "\r\n";
+    $reg = "".$nro_titulo.";".$rg.";".$cod_mun_pop.";'".$nm_eleitor."';'".$ds_email."';';NULL;'RS';2012;0\r\n";
+	//$reg = "INSERT INTO POP_CIDADAO (NRO_TITULO_ELEITOR, NRO_RG, COD_MUNICIPIO,TXT_NOME_CIDADAO, TXT_EMAIL_CIDADAO, CTR_DTH_INC, CTR_IP_INC, TXT_UF_RG, NRO_ANO_CORRENTE, IND_PESQUISA) "
+	//				 . " VALUES (".$nro_titulo.", ".$rg.", ".$cod_mun_pop.", '".$nm_eleitor."', '".$ds_email."', sysdate, NULL, 'RS', 2012, 0);";
+	//$reg .= "". "\r\n";
 			//$limpar = fputs( $abrir , $reg . "\r\n" );
-	echo $reg;
+	echo $reg."<br />";
 	fwrite($arquivo, $reg);
 }
 fwrite($arquivo, $ult_reg);
@@ -87,11 +88,12 @@ while( $regVotos = mysql_fetch_row( $selVotos ) ) {
     	echo "<p>O Município ".$id_municipio." nao foi encontrado</p>";
     	exit;
   	}
-    $reg = "INSERT INTO POP_CIDADAO (TXT_NOME_CIDADAO, NRO_TITULO_ELEITOR, NRO_RG, COD_MUNICIPIO, NRO_ANO_CORRENTE, TXT_EMAIL_CIDADAO, TXT_UF_RG, CTR_DTH_INC, CTR_IP_INC, IND_PESQUISA) "
-					 . " VALUES ('".$nm_eleitor."', ".$nro_titulo.", ".$rg.", ".$cod_mun_pop.", 2012, '".$ds_email."', 'RS', sysdate, NULL, 0)";
-	$reg .= ";". "\r\n";
+    $reg = "'".$nm_eleitor."';".$nro_titulo.";".$rg.";".$cod_mun_pop.";2012;'".$ds_email."';'RS';sysdate;NULL;0\r\n";
+	//$reg = "INSERT INTO POP_CIDADAO (TXT_NOME_CIDADAO, NRO_TITULO_ELEITOR, NRO_RG, COD_MUNICIPIO, NRO_ANO_CORRENTE, TXT_EMAIL_CIDADAO, TXT_UF_RG, CTR_DTH_INC, CTR_IP_INC, IND_PESQUISA) "
+	//				 . " VALUES ('".$nm_eleitor."', ".$nro_titulo.", ".$rg.", ".$cod_mun_pop.", 2012, '".$ds_email."', 'RS', sysdate, NULL, 0)";
+	//$reg .= ";". "\r\n";
 			//$limpar = fputs( $abrir , $reg . "\r\n" );
-	echo $reg;
+	echo $reg."<br />";
 	fwrite($arquivo, $reg);
 }
 fwrite($arquivo, $ult_reg);

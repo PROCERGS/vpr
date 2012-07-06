@@ -25,7 +25,15 @@ while( $regVotos = mysql_fetch_row( $selVotos ) ) {
 	$dth_voto = $regVotos[4];
 	$nro_ip_inc = $regVotos[5];
 //	echo "Cedula: ".$id_cedula." - Municipio: ".$id_municipio."<br>";
-	$cedula = "SELECT cod_projeto FROM cedula WHERE id_cedula = $id_cedula";
+//	$cedula = "SELECT cod_projeto FROM cedula WHERE id_cedula = $id_cedula";
+//	$selCel = mysql_query( $cedula , $db );
+//	if( $regCel = mysql_fetch_row( $selCel ) ) {
+//		$cod_projeto = $regCel[0];
+//	} else {
+//    	echo "<p>A cedula ".$id_cedula." nao foi encontrada</p>";
+//    	exit;
+//  	}
+	$cedula = "SELECT cp.cod_desc_cedula FROM cedula c, cedula_pop cp WHERE c.id_cedula = $id_cedula AND (c.id_regiao = cp.cod_corede AND c.cod_projeto = cp.nro_ordem)";
 	$selCel = mysql_query( $cedula , $db );
 	if( $regCel = mysql_fetch_row( $selCel ) ) {
 		$cod_projeto = $regCel[0];
@@ -42,11 +50,12 @@ while( $regVotos = mysql_fetch_row( $selVotos ) ) {
     	echo "<p>O Município ".$id_municipio." nao foi encontrado</p>";
     	exit;
   	}
-    $reg = "INSERT INTO POP_VOTO_WEB "
-					 . " select pop_seq_cod_voto_web.nextval, cod_desc_cedula, to_date('".$dth_voto."', 'yyyy-mm-dd hh24:mi:ss'), 0, ".$cod_mun_pop.", 2012 from POP_DESCRICAO_CEDULA t where nro_ano_corrente = 2012 and cod_corede = ".$id_regiao." and nro_ordem = ".$cod_projeto;
-	$reg .= "". "\r\n";
+    $reg = "pop_seq_cod_voto_web.nextval;".$cod_desc_cedula.";".$dth_voto.";0;".$cod_mun_pop.";2012\r\n";
+	//$reg = "INSERT INTO POP_VOTO_WEB "
+	//				 . " select pop_seq_cod_voto_web.nextval, cod_desc_cedula, to_date('".$dth_voto."', 'yyyy-mm-dd hh24:mi:ss'), 0, ".$cod_mun_pop.", 2012 from POP_DESCRICAO_CEDULA t where nro_ano_corrente = 2012 and cod_corede = ".$id_regiao." and nro_ordem = ".$cod_projeto;
+	//$reg .= "". "\r\n";
 			//$limpar = fputs( $abrir , $reg . "\r\n" );
-	echo $reg;
+	echo $reg."<br />";
 	fwrite($arquivo, $reg);
 }
 fwrite($arquivo, $ult_reg);
@@ -89,11 +98,12 @@ while( $regVotos = mysql_fetch_row( $selVotos ) ) {
     	echo "<p>O Município ".$id_municipio." nao foi encontrado</p>";
     	exit;
   	}
-    $reg = "INSERT INTO POP_VOTO_WEB "
-				 . " select pop_seq_cod_voto_web.nextval, 2012, cod_desc_cedula, to_date('".$dth_voto."', 'yyyy-mm-dd hh24:mi:ss'), 0, $cod_mun_pop from POP_DESCRICAO_CEDULA t where nro_ano_corrente = 2012 and cod_corede = ".$id_regiao." and nro_ordem = ".$cod_projeto;
-	$reg .= ";". "\r\n";
+	$reg = "pop_seq_cod_voto_web.nextval;2012;".$cod_desc_cedula.";".$dth_voto.";0;".$cod_mun_pop."\r\n";
+    //$reg = "INSERT INTO POP_VOTO_WEB "
+	//			 . " select pop_seq_cod_voto_web.nextval, 2012, cod_desc_cedula, to_date('".$dth_voto."', 'yyyy-mm-dd hh24:mi:ss'), 0, $cod_mun_pop from POP_DESCRICAO_CEDULA t where nro_ano_corrente = 2012 and cod_corede = ".$id_regiao." and nro_ordem = ".$cod_projeto;
+	//$reg .= ";". "\r\n";
 			//$limpar = fputs( $abrir , $reg . "\r\n" );
-	echo $reg;
+	echo $reg."<br />";
 	fwrite($arquivo, $reg);
 }
 fwrite($arquivo, $ult_reg);
