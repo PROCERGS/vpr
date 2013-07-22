@@ -27,18 +27,19 @@
 	.container.home { text-align: center; max-width: 760px; /*margin: 4% auto 0;*/ background-color: transparent; }
 	.container .static_bg { background: url('/images/fundo_capa.jpg') no-repeat; height: 535px; overflow: visible; }
 	.container .static_bg { padding: 0; -webkit-box-shadow: 0px 0px 20px 0px #000; box-shadow: 0px 0px 20px 0px #000; }
-	.container.home .header h1 a { display: block; background: url('/images/logotipo.png') no-repeat 40px center; width: 440px; height: 171px; text-indent: -9999px; }
+	.container.home .header h1 a { display: block; background: url('/images/logotipo_internas.png') no-repeat 40px center; width: 440px; height: 171px; text-indent: -9999px; }
+        .container.home .twelvecol h1 { font-family: 'Pathway Gothic One', sans-serif; color: #FF6600; font-size: 3em; margin-bottom: 15px; }
 	.container.home .header h2 { background: url('/images/logotipo.png') no-repeat -413px center; width: 290px; height: 171px; text-indent: -9999px; }
 	
 	.home .online_voting_dates { font-size: 12px; font-weight: bold; }
 	
 	.titulo_pagina { display:none; }
-	.home .vote_now { background: url('/images/fundo_votar.png'); padding: 20px 0 15px; margin-top: 50px; }
+	.home .vote_now { background: url('/images/fundo_votar.png'); padding: 20px 0 15px; margin-top: 20px; }
 	.home .vote_now a, .home .vote_now .unavailable { display: inline-block; font-weight: bold; font-size: 24px; text-align: left; padding: 3px 0 0 75px; height: 70px; }
 	.home .vote_now a { color: #360; background: url('/images/icone_votar.png') no-repeat; }
 	.home .vote_now .unavailable { color: #999; background: url('/images/icone_votar_off.png') no-repeat; width: 200px; }
 	
-	.home .queries { margin-top: 50px; }
+	.home .queries { margin-top: 26px; }
 	
 	.home .queries div a { background-image: url('/images/icone_cedula.png'); }
 	.home .queries .last a { background-image: url('/images/icone_locais.png'); }

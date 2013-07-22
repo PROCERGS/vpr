@@ -8,6 +8,7 @@ class AppController extends Controller {
 	protected static function setDefaultStylesheets() {
 		self::addCSS('/css/1140.css');
 		self::addCSS('/css/styles.css');
+                self::addCSS('http://fonts.googleapis.com/css?family=Pathway+Gothic+One');
 	}
 	protected static function setDefaultJavascripts() {
 		self::addJavascript('/js/jquery-1.7.2.min.js');

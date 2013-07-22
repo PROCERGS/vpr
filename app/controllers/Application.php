@@ -1,83 +1,91 @@
 <?php
 
-class Application extends AppController {
+class Application extends AppController
+{
 
-	public static function index() {
+    public static function index()
+    {
 
-		self::setPageName("Votação de Prioridades<br />Orçamento 2013");
-		
-		$string_alt_img = null;
+        self::setPageName("Votação de Prioridades<br />Orçamento 2014");
 
-		$html = new HTMLHelper();
+        $string_alt_img = null;
 
-		$votacao = Votacao::findAll();
+        $html = new HTMLHelper();
 
-		$show_vote_now = FALSE;
-		foreach ($votacao as $vot) {
-			$data_ini = $vot->getDthInicio();
-			$data_fim = $vot->getDthFim();
+        $votacao = Votacao::findMostRecent();
 
-			$data_ini = Util::createDateTime($vot->getDthInicio(), 'Y-m-d H:i:s');
-			$data_fim = Util::createDateTime($vot->getDthFim(), 'Y-m-d H:i:s');
-			$string_data = self::stringDate($data_ini, $data_fim);
+        $show_vote_now = FALSE;
+        if ($votacao instanceof Votacao) {
+            $data_ini = $votacao->getDthInicio();
+            $data_fim = $votacao->getDthFim();
 
-			$show_vote_now = $vot->isOpen();
+            $data_ini = Util::createDateTime($votacao->getDthInicio(), 'Y-m-d H:i:s');
+            $data_fim = Util::createDateTime($votacao->getDthFim(), 'Y-m-d H:i:s');
+            $string_data = self::stringDate($data_ini, $data_fim);
 
-			$nome = $vot->getNmVotacao();
-			$orçamento = (int) $vot->getIntExercicio() + 1;
-			if (is_string($nome) && is_string($orçamento))
-				$string_alt_img = $nome + " - " + $orçamento;
-		}
-		//$show_vote_now = FALSE;
+            $show_vote_now = $votacao->isOpen();
 
-		if (Config::get('isMobile'))
-			self::render(compact("string_data", "string_alt_img", "show_vote_now"), array('controller' => 'Application', 'action' => 'index_mobile'));
-		else
-			self::render(compact("string_data", "string_alt_img", "show_vote_now"));
-	}
+            $nome = $votacao->getNmVotacao();
+            $orçamento = (int) $votacao->getIntExercicio() + 1;
+            if (is_string($nome) && is_string($orçamento)) {
+                $string_alt_img = $nome + " - " + $orçamento;
+                //$show_vote_now = FALSE;
+            }
+        }
 
-	public static function make_class() {
-		$className = self::getParam('class');
-		$tableName = self::getParam('table');
+        if (Config::get('isMobile')) {
+            self::render(compact("string_data", "string_alt_img", "show_vote_now"), array('controller' => 'Application', 'action' => 'index_mobile'));
+        } else {
+            self::render(compact("string_data", "string_alt_img", "show_vote_now"));
+        }
+    }
 
-		if (is_null($className))
-			$className = Util::parseControllerName($tableName);
+    public static function make_class()
+    {
+        $className = self::getParam('class');
+        $tableName = self::getParam('table');
 
-		$class = ClassMaker::createClass($className, $tableName);
-		$class_name = ClassMaker::getClassName();
-		$class_filename = ClassMaker::getClassFileName();
+        if (is_null($className))
+            $className = Util::parseControllerName($tableName);
 
-		if (self::getParam('save') == 'true') {
-			$fullpath = MODELS_PATH . $class_filename;
-			file_put_contents($fullpath, $class);
+        $class = ClassMaker::createClass($className, $tableName);
+        $class_name = ClassMaker::getClassName();
+        $class_filename = ClassMaker::getClassFileName();
 
-			header("Content-type: text/plain");
-			echo file_get_contents($fullpath);
-			return;
-		}
+        if (self::getParam('save') == 'true') {
+            $fullpath = MODELS_PATH . $class_filename;
+            file_put_contents($fullpath, $class);
 
-		$tables = ClassMaker::getTables();
-		self::render(compact('class', 'class_name', 'class_filename', 'tableName', 'tables'));
-	}
+            header("Content-type: text/plain");
+            echo file_get_contents($fullpath);
+            return;
+        }
 
-	private static function stringDate($data_ini, $data_fim) {
-		setlocale(LC_ALL, "pt_BR", "pt_BR.utf-8", "pt_BR.iso-8859-1", "portuguese", "ptb");
-		$now = new DateTime();
-		$current_mk = time();
-		
-		/**
-		 * 	Caso queira utilizar um formato padrão de data 
-		 * 	descomente as linhas de baixo
-		 */
-		
+        $tables = ClassMaker::getTables();
+        self::render(compact('class', 'class_name', 'class_filename', 'tableName', 'tables'));
+    }
+
+    private static function stringDate($data_ini, $data_fim)
+    {
+        setlocale(LC_ALL, "pt_BR", "pt_BR.utf-8", "pt_BR.iso-8859-1", "portuguese", "ptb");
+        $now = new DateTime();
+        $current_mk = time();
+
+        /**
+         * 	Caso queira utilizar um formato padrão de data 
+         * 	descomente as linhas de baixo
+         */
 //		$string_data = "Período de Votação Online: dia 4 de julho de 2012 - das 8 às 24h";
-		$string_data = strftime("Votação Online: até as %Hh do dia %d/%m/%Y", $data_fim->getTimestamp());
-		
-		return $string_data;
-	}
-	
-	public static function pesquisa() {
-		self::render();
-	}
+        $from = strftime("das %Hh do dia %d/%m/%Y", $data_ini->getTimestamp());
+        $to = strftime("até as %Hh do dia %d/%m/%Y", $data_fim->getTimestamp());
+        $string_data = "Votação Online: $from $to";
+
+        return $string_data;
+    }
+
+    public static function pesquisa()
+    {
+        self::render();
+    }
 
 }

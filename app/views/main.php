@@ -8,7 +8,7 @@
 <?php if (isset($detector) && is_object($detector) && $detector->isiPhone()) { ?>
 		<meta name="viewport" content="width=device-width,minimum-scale=1.0, maximum-scale=1.0" />
 <?php } ?>
-		<title><?php startblock('title') ?>Votação de Prioridades 2013<?php endblock() ?></title>
+		<title><?php startblock('title') ?>Votação de Prioridades 2014<?php endblock() ?></title>
 <?php startblock('css'); require_once 'stylesheets.php'; endblock('css'); ?>
 	</head>
 	<body>
