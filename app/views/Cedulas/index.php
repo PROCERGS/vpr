@@ -26,7 +26,7 @@ endblock();
 			<button type="submit">Consultar</button>
 		</form>
 
-		<center><a style="text-decoration: none" href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input name="Envia" type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento 2013" /></a>
+		<center><a style="text-decoration: none" href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input name="Envia" type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento <?= $budgetYear ?>" /></a>
 			</center>
 	</div>
 </div>

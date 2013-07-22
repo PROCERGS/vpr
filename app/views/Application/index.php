@@ -19,7 +19,7 @@ endblock(); ?>
         </div>
         <div class="row">
             <div class="twelvecol">
-                <h1>Votação de Prioridades - Orçamento 2013</h1>
+                <h1>Votação de Prioridades - Orçamento <?= $budgetYear ?></h1>
             </div>
         </div>
         <div class="row online_voting_dates">

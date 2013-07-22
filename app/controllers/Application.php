@@ -5,14 +5,12 @@ class Application extends AppController
 
     public static function index()
     {
-
-        self::setPageName("Votação de Prioridades<br />Orçamento 2014");
+        $votacao = Votacao::findMostRecent();
+        self::setPageName("Votação de Prioridades<br />Orçamento " . $votacao->getIntExercicio());
 
         $string_alt_img = null;
 
         $html = new HTMLHelper();
-
-        $votacao = Votacao::findMostRecent();
 
         $show_vote_now = FALSE;
         if ($votacao instanceof Votacao) {
