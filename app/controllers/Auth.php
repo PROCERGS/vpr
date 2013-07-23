@@ -16,15 +16,16 @@ class Auth extends AppController
                 if (count($votacao) == 0)
                     throw new AppException("A votação não está aberta.", AppException::INFO, $previous);
 
+                $doc = self::getParam('doc');
                 $cidadao = self::getParam('Cidadao');
                 $cidadao = Cidadao::cast(Cidadao::getFromArray($cidadao));
                 $phone = $cidadao->getNroTelefone();
                 $email = $cidadao->getDsEmail();
 
-                if (strlen($cidadao->getNroTitulo()) <= 0 || strlen($cidadao->getRg()) <= 0)
-                    throw new AppException("Informe o Título de Eleitor e o Número da Identidade (RG)", AppException::ERROR, $previous);
+                if (strlen($cidadao->getNroTitulo()) <= 0 || strlen($doc) <= 0)
+                    throw new AppException("Informe o Título de Eleitor e o documento de identificação (RG ou CPF)", AppException::ERROR, $previous);
 
-                $cidadao = Cidadao::auth($cidadao->getNroTitulo(), $cidadao->getRg());
+                $cidadao = Cidadao::auth($cidadao->getNroTitulo(), $doc);
 
                 if (strlen($phone) > 0)
                     $cidadao->setNroTelefone($phone);

@@ -24,8 +24,8 @@
 				</label>
 				
 				<label for="rg">
-					RG (Carteira de Identidade):
-					<input tabindex="2" type="number" name="Cidadao[rg]" id="rg" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['rg']:''; ?>" />
+					RG (Carteira de Identidade) ou CPF:
+					<input tabindex="2" type="number" name="doc" id="doc" min="0" value="<?php echo isset($flash_extra)?@$flash_extra['rg']:''; ?>" />
 				</label>
 			</fieldset>
 			

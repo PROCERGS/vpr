@@ -22,7 +22,82 @@ class Cidadao extends Model
         return $o;
     }
 
-    public static function auth($nro_titulo, $rg)
+    public static function auth($nro_titulo, $doc)
+    {
+        $previous = array('controller' => 'Auth', 'action' => 'login');
+
+        $nro_titulo = preg_replace("/([^0-9])/", '', $nro_titulo);
+        $nro_titulo = trim($nro_titulo);
+        $nro_titulo = str_pad($nro_titulo, 12, '0', STR_PAD_LEFT);
+
+        $rgOk = self::validateRG_RS($doc);
+        $cpfOk = self::isValidCpf($doc);
+        
+        if (!$rgOk && !$cpfOk) {
+            throw new AppException("RG ou CPF inválido.", AppException::ERROR, $previous);
+        }
+
+        $cidadao = Cidadao::findByNroTituloOrIdDoc($nro_titulo, $doc);
+        if (count($cidadao) <= 0) {
+            $eleitor_tre = reset(EleitorTre::findByNroTitulo($nro_titulo));
+            if ($eleitor_tre instanceof EleitorTre) {
+                $cidadao = new Cidadao();
+                $cidadao->setEleitorTre($eleitor_tre);
+                $cidadao->fetchRegiao();
+                $cidadao->setNroTitulo($eleitor_tre->getNroTitulo());
+                if ($rgOk) {
+                    $cidadao->setRg($doc);
+                } elseif ($cpfOk) {
+                    $cidadao->setCpf($doc);
+                }
+
+                $municipio = reset(Municipio::findByCodMunTre($eleitor_tre->getCodMunTre()));
+                if ($municipio instanceof Municipio) {
+                    $cidadao->setIdMunicipio($municipio->getIdMunicipio());
+                } else {
+                    throw new AppException("Município não encontrado.", AppException::ERROR, $previous);
+                }
+
+                $cidadao->setIdCidadao($cidadao->insert());
+            } else {
+                throw new AppException("Eleitor não encontrado.", AppException::ERROR, $previous);
+            }
+        } elseif (count($cidadao) == 1) {
+            $cidadao = Cidadao::cast(reset($cidadao));
+            $cidadao->fetchEleitorTre();
+            $cidadao->fetchRegiao();
+
+            if ($rgOk) {
+                if (is_null($cidadao->getRg())) {
+                    $cidadao->setRg($doc);
+                    $cidadao->update();
+                } elseif ($cidadao->getRg() != $doc) {
+                    throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous);
+                }
+            } elseif ($cpfOk) {
+                if (is_null($cidadao->getCpf())) {
+                    $cidadao->setCpf($doc);
+                    $cidadao->update();
+                } elseif ($cidadao->getCpf() != $doc) {
+                    throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous);
+                }
+            }
+            if ($cidadao->getNroTitulo() != $nro_titulo) {
+                throw new DocumentsMismatchException('Esse documento de identificação já foi usado nessa votação', $previous);
+            }
+        } elseif (count($cidadao) > 1) {
+            throw new DocumentsMismatchException('Um dos documentos parece pertencer a outra pessoa. Verifique seus dados.', $previous);
+        } else {
+            throw new ErrorException('Unknown error.');
+        }
+        if ($cidadao instanceof Cidadao) {
+            return $cidadao;
+        }
+
+        return NULL;
+    }
+    
+    public static function authOld($nro_titulo, $rg)
     {
         $previous = array('controller' => 'Auth', 'action' => 'login');
 
@@ -80,7 +155,22 @@ class Cidadao extends Model
 
         return NULL;
     }
-
+    
+    public static function findByNroTituloOrIdDoc($nro_titulo, $doc)
+    {
+        $query = PDOUtils::getConn()->prepare(CidadaoQueries::SQL_FIND_BY_NRO_TITULO_OR_ID_DOC);
+        $params = compact('nro_titulo', 'doc');
+        if ($query->execute($params) === TRUE) {
+            $result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
+            if (count($result) > 0) {
+                return $result;
+            } else {
+                return array();
+            }
+        } else
+            return array();
+    }
+    
     public static function findByNroTituloOrRg($nro_titulo, $rg)
     {
         $query = PDOUtils::getConn()->prepare(CidadaoQueries::SQL_FIND_BY_NRO_TITULO_OR_RG);
@@ -100,7 +190,7 @@ class Cidadao extends Model
     // TODO: implementar também em javascript.
     public static function validateRG_RS($rg)
     {
-        $rg = (string) $rg;
+        $rg = trim((string) $rg);
         $rg = str_pad($rg, 10, '0', STR_PAD_LEFT);
         // Cálculo do DCE
         $dce = 0;
@@ -138,6 +228,38 @@ class Cidadao extends Model
         }
 
         return ($dce == $rg[0] && $dcd == $rg[strlen($rg) - 1]);
+    }
+    
+    /**
+     * @param string $cpf
+     * @return boolean
+     */
+    public static function isValidCpf($cpf)
+    {
+        $cpf          = str_pad(preg_replace("/[^0-9]/", "", $cpf), 11, '0', STR_PAD_LEFT);
+        $digitoUm     = 0;
+        $digitoDois = 0;
+        
+        if (strlen($cpf) != 11 || preg_match('/([0-9])\\1{10}/', $cpf)) {
+            return false;
+        }
+        
+        for ($i = 0, $x = 10; $i <= 8; $i++, $x--) {
+            $digitoUm += $cpf[$i] * $x;
+        }
+        for ($i = 0, $x = 11; $i <= 9; $i++, $x--) {
+            if (str_repeat($i, 11) == $cpf) {
+                return false;
+            }
+            $digitoDois += $cpf[$i] * $x;
+        }
+         
+        $calculoUm  = (($digitoUm%11) < 2) ? 0 : 11-($digitoUm%11);
+        $calculoDois = (($digitoDois%11) < 2) ? 0 : 11-($digitoDois%11);
+        if ($calculoUm <> $cpf[9] || $calculoDois <> $cpf[10]) {
+            return false;
+        }
+        return true;
     }
 
     public function setEleitorTre($eleitor_tre)
