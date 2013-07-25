@@ -7,10 +7,10 @@ class Election extends AppController
     {
         parent::before();
         $action = self::getParam('action');
-        if ($action != 'success') {
+        //if ($action != 'success') {
             $currentUser = VotingSession::requireCurrentVotingSession()->requireCurrentUser();
             self::setPageSubName(Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()));
-        }
+        //}
         $votacao = Votacao::findMostRecent();
         self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
     }
@@ -169,14 +169,19 @@ class Election extends AppController
         if (is_array($next_group) && reset($next_group) instanceof GrupoDemanda)
             self::redirect(array('controller' => 'Election', 'action' => 'start'));
         else {
-            $votingSession->finish();
+            //$votingSession->finish();
             self::redirect(array('controller' => 'Election', 'action' => 'success'));
         }
     }
 
     public static function success()
     {
-        self::render();
+        $poll = Poll::findLastByVotacao(2);
+        
+        self::setJavascriptVar('previousStep', 0);
+        self::addJavascript('/js/poll.js');
+        
+        self::render(compact("poll"));
     }
 
     private static function registerVotes()

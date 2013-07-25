@@ -7,17 +7,49 @@
 		<p><strong>Obrigado por sua participação!</strong></p>
 	</div>
 </div>
-<div class="row poll">
-	<div class="twelvecol last">
-		<h2>Pesquisa Opcional</h2>
-		<p>Ajude a melhorar o processo Votação de Prioridades - Orcamento <?= $budgetYear ?> dedicando alguns minutos para responder a pesquisa abaixo. Todas as respostas são tratadas estatisticamente e, em hipótese alguma, o respondente é identificado.</p>
-		<?php echo $html->link('Responder à pesquisa', array('controller' => 'Application', 'action' => 'pesquisa'), array('class' => 'pesquisa')); ?>
-	</div>
-</div>
-<div class="row home">
-	<div class="twelvecol last">
-		<?php echo $html->link('<button type="button">Voltar para a Página inicial</button>', array('controller' => 'Application', 'action' => 'index'), array('class' => 'home')); ?>
-		<?php echo $html->link('<button type="button">RS Móvel</button>', "http://m.rs.gov.br/", array('class' => 'rs_movel')); ?>
-	</div>
-</div>
+
+<?php if($poll) { ?>
+    <div class="row poll">
+        <div class="twelvecol last">
+            <h2>Pesquisa Opcional</h2>
+
+            <form id="poll" class="vote" action="/polls/confirm" method="post">
+                <div class="container">
+                    <div class="row group"> 
+                        <div class="twelvecol last">
+                            <h2><?php echo $poll->getTitle(); ?></h2>
+                            <fieldset>
+                                <?php foreach($poll->getQuestions() as $i => $question) { ?>
+                                <dl contextmenu="<?php echo $question->getMaxSelection(); ?>">
+                                        <dt><?php echo $question->getSequence(); ?> - <?php echo $question->getQuestion(); ?></dt>
+                                        <input type="hidden" value="<?php echo $question->getId(); ?>" name="poll_answers[<?php echo $i; ?>][question_id]">
+                                        <?php foreach($question->getOptions() as $option) { ?>
+                                            <dd>
+                                                <?php if ($question->getMaxSelection() > 1) { ?>
+                                                    <input type="checkbox" id="option_<?php echo $option->getId(); ?>" value="<?php echo $option->getId(); ?>" name="poll_answers[<?php echo $i; ?>][option_id][]">
+                                                <?php } else { ?>
+                                                    <input type="radio" id="option_<?php echo $option->getId(); ?>" value="<?php echo $option->getId(); ?>" name="poll_answers[<?php echo $i; ?>][option_id]">
+                                                <?php } ?>
+                                                <label for="option_<?php echo $option->getId(); ?>">
+                                                    <?php echo $option->getOption(); ?>
+                                                </label>
+                                            </dd>
+                                        <?php } ?>
+                                    </dl>
+                                <?php } ?>
+                            </fieldset>
+                            <button type="submit">Confirmar pesquisa</button>
+                        </div>
+                    </div>
+                </form>
+            </div>        
+        </div>
+    </div>
+<?php } else { ?>
+    <div class="row home">
+        <div class="twelvecol last">
+            <?php echo $html->link('<button type="button">Voltar para a Página inicial</button>', array('controller' => 'Application', 'action' => 'index'), array('class' => 'home')); ?>
+        </div>
+    </div>
+<? } ?>
 <?php endblock('content'); ?>
