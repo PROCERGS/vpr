@@ -314,5 +314,10 @@ class Cidadao extends Model
         ));
         return (is_array($voto_logs) && count($voto_logs) > 0);
     }
+    
+    public function hasPollAvailable($votacao_id)
+    {
+        return !is_null(Poll::findLastUnvotedByVotacao($votacao_id, $this->getIdCidadao()));
+    }
 
 }

@@ -26,10 +26,25 @@ class Election extends AppController
         try {
             $votingSession = VotingSession::requireCurrentVotingSession();
             $currentUser = $votingSession->requireCurrentUser();
-            $group = $votingSession->getCurrentGroup();
+            $votacao = Votacao::findMostRecent();
+            $hasPoll = $currentUser->hasPollAvailable($votacao->getIdVotacao());
+            
+            try {
+                $group = $votingSession->getCurrentGroup();
+            } catch (AppException $e) {
+                if ($hasPoll) {
+                    self::redirect(array('controller' => 'Election', 'action' => 'success'));
+                } else {
+                    throw $e;
+                }
+            }
 
             if (!($group instanceof GrupoDemanda)) {
-                throw new ErrorException("Você já votou em todos grupos disponíveis.");
+                if ($currentUser->hasPollAvailable($votingSession->getVotacaoId())) {
+                    self::redirect(array('controller' => 'Election', 'action' => 'success'));
+                } else {
+                    throw new ErrorException("Você já votou em todos grupos disponíveis.");
+                }
             }
         } catch (Exception $e) {
             Session::delete('currentUser');
