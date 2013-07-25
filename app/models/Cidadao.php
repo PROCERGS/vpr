@@ -318,7 +318,7 @@ class Cidadao extends Model
     public function hasPollAvailable($votacao_id)
     {
         $hasAvailable = Poll::findLastUnvotedByVotacao($votacao_id, $this->getIdCidadao());
-        return $hasAvailable;
+        return !is_null($hasAvailable);
     }
 
 }

@@ -42,7 +42,11 @@ class Poll extends Model
         $query = PDOUtils::getConn()->prepare(PollQueries::SQL_FIND_LAST_UNVOTED_BY_VOTACAO);
         if ($query->execute(compact('votacao_id', 'cidadao_id')) === TRUE) {
             $result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
-            return reset($result);
+            if (!empty($result)) {
+                return reset($result);
+            } else {
+                return null;
+            }
         } else
             return null;
     }
