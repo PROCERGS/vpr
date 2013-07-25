@@ -184,14 +184,20 @@ class Election extends AppController
         if (is_array($next_group) && reset($next_group) instanceof GrupoDemanda)
             self::redirect(array('controller' => 'Election', 'action' => 'start'));
         else {
-            $votingSession->finish();
+            //$votingSession->finish();
             self::redirect(array('controller' => 'Election', 'action' => 'success'));
         }
     }
 
     public static function success()
     {
-        $poll = Poll::findLastByVotacao(2);
+        $votingSession = VotingSession::requireCurrentVotingSession();
+        $currentUser = $votingSession->requireCurrentUser();
+        $votacao = Votacao::findMostRecent();
+
+        $poll = null;
+        if($currentUser->hasPollAvailable($votacao->getIdVotacao()))
+            $poll = Poll::findLastByVotacao($votacao->getIdVotacao());
         
         self::setJavascriptVar('previousStep', 0);
         self::addJavascript('/js/poll.js');

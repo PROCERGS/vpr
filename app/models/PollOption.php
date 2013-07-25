@@ -18,4 +18,9 @@ class PollOption extends Model
         return $o;
     }
 
+    public function getPollQuestion()
+    {
+        return reset(PollQuestion::findById($this->getPollQuestionId()));
+    }    
+    
 }
