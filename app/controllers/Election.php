@@ -195,10 +195,11 @@ class Election extends AppController
         $currentUser = $votingSession->requireCurrentUser();
         $votacao = Votacao::findMostRecent();
         
-        $poll = null;
-        if($currentUser->hasPollAvailable($votacao->getIdVotacao()))
-            $poll = Poll::findLastByVotacao($votacao->getIdVotacao());
-        
+        $poll = Poll::findLastByVotacao($votacao->getIdVotacao());
+        if(!$currentUser->hasPollAvailable($votacao->getIdVotacao()) || !$poll){
+            $votingSession->finish();
+        }
+
         self::setJavascriptVar('previousStep', 0);
         self::addJavascript('/js/poll.js');
         

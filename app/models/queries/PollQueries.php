@@ -6,6 +6,7 @@ class PollQueries
     const SQL_FIND_LAST = <<<EOD
 	SELECT * 
 	  FROM poll 
+     WHERE votacao_id = :votacao_id
   ORDER BY id DESC 
      LIMIT 1
 EOD;
