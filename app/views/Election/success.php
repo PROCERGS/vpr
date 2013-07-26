@@ -9,7 +9,7 @@
 </div>
 
 <?php if($poll) { ?>
-    <?php include VIEWS_PATH . 'polls/questions.php'; ?>
+    <?php include VIEWS_PATH . 'Polls/questions.php'; ?>
 <?php } else { ?>
     <div class="row home">
         <div class="twelvecol last">
