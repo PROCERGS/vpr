@@ -93,4 +93,25 @@ GROUP BY
 ORDER BY
 	r.`nm_regiao`
 EOD;
+        
+        const SQL_FIND_POLLS_BY_VOTACAO_ID = <<<EOD
+SELECT
+	p.id AS poll_id,
+	p.title,
+	pq.id AS question_id,
+	pq.question,
+	po.id AS option_id,
+	po.`option`,
+	IF(pa.id IS NULL, 0, COUNT(*)) AS votes
+FROM
+	poll p
+	INNER JOIN poll_question pq ON pq.poll_id = p.id
+	INNER JOIN poll_option po ON po.poll_question_id = pq.id
+	LEFT JOIN poll_answers pa ON pa.poll_id = p.id AND pa.poll_question_id = pq.id AND pa.poll_option_id = po.id
+WHERE
+	p.votacao_id = :votacao_id
+GROUP BY
+	p.id, pq.id, po.id
+EOD;
+        
 }

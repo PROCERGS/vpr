@@ -47,4 +47,21 @@ class Stat extends Model {
 		} else
 			return array();
 	}
+        
+        public static function findPollsByVotacaoId($votacao_id)
+        {
+            $query = PDOUtils::getConn()->prepare(StatQueries::SQL_FIND_POLLS_BY_VOTACAO_ID);
+            $query->execute(compact('votacao_id'));
+
+            $pollsStats = $query->fetchAll(PDO::FETCH_ASSOC);
+            $polls = array();
+            foreach ($pollsStats as $poll) {
+                $polls[$poll['poll_id']]['title'] = $poll['title'];
+                $polls[$poll['poll_id']]['questions'][$poll['question_id']]['question'] = $poll['question'];
+                $polls[$poll['poll_id']]['questions'][$poll['question_id']]['options'][$poll['option_id']]['option'] = $poll['option'];
+                $polls[$poll['poll_id']]['questions'][$poll['question_id']]['options'][$poll['option_id']]['votes'] = $poll['votes'];
+            }
+            
+            return $polls;
+        }
 }
