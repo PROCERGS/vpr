@@ -9,6 +9,7 @@ class VotingSession extends Model
     protected $votes;
     protected $options;
     protected $captcha;
+    protected $poll_answers;
 
     /**
      * 
@@ -101,6 +102,17 @@ class VotingSession extends Model
         $this->save();
     }
 
+    public function getCurrentPollAnswers()
+    {
+        return $this->poll_answers;
+    }    
+    
+    public function setCurrentPollAnswers($pollAnswers)
+    {
+        $this->poll_answers = $pollAnswers;
+        $this->save();
+    }    
+    
     public function setVotoLog($votoLog)
     {
         $this->voto_log = $votoLog;

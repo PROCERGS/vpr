@@ -23,4 +23,24 @@ class PollOption extends Model
         return reset(PollQuestion::findById($this->getPollQuestionId()));
     }    
     
+	public static function getSessionPollAnswers() {
+		$votingSession = VotingSession::requireCurrentVotingSession();
+		$answers = $votingSession->getCurrentPollAnswers();
+		if (is_null($answers)) {
+			$votingSession->setVotes(array());
+		}
+		return $answers;
+	}    
+    
+    public function isChecked(){
+        $currentPollAnswers = self::getSessionPollAnswers();
+        $question_id = $this->getPollQuestionId();
+        $checked = false;
+
+        if(is_array($currentPollAnswers[$question_id])){
+            $checked = in_array($this->getId(), $currentPollAnswers[$question_id]);
+        }
+
+        return $checked;
+    }
 }

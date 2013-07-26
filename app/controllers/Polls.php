@@ -1,6 +1,13 @@
 <?php
 class Polls extends AppController {
-	
+
+    public static function before()
+    {
+        parent::before();
+        $votacao = Votacao::findMostRecent();
+        self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
+    }
+    
 	protected static function setDefaultJavascripts() {
 		parent::setDefaultJavascripts();
 		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
@@ -14,35 +21,45 @@ class Polls extends AppController {
         $currentUser    = $votingSession->requireCurrentUser();
         $votacao        = Votacao::findMostRecent();
         $poll           = Poll::findLastByVotacao($votacao->getIdVotacao());
-        $answers        = $_POST['selected'];
+        $pollAnswers    = $_POST['selected'];
+
+        $votingSession->setCurrentPollAnswers($pollAnswers);
 
         if($currentUser->hasPollAvailable($votacao->getIdVotacao())) {
-            if($answers){
-                foreach ($answers as $selected) {
-                    $pollAnswer = new PollAnswers();
-                    foreach($selected as $i => $item) {
-                        $pollOption = reset(PollOption::findById($item));
-                        if($pollOption){
-                            $maxSelect = $pollOption->getPollQuestion()->getMaxSelection();
-                            if($i < $maxSelect) {
-                                $pollAnswer->addAnswer($pollOption, $currentUser);
+            $errors = $poll->validate($pollAnswers);
+            if(!$errors){
+
+                if($pollAnswers){
+                    foreach ($pollAnswers as $selected) {
+                        $pollAnswer = new PollAnswers();
+                        foreach($selected as $i => $item) {
+                            $pollOption = reset(PollOption::findById($item));
+                            if($pollOption){
+                                $maxSelect = $pollOption->getPollQuestion()->getMaxSelection();
+                                if($i < $maxSelect) {
+                                    $pollAnswer->addAnswer($pollOption, $currentUser);
+                                }
                             }
                         }
                     }
                 }
+
+                $pollRespondent = new PollRespondent();
+                $pollRespondent->setPollId($poll->getId());
+                $pollRespondent->setCidadaoId($currentUser->getIdCidadao());
+                $pollRespondent->insert();
+
+                $votingSession->finish();
+
+            }else{
+                Session::set('poll_errors', $errors);
+                self::redirect(array('controller' => 'Election', 'action' => 'success'));
             }
-
-            $pollRespondent = new PollRespondent();
-            $pollRespondent->setPollId($poll->getId());
-            $pollRespondent->setCidadaoId($currentUser->getIdCidadao());
-            $pollRespondent->insert();
-
-            $votingSession->finish();
         }
-        
+
         self::redirect(array('controller' => 'Polls', 'action' => 'success'));
 	}
-    
+
     public static function success()
     {
         self::render();

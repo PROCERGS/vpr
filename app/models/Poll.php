@@ -64,4 +64,24 @@ class Poll extends Model
         return $query->fetchAll(PDO::FETCH_CLASS, 'PollQuestion');
     }
 
+    public function validate($answers) {
+        $errors = array();
+
+        foreach($this->getQuestions() as $question) {
+            $minSelected = $question->getMinSelection();
+            $maxSelected = $question->getMaxSelection();
+            $userSelected = count($answers[$question->getId()]);
+
+            if( $userSelected < $minSelected ) {
+                $errors[] = "Deve ser selecionado pelo menos {$minSelected} resposta(s) na questão: {$question->getSequence()}";
+            }
+
+            if( $userSelected > $maxSelected ){
+                $errors[] = "Ultrapassou o limite de resposta(s) na questão:  {$question->getSequence()}";
+            }
+        }
+        
+        return $errors;
+    }
+    
 }

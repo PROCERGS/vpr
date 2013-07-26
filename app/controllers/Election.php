@@ -194,7 +194,7 @@ class Election extends AppController
         $votingSession = VotingSession::requireCurrentVotingSession();
         $currentUser = $votingSession->requireCurrentUser();
         $votacao = Votacao::findMostRecent();
-
+        
         $poll = null;
         if($currentUser->hasPollAvailable($votacao->getIdVotacao()))
             $poll = Poll::findLastByVotacao($votacao->getIdVotacao());
