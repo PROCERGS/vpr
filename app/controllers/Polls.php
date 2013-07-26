@@ -19,13 +19,12 @@ class Polls extends AppController {
 
         $votingSession  = VotingSession::requireCurrentVotingSession();
         $currentUser    = $votingSession->requireCurrentUser();
-        $votacao        = Votacao::findMostRecent();
-        $poll           = Poll::findLastByVotacao($votacao->getIdVotacao());
+        $poll           = $votingSession->getPoll();
         $pollAnswers    = $_POST['selected'];
 
         $votingSession->setCurrentPollAnswers($pollAnswers);
-
-        if($currentUser->hasPollAvailable($votacao->getIdVotacao())) {
+        
+        if($currentUser->hasPollAvailable($poll->getVotacaoId())) {
             $errors = $poll->validate($pollAnswers);
             if(!$errors){
 
@@ -35,10 +34,7 @@ class Polls extends AppController {
                         foreach($selected as $i => $item) {
                             $pollOption = reset(PollOption::findById($item));
                             if($pollOption){
-                                $maxSelect = $pollOption->getPollQuestion()->getMaxSelection();
-                                if($i < $maxSelect) {
-                                    $pollAnswer->addAnswer($pollOption, $currentUser);
-                                }
+                                $pollAnswer->addAnswer($pollOption, $currentUser);
                             }
                         }
                     }

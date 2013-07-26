@@ -8,7 +8,7 @@
         ?>
 
         <?php if($poll_errors) { ?>
-            <div class="flash warning">
+            <div class="flash error">
                 <?php foreach($poll_errors as $error) { ?>
                     <p><?php echo $error; ?></p>
                 <?php } ?>
