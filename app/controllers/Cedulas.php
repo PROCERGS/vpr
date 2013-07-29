@@ -55,11 +55,11 @@ class Cedulas extends AppController
 
         if (isset($regiao_id) && $regiao_id != -1) {
 
-            $votacao = Votacao::findByActiveVotacaoRead();
+            $votacao = Votacao::findMostRecent();
             self::setTitle("Consulta Cédula de Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
 
             if (!empty($votacao)) {
-                $votacao = Votacao::cast(reset($votacao));
+                $votacao = Votacao::cast($votacao);
                 $grupos = $votacao->findGruposDemanda();
                 $areas = $votacao->findAreasTematicas($regiao_id);
 
