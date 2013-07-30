@@ -8,12 +8,14 @@ class Polls extends AppController {
         self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
     }
     
-	protected static function setDefaultJavascripts() {
+	protected static function setDefaultJavascripts() 
+    {
 		parent::setDefaultJavascripts();
 		self::addJavascript('http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
 	}
 
-	public static function confirm() {
+	public static function confirm()
+    {
         if (!self::isPost())
             return;
 
@@ -23,7 +25,7 @@ class Polls extends AppController {
         $pollAnswers    = $_POST['selected'];
 
         $votingSession->setCurrentPollAnswers($pollAnswers);
-        
+
         if($currentUser->hasPollAvailable($poll->getVotacaoId())) {
             $errors = $poll->validate($pollAnswers);
             if(!$errors){

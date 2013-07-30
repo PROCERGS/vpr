@@ -185,6 +185,10 @@
 	.internal .row.group dl dd input[type=checkbox]:checked + label { background-color: #ddd; color: inherit; }
 	.internal .row.group dl dd input[type=checkbox] + label { padding: 10px; }
 	.internal .row.group dl dd input[type=checkbox][disabled=disabled] + label { color: #ccc !important; }
+    .internal .row.group dl dd input[type=radio] { display: none; }
+	.internal .row.group dl dd input[type=radio]:checked + label { background-color: #ddd; color: inherit; }
+	.internal .row.group dl dd input[type=radio] + label { padding: 10px; }
+	.internal .row.group dl dd input[type=radio][disabled=disabled] + label { color: #ccc !important; }    
 	.internal .row.group button[type=submit] { margin-top: 20px; height: 44px;	width: 35%; font-size: 1.5em !important; }
 	.internal .row.group .back { margin-top: 20px; height: 44px; width: 35%; font-size: 1.5em !important; }
 	.container.internal .footer { display: none; }
@@ -196,7 +200,7 @@
 	.internal a.rs_movel { display: block; }
 	.last { margin: 10px 10px 0 20px !important; }
 	
-	.row.poll { display: none; }
+	/*.row.poll { display: none; }*/
 
 /** Login **/
 	.container .login form { background: none; margin: 10px 0; padding: 0 3% 0 3%; }

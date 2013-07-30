@@ -17,7 +17,7 @@ class AppController extends Controller
     protected static function setDefaultJavascripts()
     {
         self::addJavascript('/js/jquery-1.7.2.min.js');
-        self::addJavascript('/js/css3-mediaqueries.js');
+        //self::addJavascript('/js/css3-mediaqueries.js');
         self::addJavascript('/js/default.js');
     }
 
