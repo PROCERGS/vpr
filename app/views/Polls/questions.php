@@ -15,8 +15,12 @@
             </div>
         <? } ?>
 
-        <form id="poll" class="vote" action="/Polls/confirm" method="post">
-            <div class="container">
+        <div class="container">
+            
+            <?php if(!@$readonly) { ?>
+            <form id="poll" class="vote" action="/Polls/confirm" method="post">
+            <?php } ?>
+                
                 <div class="row group"> 
                     <div class="twelvecol last">
                         <h2><?php echo $poll->getTitle(); ?></h2>
@@ -26,8 +30,14 @@
                                     <dt><?php echo $question->getSequence(); ?> - <?php echo $question->getQuestion(); ?></dt>
                                     <?php foreach($question->getOptions() as $option) { ?>
                                         <dd>
-                                            <?php $selected = $option->isChecked() ? 'checked="checked"' : ''; ?>
-
+                                            <?php 
+                                                if (!@$readonly) { 
+                                                    $selected = $option->isChecked() ? 'checked="checked"' : '';
+                                                } else {
+                                                    $selected = 'disabled="disabled"'; 
+                                                }
+                                            ?>
+                                            
                                             <?php if ($question->getMaxSelection() > 1) { ?>
                                                 <input type="checkbox" <?php echo $selected; ?> id="option_<?php echo $option->getId(); ?>" value="<?php echo $option->getId(); ?>" name="selected[<?php echo $question->getId(); ?>][]">
                                             <?php } else { ?>
@@ -42,10 +52,18 @@
                                 </dl>
                             <?php } ?>
                         </fieldset>
-                        <button type="submit">Confirmar pesquisa</button>
+
+                        <?php if(!@$readonly) { ?>
+                            <button type="submit">Confirmar pesquisa</button>
+                        <?php } ?>
+
                     </div>
                 </div>
+
+            <?php if(!@$readonly) { ?>
             </form>
+            <?php } ?>
+
         </div>        
     </div>
 </div>

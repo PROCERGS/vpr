@@ -83,7 +83,9 @@ class Cedulas extends AppController
 
         $readonly = TRUE;
 
-        self::render(compact('groups', 'readonly'), array('controller' => 'Election', 'action' => 'step'));
+        $poll = Poll::findLastByVotacao($votacao->getIdVotacao());
+        
+        self::render(compact('groups', 'readonly', 'poll'), array('controller' => 'Election', 'action' => 'step'));
     }
 
     public static function regiao_municipio()

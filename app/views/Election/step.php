@@ -70,6 +70,11 @@ endblock(); ?>
 <?php if (!$readonly) { ?>
     </form>
 <?php } else { ?>
+
+    <div class="poll-consult">
+        <?php include VIEWS_PATH . 'Polls/questions.php'; ?>
+    </div>
+
     <br /><br />
     <center><a href="<?= $html->url(array('controller' => 'Cedulas', 'action' => 'index')) ?>"><input name="Envia" type="button" value="Consultar cédula de outra Região" /></a>&nbsp;&nbsp;&nbsp;<a href="<?= $html->url(array('controller' => 'Application', 'action' => 'index')) ?>"><input name="Envia" type="button" value="Voltar para a Página Inicial da Votação de Prioridades - Orçamento <?= $budgetYear ?>" /></a></center>
 <?php } ?>
