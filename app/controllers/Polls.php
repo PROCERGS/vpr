@@ -5,7 +5,7 @@ class Polls extends AppController {
     {
         parent::before();
         $votacao = Votacao::findMostRecent();
-        self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
+        self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
     }
     
 	protected static function setDefaultJavascripts() 

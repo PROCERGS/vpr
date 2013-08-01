@@ -8,7 +8,7 @@ class Cedulas extends AppController
         parent::before();
         $votacao = Votacao::findMostRecent();
         self::setPageName("Consulta de Cédulas de Votação");
-        self::setPagesubName("Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
+        self::setPagesubName("Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
     }
 
     public static function index()
@@ -56,7 +56,7 @@ class Cedulas extends AppController
         if (isset($regiao_id) && $regiao_id != -1) {
 
             $votacao = Votacao::findMostRecent();
-            self::setTitle("Consulta Cédula de Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
+            self::setTitle("Consulta Cédula de Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
 
             if (!empty($votacao)) {
                 $votacao = Votacao::cast($votacao);

@@ -24,7 +24,7 @@ class Application extends AppController
             $show_vote_now = $votacao->isOpen();
 
             $nome = $votacao->getNmVotacao();
-            $orçamento = (int) $votacao->getIntExercicio() + 1;
+            $orçamento = $votacao->getBudgetYear();
             if (is_string($nome) && is_string($orçamento)) {
                 $string_alt_img = $nome + " - " + $orçamento;
                 //$show_vote_now = FALSE;

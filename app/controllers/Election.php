@@ -12,7 +12,7 @@ class Election extends AppController
             self::setPageSubName(Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()));
         //}
         $votacao = Votacao::findMostRecent();
-        self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
+        self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
     }
 
     protected static function setDefaultJavascripts()

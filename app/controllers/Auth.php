@@ -8,7 +8,7 @@ class Auth extends AppController
         self::addJavascript('/js/login.js');
 
         $votacao = Votacao::findMostRecent();
-        self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getIntExercicio());
+        self::setPageName("Votação de Prioridades - Orçamento " . $votacao->$votacao->getBudgetYear());
         if ($_POST) {
             $previous = array('controller' => 'Auth', 'action' => 'login');
             try {

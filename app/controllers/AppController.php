@@ -65,7 +65,7 @@ class AppController extends Controller
         }
         
         $votacao = Votacao::findMostRecent();
-        $budgetYear = $votacao->getIntExercicio();
+        $budgetYear = $votacao->getBudgetYear();
         $values = array_merge($values, compact('budgetYear'));
 
         $html = new HTMLHelper();

@@ -61,5 +61,10 @@ class Votacao extends Model
     {
         return reset(parent::findByMostRecent());
     }
+    
+    public function getBudgetYear()
+    {
+        return $this->getIntExercicio() + 1;
+    }
 
 }

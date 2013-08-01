@@ -32,7 +32,7 @@ class Cidadao extends Model
 
         $rgOk = self::validateRG_RS($doc);
         $cpfOk = self::isValidCpf($doc);
-        
+
         if (!$rgOk && !$cpfOk) {
             throw new AppException("RG ou CPF inválido.", AppException::ERROR, $previous);
         }
@@ -96,7 +96,7 @@ class Cidadao extends Model
 
         return NULL;
     }
-    
+
     public static function authOld($nro_titulo, $rg)
     {
         $previous = array('controller' => 'Auth', 'action' => 'login');
@@ -155,7 +155,7 @@ class Cidadao extends Model
 
         return NULL;
     }
-    
+
     public static function findByNroTituloOrIdDoc($nro_titulo, $doc)
     {
         $query = PDOUtils::getConn()->prepare(CidadaoQueries::SQL_FIND_BY_NRO_TITULO_OR_ID_DOC);
@@ -170,7 +170,7 @@ class Cidadao extends Model
         } else
             return array();
     }
-    
+
     public static function findByNroTituloOrRg($nro_titulo, $rg)
     {
         $query = PDOUtils::getConn()->prepare(CidadaoQueries::SQL_FIND_BY_NRO_TITULO_OR_RG);
@@ -228,41 +228,41 @@ class Cidadao extends Model
 
         return ($dce == $rg[0] && $dcd == $rg[strlen($rg) - 1]);
     }
-    
+
     protected static function cleanCPF($cpf)
     {
         return str_pad(preg_replace("/[^0-9]/", "", $cpf), 11, '0', STR_PAD_LEFT);
     }
-    
+
     protected static function cleanRG($rg)
     {
         return str_pad(preg_replace("/[^0-9]/", "", $rg), 10, '0', STR_PAD_LEFT);
     }
-    
+
     public function setCpf($cpf)
     {
         $this->cpf = self::cleanCPF($cpf);
     }
-    
+
     public function setRg($rg)
     {
         $this->cpf = self::cleanRG($rg);
     }
-    
+
     /**
      * @param string $cpf
      * @return boolean
      */
     public static function isValidCpf($cpf)
     {
-        $cpf          = self::cleanCPF($cpf);
-        $digitoUm     = 0;
+        $cpf = self::cleanCPF($cpf);
+        $digitoUm = 0;
         $digitoDois = 0;
-        
+
         if (strlen($cpf) != 11 || preg_match('/([0-9])\\1{10}/', $cpf)) {
             return false;
         }
-        
+
         for ($i = 0, $x = 10; $i <= 8; $i++, $x--) {
             $digitoUm += $cpf[$i] * $x;
         }
@@ -272,9 +272,9 @@ class Cidadao extends Model
             }
             $digitoDois += $cpf[$i] * $x;
         }
-         
-        $calculoUm  = (($digitoUm%11) < 2) ? 0 : 11-($digitoUm%11);
-        $calculoDois = (($digitoDois%11) < 2) ? 0 : 11-($digitoDois%11);
+
+        $calculoUm = (($digitoUm % 11) < 2) ? 0 : 11 - ($digitoUm % 11);
+        $calculoDois = (($digitoDois % 11) < 2) ? 0 : 11 - ($digitoDois % 11);
         if ($calculoUm <> $cpf[9] || $calculoDois <> $cpf[10]) {
             return false;
         }
@@ -328,12 +328,12 @@ class Cidadao extends Model
     public function voted($id_votacao)
     {
         $voto_logs = VotoLog::findByIdCidadaoIdVotacaoCompleted(array(
-            'id_cidadao' => $this->getIdCidadao(),
-            'id_votacao' => $id_votacao
-        ));
+                    'id_cidadao' => $this->getIdCidadao(),
+                    'id_votacao' => $id_votacao
+                ));
         return (is_array($voto_logs) && count($voto_logs) > 0);
     }
-    
+
     public function hasPollAvailable($votacao_id)
     {
         $hasAvailable = Poll::findLastUnvotedByVotacao($votacao_id, $this->getIdCidadao());
