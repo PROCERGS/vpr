@@ -1,24 +1,12 @@
 /* ============================== */
-
 /* ! Layout for desktop version   */
-
 /* ============================== */
 
 	
 
 html, body { height: 100%; }
 body { font-size: 12px; background-color: #360; font-family: Verdana, Geneva, sans-serif; color: #333; }
-body {background: rgb(69,155,0); /* Old browsers */
-/* IE9 SVG, needs conditional override of 'filter' to 'none' */
-background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj4KICAgIDxzdG9wIG9mZnNldD0iMSUiIHN0b3AtY29sb3I9IiM0NTliMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMzM2NjAwIiBzdG9wLW9wYWNpdHk9IjEiLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxyZWN0IHg9Ii01MCIgeT0iLTUwIiB3aWR0aD0iMTAxIiBoZWlnaHQ9IjEwMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-background: -moz-radial-gradient(center, ellipse cover,  rgba(69,155,0,1) 1%, rgba(51,102,0,1) 100%); /* FF3.6+ */
-background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,rgba(69,155,0,1)), color-stop(100%,rgba(51,102,0,1))); /* Chrome,Safari4+ */
-background: -webkit-radial-gradient(center, ellipse cover,  rgba(69,155,0,1) 1%,rgba(51,102,0,1) 100%); /* Chrome10+,Safari5.1+ */
-background: -o-radial-gradient(center, ellipse cover,  rgba(69,155,0,1) 1%,rgba(51,102,0,1) 100%); /* Opera 12+ */
-background: -ms-radial-gradient(center, ellipse cover,  rgba(69,155,0,1) 1%,rgba(51,102,0,1) 100%); /* IE10+ */
-background: radial-gradient(ellipse at center,  rgba(69,155,0,1) 1%,rgba(51,102,0,1) 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#459b00', endColorstr='#336600',GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
-
+body { background: rgb(69,155,0); /* Old browsers */ /* IE9 SVG, needs conditional override of 'filter' to 'none' */ background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNzUlIj4KICAgIDxzdG9wIG9mZnNldD0iMSUiIHN0b3AtY29sb3I9IiM0NTliMDAiIHN0b3Atb3BhY2l0eT0iMSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMzM2NjAwIiBzdG9wLW9wYWNpdHk9IjEiLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxyZWN0IHg9Ii01MCIgeT0iLTUwIiB3aWR0aD0iMTAxIiBoZWlnaHQ9IjEwMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+); background: -moz-radial-gradient(center, ellipse cover, rgba(69,155,0,1) 1%, rgba(51,102,0,1) 100%); /* FF3.6+ */ background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%, rgba(69,155,0,1)), color-stop(100%, rgba(51,102,0,1))); /* Chrome,Safari4+ */ background: -webkit-radial-gradient(center, ellipse cover, rgba(69,155,0,1) 1%, rgba(51,102,0,1) 100%); /* Chrome10+,Safari5.1+ */ background: -o-radial-gradient(center, ellipse cover, rgba(69,155,0,1) 1%, rgba(51,102,0,1) 100%); /* Opera 12+ */ background: -ms-radial-gradient(center, ellipse cover, rgba(69,155,0,1) 1%, rgba(51,102,0,1) 100%); /* IE10+ */ background: radial-gradient(ellipse at center, rgba(69,155,0,1) 1%, rgba(51,102,0,1) 100%); /* W3C */ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#459b00', endColorstr='#336600', GradientType=1 ); /* IE6-8 fallback on horizontal gradient */
 }
 body:after { visibility: hidden; display: block; content: ' '; height: 25px; }
 /** Estilos Gerais **/
@@ -44,7 +32,7 @@ border-left: 1px solid #333; padding: 0 20px; }
 .container .static_bg { background: url('/images/fundo_capa.jpg') no-repeat; height: 535px; overflow: visible; }
 .container .static_bg { padding: 0; -webkit-box-shadow: 0px 0px 20px 0px #000; box-shadow: 0px 0px 20px 0px #000; }
 .container.home .header h1 a { display: block; background: url('/images/logotipo_internas.png') no-repeat 40px center; width: 440px; height: 171px; text-indent: -9999px; }
-.container.home .twelvecol h1 { font-family: 'Pathway Gothic One', sans-serif; color: #FA5333; font-size: 3em; line-height: normal;}
+.container.home .twelvecol h1 { font-family: 'Pathway Gothic One', sans-serif; color: #FA5333; font-size: 3em; line-height: normal; }
 .container.home .header h2 { background: url('/images/logotipo.png') no-repeat -413px center; width: 290px; height: 171px; text-indent: -9999px; }
 .home .online_voting_dates { font-size: 12px; font-weight: bold; }
 .titulo_pagina { display:none; }
@@ -120,7 +108,7 @@ div.container.internal { box-shadow: 1px 1px 2em #003300; }
 .row.home { border-top: 1px solid #ccc; padding-top: 20px; text-align: center; }
 a.pesquisa { color: #360; background: url('/images/icone_pesquisa.png') no-repeat; display: inline-block; font-weight: bold; font-size: 20px; text-align: left !important; padding: 3px 0 0 75px; height: 75px; width: 200px; text-decoration: none; margin-top: 30px; margin-left: 360px; margin-bottom: 30px; }
 .internal a.rs_movel { display: none; }
-.description-poll { text-align: left !important; margin-bottom: 1em;}
+.description-poll { text-align: left !important; border: solid 1px #390; padding: 1em; color: #390; }
 /** Login **/
 
 	.container .login form { background: #EAEFE5; margin: 10px 0; padding: 20px 20px 30px; }
@@ -268,12 +256,7 @@ input, select { font-size: 1.6em; height: 25px; width: 95%; }
 input, select { font-size: 1.4em; height: 3em; width: 98%; }
 div.container.internal input[type="button"] { padding: 0.2em 0; margin: 0 0 0.8em 0; }
 .internal .row.group dl dt { margin: 1em 0 0 0; color: #666; text-transform: uppercase; line-height: 1.6em; border-top: 1px solid #CCC; }
-.container.home .twelvecol h1 {
-color: #FA5333;
-font-size: 2em;
-margin-bottom: 0.1em;
-line-height: normal;
-}
-.container.home .header h2 { display:none;}
+.container.home .twelvecol h1 { color: #FA5333; font-size: 2em; margin-bottom: 0.1em; line-height: normal; }
+.container.home .header h2 { display:none; }
 .home .vote_now { padding: 5% 0 10% 0; }
 }
