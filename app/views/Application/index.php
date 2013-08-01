@@ -48,7 +48,7 @@ endblock(); ?>
         </div>
         <div class="row footer menu">
             <ul class="twelvecol last">
-                <li><?php echo $html->link("Como Votar", "http://www.participa.rs.gov.br/upload/1340886342_votacaodeprioridades_coredes_v9.pdf", array("target" => "_blank")); ?></li>
+                <li><?php echo $html->link("Como Votar", "docs/VotacaodePrioridades_Coredes.pdf", array("target" => "_blank")); ?></li>
                 <li><?php echo $html->link("Portal da Participação", "http://www.participa.rs.gov.br/", array("target" => "_blank")); ?></li>
                 <li><?php echo $html->link("Site do Governo do Estado do RS", "http://www.estado.rs.gov.br/", array("target" => "_blank")); ?></li>
             </ul>
