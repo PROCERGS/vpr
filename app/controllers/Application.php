@@ -75,7 +75,7 @@ class Application extends AppController
          */
 //		$string_data = "Período de Votação Online: dia 4 de julho de 2012 - das 8 às 24h";
         $from = strftime("das %Hh do dia %d/%m/%Y", $data_ini->getTimestamp());
-        $to = strftime("até as %Hh do dia %d/%m/%Y", $data_fim->getTimestamp());
+        $to = strftime("até as %H:i do dia %d/%m/%Y", $data_fim->getTimestamp());
         $string_data = "Votação Online: $from $to";
 
         return $string_data;
