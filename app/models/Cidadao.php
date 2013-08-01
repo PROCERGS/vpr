@@ -72,21 +72,21 @@ class Cidadao extends Model
                     $cidadao->setRg($doc);
                     $cidadao->update();
                 } elseif ($cidadao->getRg() != $doc) {
-                    throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous);
+                    throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous, compact('cidadao'));
                 }
             } elseif ($cpfOk) {
                 if (is_null($cidadao->getCpf())) {
                     $cidadao->setCpf($doc);
                     $cidadao->update();
                 } elseif ($cidadao->getCpf() != $doc) {
-                    throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous);
+                    throw new DocumentsMismatchException('Esse título de eleitor já foi usado nessa votação.', $previous, compact('cidadao'));
                 }
             }
             if ($cidadao->getNroTitulo() != $nro_titulo) {
-                throw new DocumentsMismatchException('Esse documento de identificação já foi usado nessa votação', $previous);
+                throw new DocumentsMismatchException('Esse documento de identificação já foi usado nessa votação', $previous, compact('cidadao'));
             }
         } elseif (count($cidadao) > 1) {
-            throw new DocumentsMismatchException('Um dos documentos parece pertencer a outra pessoa. Verifique seus dados.', $previous);
+            throw new DocumentsMismatchException('Um dos documentos parece pertencer a outra pessoa. Verifique seus dados.', $previous, compact('cidadao'));
         } else {
             throw new ErrorException('Unknown error.');
         }
@@ -190,8 +190,7 @@ class Cidadao extends Model
     // TODO: implementar também em javascript.
     public static function validateRG_RS($rg)
     {
-        $rg = trim((string) $rg);
-        $rg = str_pad($rg, 10, '0', STR_PAD_LEFT);
+        $rg = self::cleanRG($rg);
         // Cálculo do DCE
         $dce = 0;
         for ($i = 1; $i < 9; $i++) {
@@ -230,13 +229,33 @@ class Cidadao extends Model
         return ($dce == $rg[0] && $dcd == $rg[strlen($rg) - 1]);
     }
     
+    protected static function cleanCPF($cpf)
+    {
+        return str_pad(preg_replace("/[^0-9]/", "", $cpf), 11, '0', STR_PAD_LEFT);
+    }
+    
+    protected static function cleanRG($rg)
+    {
+        return str_pad(preg_replace("/[^0-9]/", "", $rg), 10, '0', STR_PAD_LEFT);
+    }
+    
+    public function setCpf($cpf)
+    {
+        $this->cpf = self::cleanCPF($cpf);
+    }
+    
+    public function setRg($rg)
+    {
+        $this->cpf = self::cleanRG($rg);
+    }
+    
     /**
      * @param string $cpf
      * @return boolean
      */
     public static function isValidCpf($cpf)
     {
-        $cpf          = str_pad(preg_replace("/[^0-9]/", "", $cpf), 11, '0', STR_PAD_LEFT);
+        $cpf          = self::cleanCPF($cpf);
         $digitoUm     = 0;
         $digitoDois = 0;
         
