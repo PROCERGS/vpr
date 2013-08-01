@@ -108,7 +108,7 @@ div.container.internal { box-shadow: 1px 1px 2em #003300; }
 .row.home { border-top: 1px solid #ccc; padding-top: 20px; text-align: center; }
 a.pesquisa { color: #360; background: url('/images/icone_pesquisa.png') no-repeat; display: inline-block; font-weight: bold; font-size: 20px; text-align: left !important; padding: 3px 0 0 75px; height: 75px; width: 200px; text-decoration: none; margin-top: 30px; margin-left: 360px; margin-bottom: 30px; }
 .internal a.rs_movel { display: none; }
-.description-poll { text-align: left !important; border: solid 1px #390; padding: 1em; color: #390; }
+.description-poll { text-align: left !important; border: solid 1px #F0CDA8; padding: 1em; color: #945511; background-color: #FFFAE7; }
 /** Login **/
 
 	.container .login form { background: #EAEFE5; margin: 10px 0; padding: 20px 20px 30px; }
