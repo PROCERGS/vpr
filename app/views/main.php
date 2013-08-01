@@ -10,6 +10,7 @@
 <?php } ?>
 		<title><?php startblock('title') ?>Votação de Prioridades <?= $budgetYear ?><?php endblock() ?></title>
 <?php startblock('css'); require_once 'stylesheets.php'; endblock('css'); ?>
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;">
 	</head>
 	<body>
 <?php startblock('main'); ?>
