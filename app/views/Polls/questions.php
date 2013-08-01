@@ -1,6 +1,5 @@
 <div class="row poll">
     <div class="twelvecol last">
-        <h2>Pesquisa Opcional</h2>
 
         <?php 
             $poll_errors = Session::get('poll_errors');
@@ -24,6 +23,7 @@
                 <div class="row group"> 
                     <div class="twelvecol last">
                         <h2><?php echo $poll->getTitle(); ?></h2>
+                        <p class="description-poll">As recentes manifestações por melhorias que inundaram as ruas do Brasil levaram a Coordenação Estadual da Participação Popular e Cidadã – PPC, a propor uma CONSULTA SOBRE REFORMA POLÍTICA. Por isso foi incluído o Campo 3 na cédula de votação de prioridades, cujas questões estão abaixo. Manifeste sua opinião sobre o futuro do Brasil!</p>
                         <fieldset>
                             <?php foreach($poll->getQuestions() as $i => $question) { ?>
                                 <dl contextmenu="<?php echo $question->getMaxSelection(); ?>">
