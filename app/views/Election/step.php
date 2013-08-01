@@ -11,7 +11,7 @@ endblock(); ?>
 <?php foreach ($groups as $currentGroup) {
     $group = $currentGroup['group'];
     ?>
-            <div class="row content_head">
+            <div class="row content_head instruction">
                 <div class="sixcol">
                     <h3>Instruções</h3>
                     <p>Clique em até <?php echo $group->getQtdMaxEscolha() . ' ' . strtolower($group->getNmGrupoAbrev()); ?>.</p>
