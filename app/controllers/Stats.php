@@ -12,7 +12,7 @@ class Stats extends AppController
 
         $values = CacheFS::get('statsSummary');
 
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         $id_votacao = $votacao->getIdVotacao();        
         
         if (is_null($values) || $cache == 'off') {
@@ -62,7 +62,7 @@ class Stats extends AppController
         self::setPageName("Acompanhamento da Votação");
         self::setPageSubName("Parciais atualizadas por tipo de mídia online");
 
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         $id_votacao = $votacao->getIdVotacao();
         
         $totalVotos = reset(Stat::findByQtdVotos(compact('id_votacao')));

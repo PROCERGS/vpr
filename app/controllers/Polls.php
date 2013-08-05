@@ -4,7 +4,7 @@ class Polls extends AppController {
     public static function before()
     {
         parent::before();
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
     }
     

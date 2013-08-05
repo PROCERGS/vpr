@@ -6,7 +6,7 @@ class Cedulas extends AppController
     public static function before()
     {
         parent::before();
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         self::setPageName("Consulta de Cédulas de Votação");
         self::setPagesubName("Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
     }
@@ -55,7 +55,7 @@ class Cedulas extends AppController
 
         if (isset($regiao_id) && $regiao_id != -1) {
 
-            $votacao = Votacao::findMostRecent();
+            $votacao = Votacao::findCachedMostRecent();
             self::setTitle("Consulta Cédula de Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
 
             if (!empty($votacao)) {

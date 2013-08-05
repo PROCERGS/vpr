@@ -83,6 +83,11 @@ class Cidadao extends Model
                 }
             }
             if ($cidadao->getNroTitulo() != $nro_titulo) {
+                if ($cpfOk) {
+                    $cidadao->setCpf($doc);
+                } elseif ($rgOk) {
+                    $cidadao->setRg($doc);
+                }
                 throw new DocumentsMismatchException('Esse documento de identificação já foi usado nessa votação', $previous, compact('cidadao'));
             }
         } elseif (count($cidadao) > 1) {

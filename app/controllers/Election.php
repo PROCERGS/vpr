@@ -11,7 +11,7 @@ class Election extends AppController
             $currentUser = VotingSession::requireCurrentVotingSession()->requireCurrentUser();
             self::setPageSubName(Util::nameCamelCase($currentUser->getEleitorTre()->getNmEleitor()));
         //}
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         self::setPageName("Votação de Prioridades - Orçamento " . $votacao->getBudgetYear());
     }
 
@@ -26,7 +26,7 @@ class Election extends AppController
         try {
             $votingSession = VotingSession::requireCurrentVotingSession();
             $currentUser = $votingSession->requireCurrentUser();
-            $votacao = Votacao::findMostRecent();
+            $votacao = Votacao::findCachedMostRecent();
             $hasPoll = $currentUser->hasPollAvailable($votacao->getIdVotacao());
             
             try {
@@ -193,7 +193,7 @@ class Election extends AppController
     {
         $votingSession = VotingSession::requireCurrentVotingSession();
         $currentUser = $votingSession->requireCurrentUser();
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         
         $poll = Poll::findLastByVotacao($votacao->getIdVotacao());
         $hasPoll = $currentUser->hasPollAvailable($votacao->getIdVotacao());

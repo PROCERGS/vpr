@@ -5,7 +5,7 @@ class Application extends AppController
 
     public static function index()
     {
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         self::setPageName("Votação de Prioridades<br />Orçamento " . $votacao->getIntExercicio());
 
         $string_alt_img = null;

@@ -10,6 +10,8 @@ class Votacao extends Model
     protected $nm_votacao;
     protected $dth_inicio;
     protected $dth_fim;
+    
+    private static $mostRecentCache = null;
 
     /**
      * @return Votacao
@@ -60,6 +62,17 @@ class Votacao extends Model
     public static function findMostRecent()
     {
         return reset(parent::findByMostRecent());
+    }
+    
+    /**
+     * @return Votacao
+     */
+    public static function findCachedMostRecent()
+    {
+        if (is_null(self::$mostRecentCache)) {
+            self::$mostRecentCache = self::findMostRecent();
+        }
+        return self::$mostRecentCache;
     }
     
     public function getBudgetYear()

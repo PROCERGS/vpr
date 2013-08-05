@@ -64,7 +64,7 @@ class AppController extends Controller
             $current_nm_regiao = $currentUser->getRegiao()->getNmRegiao();
         }
         
-        $votacao = Votacao::findMostRecent();
+        $votacao = Votacao::findCachedMostRecent();
         $budgetYear = $votacao->getBudgetYear();
         $values = array_merge($values, compact('budgetYear'));
 
