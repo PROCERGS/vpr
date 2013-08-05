@@ -4,11 +4,11 @@ class StatQueries {
 SELECT
 	COUNT(*) AS `total` 
 FROM (
-	SELECT `id_cidadao`
-	FROM  `voto_log` 
-	WHERE
-		`dth_inicio` IS NOT NULL 
-		AND `dth_fim` IS NOT NULL 
+	  SELECT `id_cidadao`
+	    FROM `voto_log` 
+	   WHERE `dth_inicio` IS NOT NULL 
+		 AND `dth_fim` IS NOT NULL 
+         AND  id_votacao = :id_votacao   
 	GROUP BY `id_cidadao`
 ) m
 EOD;
@@ -18,12 +18,11 @@ SELECT
 	mv.`nm_meio_votacao`,
 	COUNT(s.`id_meio_votacao`) AS `total`
 FROM (
-	SELECT
-		`id_cidadao`, `id_meio_votacao`
-	FROM  `voto_log`
-	WHERE
-		`dth_inicio` IS NOT NULL 
-		AND `dth_fim` IS NOT NULL 
+	  SELECT `id_cidadao`, `id_meio_votacao`
+	    FROM `voto_log`
+	   WHERE `dth_inicio` IS NOT NULL 
+         AND `dth_fim` IS NOT NULL 
+         AND  id_votacao = :id_votacao   
 	GROUP BY `id_cidadao`, `id_meio_votacao`
 ) s
 	INNER JOIN `meio_votacao` mv ON mv.`id_meio_votacao` = s.`id_meio_votacao`
@@ -32,10 +31,14 @@ FROM (
 EOD;
 	
 	const SQL_FIND_BY_QTD_VOTOS = <<<EOD
-SELECT
-	COUNT(*) AS `total`
-FROM
-	`voto`
+SELECT	
+    COUNT(*) AS `total`
+FROM 
+    voto v, cedula c
+WHERE 
+    v.`id_cedula` = c.`id_cedula`
+AND 
+    c.`id_votacao` = :id_votacao
 EOD;
 	
 	const SQL_FIND_BY_QTD_VOTOS_BY_MEIO_VOTACAO = <<<EOD
@@ -45,6 +48,9 @@ SELECT
 FROM
 	`voto` v
 	INNER JOIN `meio_votacao` mv ON mv.`id_meio_votacao` = v.`id_meio_votacao`
+	INNER JOIN `cedula` c ON c.`id_cedula` = v.`id_cedula`
+WHERE 
+    c.`id_votacao` = :id_votacao
 GROUP BY v.`id_meio_votacao`
 EOD;
 	
@@ -54,20 +60,15 @@ SELECT
 	mv.`nm_meio_votacao`,
 	COUNT(s.`id_meio_votacao`) AS `total`
 FROM (
-	SELECT
-		vl.`id_cidadao`, 
-        vl.`id_meio_votacao`,
-        r.`id_regiao`,
-        r.`nm_regiao`
-	FROM 
-        `voto_log` vl
-        INNER JOIN `cidadao` c ON c.`id_cidadao` = vl.`id_cidadao`
-        INNER JOIN `municipio` m ON m.`id_municipio` = c.`id_municipio`
-        INNER JOIN `regiao` r ON r.`id_regiao` = m.`id_regiao`
-	WHERE
-		`dth_inicio` IS NOT NULL 
-		AND `dth_fim` IS NOT NULL 
-	GROUP BY `id_cidadao`, `id_meio_votacao`
+	  SELECT vl.`id_cidadao`, vl.`id_meio_votacao`, r.`id_regiao`, r.`nm_regiao`
+        FROM `voto_log` vl
+  INNER JOIN `cidadao` c ON c.`id_cidadao` = vl.`id_cidadao`
+  INNER JOIN `municipio` m ON m.`id_municipio` = c.`id_municipio`
+  INNER JOIN `regiao` r ON r.`id_regiao` = m.`id_regiao`
+       WHERE `dth_inicio` IS NOT NULL 
+         AND `dth_fim` IS NOT NULL 
+         AND vl.`id_votacao` = :id_votacao
+    GROUP BY `id_cidadao`, `id_meio_votacao`
 ) s
 	INNER JOIN `meio_votacao` mv ON mv.`id_meio_votacao` = s.`id_meio_votacao`
 GROUP BY
@@ -87,6 +88,8 @@ FROM
 	INNER JOIN `meio_votacao` mv ON mv.`id_meio_votacao` = v.`id_meio_votacao`
 	INNER JOIN `municipio` m ON m.`id_municipio` = v.`id_municipio`
 	INNER JOIN `regiao` r ON r.`id_regiao` = m.`id_regiao`
+	INNER JOIN `cedula` c ON c.`id_cedula` = v.`id_cedula`
+WHERE c.id_votacao = :id_votacao
 GROUP BY
 	v.`id_meio_votacao`,
 	r.`id_regiao`

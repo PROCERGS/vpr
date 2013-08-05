@@ -12,13 +12,16 @@ class Stats extends AppController
 
         $values = CacheFS::get('statsSummary');
 
+        $votacao = Votacao::findMostRecent();
+        $id_votacao = $votacao->getIdVotacao();        
+        
         if (is_null($values) || $cache == 'off') {
             $meios_votacao = array();
 
             $eleitores = array('totais' => array());
             $votos = array('totais' => array());
 
-            $cidadaosPorRegiaoMeioVotacao = Stat::findCidadaosPorRegiaoMeioVotacao();
+            $cidadaosPorRegiaoMeioVotacao = Stat::findCidadaosPorRegiaoMeioVotacao(compact('id_votacao'));
             foreach ($cidadaosPorRegiaoMeioVotacao as $stat) {
                 $meio = $stat['nm_meio_votacao'];
                 $regiao = $stat['nm_regiao'];
@@ -30,7 +33,7 @@ class Stats extends AppController
                 @$eleitores['totais'][$meio] += $total;
             }
 
-            $votosPorRegiaoMeioVotacao = Stat::findVotosPorRegiaoMeioVotacao();
+            $votosPorRegiaoMeioVotacao = Stat::findVotosPorRegiaoMeioVotacao(compact('id_votacao'));
             foreach ($votosPorRegiaoMeioVotacao as $stat) {
                 $meio = $stat['nm_meio_votacao'];
                 $regiao = $stat['nm_regiao'];
@@ -60,12 +63,13 @@ class Stats extends AppController
         self::setPageSubName("Parciais atualizadas por tipo de mídia online");
 
         $votacao = Votacao::findMostRecent();
+        $id_votacao = $votacao->getIdVotacao();
         
-        $totalVotos = reset(Stat::findByQtdVotos());
-        $totalVotosByMeioVotacaoRaw = Stat::findByQtdVotosByMeioVotacao();
+        $totalVotos = reset(Stat::findByQtdVotos(compact('id_votacao')));
+        $totalVotosByMeioVotacaoRaw = Stat::findByQtdVotosByMeioVotacao(compact('id_votacao'));
 
-        $totalCidadaos = reset(Stat::findByQtdCidadaos());
-        $totalCidadaosByMeioVotacaoRaw = Stat::findByQtdCidadaosByMeioVotacao();
+        $totalCidadaos = reset(Stat::findByQtdCidadaos(compact('id_votacao')));
+        $totalCidadaosByMeioVotacaoRaw = Stat::findByQtdCidadaosByMeioVotacao(compact('id_votacao'));
 
         $totalVotosByMeioVotacao = array();
         $totalCidadaosByMeioVotacao = array();
