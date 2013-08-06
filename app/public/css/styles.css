@@ -267,10 +267,10 @@ button[type="submit"] { width: 96%; }
 .container.internal .identification p { text-align: center; color: #999; }
 }
 
-/* antes da votação */
+/* antes da votação 
  .home .vote_now a {
 	background: url("/images/icone_votar_off.png") no-repeat scroll 0 0 transparent !important;
     color: #999999;
     pointer-events: none;
 	cursor:none;
-}
+} */
