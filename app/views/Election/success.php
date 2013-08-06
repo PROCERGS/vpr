@@ -4,7 +4,6 @@
 <div class="row">
 	<div class="twelvecol last select_regiao">
 		<h2>Voto enviado!</h2>
-		<p><strong>Obrigado por sua participação!</strong></p>
 	</div>
 </div>
 
