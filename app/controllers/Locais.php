@@ -38,8 +38,10 @@ class Locais extends AppController {
 	}
 
 	public static function municipio() {
+        $votacao = Votacao::findCachedMostRecent();
 		$nome_municipio = self::getParam('nome_municipio');
-		$urna_municipios = Urna::findByTxtLocalizacao($nome_municipio);
+        $id_votacao = $votacao->getIdVotacao();
+		$urna_municipios = Urna::findByTxtLocalizacao($nome_municipio,$id_votacao);
 		$string = self::descricaoMunicipios($urna_municipios, $nome_municipio);
 		self::setJavascriptVar('nome_municipio', $nome_municipio);
 

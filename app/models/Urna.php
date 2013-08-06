@@ -23,9 +23,10 @@ class Urna extends Model {
 			return array();
 	}
 	
-	public static function findByTxtLocalizacao($nm_municipio) {
+	public static function findByTxtLocalizacao($nm_municipio,$id_votacao) {
 		$query = PDOUtils::getConn()->prepare(UrnaQueries::SQL_FIND_BY_NM_MUNICIPIO);
 		$query->bindValue('nm_municipio', $nm_municipio);
+		$query->bindValue('id_votacao', $id_votacao);
 		if ($query->execute() === TRUE) {
 			$result = $query->fetchAll(PDO::FETCH_CLASS, get_called_class());
 			if (count($result) > 0)

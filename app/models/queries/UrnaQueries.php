@@ -16,6 +16,7 @@ FROM
 WHERE
 	length(u.txt_localizacao) > 2
 	AND  m.`nm_municipio` = :nm_municipio
+    AND u.id_votacao = :id_votacao
 ORDER BY
 	u.`txt_localizacao`
 EOD;
