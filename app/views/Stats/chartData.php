@@ -27,3 +27,4 @@ echo implode(",\n", $entries);
 var current = <?= $current ?>;
 var lastUpdate = '<?= $lastUpdate ?>';
 var lastDelta = <?= $delta ?>;
+var cacheHit = <?= $cacheHit?'true':'false' ?>;

@@ -13,8 +13,8 @@ class Stats extends AppController
         $values = CacheFS::get('statsSummary');
 
         $votacao = Votacao::findCachedMostRecent();
-        $id_votacao = $votacao->getIdVotacao();        
-        
+        $id_votacao = $votacao->getIdVotacao();
+
         if (is_null($values) || $cache == 'off') {
             $meios_votacao = array();
 
@@ -64,7 +64,7 @@ class Stats extends AppController
 
         $votacao = Votacao::findCachedMostRecent();
         $id_votacao = $votacao->getIdVotacao();
-        
+
         $totalVotos = reset(Stat::findByQtdVotos(compact('id_votacao')));
         $totalVotosByMeioVotacaoRaw = Stat::findByQtdVotosByMeioVotacao(compact('id_votacao'));
 
@@ -83,7 +83,7 @@ class Stats extends AppController
             $totalCidadaosByMeioVotacao[$stat['nm_meio_votacao']] = $stat['total'];
         }
         $meios_votacao = array_keys($meios_votacao);
-        
+
         // Poll data
         $polls = Stat::findPollsByVotacaoId($votacao->getIdVotacao());
 
@@ -91,25 +91,39 @@ class Stats extends AppController
 
         self::render($values);
     }
-    
+
     public static function liveChart()
     {
         self::setPageName("Evolução da Votação");
         self::setPageSubName("Estatísticas em tempo real");
-        
+
         $dataUrl = HTMLHelper::url(array('controller' => 'Stats', 'action' => 'chartData'));
-        
+
         $values = compact('dataUrl');
         self::render($values);
     }
-    
+
     public static function chartData()
     {
-        $votacao = Votacao::findCachedMostRecent();
-        $id_votacao = $votacao->getIdVotacao();
-        $newVotesPerMinute = Stat::findNewVotesPerMinuteByVotacaoId($id_votacao);
+        $cache = self::getParam('cache');
+        $values = CacheFS::get('chartData');
+
+        if (is_null($values) || $cache == 'off') {
+            $votacao = Votacao::findCachedMostRecent();
+            $id_votacao = $votacao->getIdVotacao();
+            $newVotesPerMinute = Stat::findNewVotesPerMinuteByVotacaoId($id_votacao);
+
+            $values = compact('newVotesPerMinute');
+            
+            CacheFS::set('chartData', $values, 20 * SECOND);
+            $values = CacheFS::get('chartData');
+            $values['cacheHit'] = false;
+            error_log("Cache miss");
+        } else {
+            $values['cacheHit'] = true;
+            error_log("Cache HIT");
+        }
         
-        $values = compact('newVotesPerMinute');
         self::render($values);
     }
 
