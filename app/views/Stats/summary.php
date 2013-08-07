@@ -36,6 +36,7 @@ endblock(); ?>
                     <th>Meio de Votação</th>
                     <th>Total de Votos</th>
                     <th>Total de Eleitores</th>
+                    <th>Tempo Médio</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +49,7 @@ endblock(); ?>
                         <td><?php echo $meio_votacao; ?> </td>
                         <td><?php echo str_pad(number_format(@$totalVotosByMeioVotacao[$meio_votacao], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
                         <td><?php echo str_pad(number_format(@$totalCidadaosByMeioVotacao[$meio_votacao], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?></td>
+                        <td><?php echo str_pad(number_format(@$averageByMeioVotacao[$meio_votacao], 0, ',', '.'), 1, '0', STR_PAD_LEFT); ?> minutos</td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -74,7 +76,7 @@ endblock(); ?>
                         $odd = $i++ % 2 == 0 ? ' class="odd"' : ''; ?>
                 <tr<?= $odd; ?>>
                     <td><?= $option['option'] ?></td>
-                    <td><?= $option['votes'] ?></td>
+                    <td><?= number_format($option['votes'], 0, ',', '.') ?></td>
                 </tr>
                     <?php } ?>
                 <?php } ?>

@@ -136,4 +136,33 @@ GROUP BY
 	x.fim
 EOD;
     
+    const SQL_FIND_VOTING_TIME_BY_VOTACAO_ID = <<<EOD
+SELECT
+	x.id_meio_votacao,
+	m.nm_meio_votacao,
+	ROUND(AVG(x.`delta`)) AS `average`,
+	ROUND(STDDEV(x.`delta`)) AS `std_dev`
+FROM (
+	SELECT 
+		vl.id_cidadao,
+		vl.id_meio_votacao,
+		MIN(vl.dth_inicio),
+		MAX(vl.dth_fim),
+		TIMESTAMPDIFF(MINUTE, MIN(vl.dth_inicio), MAX(vl.dth_fim)) AS `delta`
+	FROM
+		voto_log vl
+	WHERE
+		vl.id_votacao = :votacao_id
+		AND vl.dth_fim IS NOT NULL
+	GROUP BY
+		vl.id_cidadao,
+		vl.id_meio_votacao
+	HAVING
+		COUNT(*) = 2
+) x
+	INNER JOIN meio_votacao m ON x.id_meio_votacao = m.id_meio_votacao
+GROUP BY
+	x.id_meio_votacao
+EOD;
+    
 }

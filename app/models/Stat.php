@@ -77,5 +77,17 @@ class Stat extends Model
         $query->execute(compact('votacao_id'));
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
+    
+    /**
+     * Return the average time in minutes for each voting method
+     * @param int $votacao_id
+     * @return array
+     */
+    public static function findAverageVotingTimeByVotacaoId($votacao_id)
+    {
+        $query = PDOUtils::getConn()->prepare(StatQueries::SQL_FIND_VOTING_TIME_BY_VOTACAO_ID);
+        $query->execute(compact('votacao_id'));
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }

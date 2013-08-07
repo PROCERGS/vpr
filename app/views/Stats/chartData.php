@@ -24,7 +24,7 @@ foreach ($history as $entry) {
 echo implode(",\n", $entries);
 ?>
 ];
-var current = <?= $current ?>;
+var current = '<?= number_format($current, 0, ',', '.') ?>';
 var lastUpdate = '<?= $lastUpdate ?>';
-var lastDelta = <?= $delta ?>;
+var lastDelta = '<?= number_format($delta, 0, ',', '.') ?>';
 var cacheHit = <?= $cacheHit?'true':'false' ?>;
