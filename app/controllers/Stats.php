@@ -91,5 +91,26 @@ class Stats extends AppController
 
         self::render($values);
     }
+    
+    public static function liveChart()
+    {
+        self::setPageName("Evolução da Votação");
+        self::setPageSubName("Estatísticas em tempo real");
+        
+        $dataUrl = HTMLHelper::url(array('controller' => 'Stats', 'action' => 'chartData'));
+        
+        $values = compact('dataUrl');
+        self::render($values);
+    }
+    
+    public static function chartData()
+    {
+        $votacao = Votacao::findCachedMostRecent();
+        $id_votacao = $votacao->getIdVotacao();
+        $newVotesPerMinute = Stat::findNewVotesPerMinuteByVotacaoId($id_votacao);
+        
+        $values = compact('newVotesPerMinute');
+        self::render($values);
+    }
 
 }

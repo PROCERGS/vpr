@@ -1,6 +1,9 @@
 <?php
-class StatQueries {
-	const SQL_FIND_BY_QTD_CIDADAOS = <<<EOD
+
+class StatQueries
+{
+
+    const SQL_FIND_BY_QTD_CIDADAOS = <<<EOD
 SELECT
 	COUNT(*) AS `total` 
 FROM (
@@ -12,8 +15,7 @@ FROM (
 	GROUP BY `id_cidadao`
 ) m
 EOD;
-	
-	const SQL_FIND_BY_QTD_CIDADAOS_BY_MEIO_VOTACAO = <<<EOD
+    const SQL_FIND_BY_QTD_CIDADAOS_BY_MEIO_VOTACAO = <<<EOD
 SELECT
 	mv.`nm_meio_votacao`,
 	COUNT(s.`id_meio_votacao`) AS `total`
@@ -29,8 +31,7 @@ FROM (
 	GROUP BY
 		s.`id_meio_votacao`
 EOD;
-	
-	const SQL_FIND_BY_QTD_VOTOS = <<<EOD
+    const SQL_FIND_BY_QTD_VOTOS = <<<EOD
 SELECT	
     COUNT(*) AS `total`
 FROM 
@@ -40,8 +41,7 @@ WHERE
 AND 
     c.`id_votacao` = :id_votacao
 EOD;
-	
-	const SQL_FIND_BY_QTD_VOTOS_BY_MEIO_VOTACAO = <<<EOD
+    const SQL_FIND_BY_QTD_VOTOS_BY_MEIO_VOTACAO = <<<EOD
 SELECT
 	mv.`nm_meio_votacao`,
 	COUNT(v.`id_meio_votacao`) AS `total`
@@ -53,8 +53,7 @@ WHERE
     c.`id_votacao` = :id_votacao
 GROUP BY v.`id_meio_votacao`
 EOD;
-	
-	const SQL_FIND_CIDADAOS_POR_REGIAO_MEIO_VOTACAO = <<<EOD
+    const SQL_FIND_CIDADAOS_POR_REGIAO_MEIO_VOTACAO = <<<EOD
 SELECT
     s.`nm_regiao`,
 	mv.`nm_meio_votacao`,
@@ -77,8 +76,7 @@ GROUP BY
 ORDER BY
     s.`nm_regiao`
 EOD;
-
-	const SQL_FIND_VOTOS_POR_REGIAO_MEIO_VOTACAO = <<<EOD
+    const SQL_FIND_VOTOS_POR_REGIAO_MEIO_VOTACAO = <<<EOD
 SELECT
     r.`nm_regiao`,
 	mv.`nm_meio_votacao`,
@@ -96,8 +94,7 @@ GROUP BY
 ORDER BY
 	r.`nm_regiao`
 EOD;
-        
-        const SQL_FIND_POLLS_BY_VOTACAO_ID = <<<EOD
+    const SQL_FIND_POLLS_BY_VOTACAO_ID = <<<EOD
 SELECT
 	p.id AS poll_id,
 	p.title,
@@ -116,5 +113,27 @@ WHERE
 GROUP BY
 	p.id, pq.id, po.id
 EOD;
-        
+
+    const SQL_FIND_NEW_VOTES_PER_MINUTE_BY_VOTACAO_ID = <<<EOD
+SELECT
+	x.fim AS `time`,
+	COUNT(*) AS `new_votes`
+FROM (
+	SELECT 
+		DATE_FORMAT(MAX(vl.dth_fim), '%Y-%m-%d %H:%i') AS `fim`,
+		vl.id_cidadao
+	FROM
+		voto_log vl
+	WHERE
+		vl.id_votacao = :votacao_id
+		AND vl.dth_fim IS NOT NULL
+	GROUP BY
+		vl.id_cidadao
+	HAVING
+		COUNT(*) = 2
+) x
+GROUP BY
+	x.fim
+EOD;
+    
 }
