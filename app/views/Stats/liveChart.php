@@ -25,11 +25,23 @@
                 height: 140px;
                 position: absolute;
                 right: 10px;
-                top: 10px;
+                top: 67px;
             }
+            .well { margin: 0; }
 
-            .current, .votesPerMinute {
+            .data {
+                float: left;
+                margin: 0 45px;
+                text-align: center;
+            }
+            .current, .votesPerMinute, .lastUpdate {
+                font-size: 55px;
                 font-weight: bold;
+                display: block;
+            }
+            .hasCountdown {
+                border: none;
+                background: none;
             }
         </style>
 
@@ -41,10 +53,23 @@
     <body>
         <div data-spyx="affix" data-offset-top="10" class="fixed">
             <h1>Votação de Prioridades - Orçamento 2014</h1>
-            <h2>Último Voto: <span class="lastUpdate">não disponível</span> - Votos/minuto: <span class="votesPerMinute">0</span></h2>
-            <h2>Total de Eleitores Votantes: <span class="current">0</span></h2>
-
-            <div class="countdown"></div>
+            <div class="well clearfix">
+                <div class="data">
+                    <span class="lastUpdate">não disponível</span>
+                    Último Voto Considerado
+                </div>
+                <div class="data">
+                    <span class="current">0</span>
+                    Eleitores
+                </div>
+                <div class="data">
+                    <span class="votesPerMinute">0</span>
+                    Votos/minuto
+                </div>
+                
+                <div class="countdown"></div>
+            </div>
+            
         </div>
         <div id="chart_div" style="width: 100%; height: 700px;"></div>
 
@@ -92,7 +117,7 @@
             }
             $(document).ready(function() {
                 setInterval(function() {
-                    $.getScript('chart_data.php', function() {
+                    $.getScript('<?= $dataUrl ?>', function() {
                         drawChart();
                     });
                 }, 30000);
@@ -100,6 +125,5 @@
                 $('.countdown').countdown({until: new Date(2013, 07, 07, 23,59,59), format: 'HMS'});
             });
         </script>
-        <script src="/js/bootstrap.min.js"></script>
     </body>
 </html>

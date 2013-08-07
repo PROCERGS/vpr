@@ -18,7 +18,7 @@ foreach ($history as $entry) {
     $year = $date->format('Y');
     $dateFormated = "$year, $month, " . $date->format('d, H, i, s');
     $entries[] = "[new Date($dateFormated), $delta]";
-    $lastUpdate = $date->format('d/m/Y - H:i:s');
+    $lastUpdate = $date->format('H:i');
 }
 
 echo implode(",\n", $entries);
