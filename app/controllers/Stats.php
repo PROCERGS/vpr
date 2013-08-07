@@ -118,10 +118,8 @@ class Stats extends AppController
             CacheFS::set('chartData', $values, 20 * SECOND);
             $values = CacheFS::get('chartData');
             $values['cacheHit'] = false;
-            error_log("Cache miss");
         } else {
             $values['cacheHit'] = true;
-            error_log("Cache HIT");
         }
         
         self::render($values);
