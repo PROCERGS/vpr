@@ -6,11 +6,13 @@ $entries = array();
 $current = 0;
 $delta = 0;
 $total = count($history);
+$deltas = array();
 foreach ($history as $entry) {
 /*    if (count($entries) == $total - 5) {
         break;
     }*/
     $delta = $entry['new_votes'];
+    $deltas[] = $delta;
     
     $current += $delta;
     $date = DateTime::createFromFormat('Y-m-d H:i', $entry['time']);
@@ -28,3 +30,4 @@ var current = '<?= number_format($current, 0, ',', '.') ?>';
 var lastUpdate = '<?= $lastUpdate ?>';
 var lastDelta = '<?= number_format($delta, 0, ',', '.') ?>';
 var cacheHit = <?= $cacheHit?'true':'false' ?>;
+var average = <?= round(array_sum($deltas)/count($deltas), 0) ?>;

@@ -31,10 +31,10 @@
 
             .data {
                 float: left;
-                margin: 0 45px;
+                margin: 0 20px;
                 text-align: center;
             }
-            .current, .votesPerMinute, .lastUpdate {
+            .current, .votesPerMinute, .lastUpdate, .votesPerMinuteAverage {
                 font-size: 55px;
                 font-weight: bold;
                 display: block;
@@ -59,12 +59,16 @@
                     Último Voto Considerado
                 </div>
                 <div class="data">
+                    <span class="votesPerMinute">0</span>
+                    Votos/minuto
+                </div>
+                <div class="data">
                     <span class="current">0</span>
                     Eleitores
                 </div>
                 <div class="data">
-                    <span class="votesPerMinute">0</span>
-                    Votos/minuto
+                    <span class="votesPerMinuteAverage">0</span>
+                    Média de Votos/minuto
                 </div>
                 
                 <div class="countdown"></div>
@@ -114,6 +118,7 @@
                 $(".current").html(current);
                 $(".lastUpdate").html(lastUpdate);
                 $(".votesPerMinute").html(lastDelta);
+                $(".votesPerMinuteAverage").html(average);
             }
             $(document).ready(function() {
                 setInterval(function() {
