@@ -7,9 +7,9 @@ $current = 0;
 $delta = 0;
 $total = count($history);
 foreach ($history as $entry) {
-    if (count($entries) == $total - 5) {
+/*    if (count($entries) == $total - 5) {
         break;
-    }
+    }*/
     $delta = $entry['new_votes'];
     
     $current += $delta;

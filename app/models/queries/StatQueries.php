@@ -129,8 +129,8 @@ FROM (
 		AND vl.dth_fim IS NOT NULL
 	GROUP BY
 		vl.id_cidadao
-	HAVING
-		COUNT(*) = 2
+--	HAVING
+--		COUNT(*) = 2
 ) x
 GROUP BY
 	x.fim
@@ -157,8 +157,8 @@ FROM (
 	GROUP BY
 		vl.id_cidadao,
 		vl.id_meio_votacao
-	HAVING
-		COUNT(*) = 2
+--	HAVING
+--		COUNT(*) = 2
 ) x
 	INNER JOIN meio_votacao m ON x.id_meio_votacao = m.id_meio_votacao
 GROUP BY
