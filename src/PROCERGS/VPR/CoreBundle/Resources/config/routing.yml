@@ -1,0 +1,3 @@
+procergsvpr_core_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:index }

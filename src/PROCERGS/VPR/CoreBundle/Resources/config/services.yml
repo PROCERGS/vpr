@@ -1,0 +1,11 @@
+parameters:
+    user_provider.class: PROCERGS\VPR\CoreBundle\Security\FOSUBUserProvider
+#    procergsvpr_core.example.class: PROCERGS\VPR\CoreBundle\Example
+
+services:
+    user_provider:
+        class: "%user_provider.class%"
+        arguments: [ @fos_user.user_manager, { login_cidadao: login_cidadao_id } ]
+#    procergsvpr_core.example:
+#        class: %procergsvpr_core.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
