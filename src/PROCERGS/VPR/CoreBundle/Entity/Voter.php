@@ -4,11 +4,13 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
 /**
  * @ORM\Entity
  */
-class Voter extends BaseUser
+class Voter extends BaseUser implements OAuthAwareUserProviderInterface
 {
 
     /**
@@ -34,6 +36,11 @@ class Voter extends BaseUser
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function loadUserByOAuthUserResponse(UserResponseInterface $response)
+    {
+        
     }
 
 }

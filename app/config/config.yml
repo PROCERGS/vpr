@@ -69,6 +69,13 @@ swiftmailer:
     spool:     { type: memory }
 
 hwi_oauth:
+    connect:
+        account_connector: user_provider
+    fosub:
+        username_iterations: 30
+        properties:
+            login_cidadao: login_cidadao_id
+            
     firewall_name: secured_area
     resource_owners:
         login_cidadao:
@@ -77,13 +84,14 @@ hwi_oauth:
             client_secret:        %login_cidadao_secret%
             access_token_url:     http://lc.des.dona.to/oauth/v2/token
             authorization_url:    http://lc.des.dona.to/oauth/v2/auth
-            infos_url:            http://lc.des.dona.to/api/user
+            infos_url:            http://lc.des.dona.to/api/v1/person
             scope:                "name cpf"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
                 nickname:   username
                 realname:   fullname
+                email:      email
 
 fos_user:
     db_driver: orm
