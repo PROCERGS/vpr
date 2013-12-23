@@ -88,9 +88,9 @@ hwi_oauth:
             scope:                "name cpf email"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
-                identifier: id
+                identifier: username
                 nickname:   username
-                realname:   fullname
+                realname:   name
                 email:      email
 
 fos_user:

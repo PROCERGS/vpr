@@ -6,8 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name)
+
+    public function indexAction()
     {
-        return $this->render('PROCERGSVPRCoreBundle:Default:index.html.twig', array('name' => $name));
+        $voter = $this->get('security.context')->getToken()->getUser();
+
+        return $this->render('PROCERGSVPRCoreBundle:Default:index.html.twig', array('voter' => $voter));
     }
+
 }

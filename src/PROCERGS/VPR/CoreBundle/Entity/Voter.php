@@ -19,6 +19,11 @@ class Voter extends BaseUser implements OAuthAwareUserProviderInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $name;
 
     /**
      * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
@@ -61,5 +66,15 @@ class Voter extends BaseUser implements OAuthAwareUserProviderInterface
     public function getLoginCidadaoAccessToken()
     {
         return $this->loginCidadaoAccessToken;
+    }
+    
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+    
+    public function getName()
+    {
+        return $this->name;
     }
 }
