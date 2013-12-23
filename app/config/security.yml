@@ -39,7 +39,7 @@ security:
             
             oauth:
                 resource_owners:
-                    login_cidadao:  "/login/check-cidadao"
+                    loginCidadao:  "/login/check-cidadao"
                 login_path:   /login
                 failure_path: /login
                 oauth_user_provider:

@@ -74,11 +74,11 @@ hwi_oauth:
     fosub:
         username_iterations: 30
         properties:
-            login_cidadao: login_cidadao_id
+            loginCidadao: loginCidadaoId
             
     firewall_name: secured_area
     resource_owners:
-        login_cidadao:
+        loginCidadao:
             type:                 oauth2
             client_id:            %login_cidadao_id%
             client_secret:        %login_cidadao_secret%

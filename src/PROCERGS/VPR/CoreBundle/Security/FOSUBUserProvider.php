@@ -16,7 +16,7 @@ class FOSUBUserProvider extends BaseClass
     {
         $property = $this->getProperty($response);
         $username = $response->getUsername();
-
+        
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
 

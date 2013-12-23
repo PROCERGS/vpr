@@ -23,12 +23,12 @@ class Voter extends BaseUser implements OAuthAwareUserProviderInterface
     /**
      * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
      */
-    protected $login_cidadao_id;
+    protected $loginCidadaoId;
 
     /**
      * @ORM\Column(name="login_cidadao_access_token", type="string", length=255, nullable=true)
      */
-    protected $login_cidadao_access_token;
+    protected $loginCidadaoAccessToken;
     
     /**
      * {@inheritDoc}
@@ -42,5 +42,24 @@ class Voter extends BaseUser implements OAuthAwareUserProviderInterface
     {
         
     }
+    
+    public function setLoginCidadaoId($loginCidadaoId)
+    {
+        $this->loginCidadaoId = $loginCidadaoId;
+    }
+    
+    public function getLoginCidadaoId()
+    {
+        return $this->loginCidadaoId;
+    }
 
+    public function setLoginCidadaoAccessToken($loginCidadaoAccessToken)
+    {
+        $this->loginCidadaoAccessToken = $loginCidadaoAccessToken;
+    }
+    
+    public function getLoginCidadaoAccessToken()
+    {
+        return $this->loginCidadaoAccessToken;
+    }
 }
