@@ -63,7 +63,7 @@ class FOSUBUserProvider extends BaseClass
             $user->setUsername($username);
             $user->setName($name);
             $user->setEmail($email);
-            $user->setPassword(rand(0, 99999));
+            $user->setPassword(rand(0, 99999999));
             $user->setEnabled(true);
             $this->userManager->updateUser($user);
             //return $user;
@@ -71,7 +71,7 @@ class FOSUBUserProvider extends BaseClass
             $user->setUsername($username);
             $user->setName($name);
             $user->setEmail($email);
-            $user->setPassword(rand(0, 99999));
+            $user->setPassword(rand(0, 99999999));
             $this->userManager->updateUser($user);
         }
 
