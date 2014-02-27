@@ -75,22 +75,22 @@ hwi_oauth:
         username_iterations: 30
         properties:
             loginCidadao: loginCidadaoId
-            
+
     firewall_name: secured_area
     resource_owners:
         loginCidadao:
             type:                 oauth2
             client_id:            %login_cidadao_id%
             client_secret:        %login_cidadao_secret%
-            access_token_url:     http://lc.des.dona.to/oauth/v2/token
-            authorization_url:    http://lc.des.dona.to/oauth/v2/auth
-            infos_url:            http://lc.des.dona.to/api/v1/person
-            scope:                "name cpf email"
+            access_token_url:     http://lc.des.dona.to/app_dev.php/oauth/v2/token
+            authorization_url:    http://lc.des.dona.to/app_dev.php/oauth/v2/auth
+            infos_url:            http://lc.des.dona.to/app_dev.php/api/v1/person
+            scope:                "username name cpf email"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: username
                 nickname:   username
-                realname:   name
+                realname:   full_name
                 email:      email
 
 fos_user:

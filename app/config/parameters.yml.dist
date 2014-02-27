@@ -13,3 +13,6 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    login_cidadao_id: oauth_id
+    login_cidadao_secret: oauth_secret
