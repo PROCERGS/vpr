@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+#jumbo {
+  background-color: #333;
+  color: #eee;
+}
+#jumbo p {
+  font-size: 16px;
+}
+#try-header {
+  margin: 30px 0px;
+}
+#try-more {
+  margin: 30px 0px;
+  font-style: italic;
+}

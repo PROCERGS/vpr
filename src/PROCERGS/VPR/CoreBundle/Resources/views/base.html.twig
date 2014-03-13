@@ -1,0 +1,22 @@
+{% extends '::base.html.twig' %}
+
+{% block header %}
+{% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    {% stylesheets 'bundles/procergsvprcore/css/*.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />    
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+      </script>
+      <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js">
+      </script>
+{% endblock %}

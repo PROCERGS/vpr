@@ -1,3 +1,9 @@
 procergsvpr_core_homepage:
     pattern:  /
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:index }
+
+    
+procergsvpr_core_municipio:
+    pattern:  /municipio
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:municipio }
+    
