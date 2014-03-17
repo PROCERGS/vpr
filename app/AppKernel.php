@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new PROCERGS\VPR\CoreBundle\PROCERGSVPRCoreBundle(),
+            new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

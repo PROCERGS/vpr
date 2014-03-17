@@ -103,4 +103,4 @@ fos_user:
     user_class: PROCERGS\VPR\CoreBundle\Entity\Voter
 
 parameters:
-    buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
+    buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
