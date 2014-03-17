@@ -86,9 +86,9 @@ hwi_oauth:
             type:                 oauth2
             client_id:            %login_cidadao_id%
             client_secret:        %login_cidadao_secret%
-            access_token_url:     http://lc.des.dona.to/app_dev.php/oauth/v2/token
-            authorization_url:    http://lc.des.dona.to/app_dev.php/oauth/v2/auth
-            infos_url:            http://lc.des.dona.to/app_dev.php/api/v1/person
+            access_token_url:     %login_cidadao_base_url%/oauth/v2/token
+            authorization_url:    %login_cidadao_base_url%/oauth/v2/auth
+            infos_url:            %login_cidadao_base_url%/api/v1/person
             scope:                "username name cpf email"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
@@ -101,3 +101,6 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: PROCERGS\VPR\CoreBundle\Entity\Voter
+
+parameters:
+    buzz.client.class: PROCERGS\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
