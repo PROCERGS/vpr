@@ -1,27 +1,20 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
-      <div class="row">
-        <div class="col-md-12">
-          <h3>
-            Selecione seu domicílio eleitorar
-            <br>
-          </h3>
-          <p>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Selecione seu domicílio eleitorar</h3>
+        <p>
             Para que seu voto seja válido, infome o município ao qual está vinculado
             seu título de eleitor. Isso é: onde você vota?
-            <br>
-          </p>
-          <form>
+        </p>
+        <form role="form">
             <div class="form-group">
-              <label>
-                Município
-              </label>
-              <input placeholder="Porto Alegre" class="form-control" type="text">
-              <button type="submit" class="btn btn-primary">
-                Click!
-              </button>
+                <label for="exampleInputPassword1">Município</label>
+                <input type="text" class="form-control" placeholder="Porto Alegre">
             </div>
-          </form>
-        </div>      
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -2,8 +2,33 @@ procergsvpr_core_homepage:
     pattern:  /
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:index }
 
-    
+
 procergsvpr_core_municipio:
     pattern:  /municipio
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:municipio }
-    
+
+
+procergsvpr_core_tituloVotou:
+    pattern:  /tituloVotou
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'PROCERGSVPRCoreBundle:Default:tituloVotou.html.twig'
+
+procergsvpr_core_nfgFraca:
+    pattern:  /nfgFraca
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'PROCERGSVPRCoreBundle:Default:nfgFraca.html.twig'
+
+procergsvpr_core_horarioEncerrado:
+    pattern:  /horarioEncerrado
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'PROCERGSVPRCoreBundle:Default:horarioEncerrado.html.twig'
+
+procergsvpr_core_cedula:
+    pattern:  /cedula
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'PROCERGSVPRCoreBundle:Default:cedula.html.twig'
+

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class DefaultController extends Controller
 {
 
-    /**     
+    /**
      * @Template()
      */
     public function indexAction()
@@ -18,10 +18,10 @@ class DefaultController extends Controller
         $voter = $this->get('security.context')->getToken()->getUser();
         return array('voter' => $voter);
     }
-    
+
     /**
      * @Template()
-     */    
+     */
     public function municipioAction()
     {
         $voter = $this->get('security.context')->getToken()->getUser();
