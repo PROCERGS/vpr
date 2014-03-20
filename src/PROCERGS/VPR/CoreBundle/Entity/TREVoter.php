@@ -8,7 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
  * TREVoter
  *
  * @ORM\Entity
- * @ORM\Table()
+ * @ORM\Table(
+ *      indexes={
+ *          @ORM\Index(name="index_trevoter_name", columns={"name"}),
+ *          @ORM\Index(name="index_trevoter_cityCode", columns={"city_code"}),
+ *          @ORM\Index(name="index_trevoter_zone", columns={"votingZone"}),
+ *      }
+ * )
  */
 class TREVoter
 {
