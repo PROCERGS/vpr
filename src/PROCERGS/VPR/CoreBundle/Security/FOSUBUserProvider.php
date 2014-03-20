@@ -43,36 +43,33 @@ class FOSUBUserProvider extends BaseClass
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $loginCidadaoId = $response->getUsername();
         $username = $response->getNickname();
-        $name = $response->getRealName();
-        $email = $response->getEmail();
-
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
-        //when the user is registrating
+
         if (null === $user) {
+            $lcData = $response->getResponse();
+            $loginCidadaoId = $response->getUsername();
+            $email = $response->getEmail();
+            $firstName = $lcData['first_name'];
+            $surname = $lcData['surname'];
+
             $service = $response->getResourceOwner()->getName();
             $setter = 'set' . ucfirst($service);
             $setter_id = $setter . 'Id';
             $setter_token = $setter . 'AccessToken';
-            // create new user here
+            $setter_username = $setter . 'Username';
+
             $user = $this->userManager->createUser();
-            $user->$setter_id($username);
+            $user->$setter_id($loginCidadaoId);
             $user->$setter_token($response->getAccessToken());
-            //I have set all requested data with the user's username
-            //modify here with relevant data
+            $user->$setter_username($response->getNickname());
+
             $user->setUsername($username);
-            $user->setName($name);
+            $user->setFirstName($firstName);
+            $user->setSurname($surname);
             $user->setEmail($email);
-            $user->setPassword(rand(0, 99999999));
+            $user->setPassword('');
             $user->setEnabled(true);
-            $this->userManager->updateUser($user);
-            //return $user;
-        } else {
-            $user->setUsername($username);
-            $user->setName($name);
-            $user->setEmail($email);
-            $user->setPassword(rand(0, 99999999));
             $this->userManager->updateUser($user);
         }
 
