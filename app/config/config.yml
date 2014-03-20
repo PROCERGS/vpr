@@ -89,10 +89,10 @@ hwi_oauth:
             access_token_url:     %login_cidadao_base_url%/oauth/v2/token
             authorization_url:    %login_cidadao_base_url%/oauth/v2/auth
             infos_url:            %login_cidadao_base_url%/api/v1/person
-            scope:                "username name cpf email"
+            scope:                "id username full_name name cpf email"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
-                identifier: username
+                identifier: id
                 nickname:   username
                 realname:   full_name
                 email:      email

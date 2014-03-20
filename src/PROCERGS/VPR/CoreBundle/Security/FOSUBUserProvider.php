@@ -16,7 +16,7 @@ class FOSUBUserProvider extends BaseClass
     {
         $property = $this->getProperty($response);
         $username = $response->getUsername();
-        
+
         //on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
 
@@ -43,10 +43,11 @@ class FOSUBUserProvider extends BaseClass
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $username = $response->getUsername();
+        $loginCidadaoId = $response->getUsername();
+        $username = $response->getNickname();
         $name = $response->getRealName();
         $email = $response->getEmail();
-        
+
         $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
         //when the user is registrating
         if (null === $user) {

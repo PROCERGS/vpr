@@ -1,7 +1,7 @@
 procergsvpr_core:
     resource: "@PROCERGSVPRCoreBundle/Resources/config/routing.yml"
     prefix:   /
-    
+
 login_cidadao_login:
     pattern: /login/check-cidadao
 
