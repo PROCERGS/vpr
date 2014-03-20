@@ -32,3 +32,21 @@ procergsvpr_core_cedula:
         _controller: FrameworkBundle:Template:template
         template:    'PROCERGSVPRCoreBundle:Default:cedula.html.twig'
 
+procergsvpr_core_solicita_titulo:
+    pattern:  /solicita_titulo
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'PROCERGSVPRCoreBundle:Default:solicita_titulo.html.twig'
+
+procergsvpr_core_reforcar_voto:
+    pattern:  /reforcar_voto
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'PROCERGSVPRCoreBundle:Default:reforcar_voto.html.twig'
+
+procergsvpr_core_sem_nfg:
+    pattern:  /sem_nfg
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template:    'PROCERGSVPRCoreBundle:Default:sem_nfg.html.twig'
+

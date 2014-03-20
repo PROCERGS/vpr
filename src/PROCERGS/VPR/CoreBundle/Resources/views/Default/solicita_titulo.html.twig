@@ -1,0 +1,17 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>Digite seu título de eleitor</h3>
+        <form role="form">
+            <div class="form-group">
+                <label for="exampleInputPassword1">Título</label>
+                <input type="text" class="form-control" placeholder="123456789">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div class="alert alert-success" style="margin-top:20px">Obrigado por votar!</div>
+    </div>
+</div>
+{% endblock %}
