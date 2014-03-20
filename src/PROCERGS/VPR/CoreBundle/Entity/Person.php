@@ -43,7 +43,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="voterRegistration", type="string", length=12, nullable=true)
+     * @ORM\Column(name="voterRegistration", type="string", length=12, nullable=true, unique=true)
      */
     protected $voterRegistration;
 

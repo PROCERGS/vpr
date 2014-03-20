@@ -1,0 +1,134 @@
+<?php
+
+namespace PROCERGS\VPR\CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Step
+ *
+ * @ORM\Table()
+ * @ORM\Entity
+ */
+class Step
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sorting", type="integer")
+     */
+    private $sorting;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="maxSelection", type="integer")
+     */
+    private $maxSelection;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PollOption", mappedBy="step")
+     */
+    protected $pollOptions;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Poll", inversedBy="steps")
+     * @ORM\JoinColumn(name="poll_id", referencedColumnName="id")
+     */
+    protected $poll;
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Step
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set sorting
+     *
+     * @param integer $sorting
+     * @return Step
+     */
+    public function setSorting($sorting)
+    {
+        $this->sorting = $sorting;
+
+        return $this;
+    }
+
+    /**
+     * Get sorting
+     *
+     * @return integer
+     */
+    public function getSorting()
+    {
+        return $this->sorting;
+    }
+
+    /**
+     * Set maxSelection
+     *
+     * @param integer $maxSelection
+     * @return Step
+     */
+    public function setMaxSelection($maxSelection)
+    {
+        $this->maxSelection = $maxSelection;
+
+        return $this;
+    }
+
+    /**
+     * Get maxSelection
+     *
+     * @return integer
+     */
+    public function getMaxSelection()
+    {
+        return $this->maxSelection;
+    }
+}
