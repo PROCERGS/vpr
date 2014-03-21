@@ -23,16 +23,20 @@ class FOSUBUserProvider extends BaseClass
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
         $setter_token = $setter . 'AccessToken';
+        $setter_username = $setter . 'Username';
 
         //we "disconnect" previously connected users
-        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
+        $previousUser = $this->userManager->findUserBy(array($property => $username));
+        if (null !== $previousUser && $previousUser->getId() != $user->getId()) {
             $previousUser->$setter_id(null);
             $previousUser->$setter_token(null);
+            $previousUser->$setter_username(null);
             $this->userManager->updateUser($previousUser);
         }
 
         //we connect current user
         $user->$setter_id($username);
+        $user->$setter_username($response->getNickname());
         $user->$setter_token($response->getAccessToken());
 
         $this->userManager->updateUser($user);
