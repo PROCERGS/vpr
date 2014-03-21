@@ -50,21 +50,21 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="loginCidadaoId", type="string", length=255)
+     * @ORM\Column(name="loginCidadaoId", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="loginCidadaoAccessToken", type="string", length=255)
+     * @ORM\Column(name="loginCidadaoAccessToken", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoAccessToken;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="loginCidadaoUsername", type="string", length=255)
+     * @ORM\Column(name="loginCidadaoUsername", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoUsername;
 
