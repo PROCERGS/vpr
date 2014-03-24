@@ -72,6 +72,12 @@ class Vote
     private $voterRegistration;
 
     /**
+     * @ORM\ManyToOne(targetEntity="BallotBox")
+     * @ORM\JoinColumn(name="ballot_box_id", referencedColumnName="id", nullable=false)
+     */
+    protected $ballotBox;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Corede")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id")
      */
