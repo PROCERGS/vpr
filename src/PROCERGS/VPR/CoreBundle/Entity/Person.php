@@ -13,6 +13,30 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
  * @ORM\Table()
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="email",
+ *          column=@ORM\Column(
+ *              name     = "email",
+ *              type     = "string",
+ *              length   = 255,
+ *              nullable = true                                             
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="emailCanonical",
+ *          column=@ORM\Column(
+ *              name     = "email_canonical",
+ *              type     = "string",
+ *              nullable = true,
+ *              unique   = true,
+ *              length   = 255
+ *          )
+ *      ),
+ *      @ORM\AttributeOverride(name="password",
+ *          column=@ORM\Column(
+ *              nullable = true
+ *          )
+ *      )      
+ * })
  */
 class Person extends BaseUser implements OAuthAwareUserProviderInterface
 {

@@ -9,3 +9,9 @@ services:
 #    procergsvpr_core.example:
 #        class: %procergsvpr_core.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+    procergs_person.registration.form.type:
+        class: PROCERGS\VPR\CoreBundle\Form\Type\RegistrationFormType
+        arguments: [ PROCERGS\VPR\CoreBundle\Entity\Person ]
+        tags:
+            - { name: form.type, alias: vpr_person_registration }
