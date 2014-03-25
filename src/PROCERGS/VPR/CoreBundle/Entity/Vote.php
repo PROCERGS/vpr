@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class Vote
 {
@@ -28,6 +29,7 @@ class Vote
      * @ORM\Column(name="options", type="text")
      */
     private $options;
+    private $plainOptions;
 
     /**
      * @var \DateTime
@@ -94,12 +96,35 @@ class Vote
     }
 
     /**
+     * Set plainOptions
+     *
+     * @param string $plainOptions
+     * @return Vote
+     */
+    protected function setPlainOptions($plainOptions)
+    {
+        $this->plainOptions = $plainOptions;
+
+        return $this;
+    }
+
+    /**
+     * Get plainOptions
+     *
+     * @return string
+     */
+    public function getPlainOptions()
+    {
+        return $this->plainOptions;
+    }
+
+    /**
      * Set options
      *
      * @param string $options
      * @return Vote
      */
-    public function setOptions($options)
+    protected function setOptions($options)
     {
         $this->options = $options;
 
@@ -252,6 +277,24 @@ class Vote
     public function getVoterRegistration()
     {
         return $this->voterRegistration;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setCreatedAtValue()
+    {
+        if (!($this->getCreatedAt() instanceof \DateTime)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function encryptVote()
+    {
+        
     }
 
 }

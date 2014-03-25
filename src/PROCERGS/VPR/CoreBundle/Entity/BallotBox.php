@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class BallotBox
 {
@@ -372,6 +373,32 @@ class BallotBox
     public function getIsOnline()
     {
         return $this->isOnline;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setKeys()
+    {
+        if (!is_null($this->getPrivateKey())) {
+            return;
+        }
+
+        $config = array(
+            "digest_alg" => "sha512",
+            "private_key_bits" => 4096,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        );
+
+        $res = openssl_pkey_new($config);
+
+        openssl_pkey_export($res, $privKey);
+
+        $details = openssl_pkey_get_details($res);
+        $pubKey = $details["key"];
+
+        $this->setPrivateKey($privKey);
+        $this->setPublicKey($pubKey);
     }
 
 }
