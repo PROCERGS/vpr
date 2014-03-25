@@ -401,4 +401,16 @@ class BallotBox
         $this->setPublicKey($pubKey);
     }
 
+    public function setPoll($poll)
+    {
+        $this->poll = $poll;
+
+        return $this;
+    }
+
+    public function getPoll()
+    {
+        return $this->poll;
+    }
+
 }

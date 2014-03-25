@@ -1,0 +1,8 @@
+form.username: 'Titulo eleitor'
+form.firstname: Nome
+form.surname: Sobrenome
+form.submit: Enviar
+register.title: 'Votação de Prioridades do RS'
+register.login.simple: 'Acessar com Título de Eleitor do RS'
+register.login.lc: 'Acessar com Login Cidadão'
+form.username.invalid: __form.username.invalid

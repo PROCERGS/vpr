@@ -67,6 +67,11 @@ class Poll
      */
     protected $steps;
 
+    public function __construct()
+    {
+        $this->ballotBoxes = new ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -190,6 +195,11 @@ class Poll
     public function getPublicKey()
     {
         return $this->publicKey;
+    }
+
+    public function getBallotBoxes()
+    {
+        return $this->ballotBoxes;
     }
 
 }

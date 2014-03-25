@@ -2,6 +2,11 @@ procergsvpr_core:
     resource: "@PROCERGSVPRCoreBundle/Resources/config/routing.yml"
     prefix:   /
 
+vpr_demo:
+    prefix:   /demo
+    resource: "@PROCERGSVPRCoreBundle/Controller/DemoController.php"
+    type:     annotation
+
 login_cidadao_login:
     pattern: /login/check-cidadao
 
