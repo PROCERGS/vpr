@@ -112,6 +112,11 @@ class BallotBox
      */
     protected $city;
 
+    public function __construct()
+    {
+        $this->setTotalInvalidVotes(0);
+    }
+
     /**
      * Get id
      *
