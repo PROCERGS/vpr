@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * PollOption
@@ -19,6 +20,7 @@ class PollOption
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"vote"})
      */
     private $id;
 
@@ -26,6 +28,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Groups({"vote"})
      */
     private $title;
 
@@ -33,6 +36,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     * @Groups({"vote"})
      */
     private $description;
 
@@ -40,6 +44,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="scope", type="string", length=255)
+     * @Groups({"vote"})
      */
     private $scope;
 
@@ -47,6 +52,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="cost", type="decimal")
+     * @Groups({"vote"})
      */
     private $cost;
 
@@ -54,30 +60,35 @@ class PollOption
      * @var integer
      *
      * @ORM\Column(name="categorySorting", type="integer")
+     * @Groups({"vote"})
      */
     private $categorySorting;
 
     /**
      * @ORM\ManyToOne(targetEntity="Poll")
      * @ORM\JoinColumn(name="poll_id", referencedColumnName="id")
+     * @Groups({"vote"})
      */
     protected $poll;
 
     /**
      * @ORM\ManyToOne(targetEntity="Step", inversedBy="pollOptions")
      * @ORM\JoinColumn(name="step_id", referencedColumnName="id")
+     * @Groups({"vote"})
      */
     protected $step;
 
     /**
      * @ORM\ManyToOne(targetEntity="Corede")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id")
+     * @Groups({"vote"})
      */
     protected $corede;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="pollOptions")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @Groups({"vote"})
      */
     protected $category;
 

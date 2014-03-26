@@ -3,9 +3,10 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
- * Po�ll
+ * Poll
  *
  * @ORM\Table()
  * @ORM\Entity
@@ -19,6 +20,7 @@ class Poll
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"vote"})
      */
     private $id;
 
@@ -26,6 +28,7 @@ class Poll
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"vote"})
      */
     private $name;
 
@@ -33,6 +36,7 @@ class Poll
      * @var \DateTime
      *
      * @ORM\Column(name="openingTime", type="datetime")
+     * @Groups({"vote"})
      */
     private $openingTime;
 
@@ -40,6 +44,7 @@ class Poll
      * @var \DateTime
      *
      * @ORM\Column(name="closingTimime", type="datetime")
+     * @Groups({"vote"})
      */
     private $closingTimime;
 
@@ -47,6 +52,7 @@ class Poll
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     * @Groups({"vote"})
      */
     private $description;
 
@@ -86,7 +92,7 @@ class Poll
      * Set name
      *
      * @param string $name
-     * @return Po�ll
+     * @return Poll
      */
     public function setName($name)
     {
@@ -109,7 +115,7 @@ class Poll
      * Set openingTime
      *
      * @param \DateTime $openingTime
-     * @return Po�ll
+     * @return Poll
      */
     public function setOpeningTime($openingTime)
     {
@@ -132,7 +138,7 @@ class Poll
      * Set closingTimime
      *
      * @param \DateTime $closingTimime
-     * @return Po�ll
+     * @return Poll
      */
     public function setClosingTimime($closingTimime)
     {
@@ -155,7 +161,7 @@ class Poll
      * Set description
      *
      * @param string $description
-     * @return Po�ll
+     * @return Poll
      */
     public function setDescription($description)
     {
@@ -178,7 +184,7 @@ class Poll
      * Set publicKey
      *
      * @param string $publicKey
-     * @return Po�ll
+     * @return Poll
      */
     public function setPublicKey($publicKey)
     {

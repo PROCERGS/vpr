@@ -21,7 +21,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "hwi/oauth-bundle": "0.3.*@dev",
         "friendsofsymfony/user-bundle": "~2.0@dev",
-        "guilhermednt/hwi-oauth-proxy-bundle": "dev-master"
+        "guilhermednt/hwi-oauth-proxy-bundle": "dev-master",
+        "jms/serializer-bundle" : "*"
     },
     "scripts": {
         "post-install-cmd": [

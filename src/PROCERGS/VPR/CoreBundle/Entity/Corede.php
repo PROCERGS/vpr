@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * Corede
@@ -19,6 +20,7 @@ class Corede
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"vote"})
      */
     private $id;
 
@@ -26,6 +28,7 @@ class Corede
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"vote"})
      */
     private $name;
 

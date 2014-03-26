@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * Step
@@ -18,6 +19,7 @@ class Step
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"vote"})
      */
     private $id;
 
@@ -25,6 +27,7 @@ class Step
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"vote"})
      */
     private $name;
 
@@ -32,6 +35,7 @@ class Step
      * @var integer
      *
      * @ORM\Column(name="sorting", type="integer")
+     * @Groups({"vote"})
      */
     private $sorting;
 
@@ -39,6 +43,7 @@ class Step
      * @var integer
      *
      * @ORM\Column(name="maxSelection", type="integer")
+     * @Groups({"vote"})
      */
     private $maxSelection;
 
@@ -50,6 +55,7 @@ class Step
     /**
      * @ORM\ManyToOne(targetEntity="Poll", inversedBy="steps")
      * @ORM\JoinColumn(name="poll_id", referencedColumnName="id")
+     * @Groups({"vote"})
      */
     protected $poll;
 

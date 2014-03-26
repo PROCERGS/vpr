@@ -17,3 +17,5 @@ parameters:
     login_cidadao_id: oauth_id
     login_cidadao_secret: oauth_secret
     login_cidadao_base_url: http://meu.rs.gov.br
+
+    privateKeyFile: 'file:///home/user/some/folder/privkey.pem'

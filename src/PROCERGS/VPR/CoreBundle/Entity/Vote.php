@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * Vote
@@ -20,68 +21,86 @@ class Vote
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"vote"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="options", type="text")
+     * @Groups({"vote"})
      */
-    private $options;
+    protected $options;
     private $plainOptions;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="createdAt", type="datetime")
+     * @Groups({"vote"})
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var string
      *
      * @ORM\Column(name="signature", type="text")
+     * @Groups({"vote"})
      */
-    private $signature;
+    protected $signature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="passphrase", type="string", length=255)
+     * @Groups({"vote"})
+     */
+    protected $passphrase;
 
     /**
      * @var string
      *
      * @ORM\Column(name="authType", type="string", length=255)
+     * @Groups({"vote"})
      */
-    private $authType;
+    protected $authType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="loginCidadaoId", type="string", length=255)
+     * @Groups({"vote"})
      */
-    private $loginCidadaoId;
+    protected $loginCidadaoId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="nfgCpf", type="string", length=255)
+     * @Groups({"vote"})
      */
-    private $nfgCpf;
+    protected $nfgCpf;
 
     /**
      * @var string
      *
      * @ORM\Column(name="voterRegistration", type="string", length=12)
+     * @Groups({"vote"})
      */
-    private $voterRegistration;
+    protected $voterRegistration;
 
     /**
      * @ORM\ManyToOne(targetEntity="BallotBox")
      * @ORM\JoinColumn(name="ballot_box_id", referencedColumnName="id", nullable=false)
+     * @Groups({"vote"})
      */
     protected $ballotBox;
 
     /**
      * @ORM\ManyToOne(targetEntity="Corede")
-     * @ORM\JoinColumn(name="corede_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="corede_id", referencedColumnName="id", nullable=false)
+     * @Groups({"vote"})
      */
     protected $corede;
 
@@ -101,7 +120,7 @@ class Vote
      * @param string $plainOptions
      * @return Vote
      */
-    protected function setPlainOptions($plainOptions)
+    public function setPlainOptions($plainOptions)
     {
         $this->plainOptions = $plainOptions;
 
@@ -185,6 +204,29 @@ class Vote
     public function getSignature()
     {
         return $this->signature;
+    }
+
+    /**
+     * Set passphrase
+     *
+     * @param string $passphrase
+     * @return Vote
+     */
+    public function setPassphrase($passphrase)
+    {
+        $this->passphrase = $passphrase;
+
+        return $this;
+    }
+
+    /**
+     * Get passphrase
+     *
+     * @return string
+     */
+    public function getPassphrase()
+    {
+        return $this->passphrase;
     }
 
     /**
@@ -280,6 +322,27 @@ class Vote
     }
 
     /**
+     *
+     * @return BallotBox
+     */
+    public function getBallotBox()
+    {
+        return $this->ballotBox;
+    }
+
+    /**
+     *
+     * @param BallotBox $ballotBox
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
+     */
+    public function setBallotBox($ballotBox)
+    {
+        $this->ballotBox = $ballotBox;
+
+        return $this;
+    }
+
+    /**
      * @ORM\PrePersist
      */
     public function setCreatedAtValue()
@@ -294,7 +357,32 @@ class Vote
      */
     public function encryptVote()
     {
-        
+        $crypted = null;
+        $ballotBox = $this->getBallotBox();
+        $poll = $ballotBox->getPoll();
+        $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
+        $options = $this->getPlainOptions();
+
+        $passphrases = null;
+        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey))) {
+            $this->setOptions(base64_encode($crypted));
+            $passphrase = base64_encode(reset($passphrases));
+            $this->setPassphrase($passphrase);
+        } else {
+            $error = openssl_error_string();
+            throw new \ErrorException($error);
+        }
+    }
+
+    public function openVote($privateKey)
+    {
+        $openVote = null;
+        $options = base64_decode($this->getOptions());
+        $passphrase = base64_decode($this->getPassphrase());
+        openssl_open($options, $openVote, $passphrase, $privateKey);
+        $this->setPlainOptions($openVote);
+
+        return $this;
     }
 
 }

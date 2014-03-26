@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * BallotBox
@@ -20,6 +21,7 @@ class BallotBox
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Groups({"vote"})
      */
     private $id;
 
@@ -27,6 +29,7 @@ class BallotBox
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups({"vote"})
      */
     private $name;
 
@@ -55,6 +58,7 @@ class BallotBox
      * @var string
      *
      * @ORM\Column(name="address", type="string", length=255)
+     * @Groups({"vote"})
      */
     private $address;
 
@@ -62,6 +66,7 @@ class BallotBox
      * @var string
      *
      * @ORM\Column(name="latitude", type="string", length=255, nullable=true)
+     * @Groups({"vote"})
      */
     private $latitude;
 
@@ -69,6 +74,7 @@ class BallotBox
      * @var string
      *
      * @ORM\Column(name="longitude", type="string", length=255, nullable=true)
+     * @Groups({"vote"})
      */
     private $longitude;
 
@@ -76,6 +82,7 @@ class BallotBox
      * @var \DateTime
      *
      * @ORM\Column(name="openingTime", type="datetime", nullable=true)
+     * @Groups({"vote"})
      */
     private $openingTime;
 
@@ -83,6 +90,7 @@ class BallotBox
      * @var \DateTime
      *
      * @ORM\Column(name="closingTime", type="datetime", nullable=true)
+     * @Groups({"vote"})
      */
     private $closingTime;
 
@@ -97,18 +105,21 @@ class BallotBox
      * @var boolean
      *
      * @ORM\Column(name="isOnline", type="boolean")
+     * @Groups({"vote"})
      */
     private $isOnline;
 
     /**
      * @ORM\ManyToOne(targetEntity="Poll", inversedBy="ballotBoxes")
      * @ORM\JoinColumn(name="poll_id", referencedColumnName="id", nullable=false)
+     * @Groups({"vote"})
      */
     protected $poll;
 
     /**
      * @ORM\ManyToOne(targetEntity="City", inversedBy="ballotBoxes")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     * @Groups({"vote"})
      */
     protected $city;
 
@@ -397,7 +408,7 @@ class BallotBox
 
         $res = openssl_pkey_new($config);
 
-        openssl_pkey_export($res, $privKey);
+        openssl_pkey_export($res, $privKey, $this->getSecret());
 
         $details = openssl_pkey_get_details($res);
         $pubKey = $details["key"];
@@ -406,16 +417,35 @@ class BallotBox
         $this->setPublicKey($pubKey);
     }
 
-    public function setPoll($poll)
+    /**
+     * @param \PROCERGS\VPR\CoreBundle\Entity\Poll $poll
+     * @return \PROCERGS\VPR\CoreBundle\Entity\BallotBox
+     */
+    public function setPoll(Poll $poll)
     {
         $this->poll = $poll;
 
         return $this;
     }
 
+    /**
+     * @return Poll
+     */
     public function getPoll()
     {
         return $this->poll;
+    }
+
+    public function sign($serializedOptions)
+    {
+        $encryptedPrivate = $this->getPrivateKey();
+        $passphrase = $this->getSecret();
+        $privateKey = openssl_pkey_get_private($encryptedPrivate, $passphrase);
+
+        $signature = false;
+        openssl_sign($serializedOptions, $signature, $privateKey);
+
+        return base64_encode($signature);
     }
 
 }

@@ -64,7 +64,7 @@ class City
     protected $corede;
 
     /**
-     * @ORM\OneToMany(targetEntity="BallotBox", mappedBy="poll")
+     * @ORM\OneToMany(targetEntity="BallotBox", mappedBy="city")
      */
     protected $ballotBoxes;
 
