@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Step
  *
- * @ORM\Table()
+ * @ORM\Table(name="step")
  * @ORM\Entity
  */
 class Step
@@ -42,7 +42,7 @@ class Step
     /**
      * @var integer
      *
-     * @ORM\Column(name="maxSelection", type="integer")
+     * @ORM\Column(name="max_selection", type="integer")
      * @Groups({"vote"})
      */
     private $maxSelection;

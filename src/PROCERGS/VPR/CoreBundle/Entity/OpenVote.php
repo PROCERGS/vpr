@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OpenVote
  *
- * @ORM\Table()
+ * @ORM\Table(name="open_vote")
  * @ORM\Entity
  */
 class OpenVote
@@ -49,14 +49,14 @@ class OpenVote
     /**
      * @var string
      *
-     * @ORM\Column(name="authType", type="string", length=255)
+     * @ORM\Column(name="auth_type", type="string", length=255)
      */
     protected $authType;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="voterRegistration", type="boolean")
+     * @ORM\Column(name="voter_registration", type="boolean")
      */
     protected $validVoterRegistration;
 

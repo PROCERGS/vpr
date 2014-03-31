@@ -8,11 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
  * TREVoter
  *
  * @ORM\Entity
- * @ORM\Table(
+ * @ORM\Table(name="tre_voter",
  *      indexes={
  *          @ORM\Index(name="index_trevoter_name", columns={"name"}),
  *          @ORM\Index(name="index_trevoter_cityCode", columns={"city_code"}),
- *          @ORM\Index(name="index_trevoter_zone", columns={"votingZone"}),
+ *          @ORM\Index(name="index_trevoter_zone", columns={"voting_zone"}),
  *      }
  * )
  */
@@ -52,14 +52,14 @@ class TREVoter
     /**
      * @var string
      *
-     * @ORM\Column(name="voterRegistration", type="string", length=12, unique=true)
+     * @ORM\Column(name="voter_registration", type="string", length=12, unique=true)
      */
     private $voterRegistration;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="votingZone", type="string", length=255)
+     * @ORM\Column(name="voting_zone", type="string", length=255)
      */
     private $votingZone;
 

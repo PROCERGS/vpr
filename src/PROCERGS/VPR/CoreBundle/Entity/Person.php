@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Person
  *
- * @ORM\Table()
+ * @ORM\Table(name="person")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  * @ORM\AttributeOverrides({
@@ -54,49 +54,49 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255)
      */
     protected $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Surname", type="string", length=255)
+     * @ORM\Column(name="surname", type="string", length=255)
      */
     protected $surname;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="voterRegistration", type="string", length=12, nullable=true, unique=true)
+     * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true, unique=true)
      */
     protected $voterRegistration;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="loginCidadaoId", type="string", length=255, nullable=true)
+     * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="loginCidadaoAccessToken", type="string", length=255, nullable=true)
+     * @ORM\Column(name="login_cidadao_access_token", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoAccessToken;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="loginCidadaoUsername", type="string", length=255, nullable=true)
+     * @ORM\Column(name="login_cidadao_username", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoUsername;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
@@ -109,7 +109,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="TREVoter")
-     * @ORM\JoinColumn(name="voterRegistration", referencedColumnName="voterRegistration", nullable=true)
+     * @ORM\JoinColumn(name="voterRegistration", referencedColumnName="voter_registration", nullable=true)
      * @Groups({"vote"})
      */
     protected $treEntry;

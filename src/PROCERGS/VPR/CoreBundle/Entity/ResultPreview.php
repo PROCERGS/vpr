@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ResultPreview
  *
- * @ORM\Table()
+ * @ORM\Table(name="result_preview")
  * @ORM\Entity
  */
 class ResultPreview
@@ -24,7 +24,7 @@ class ResultPreview
     /**
      * @var string
      *
-     * @ORM\Column(name="authType", type="string", length=255)
+     * @ORM\Column(name="auth_type", type="string", length=255)
      */
     private $authType;
 

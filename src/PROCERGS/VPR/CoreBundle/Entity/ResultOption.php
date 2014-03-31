@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ResultOption
  *
- * @ORM\Table()
+ * @ORM\Table(name="result_option")
  * @ORM\Entity
  */
 class ResultOption
@@ -24,21 +24,21 @@ class ResultOption
     /**
      * @var string
      *
-     * @ORM\Column(name="authType", type="string", length=255)
+     * @ORM\Column(name="auth_type", type="string", length=255)
      */
     private $authType;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="voterRegistration", type="string", length=12)
+     * @ORM\Column(name="voter_tegistration", type="string", length=12)
      */
     private $voterRegistration;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isNull", type="boolean")
+     * @ORM\Column(name="is_null", type="boolean")
      */
     private $isNull;
 

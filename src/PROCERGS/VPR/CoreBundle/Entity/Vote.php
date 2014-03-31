@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Vote
  *
- * @ORM\Table()
+ * @ORM\Table(name="vote")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
@@ -37,7 +37,7 @@ class Vote
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime")
      * @Groups({"vote"})
      */
     protected $createdAt;
@@ -61,7 +61,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="authType", type="string", length=255)
+     * @ORM\Column(name="auth_type", type="string", length=255)
      * @Groups({"vote"})
      */
     protected $authType;
@@ -69,7 +69,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="loginCidadaoId", type="string", length=255)
+     * @ORM\Column(name="login_cidadao_id", type="string", length=255)
      * @Groups({"vote"})
      */
     protected $loginCidadaoId;
@@ -77,7 +77,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="nfgCpf", type="string", length=255)
+     * @ORM\Column(name="nfg_cpf", type="string", length=255)
      * @Groups({"vote"})
      */
     protected $nfgCpf;
@@ -85,7 +85,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="voterRegistration", type="string", length=12)
+     * @ORM\Column(name="voter_registration", type="string", length=12)
      * @Groups({"vote"})
      */
     protected $voterRegistration;

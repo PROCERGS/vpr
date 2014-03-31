@@ -4,11 +4,12 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Poll
  *
- * @ORM\Table()
+ * @ORM\Table(name="poll")
  * @ORM\Entity
  */
 class Poll
@@ -35,7 +36,7 @@ class Poll
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="openingTime", type="datetime")
+     * @ORM\Column(name="opening_time", type="datetime")
      * @Groups({"vote"})
      */
     private $openingTime;
@@ -43,10 +44,10 @@ class Poll
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="closingTimime", type="datetime")
+     * @ORM\Column(name="closing_time", type="datetime")
      * @Groups({"vote"})
      */
-    private $closingTimime;
+    private $closingTime;
 
     /**
      * @var string
@@ -59,7 +60,7 @@ class Poll
     /**
      * @var string
      *
-     * @ORM\Column(name="publicKey", type="text")
+     * @ORM\Column(name="public_key", type="text")
      */
     private $publicKey;
 
@@ -140,9 +141,9 @@ class Poll
      * @param \DateTime $closingTimime
      * @return Poll
      */
-    public function setClosingTimime($closingTimime)
+    public function setClosingTime($var)
     {
-        $this->closingTimime = $closingTimime;
+        $this->closingTime = $var;
 
         return $this;
     }

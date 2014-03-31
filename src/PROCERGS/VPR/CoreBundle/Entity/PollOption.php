@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * PollOption
  *
- * @ORM\Table()
+ * @ORM\Table(name="poll_option")
  * @ORM\Entity
  */
 class PollOption
@@ -35,7 +35,7 @@ class PollOption
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      * @Groups({"vote"})
      */
     private $description;
@@ -43,7 +43,7 @@ class PollOption
     /**
      * @var string
      *
-     * @ORM\Column(name="scope", type="string", length=255)
+     * @ORM\Column(name="coverage", type="text", nullable=true)
      * @Groups({"vote"})
      */
     private $scope;
@@ -59,7 +59,7 @@ class PollOption
     /**
      * @var integer
      *
-     * @ORM\Column(name="categorySorting", type="integer")
+     * @ORM\Column(name="category_sorting", type="integer")
      * @Groups({"vote"})
      */
     private $categorySorting;

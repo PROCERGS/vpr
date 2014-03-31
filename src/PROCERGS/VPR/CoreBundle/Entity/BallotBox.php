@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * BallotBox
  *
- * @ORM\Table()
+ * @ORM\Table(name="ballot_box")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
@@ -43,14 +43,14 @@ class BallotBox
     /**
      * @var string
      *
-     * @ORM\Column(name="publicKey", type="text")
+     * @ORM\Column(name="public_key", type="text")
      */
     private $publicKey;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="privateKey", type="text")
+     * @ORM\Column(name="private_key", type="text")
      */
     private $privateKey;
 
@@ -81,7 +81,7 @@ class BallotBox
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="openingTime", type="datetime", nullable=true)
+     * @ORM\Column(name="opening_time", type="datetime", nullable=true)
      * @Groups({"vote"})
      */
     private $openingTime;
@@ -89,7 +89,7 @@ class BallotBox
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="closingTime", type="datetime", nullable=true)
+     * @ORM\Column(name="closing_time", type="datetime", nullable=true)
      * @Groups({"vote"})
      */
     private $closingTime;
@@ -97,14 +97,14 @@ class BallotBox
     /**
      * @var integer
      *
-     * @ORM\Column(name="totalInvalidVotes", type="integer")
+     * @ORM\Column(name="total_invalid_votes", type="integer")
      */
     private $totalInvalidVotes;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isOnline", type="boolean")
+     * @ORM\Column(name="is_online", type="boolean")
      * @Groups({"vote"})
      */
     private $isOnline;

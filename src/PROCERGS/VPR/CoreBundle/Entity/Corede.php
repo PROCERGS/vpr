@@ -8,7 +8,7 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Corede
  *
- * @ORM\Table()
+ * @ORM\Table(name="corede")
  * @ORM\Entity
  */
 class Corede

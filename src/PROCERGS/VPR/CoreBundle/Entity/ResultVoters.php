@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ResultVoters
  *
- * @ORM\Table()
+ * @ORM\Table(name="result_voters")
  * @ORM\Entity
  */
 class ResultVoters
@@ -31,7 +31,7 @@ class ResultVoters
     /**
      * @var string
      *
-     * @ORM\Column(name="authType", type="string", length=255)
+     * @ORM\Column(name="auth_type", type="string", length=255)
      */
     private $authType;
 

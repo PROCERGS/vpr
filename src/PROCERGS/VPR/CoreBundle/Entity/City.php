@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * City
  *
- * @ORM\Table()
+ * @ORM\Table(name="city")
  * @ORM\Entity
  */
 class City
@@ -25,21 +25,21 @@ class City
     /**
      * @var integer
      *
-     * @ORM\Column(name="treCode", type="integer")
+     * @ORM\Column(name="tre_code", type="integer")
      */
     private $treCode;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="ibgeCode", type="integer")
+     * @ORM\Column(name="ibge_code", type="integer")
      */
     private $ibgeCode;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="codSefa", type="integer")
+     * @ORM\Column(name="cod_sefa", type="integer")
      */
     private $codSefa;
 
@@ -53,7 +53,7 @@ class City
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isCapital", type="boolean")
+     * @ORM\Column(name="is_capital", type="boolean")
      */
     private $isCapital;
 
