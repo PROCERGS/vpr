@@ -75,7 +75,7 @@ class Poll
 
     public function __construct()
     {
-        $this->ballotBoxes = new ArrayCollection();
+        //$this->ballotBoxes = new ArrayCollection();
     }
 
     /**

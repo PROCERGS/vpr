@@ -1,0 +1,28 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {% stylesheets 'bundles/procergsvprcore/css/admin/*.css' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />    
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/*' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>
+            {{ contentName }} »
+            <small>{{ actionName }}</small>
+        </h1>
+    </div>
+
+    {% block content %}{% endblock %}
+{% endblock %}
