@@ -1,11 +1,13 @@
 parameters:
     user_provider.class: PROCERGS\VPR\CoreBundle\Security\FOSUBUserProvider
+    procergs_vpr.listener.authentication.class: PROCERGS\VPR\CoreBundle\EventListener\AuthenticationListener
+
 #    procergsvpr_core.example.class: PROCERGS\VPR\CoreBundle\Example
 
 services:
     user_provider:
         class: "%user_provider.class%"
-        arguments: [ @fos_user.user_manager, { loginCidadao: loginCidadaoId } ]
+        arguments: [ "@fos_user.user_manager", { loginCidadao: loginCidadaoId } ]
 #    procergsvpr_core.example:
 #        class: %procergsvpr_core.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
@@ -15,3 +17,13 @@ services:
         arguments: [ PROCERGS\VPR\CoreBundle\Entity\Person ]
         tags:
             - { name: form.type, alias: vpr_person_registration }
+
+    procergs_vpr.listener.authentication:
+        class: %procergs_vpr.listener.authentication.class%
+        arguments: [ "@fos_user.security.login_manager", %fos_user.firewall_name% ]
+        #parent: fos_user.listener.authentication        
+        #abstract: true
+        calls:
+            - [setContainer, ["@service_container"]]        
+        tags:
+            - { name: kernel.event_subscriber }
