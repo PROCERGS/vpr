@@ -13,3 +13,7 @@
   margin: 30px 0px;
   font-style: italic;
 }
+
+.has-feedback .sr-only ~ .form-control-feedback {
+  top: 0;
+}
