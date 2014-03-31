@@ -109,7 +109,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="TREVoter")
-     * @ORM\JoinColumn(name="voterRegistration", referencedColumnName="voter_registration", nullable=true)
+     * @ORM\JoinColumn(name="voter_registration", referencedColumnName="voter_registration", nullable=true)
      * @Groups({"vote"})
      */
     protected $treEntry;
