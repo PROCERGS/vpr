@@ -6,6 +6,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * Person
@@ -19,7 +20,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
  *              name     = "email",
  *              type     = "string",
  *              length   = 255,
- *              nullable = true                                             
+ *              nullable = true
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="emailCanonical",
@@ -35,7 +36,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
  *          column=@ORM\Column(
  *              nullable = true
  *          )
- *      )      
+ *      )
  * })
  */
 class Person extends BaseUser implements OAuthAwareUserProviderInterface
@@ -98,6 +99,20 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      * @ORM\Column(name="createdAt", type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $city;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TREVoter")
+     * @ORM\JoinColumn(name="voterRegistration", referencedColumnName="voterRegistration", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $treEntry;
 
     /**
      * Get id
@@ -283,6 +298,30 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         if (!($this->getCreatedAt() instanceof \DateTime)) {
             $this->createdAt = new \DateTime();
         }
+    }
+
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    public function setCity(City $city)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getTREEntry()
+    {
+        return $this->treEntry;
+    }
+
+    public function setTREEntry(TREVoter $treEntry)
+    {
+        $this->treEntry = $treEntry;
+
+        return $this;
     }
 
 }
