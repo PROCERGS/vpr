@@ -2,10 +2,15 @@ procergsvpr_core_homepage:
     pattern:  /
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:index }
 
-vpr_demo:
-    prefix:   /
-    resource: "@PROCERGSVPRCoreBundle/Controller"
+vpr_person:
+    prefix:   /person
+    resource: "@PROCERGSVPRCoreBundle/Controller/PersonController.php"
     type:     annotation
+
+vpr_admin:
+    resource: "@PROCERGSVPRCoreBundle/Controller/PollController.php"
+    type:     annotation
+    prefix:   /admin/poll
 
 procergsvpr_core_municipio:
     pattern:  /municipio

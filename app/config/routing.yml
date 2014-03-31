@@ -7,11 +7,6 @@ vpr_demo:
     resource: "@PROCERGSVPRCoreBundle/Controller/DemoController.php"
     type:     annotation
 
-vpr_admin:
-    resource: "@PROCERGSVPRCoreBundle/Controller/"
-    type:     annotation
-    prefix:   /admin
-
 login_cidadao_login:
     pattern: /login/check-cidadao
 

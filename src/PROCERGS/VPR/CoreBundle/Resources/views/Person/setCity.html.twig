@@ -8,13 +8,13 @@
             Para que seu voto seja válido, infome o município ao qual está vinculado
             seu título de eleitor. Isso é: onde você vota?
         </p>
-        <form role="form">
+        {{ form_start(form) }}<!--form role="form" -->
             <div class="form-group">
                 <label for="exampleInputPassword1">Município</label>
                 <input type="text" class="form-control" placeholder="Porto Alegre">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}
