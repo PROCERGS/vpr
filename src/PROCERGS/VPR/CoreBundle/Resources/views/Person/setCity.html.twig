@@ -2,18 +2,33 @@
 
 {% block body %}
 <div class="row">
-    <div class="col-md-12">
-        <h3>Selecione seu domicílio eleitorar</h3>
-        <p>
-            Para que seu voto seja válido, infome o município ao qual está vinculado
-            seu título de eleitor. Isso é: onde você vota?
-        </p>
-        {{ form_start(form) }}<!--form role="form" -->
-            <div class="form-group">
-                <label for="exampleInputPassword1">Município</label>
-                <input type="text" class="form-control" placeholder="Porto Alegre">
+    <div class="col-xs-12">
+        <h1>{% trans %}What's your voting city?{% endtrans %}</h1>
+
+        {{ form_start(form, { 'action': path('vpr_city_selection'), 'attr': { 'role': 'form' } }) }}
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <p>{% trans %}You need to type the city where you vote so that we can show you the relevant options for you.{% endtrans %}</p>
+                    <p>{% trans %}Please be aware that informing the wrong city will cause your vote to be discarted.{% endtrans %}</p>
+                    <div class="form-group">
+                        {{ form_label(form.city.name, 'City' | trans) }}
+                        {{ form_widget(form.city.name, { 'attr': { 'class': 'form-control' } } ) }}
+                        {{ form_errors(form.city.name) }}
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <p>{% trans %}Alternatively you can type your voter registration, without the need to type your city.{% endtrans %}</p>
+                    <div class="form-group">
+                        {{ form_label(form.voterRegistration, 'Voter Registration' | trans) }}
+                        {{ form_widget(form.voterRegistration, { 'attr': { 'placeholder': 'Voter Registration' | trans, 'class': 'form-control' } } ) }}
+                        {{ form_errors(form.voterRegistration) }}
+                    </div>
+                </div>
+
+                <div class="col-xs-12 text-center">
+                    {{ form_widget(form.submit, { 'attr': { 'class': 'btn btn-lg btn-primary' }, 'label': 'Continue' | trans}) }}
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
         {{ form_end(form) }}
     </div>
 </div>

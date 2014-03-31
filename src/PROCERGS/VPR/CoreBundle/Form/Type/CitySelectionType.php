@@ -12,11 +12,12 @@ class CitySelectionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('city', new CityType())
+                ->add('city', new CityType(), array('required' => false))
                 ->add('voterRegistration', 'number', array(
                     'constraints' => new Length(array('max' => 12)),
+                    'required' => false
                 ))
-                ->add('select', 'submit');
+                ->add('submit', 'submit');
     }
 
     public function getName()
