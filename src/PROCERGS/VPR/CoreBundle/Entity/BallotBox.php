@@ -57,7 +57,7 @@ class BallotBox
     /**
      * @var string
      *
-     * @ORM\Column(name="address", type="string", length=255)
+     * @ORM\Column(name="address", type="string", length=255, nullable=true)
      * @Groups({"vote"})
      */
     private $address;
@@ -436,6 +436,25 @@ class BallotBox
         return $this->poll;
     }
 
+    /**
+     * @param \PROCERGS\VPR\CoreBundle\Entity\City $city
+     * @return \PROCERGS\VPR\CoreBundle\Entity\City
+     */
+    public function setCity(\PROCERGS\VPR\CoreBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return \PROCERGS\VPR\CoreBundle\Entity\City
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }    
+    
     public function sign($serializedOptions)
     {
         $encryptedPrivate = $this->getPrivateKey();

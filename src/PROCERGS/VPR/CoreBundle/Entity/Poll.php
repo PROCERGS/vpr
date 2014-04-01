@@ -153,9 +153,9 @@ class Poll
      *
      * @return \DateTime
      */
-    public function getClosingTimime()
+    public function getClosingTime()
     {
-        return $this->closingTimime;
+        return $this->closingTime;
     }
 
     /**

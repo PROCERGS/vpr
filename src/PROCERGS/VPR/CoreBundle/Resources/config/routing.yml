@@ -7,10 +7,15 @@ vpr_person:
     resource: "@PROCERGSVPRCoreBundle/Controller/PersonController.php"
     type:     annotation
 
-vpr_admin:
+vpr_admin_poll:
     resource: "@PROCERGSVPRCoreBundle/Controller/PollController.php"
     type:     annotation
     prefix:   /admin/poll
+
+vpr_admin_ballotbox:
+    resource: "@PROCERGSVPRCoreBundle/Controller/BallotboxController.php"
+    type:     annotation
+    prefix:   /admin/ballotbox
 
 procergsvpr_core_municipio:
     pattern:  /municipio

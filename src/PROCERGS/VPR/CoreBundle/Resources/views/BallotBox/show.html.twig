@@ -1,0 +1,72 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>BallotBox</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Secret</th>
+                <td>{{ entity.secret }}</td>
+            </tr>
+            <tr>
+                <th>Publickey</th>
+                <td>{{ entity.publicKey }}</td>
+            </tr>
+            <tr>
+                <th>Privatekey</th>
+                <td>{{ entity.privateKey }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ entity.address }}</td>
+            </tr>
+            <tr>
+                <th>Latitude</th>
+                <td>{{ entity.latitude }}</td>
+            </tr>
+            <tr>
+                <th>Longitude</th>
+                <td>{{ entity.longitude }}</td>
+            </tr>
+            <tr>
+                <th>Openingtime</th>
+                <td>{{ entity.openingTime|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Closingtime</th>
+                <td>{{ entity.closingTime|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Totalinvalidvotes</th>
+                <td>{{ entity.totalInvalidVotes }}</td>
+            </tr>
+            <tr>
+                <th>Isonline</th>
+                <td>{{ entity.isOnline }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('ballotbox') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('ballotbox_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

@@ -7,21 +7,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use PROCERGS\VPR\CoreBundle\Entity\Poll;
-use PROCERGS\VPR\CoreBundle\Form\Type\PollType;
+use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
+use PROCERGS\VPR\CoreBundle\Form\Type\BallotBoxType;
 
 /**
- * Poll controller.
+ * BallotBox controller.
  *
  * @Route("/")
  */
-class PollController extends Controller
+class BallotBoxController extends Controller
 {
 
     /**
-     * Lists all Poll entities.
+     * Lists all BallotBox entities.
      *
-     * @Route("/", name="poll")
+     * @Route("/", name="ballotbox")
      * @Method("GET")
      * @Template()
      */
@@ -29,22 +29,22 @@ class PollController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findAll();
+        $entities = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findAll();
 
         return array(
             'entities' => $entities,
         );
     }
     /**
-     * Creates a new Poll entity.
+     * Creates a new BallotBox entity.
      *
-     * @Route("/", name="poll_create")
+     * @Route("/", name="ballotbox_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:Poll:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:BallotBox:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity = new Poll();
+        $entity = new BallotBox();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -52,9 +52,8 @@ class PollController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            
-            $this->get('session')->getFlashBag()->add('success', 'Registro adicionado com sucesso!');
-            return $this->redirect($this->generateUrl('poll_show', array('id' => $entity->getId())));
+
+            return $this->redirect($this->generateUrl('ballotbox_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -64,16 +63,16 @@ class PollController extends Controller
     }
 
     /**
-    * Creates a form to create a Poll entity.
+    * Creates a form to create a BallotBox entity.
     *
-    * @param Poll $entity The entity
+    * @param BallotBox $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createCreateForm(Poll $entity)
+    private function createCreateForm(BallotBox $entity)
     {
-        $form = $this->createForm(new PollType(), $entity, array(
-            'action' => $this->generateUrl('poll_create'),
+        $form = $this->createForm(new BallotBoxType(), $entity, array(
+            'action' => $this->generateUrl('ballotbox_create'),
             'method' => 'POST',
         ));
 
@@ -83,15 +82,15 @@ class PollController extends Controller
     }
 
     /**
-     * Displays a form to create a new Poll entity.
+     * Displays a form to create a new BallotBox entity.
      *
-     * @Route("/new", name="poll_new")
+     * @Route("/new", name="ballotbox_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new Poll();
+        $entity = new BallotBox();
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -101,9 +100,9 @@ class PollController extends Controller
     }
 
     /**
-     * Finds and displays a Poll entity.
+     * Finds and displays a BallotBox entity.
      *
-     * @Route("/{id}", name="poll_show")
+     * @Route("/{id}", name="ballotbox_show")
      * @Method("GET")
      * @Template()
      */
@@ -111,10 +110,10 @@ class PollController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+        $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Poll entity.');
+            throw $this->createNotFoundException('Unable to find BallotBox entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -126,9 +125,9 @@ class PollController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Poll entity.
+     * Displays a form to edit an existing BallotBox entity.
      *
-     * @Route("/{id}/edit", name="poll_edit")
+     * @Route("/{id}/edit", name="ballotbox_edit")
      * @Method("GET")
      * @Template()
      */
@@ -136,10 +135,10 @@ class PollController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+        $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Poll entity.');
+            throw $this->createNotFoundException('Unable to find BallotBox entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -153,16 +152,16 @@ class PollController extends Controller
     }
 
     /**
-    * Creates a form to edit a Poll entity.
+    * Creates a form to edit a BallotBox entity.
     *
-    * @param Poll $entity The entity
+    * @param BallotBox $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Poll $entity)
+    private function createEditForm(BallotBox $entity)
     {
-        $form = $this->createForm(new PollType(), $entity, array(
-            'action' => $this->generateUrl('poll_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new BallotBoxType(), $entity, array(
+            'action' => $this->generateUrl('ballotbox_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -171,20 +170,20 @@ class PollController extends Controller
         return $form;
     }
     /**
-     * Edits an existing Poll entity.
+     * Edits an existing BallotBox entity.
      *
-     * @Route("/{id}", name="poll_update")
+     * @Route("/{id}", name="ballotbox_update")
      * @Method("PUT")
-     * @Template("PROCERGSVPRCoreBundle:Poll:edit.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:BallotBox:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+        $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Poll entity.');
+            throw $this->createNotFoundException('Unable to find BallotBox entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -194,9 +193,7 @@ class PollController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Registro alterado com sucesso!');
-            
-            return $this->redirect($this->generateUrl('poll_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('ballotbox_edit', array('id' => $id)));
         }
 
         return array(
@@ -206,9 +203,9 @@ class PollController extends Controller
         );
     }
     /**
-     * Deletes a Poll entity.
+     * Deletes a BallotBox entity.
      *
-     * @Route("/{id}", name="poll_delete")
+     * @Route("/{id}", name="ballotbox_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -218,23 +215,21 @@ class PollController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+            $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Poll entity.');
+                throw $this->createNotFoundException('Unable to find BallotBox entity.');
             }
 
             $em->remove($entity);
             $em->flush();
-            
-            $this->get('session')->getFlashBag()->add('success', 'Registro removido com sucesso!');
         }
 
-        return $this->redirect($this->generateUrl('poll'));
+        return $this->redirect($this->generateUrl('ballotbox'));
     }
 
     /**
-     * Creates a form to delete a Poll entity by id.
+     * Creates a form to delete a BallotBox entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -243,7 +238,7 @@ class PollController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('poll_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('ballotbox_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

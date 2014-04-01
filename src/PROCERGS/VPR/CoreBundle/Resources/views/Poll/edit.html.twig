@@ -7,12 +7,22 @@
         <a class="btn btn-default" href="{{ path('poll') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
     </div>
 
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     {{ form_start(edit_form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
         {{ form_errors(edit_form) }}
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
+                {{ form_errors(edit_form.name) }}
                 {{ form_widget(edit_form.name, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
@@ -20,6 +30,7 @@
         <div class="form-inline form-group">
             <label class="col-sm-2 control-label">Data abertura</label>
             <div class="col-sm-10">
+                {{ form_errors(edit_form.openingTime) }}
                 {{ form_widget(edit_form.openingTime, {'attr': {'class': ''}}) }}
             </div>
         </div>
@@ -27,13 +38,15 @@
         <div class="form-inline form-group">
             <label class="col-sm-2 control-label">Data fechamento</label>
             <div class="col-sm-10">
-                {{ form_widget(edit_form.closingTimime, {'attr': {'class': ''}}) }}
+                {{ form_errors(edit_form.closingTime) }}
+                {{ form_widget(edit_form.closingTime, {'attr': {'class': ''}}) }}
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Descrição</label>
             <div class="col-sm-10">
+                {{ form_errors(edit_form.description) }}
                 {{ form_widget(edit_form.description, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
@@ -41,6 +54,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">Chave publica</label>
             <div class="col-sm-7">
+                {{ form_errors(edit_form.publicKey) }}
                 {{ form_widget(edit_form.publicKey, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>

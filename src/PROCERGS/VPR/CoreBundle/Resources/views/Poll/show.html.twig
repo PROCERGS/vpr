@@ -6,7 +6,16 @@
     <div class="navbar">
         <a class="btn btn-default" href="{{ path('poll') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
     </div>
-        
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <form class="form-horizontal" role="form">
         <div class="form-group">
             <label class="col-sm-2 control-label">Id</label>
@@ -32,7 +41,7 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">Data fechamento</label>
             <div class="col-sm-10">
-                <p class="form-control-static">{{ entity.closingTimime|date('d/m/Y H:i:s') }}</p>
+                <p class="form-control-static">{{ entity.closingTime|date('d/m/Y H:i:s') }}</p>
             </div>
         </div>
 
