@@ -1,4 +1,7 @@
-{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %} {% block body %} {% trans_default_domain 'messages' %}
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+{% trans_default_domain 'messages' %}
 <h2 id="try-header">{{ 'register.title' | trans }}</h2>
 <div class="row">
     <div class="col-md-6">
@@ -32,15 +35,17 @@
         </div>
     </div>
 </div>
-{% endblock %} {% block javascripts %} {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
 <script type="text/javascript">
 var usernameId = '#{{ form.username.vars.id }}';
 var messages = {
 	    '0' : "{{ 'form.username.invalid' | trans }}"
 };
-
-
 </script>
+
 <script type="text/javascript">
 $(function () {
 			$(usernameId).on('blur', function () {
@@ -56,7 +61,6 @@ $(function () {
 
 				});
 		});
-
-
 </script>
+
 {% endblock %}
