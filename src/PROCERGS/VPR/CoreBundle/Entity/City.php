@@ -18,16 +18,8 @@ class City
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="tre_code", type="integer")
-     */
-    private $treCode;
 
     /**
      * @var integer

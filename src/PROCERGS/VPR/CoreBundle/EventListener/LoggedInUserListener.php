@@ -35,6 +35,10 @@ class LoggedInUserListener
         if (is_null($this->context->getToken())) {
             return;
         }
+        if (!is_null($this->session->get('city_id'))) {
+            // City already chosen
+            return;
+        }
 
         $_route = $event->getRequest()->attributes->get('_route');
         if ($this->context->isGranted('IS_AUTHENTICATED_FULLY') && $_route !== 'vpr_city_selection') {

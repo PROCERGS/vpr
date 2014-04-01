@@ -22,9 +22,27 @@ class PersonController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $data = $form->getData();
-            print_r($data);
-            die();
+            $person = $this->getUser();
+
+            if (array_key_exists('voterRegistration', $data)) {
+                $voterRegistration = $data['voterRegistration'];
+                $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
+                $voter = $treRepo->findOneBy(compact('voterRegistration'));
+                $city = $voter->getCity();
+            } else {
+                $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+                $city = $cityRepo->findOneBy(array('name' => $data['city']['name']));
+            }
+
+            $person->setCity($city);
+            $this->get('session')->set('city_id', $city->getId());
+            $userManager = $this->get('fos_user.user_manager');
+            $userManager->updateUser($person);
+
+            $url = $this->generateUrl('procergsvpr_core_cedula');
+            return $this->redirect($url);
         }
         return array('form' => $form->createView());
     }

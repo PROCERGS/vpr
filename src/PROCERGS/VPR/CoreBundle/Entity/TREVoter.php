@@ -36,9 +36,9 @@ class TREVoter
     /**
      * @var string
      *
-     * @ORM\Column(name="city", type="string", length=255)
+     * @ORM\Column(name="city_name", type="string", length=255)
      */
-    private $city;
+    private $cityName;
 
     /**
      * @var integer
@@ -61,6 +61,12 @@ class TREVoter
      * @ORM\Column(name="voting_zone", type="string", length=255)
      */
     private $votingZone;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="city_code", referencedColumnName="id", nullable=true)
+     */
+    protected $city;
 
     /**
      * Get id
@@ -96,26 +102,26 @@ class TREVoter
     }
 
     /**
-     * Set city
+     * Set cityName
      *
-     * @param string $city
+     * @param string $cityName
      * @return TREVoter
      */
-    public function setCity($city)
+    public function setCityName($cityName)
     {
-        $this->city = $city;
+        $this->cityName = $cityName;
 
         return $this;
     }
 
     /**
-     * Get city
+     * Get cityName
      *
      * @return string
      */
-    public function getCity()
+    public function getCityName()
     {
-        return $this->city;
+        return $this->cityName;
     }
 
     /**
@@ -132,7 +138,7 @@ class TREVoter
     }
 
     /**
-     * Get city
+     * Get cityCode
      *
      * @return string
      */
@@ -187,4 +193,12 @@ class TREVoter
         return $this->votingZone;
     }
 
+    /**
+     *
+     * @return City
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
 }
