@@ -52,7 +52,8 @@ class BallotBoxController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-
+            
+            $this->get('session')->getFlashBag()->add('success', 'Registro adicionado com sucesso!');
             return $this->redirect($this->generateUrl('ballotbox_show', array('id' => $entity->getId())));
         }
 
@@ -193,7 +194,8 @@ class BallotBoxController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('ballotbox_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add('success', 'Registro alterado com sucesso!');
+            return $this->redirect($this->generateUrl('ballotbox_show', array('id' => $id)));
         }
 
         return array(
@@ -223,6 +225,8 @@ class BallotBoxController extends Controller
 
             $em->remove($entity);
             $em->flush();
+            
+            $this->get('session')->getFlashBag()->add('success', 'Registro removido com sucesso!');
         }
 
         return $this->redirect($this->generateUrl('ballotbox'));

@@ -196,7 +196,7 @@ class PollController extends Controller
 
             $this->get('session')->getFlashBag()->add('success', 'Registro alterado com sucesso!');
             
-            return $this->redirect($this->generateUrl('poll_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('poll_show', array('id' => $id)));
         }
 
         return array(

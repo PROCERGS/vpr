@@ -1,16 +1,133 @@
-{% extends '::base.html.twig' %}
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'Urna' %}
+{% set actionName = 'Editar' %}
 
-{% block body -%}
-    <h1>BallotBox edit</h1>
+{% block content -%}
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('ballotbox') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
+    </div>
 
-    {{ form(edit_form) }}
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('ballotbox') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {{ form_start(edit_form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
+        {{ form_errors(edit_form) }}
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.name) }}
+                {{ form_widget(edit_form.name, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Eleição</label>
+            <div class="col-sm-5">
+                {{ form_errors(edit_form.poll) }}
+                {{ form_widget(edit_form.poll, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>        
+
+        <div class="form-inline form-group">
+            <label class="col-sm-2 control-label">Data abertura</label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.openingTime) }}
+                {{ form_widget(edit_form.openingTime, {'attr': {'class': ''}}) }}
+            </div>
+        </div>
+
+        <div class="form-inline form-group">
+            <label class="col-sm-2 control-label">Data fechamento</label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.closingTime) }}
+                {{ form_widget(edit_form.closingTime, {'attr': {'class': ''}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Secret</label>
+            <div class="col-sm-7">
+                {{ form_errors(edit_form.secret) }}
+                {{ form_widget(edit_form.secret, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Chave privada</label>
+            <div class="col-sm-7">
+                {{ form_errors(edit_form.privateKey) }}
+                {{ form_widget(edit_form.privateKey, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+    
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Chave publica</label>
+            <div class="col-sm-7">
+                {{ form_errors(edit_form.publicKey) }}
+                {{ form_widget(edit_form.publicKey, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Cidade</label>
+            <div class="col-sm-5">
+                {{ form_errors(edit_form.city) }}
+                {{ form_widget(edit_form.city, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>      
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Endereço</label>
+            <div class="col-sm-10">
+                {{ form_errors(edit_form.address) }}
+                {{ form_widget(edit_form.address, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Latitude</label>
+            <div class="col-sm-4">
+                {{ form_errors(edit_form.latitude) }}
+                {{ form_widget(edit_form.latitude, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>    
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Longitude</label>
+            <div class="col-sm-4">
+                {{ form_errors(edit_form.longitude) }}
+                {{ form_widget(edit_form.longitude, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>    
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        {{ form_errors(edit_form.isOnline) }}
+                        {{ form_widget(edit_form.isOnline) }} Urna online
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group form-actions">
+            <div class="col-lg-10 col-lg-offset-2">
+                {{ form_widget(edit_form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'Salvar'}) }}
+
+    {{ form_end(edit_form) }}
+
+                {{ form_start(delete_form) }}
+                {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'Remover'}) }}
+                {{ form_end(delete_form) }}
+            </div>
+        </div>
 {% endblock %}

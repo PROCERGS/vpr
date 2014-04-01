@@ -1,72 +1,128 @@
-{% extends '::base.html.twig' %}
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'Urna' %}
+{% set actionName = 'Visualizar' %}
 
-{% block body -%}
-    <h1>BallotBox</h1>
+{% block content -%}
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('ballotbox') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
+    </div>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ entity.name }}</td>
-            </tr>
-            <tr>
-                <th>Secret</th>
-                <td>{{ entity.secret }}</td>
-            </tr>
-            <tr>
-                <th>Publickey</th>
-                <td>{{ entity.publicKey }}</td>
-            </tr>
-            <tr>
-                <th>Privatekey</th>
-                <td>{{ entity.privateKey }}</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>{{ entity.address }}</td>
-            </tr>
-            <tr>
-                <th>Latitude</th>
-                <td>{{ entity.latitude }}</td>
-            </tr>
-            <tr>
-                <th>Longitude</th>
-                <td>{{ entity.longitude }}</td>
-            </tr>
-            <tr>
-                <th>Openingtime</th>
-                <td>{{ entity.openingTime|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Closingtime</th>
-                <td>{{ entity.closingTime|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Totalinvalidvotes</th>
-                <td>{{ entity.totalInvalidVotes }}</td>
-            </tr>
-            <tr>
-                <th>Isonline</th>
-                <td>{{ entity.isOnline }}</td>
-            </tr>
-        </tbody>
-    </table>
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('ballotbox') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('ballotbox_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Id</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.id }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Nome</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.name }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Eleição</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{% if(entity.poll) %}{{ entity.poll.name }}{% endif %}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Data abertura</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.openingTime|date('d/m/Y H:i:s') }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Data fechamento</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.closingTime|date('d/m/Y H:i:s') }}</p>
+            </div>
+        </div>            
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Secret</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.secret }}</p>
+            </div>
+        </div>            
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Chave privada</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.privateKey }}</p>
+            </div>
+        </div>            
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Chave pública</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.publicKey }}</p>
+            </div>
+        </div>            
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Cidade</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{% if(entity.city) %}{{ entity.city.name }}{% endif %}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Endereço</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.address }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Latitude</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.latitude }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Longitude</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.longitude }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Total de votos inválidos</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.totalInvalidVotes }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Urna online?</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{% if(entity.isOnline) %}Sim{% else %}Não{% endif %}</p>
+            </div>
+        </div>
+    </form>
+
+    <div class="form-group form-actions">
+        <div class="col-lg-10 col-lg-offset-2">            
+            <a href="{{ path('ballotbox_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">Editar</a>
+
+            {{ form_start(delete_form) }}
+            {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'Remover'}) }}
+            {{ form_end(delete_form) }}
+        </div>
+    </div>
 {% endblock %}
