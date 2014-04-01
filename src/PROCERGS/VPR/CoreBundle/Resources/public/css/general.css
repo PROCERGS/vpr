@@ -1,4 +1,6 @@
 @CHARSET "UTF-8";
+
+/* genral */
 #jumbo {
   background-color: #333;
   color: #eee;
@@ -14,6 +16,39 @@
   font-style: italic;
 }
 
+
+/* fix boostrap form feedback */
 .has-feedback .sr-only ~ .form-control-feedback {
   top: 0;
+}
+
+/* general */
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+}
+
+body > .container {
+  min-height: 58%;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+header,
+footer{
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03732e', endColorstr='#003302',GradientType=0 ); /* IE6-9 */
+  background-image: linear-gradient(to bottom, #03732e, #003302);
+}
+
+header {
+  height: 240px;
+}
+
+footer {
+  height: 45px;
+  margin-top: 5px;
 }
