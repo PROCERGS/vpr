@@ -20,11 +20,14 @@
 .form-actions {
     background: none repeat scroll 0 0 #F9F9F9;
     border-top: 1px solid #DDDDDD;
-    margin-top: 30px;
+    margin-top: 45px;
     padding: 11px 0;
     min-height:52px;
 }
 .form-actions div a:first-child, .form-actions div button:first-child {
     float: left;
     margin-right: 10px;
+}
+.page-header {
+    margin: 20px 0;
 }

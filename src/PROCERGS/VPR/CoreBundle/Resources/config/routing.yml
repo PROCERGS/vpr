@@ -17,6 +17,11 @@ vpr_admin_ballotbox:
     type:     annotation
     prefix:   /admin/ballotbox
 
+vpr_admin_step:
+    resource: "@PROCERGSVPRCoreBundle/Controller/StepController.php"
+    type:     annotation
+    prefix:   /admin/step
+
 procergsvpr_core_municipio:
     pattern:  /municipio
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:municipio }

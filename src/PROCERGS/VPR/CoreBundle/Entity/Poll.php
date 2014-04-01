@@ -73,7 +73,7 @@ class Poll
      * @ORM\OneToMany(targetEntity="Step", mappedBy="poll")
      */
     protected $steps;
-
+    
     public function __construct()
     {
         //$this->ballotBoxes = new ArrayCollection();
@@ -209,4 +209,8 @@ class Poll
         return $this->ballotBoxes;
     }
 
+    public function getSteps()
+    {
+        return $this->steps;
+    }     
 }

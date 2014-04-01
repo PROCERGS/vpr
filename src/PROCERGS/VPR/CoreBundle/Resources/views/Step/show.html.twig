@@ -1,0 +1,65 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'Etapas' %}
+{% set actionName = 'Visualizar' %}
+
+{% block content -%}
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('step') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
+    </div>
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <form class="form-horizontal" role="form">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Id</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.id }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Nome</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.name }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Eleição</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{% if(entity.poll) %}{{ entity.poll.name }}{% endif %}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Ordem</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.sorting }}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Qtde de seleção</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.maxSelection }}</p>
+            </div>
+        </div>
+    </form>
+
+    <div class="form-group form-actions">
+        <div class="col-lg-10 col-lg-offset-2">
+            <a href="{{ path('step_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">Editar</a>
+
+            {{ form_start(delete_form) }}
+            {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'Remover'}) }}
+            {{ form_end(delete_form) }}
+        </div>
+    </div>
+{% endblock %}

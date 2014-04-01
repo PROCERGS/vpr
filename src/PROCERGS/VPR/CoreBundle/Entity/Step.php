@@ -137,4 +137,23 @@ class Step
     {
         return $this->maxSelection;
     }
+    
+    /**
+     * @param \PROCERGS\VPR\CoreBundle\Entity\Poll $poll
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Poll
+     */
+    public function setPoll(Poll $poll)
+    {
+        $this->poll = $poll;
+
+        return $this;
+    }
+
+    /**
+     * @return Poll
+     */
+    public function getPoll()
+    {
+        return $this->poll;
+    }    
 }
