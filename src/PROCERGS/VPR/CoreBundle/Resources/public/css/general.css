@@ -27,11 +27,12 @@ html,
 body {
   height: 100%;
   min-height: 100%;
+  margin-bottom: -337px;
   position: relative;
 }
 
 body > .container {
-  min-height: 58%;
+  min-height: 100%;
 }
 
 .navbar {
@@ -50,5 +51,4 @@ header {
 
 footer {
   height: 45px;
-  margin-top: 5px;
 }
