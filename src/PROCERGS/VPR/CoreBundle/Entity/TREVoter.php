@@ -23,8 +23,6 @@ class TREVoter
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -52,6 +50,7 @@ class TREVoter
     /**
      * @var string
      *
+     * @ORM\Id
      * @ORM\Column(name="voter_registration", type="string", length=12, unique=true)
      */
     private $voterRegistration;
