@@ -3,11 +3,12 @@
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormError;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Form\Type\CitySelectionType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormError;
+use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 
 class PersonController extends Controller
 {
@@ -31,7 +32,7 @@ class PersonController extends Controller
                 $voterRegistration = $data['voterRegistration'];
                 $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
                 $voter = $treRepo->findOneBy(array('id' => $voterRegistration));
-                if (!$voter) {
+                if (!($voter instanceof TREVoter)) {
                     $form->addError(new FormError('not found voterRegistration'));
                     return array('form' => $form->createView());
                 }
