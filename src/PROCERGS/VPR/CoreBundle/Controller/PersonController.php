@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Form\Type\CitySelectionType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormError;
 
 class PersonController extends Controller
 {
@@ -29,13 +30,21 @@ class PersonController extends Controller
             if (array_key_exists('voterRegistration', $data)) {
                 $voterRegistration = $data['voterRegistration'];
                 $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
-                $voter = $treRepo->findOneBy(compact('voterRegistration'));
+                $voter = $treRepo->findOneBy(array('id' => $voterRegistration));
+                if (!$voter) {
+                    $form->addError(new FormError('not found voterRegistration'));
+                    return array('form' => $form->createView());
+                }
+                $person->setTreVoter($voter);
                 $city = $voter->getCity();
             } else {
                 $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
                 $city = $cityRepo->findOneBy(array('name' => $data['city']['name']));
+                if (!$city) {
+                    $form->addError(new FormError('not found city'));
+                    return array('form' => $form->createView());
+                }
             }
-
             $person->setCity($city);
             $this->get('session')->set('city_id', $city->getId());
             $userManager = $this->get('fos_user.user_manager');

@@ -10,8 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="tre_voter",
  *      indexes={
- *          @ORM\Index(name="index_trevoter_name", columns={"name"}),
- *          @ORM\Index(name="index_trevoter_cityCode", columns={"city_code"}),
+ *          @ORM\Index(name="index_trevoter_name", columns={"name"}),          
  *          @ORM\Index(name="index_trevoter_zone", columns={"voting_zone"}),
  *      }
  * )
@@ -20,9 +19,9 @@ class TREVoter
 {
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
+     * @var integer     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="string", length=12)
      */
     private $id;
 
@@ -41,21 +40,6 @@ class TREVoter
     private $cityName;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="city_code", type="integer")
-     */
-    private $cityCode;
-
-    /**
-     * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(name="voter_registration", type="string", length=12, unique=true)
-     */
-    private $voterRegistration;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="voting_zone", type="string", length=255)
@@ -64,7 +48,7 @@ class TREVoter
 
     /**
      * @ORM\ManyToOne(targetEntity="City")
-     * @ORM\JoinColumn(name="city_code", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
      */
     protected $city;
 
@@ -147,28 +131,6 @@ class TREVoter
         return $this->cityCode;
     }
 
-    /**
-     * Set voterRegistration
-     *
-     * @param string $voterRegistration
-     * @return TREVoter
-     */
-    public function setVoterRegistration($voterRegistration)
-    {
-        $this->voterRegistration = $voterRegistration;
-
-        return $this;
-    }
-
-    /**
-     * Get voterRegistration
-     *
-     * @return string
-     */
-    public function getVoterRegistration()
-    {
-        return $this->voterRegistration;
-    }
 
     /**
      * Set votingZone

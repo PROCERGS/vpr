@@ -43,7 +43,7 @@ class LoggedInUserListener
         $_route = $event->getRequest()->attributes->get('_route');
         if ($this->context->isGranted('IS_AUTHENTICATED_FULLY') && $_route !== 'vpr_city_selection') {
             $person = $this->context->getToken()->getUser();
-            $treEntry = $person->getTREEntry();
+            $treEntry = $person->getTreVoter();
             if (!($treEntry instanceof TREVoter)) {
                 // Always sends users to select/confirm their voting city.
                 // This avoids taking for granted that the user's city is correct

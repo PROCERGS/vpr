@@ -13,7 +13,7 @@ class CitySelectionType extends AbstractType
     {
         $builder
                 ->add('city', new CityType(), array('required' => false))
-                ->add('voterRegistration', 'number', array(
+                ->add('voterRegistration', 'text', array(
                     'constraints' => new Length(array('max' => 12)),
                     'required' => false
                 ))

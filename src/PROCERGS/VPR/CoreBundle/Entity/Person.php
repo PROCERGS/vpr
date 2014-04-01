@@ -68,13 +68,6 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true, unique=true)
-     */
-    protected $voterRegistration;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoId;
@@ -109,10 +102,10 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="TREVoter")
-     * @ORM\JoinColumn(name="voter_registration", referencedColumnName="voter_registration", nullable=true)
+     * @ORM\JoinColumn(name="tre_voter_id", referencedColumnName="id", nullable=true)
      * @Groups({"vote"})
      */
-    protected $treEntry;
+    protected $treVoter;
 
     /**
      * Get id
@@ -168,29 +161,6 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     public function getSurname()
     {
         return $this->surname;
-    }
-
-    /**
-     * Set voterRegistration
-     *
-     * @param string $voterRegistration
-     * @return Person
-     */
-    public function setVoterRegistration($voterRegistration)
-    {
-        $this->voterRegistration = $voterRegistration;
-
-        return $this;
-    }
-
-    /**
-     * Get voterRegistration
-     *
-     * @return string
-     */
-    public function getVoterRegistration()
-    {
-        return $this->voterRegistration;
     }
 
     /**
@@ -312,14 +282,14 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this;
     }
 
-    public function getTREEntry()
+    public function getTreVoter()
     {
-        return $this->treEntry;
+        return $this->treVoter;
     }
 
-    public function setTREEntry(TREVoter $treEntry)
+    public function setTreVoter(TREVoter $var)
     {
-        $this->treEntry = $treEntry;
+        $this->treVoter = $var;
 
         return $this;
     }
