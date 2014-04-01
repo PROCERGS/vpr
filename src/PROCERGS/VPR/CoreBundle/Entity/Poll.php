@@ -36,7 +36,7 @@ class Poll
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="opening_time", type="datetime")
+     * @ORM\Column(name="opening_time", type="datetime", nullable=false)
      * @Groups({"vote"})
      */
     private $openingTime;
@@ -44,7 +44,7 @@ class Poll
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="closing_time", type="datetime")
+     * @ORM\Column(name="closing_time", type="datetime", nullable=false)
      * @Groups({"vote"})
      */
     private $closingTime;

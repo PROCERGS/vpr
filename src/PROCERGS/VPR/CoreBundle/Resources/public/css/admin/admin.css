@@ -1,15 +1,22 @@
-#procergs_vpr_corebundle_poll_closingTimime select, #procergs_vpr_corebundle_poll_openingTime select { 
-    width:90px;
+#procergs_vpr_corebundle_poll_closingTimime select, 
+#procergs_vpr_corebundle_poll_openingTime select, 
+#procergs_vpr_corebundle_ballotbox_openingTime select, 
+#procergs_vpr_corebundle_ballotbox_closingTime select { 
     margin-right: 6px;
 }
-#procergs_vpr_corebundle_poll_openingTime_time_minute, #procergs_vpr_corebundle_poll_closingTimime_time_minute {
+#procergs_vpr_corebundle_poll_openingTime_time_minute, 
+#procergs_vpr_corebundle_poll_closingTimime_time_minute, 
+#procergs_vpr_corebundle_ballotbox_openingTime_time_minute, 
+#procergs_vpr_corebundle_ballotbox_closingTime_time_minute {
     margin-left: 6px;
 }
-#procergs_vpr_corebundle_poll_openingTime_date, #procergs_vpr_corebundle_poll_closingTimime_date {
+#procergs_vpr_corebundle_poll_openingTime_date, 
+#procergs_vpr_corebundle_poll_closingTimime_date, 
+#procergs_vpr_corebundle_ballotbox_openingTime_date, 
+#procergs_vpr_corebundle_ballotbox_closingTime_date {
     float: left;
     margin-right: 20px;
 }
-
 .form-actions {
     background: none repeat scroll 0 0 #F9F9F9;
     border-top: 1px solid #DDDDDD;
@@ -17,7 +24,6 @@
     padding: 11px 0;
     min-height:52px;
 }
-
 .form-actions div a:first-child, .form-actions div button:first-child {
     float: left;
     margin-right: 10px;

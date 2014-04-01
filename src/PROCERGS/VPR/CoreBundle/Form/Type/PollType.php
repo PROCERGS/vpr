@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\VPR\CoreBundle\Form;
+namespace PROCERGS\VPR\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,10 +16,21 @@ class PollType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('openingTime')
-            ->add('closingTimime')
+            ->add('openingTime', 'datetime',array(
+                'required' => false,
+                'date_format' => 'dd MMMM yyyy',
+                'widget' => 'choice',
+                'years' => range(date('Y'), date('Y') - 70)
+            ))
+            ->add('closingTimime', 'datetime',array(
+                'required' => false,
+                'date_format' => 'dd MMMM yyyy',
+                'widget' => 'choice',
+                'years' => range(date('Y'), date('Y') - 70)
+            ))                
+                
             ->add('description')
-            ->add('publicKey')
+            ->add('publicKey', 'text')
         ;
     }
     

@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
-use PROCERGS\VPR\CoreBundle\Form\PollType;
+use PROCERGS\VPR\CoreBundle\Form\Type\PollType;
 
 /**
  * Poll controller.
@@ -55,6 +55,8 @@ class PollController extends Controller
             
             $this->get('session')->getFlashBag()->add('success', 'Registro adicionado com sucesso!');
             return $this->redirect($this->generateUrl('poll'));
+        }else{
+            $errors = $form->getErrors();
         }
 
         return array(

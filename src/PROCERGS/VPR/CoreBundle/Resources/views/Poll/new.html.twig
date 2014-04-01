@@ -8,10 +8,9 @@
     </div>
 
     {{ form_start(form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
-        {{ form_errors(form) }}
-
+   
         <div class="form-group">
-            <label class="col-sm-2 control-label">Name</label>
+            <label class="col-sm-2 control-label">Nome</label>
             <div class="col-sm-10">
                 {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
             </div>
@@ -20,6 +19,7 @@
         <div class="form-inline form-group">
             <label class="col-sm-2 control-label">Data abertura</label>
             <div class="col-sm-10">
+                {{ form_errors(form.openingTime) }}
                 {{ form_widget(form.openingTime, {'attr': {'class': ''}}) }}
             </div>
         </div>
@@ -27,6 +27,7 @@
         <div class="form-inline form-group">
             <label class="col-sm-2 control-label">Data fechamento</label>
             <div class="col-sm-10">
+                {{ form_errors(form.closingTimime) }}
                 {{ form_widget(form.closingTimime, {'attr': {'class': ''}}) }}
             </div>
         </div>
@@ -40,7 +41,7 @@
 
         <div class="form-group">
             <label class="col-sm-2 control-label">Chave publica</label>
-            <div class="col-sm-10">
+            <div class="col-sm-7">
                 {{ form_widget(form.publicKey, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>

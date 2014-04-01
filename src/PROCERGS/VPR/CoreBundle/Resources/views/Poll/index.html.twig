@@ -7,15 +7,6 @@
         <a class="btn btn-default" href="{{ path('poll_new') }}" role="button"><span class="glyphicon glyphicon-file"></span> Adicionar</a>
     </div>
 
-    {% for type, messages in app.session.flashbag.all() %}
-        {% for message in messages %}
-            <div class="alert alert-success alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover records_list">
             <thead>
@@ -30,20 +21,24 @@
                 </tr>
             </thead>
             <tbody>
-            {% for entity in entities %}
-                <tr>
-                    <td><a href="{{ path('poll_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                    <td>{{ entity.name }}</td>
-                    <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
-                    <td>{% if entity.closingTimime %}{{ entity.closingTimime|date('d/m/Y H:i:s') }}{% endif %}</td>
-                    <td>{{ entity.description }}</td>
-                    <td>{{ entity.publicKey }}</td>
-                    <td>
-                        <a title="Visualizar" class="btn btn-default btn-sm" href="{{ path('poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                        <a title="Editar" class="btn btn-default btn-sm" href="{{ path('poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                    </td>
-                </tr>
-            {% endfor %}
+                {% if(entities) %}
+                    {% for entity in entities %}
+                        <tr>
+                            <td><a href="{{ path('poll_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                            <td>{{ entity.name }}</td>
+                            <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
+                            <td>{% if entity.closingTimime %}{{ entity.closingTimime|date('d/m/Y H:i:s') }}{% endif %}</td>
+                            <td>{{ entity.description }}</td>
+                            <td>{{ entity.publicKey }}</td>
+                            <td>
+                                <a title="Visualizar" class="btn btn-default btn-sm" href="{{ path('poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a title="Editar" class="btn btn-default btn-sm" href="{{ path('poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                        <tr><td colspan="7" class="text-center">Nenhum registro encontrado</td></tr>
+                {% endif %}                
             </tbody>
         </table>
     </div>
