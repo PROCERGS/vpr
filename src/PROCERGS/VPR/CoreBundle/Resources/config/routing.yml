@@ -13,7 +13,7 @@ vpr_admin_poll:
     prefix:   /admin/poll
 
 vpr_admin_ballotbox:
-    resource: "@PROCERGSVPRCoreBundle/Controller/BallotboxController.php"
+    resource: "@PROCERGSVPRCoreBundle/Controller/BallotBoxController.php"
     type:     annotation
     prefix:   /admin/ballotbox
 
