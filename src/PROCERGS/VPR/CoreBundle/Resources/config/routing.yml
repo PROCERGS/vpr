@@ -69,9 +69,7 @@ procergsvpr_core_sem_nfg:
         _controller: FrameworkBundle:Template:template
         template:    'PROCERGSVPRCoreBundle:Default:sem_nfg.html.twig'
 
-procergsvpr_core_locais:
-    pattern:  /locais
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:locais.html.twig'
+procergsvpr_core_places:
+    pattern:  /places
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:places }
 
