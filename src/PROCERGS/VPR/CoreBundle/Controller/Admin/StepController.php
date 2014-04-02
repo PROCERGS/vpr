@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\VPR\CoreBundle\Controller;
+namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

@@ -1,5 +1,9 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
+{% block header %}
+{% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
+{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
 
@@ -23,6 +27,5 @@
             <small>{{ actionName }}</small>
         </h1>
     </div>
-
     {% block content %}{% endblock %}
 {% endblock %}

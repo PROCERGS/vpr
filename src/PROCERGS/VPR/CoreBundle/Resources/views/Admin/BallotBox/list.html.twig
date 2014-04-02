@@ -19,8 +19,8 @@
                     <tr>
                         <td><a href="{{ path('ballotbox_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                         <td>{{ entity.name }}</td>
-                        <td>{% if entity.poll %}{{ entity.poll.name }}{% endif %}</td>
-                        <td>{% if entity.city %}{{ entity.city.name }}{% endif %}</td>
+                        <td>{% if entity.poll.name is defined %}{{ entity.poll.name }}{% endif %}</td>
+                        <td>{% if entity.city.name is defined %}{{ entity.poll.name }}{% endif %}</td>
                         <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{% if entity.closingTime %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td class="text-center">{{ entity.totalInvalidVotes }}</td>
