@@ -39,8 +39,7 @@ body > .container {
   margin-bottom: 0;
 }
 
-header,
-footer{
+header {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03732e', endColorstr='#003302',GradientType=0 ); /* IE6-9 */
   background-image: linear-gradient(to bottom, #03732e, #003302);
 }
@@ -50,5 +49,6 @@ header {
 }
 
 footer {
+  background-color: #03732e;
   height: 45px;
 }

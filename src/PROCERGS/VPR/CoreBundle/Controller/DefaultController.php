@@ -52,11 +52,21 @@ class DefaultController extends Controller
           $city = $cityRepo->findOneBy(array('name' => $data['city']));
           if ($city) {
             $repository = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+
+            $query = $repository->createQueryBuilder('b')
+                ->select('max(b.poll) poll')
+                ->getQuery();
+            $poll = $query->getOneOrNullResult();
+
             $query = $repository->createQueryBuilder('b')
                 ->where('b.city = :city')
+                ->andWhere('b.poll = :poll')
                 ->setParameter('city', $city->getId())
+                ->setParameter('poll', $poll)
                 ->getQuery();
             $boxes = $query->getResult();
+
+
           } else {
             $form->addError(new FormError('not found city'));
           }
