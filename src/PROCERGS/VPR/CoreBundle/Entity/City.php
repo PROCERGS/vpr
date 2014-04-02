@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 
 /**
  * City
@@ -18,6 +19,7 @@ class City
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @Groups({"autocomplete"})
      */
     private $id;
 
@@ -38,6 +40,7 @@ class City
     /**
      * @var string
      *
+     * @Groups({"autocomplete"})
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;

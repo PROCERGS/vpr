@@ -5,4 +5,4 @@ form.submit: Enviar
 register.title: 'Votação de Prioridades do RS'
 register.login.simple: 'Acessar com Título de Eleitor do RS'
 register.login.lc: 'Acessar com Login Cidadão'
-form.username.invalid: __form.username.invalid
+form.city-selection.tried-different-city: 'Embora você tenha digitado uma cidade diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'

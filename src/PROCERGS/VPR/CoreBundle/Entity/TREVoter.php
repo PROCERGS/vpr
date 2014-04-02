@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="tre_voter",
  *      indexes={
- *          @ORM\Index(name="index_trevoter_name", columns={"name"}),          
+ *          @ORM\Index(name="index_trevoter_name", columns={"name"}),
  *          @ORM\Index(name="index_trevoter_zone", columns={"voting_zone"}),
  *      }
  * )
@@ -19,7 +19,7 @@ class TREVoter
 {
 
     /**
-     * @var integer     *
+     * @var integer
      * @ORM\Id
      * @ORM\Column(name="id", type="string", length=12)
      */
@@ -131,7 +131,6 @@ class TREVoter
         return $this->cityCode;
     }
 
-
     /**
      * Set votingZone
      *
@@ -163,4 +162,5 @@ class TREVoter
     {
         return $this->city;
     }
+
 }

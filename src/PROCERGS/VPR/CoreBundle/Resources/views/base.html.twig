@@ -3,6 +3,14 @@
 {% block header %}
 {% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
 <header></header>
+
+{% for flashMessage in app.session.flashbag.get('notice') %}
+    <div class="alert alert-info">
+        <div class="container">
+            {{ flashMessage }}
+        </div>
+    </div>
+{% endfor %}
 {% endblock %}
 
 {% block sidebar %}

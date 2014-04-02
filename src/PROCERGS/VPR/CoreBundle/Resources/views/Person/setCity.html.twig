@@ -12,7 +12,7 @@
                     <p>{% trans %}Please be aware that informing the wrong city will cause your vote to be discarted.{% endtrans %}</p>
                     <div class="form-group">
                         {{ form_label(form.city.name, 'City' | trans) }}
-                        {{ form_widget(form.city.name, { 'attr': { 'class': 'form-control' } } ) }}
+                        {{ form_widget(form.city.name, { 'attr': { 'class': 'form-control city' } } ) }}
                         {{ form_errors(form.city.name) }}
                     </div>
                 </div>
@@ -32,4 +32,39 @@
         {{ form_end(form) }}
     </div>
 </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+            '@PROCERGSVPRCoreBundle/Resources/public/js/typeahead.bundle.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+<script>
+    $(document).ready(function() {
+        var citiesList = {{ cities | raw }};
+
+        var cities = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            local: $.map(citiesList, function(city) { return { value: city.name }; })
+
+        });
+
+        cities.initialize();
+
+        $('input.city').typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1
+        },
+        {
+            name: 'cities',
+            displayKey: 'value',
+            source: cities.ttAdapter()
+        });
+    });
+</script>
 {% endblock %}
