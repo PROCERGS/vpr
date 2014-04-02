@@ -28,8 +28,15 @@ class CategoryController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $dql   = "SELECT c FROM PROCERGSVPRCoreBundle:Category c";
+        $query = $em->createQuery($dql);
 
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:Category')->findAll();
+        $paginator  = $this->get('knp_paginator');
+        $entities = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            10
+        );
 
         return array(
             'entities' => $entities,

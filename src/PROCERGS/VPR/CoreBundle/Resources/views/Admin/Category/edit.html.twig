@@ -1,10 +1,10 @@
 {% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
-{% set contentName = 'Categorias' %}
-{% set actionName = 'Editar' %}
+{% set contentName = 'admin.category'|trans %}
+{% set actionName = 'admin.edit'|trans %}
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('category') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
+        <a class="btn btn-default" href="{{ path('category') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
@@ -20,7 +20,7 @@
         {{ form_errors(edit_form) }}
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Name</label>
+            <label class="col-sm-2 control-label">{% trans %}admin.name{% endtrans %}</label>
             <div class="col-sm-7">
                 {{ form_errors(edit_form.name) }}
                 {{ form_widget(edit_form.name, {'attr': {'class': 'form-control'}}) }}
@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Ordem</label>
+            <label class="col-sm-2 control-label">{% trans %}admin.sorting{% endtrans%}</label>
             <div class="col-sm-1">
                 {{ form_errors(edit_form.sorting) }}
                 {{ form_widget(edit_form.sorting, {'attr': {'class': 'form-control'}}) }}
@@ -37,12 +37,12 @@
 
         <div class="form-group form-actions">
             <div class="col-lg-10 col-lg-offset-2">
-                {{ form_widget(edit_form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'Salvar'}) }}
+                {{ form_widget(edit_form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'admin.save'|trans}) }}
 
     {{ form_end(edit_form) }}
 
                 {{ form_start(delete_form) }}
-                {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'Remover'}) }}
+                {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
                 {{ form_end(delete_form) }}
             </div>
         </div>

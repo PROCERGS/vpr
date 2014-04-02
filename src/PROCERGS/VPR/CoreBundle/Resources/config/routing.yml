@@ -28,6 +28,11 @@ vpr_admin_category:
     type:     annotation
     prefix:   /admin/category
 
+vpr_admin_person:
+    resource: "@PROCERGSVPRCoreBundle/Controller/Admin/PersonController.php"
+    type:     annotation
+    prefix:   /admin/person
+
 procergsvpr_core_municipio:
     pattern:  /municipio
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:municipio }

@@ -6,3 +6,18 @@ register.title: 'Votação de Prioridades do RS'
 register.login.simple: 'Acessar com Título de Eleitor do RS'
 register.login.lc: 'Acessar com Login Cidadão'
 form.city-selection.tried-different-city: 'Embora você tenha digitado uma cidade diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'
+Previous: Anterior
+Next: Próximo
+admin.category: Categorias
+admin.list: Listar
+admin.add: Adicionar
+admin.id: Id
+admin.name: Name
+admin.sorting: Ordem
+admin.actions: Actions
+admin.show: Visualizar
+admin.edit: Editar
+admin.save: Salvar
+admin.delete: Remover
+admin.no_record_found: 'Nenhum registro encontrado'
+admin.back_to_list: 'Voltar para lista'

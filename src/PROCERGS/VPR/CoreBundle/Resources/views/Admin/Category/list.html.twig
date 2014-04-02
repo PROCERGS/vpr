@@ -2,28 +2,32 @@
     <table class="table table-striped table-bordered table-hover records_list">
         <thead>
             <tr>
-                <th width="5%">Id</th>
-                <th width="70%">Nome</th>
-                <th width="10%">Ordem</th>
-                <th width="8%">Ações</th>
+                <th width="5%">{{ 'admin.id'|trans }}</th>
+                <th width="70%">{{ 'admin.name'|trans }}</th>
+                <th width="10%">{{ 'admin.sorting'|trans }}</th>
+                <th width="8%">{{ 'admin.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
             {% if(entities) %}
                 {% for entity in entities %}
                     <tr>
-                        <td><a href="{{ path('category_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                        <td><a href="{{ path('category_show', { 'id': entity.id }) }}" title="{{ 'admin.show'|trans }}">{{ entity.id }}</a></td>
                         <td>{{ entity.name }}</td>
                         <td>{{ entity.sorting }}</td>
                         <td>
-                            <a title="Visualizar" class="btn btn-default btn-sm" href="{{ path('category_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a title="Editar" class="btn btn-default btn-sm" href="{{ path('category_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('category_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('category_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                         </td>
                     </tr>
                 {% endfor %}
             {% else %}
-                    <tr><td colspan="7" class="text-center">Nenhum registro encontrado</td></tr>
+                    <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
             {% endif %}                
         </tbody>
     </table>
+</div>
+
+<div class="row text-center">
+    {{ knp_pagination_render(entities) }}
 </div>
