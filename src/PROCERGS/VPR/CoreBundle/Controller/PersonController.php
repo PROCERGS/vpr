@@ -57,17 +57,19 @@ class PersonController extends Controller
 
                 $cityName = trim($data['city']['name']);
                 if (strlen($cityName) > 0) {
-                    $typedCity = $cityRepo->findOneBy(array('name' => $data['city']['name']));
+                    $typedCity = $cityRepo->findOneBy(array('name' => $cityName));
                     if (!($typedCity instanceof City)) {
                         $message = $translator->trans('form.city-selection.city-not-found',
                                 array(), 'validators');
                         $formError = new FormError($message);
                         $form->get('city')->get('name')->addError($formError);
                         throw new FormException($formError);
-                    } elseif ($city instanceof City) {
+                    } elseif (isset($city) && $city instanceof City) {
                         // user is trying to use a different city!
                         $message = $translator->trans('form.city-selection.tried-different-city');
                         $session->getFlashBag()->add('notice', $message);
+                    } else {
+                        $city = $typedCity;
                     }
                 }
                 $person->setCity($city);
