@@ -25,6 +25,9 @@
                     <li><a href="{{ path('procergsvpr_core_sem_nfg') }}">Sem NFG</a></li>
                 </ul>
             </li>
+            {% if app.user is not null and (is_granted('ROLE_STATS') or is_granted('ROLE_CRUD_POLL') or is_granted('ROLE_CRUD_BALLOTBOX') or is_granted('ROLE_MANAGE_USER')) %}
+                <li><a href="{{ path('admin') }}">Admin</a></li>
+            {% endif %}
         </ul>
     </div>
 </nav>
