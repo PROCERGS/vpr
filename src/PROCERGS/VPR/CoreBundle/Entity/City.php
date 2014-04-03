@@ -188,4 +188,12 @@ class City
         return $this->isCapital;
     }
 
+    /**
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Corede
+     */
+    public function getCorede()
+    {
+        return $this->corede;
+    }
+
 }

@@ -217,4 +217,12 @@ class PollOption
         return $this->categorySorting;
     }
 
+    /**
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Step
+     */
+    public function getStep()
+    {
+        return $this->step;
+    }
+
 }

@@ -8,13 +8,12 @@
         <p>Selecione o munípio para ver os locais de votação</p>
 
         {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
-        <div class="form-group">
-          {{ form_label(form.city) }}
-          {{ form_errors(form.city) }}
-          {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search'}) }}
-
+          <div class="form-group">
+            {{ form_label(form.city) }}
+            {{ form_errors(form.city) }}
+            {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+          </div>
+          {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search'}) }}
         {{ form_end(form) }}
 
         {% if boxes %}

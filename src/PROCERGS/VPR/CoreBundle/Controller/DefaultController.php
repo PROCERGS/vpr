@@ -53,21 +53,22 @@ class DefaultController extends Controller
           $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
           $city = $cityRepo->findOneBy(array('name' => $data['city']));
           if ($city) {
-            $repository = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+            $pollRepo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll');
 
-            $query = $repository->createQueryBuilder('b')
-                ->select('max(b.poll) poll')
+            $query = $pollRepo->createQueryBuilder('p')
+                ->select('max(p.id) id')
                 ->getQuery();
             $poll = $query->getOneOrNullResult();
 
-            $query = $repository->createQueryBuilder('b')
+            $ballotBoxRepo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+
+            $query = $ballotBoxRepo->createQueryBuilder('b')
                 ->where('b.city = :city')
                 ->andWhere('b.poll = :poll')
                 ->setParameter('city', $city->getId())
-                ->setParameter('poll', $poll)
+                ->setParameter('poll', $poll['id'])
                 ->getQuery();
             $boxes = $query->getResult();
-
 
           } else {
             $form->addError(new FormError('not found city'));
@@ -77,19 +78,18 @@ class DefaultController extends Controller
 
         $form = $form->createView();
 
-
         return $this->render('PROCERGSVPRCoreBundle:Default:places.html.twig', compact('form', 'boxes'));
     }
-    
+
     public function registerAction(Request $request)
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $formFactory = $this->container->get('fos_user.registration.form.factory');
-    
+
         $user = new Person();
         $form = $formFactory->createForm();
         $form->setData($user);
-    
+
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
@@ -135,14 +135,14 @@ class DefaultController extends Controller
             'form' => $form->createView()
         ));
     }
-    
+
     private function _testName($val1, $val2)
     {
         $a1 = explode(' ', $val1);
         $a2 = explode(' ', $val2);
         return (mb_strtolower(trim($a1[0])) === mb_strtolower(trim($a2[0])));
     }
-    
+
     private function _auth($user, $response)
     {
         try {
@@ -153,6 +153,61 @@ class DefaultController extends Controller
             // We simply do not authenticate users which do not pass the user
             // checker (not enabled, expired, etc.).
         }
+    }
+
+    public function ballotsAction(Request $request)
+    {
+        $form = $this->createFormBuilder()
+                     ->add('city', 'text', array(
+                        'required' => true
+                      ))
+                     ->add('submit', 'submit')
+                     ->getForm();
+
+        $form->handleRequest($request);
+
+        $steps = array();
+
+        if ($form->isValid()) {
+          $em = $this->getDoctrine()->getManager();
+          $data = $form->getData();
+
+          $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+          $city = $cityRepo->findOneBy(array('name' => $data['city']));
+
+          if ($city) {
+            $pollRepo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll');
+
+            $query = $pollRepo->createQueryBuilder('p')
+                ->select('min(p.id) id') // TESTE - trocar para max !
+                // ->select('max(p.id) id')
+                ->getQuery();
+            $poll = $query->getOneOrNullResult();
+
+            $pollOptionsRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+
+            $query = $pollOptionsRepo->createQueryBuilder('p')
+                ->Where('p.poll = :poll')
+                ->andWhere('p.corede = :corede')
+                ->setParameter('poll', $poll['id'])
+                ->setParameter('corede', $city->getCorede())
+                ->getQuery();
+            $pollOptions = $query->getResult();
+
+            foreach ($pollOptions as $option) {
+              $step = $option->getStep()->getName();
+
+              if ( !array_key_exists($step, $steps) ) {
+                $steps[$step] = array();
+              }
+              array_push($steps[$step], $option);
+            }
+          }
+        }
+
+        $form = $form->createView();
+
+        return $this->render('PROCERGSVPRCoreBundle:Default:ballots.html.twig', compact('form', 'steps'));
     }
 
 }

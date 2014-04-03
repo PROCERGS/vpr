@@ -88,3 +88,7 @@ procergsvpr_core_places:
     pattern:  /places
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:places }
 
+procergsvpr_core_ballots:
+    pattern:  /ballots
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:ballots }
+
