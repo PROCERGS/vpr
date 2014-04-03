@@ -39,10 +39,12 @@ security:
                     service: user_provider
 
             logout:
-                path: /logout                    
+                path: /logout
 
     access_control:
         - { path: ^/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/places, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/ballots, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }

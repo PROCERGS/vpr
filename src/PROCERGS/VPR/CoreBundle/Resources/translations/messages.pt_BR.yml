@@ -47,8 +47,8 @@ admin.ballotbox_online: 'Urna Online'
 'What''s your voting city?': '__What''s your voting city?'
 'You need to type the city where you vote so that we can show you the relevant options for you.': '__You need to type the city where you vote so that we can show you the relevant options for you.'
 'Please be aware that informing the wrong city will cause your vote to be discarted.': '__Please be aware that informing the wrong city will cause your vote to be discarted.'
-City: __City
+City: Cidade
 'Alternatively you can type your voter registration, without the need to type your city.': '__Alternatively you can type your voter registration, without the need to type your city.'
 'Voter Registration': '__Voter Registration'
-Continue: __Continue
-form.username.invalid: __form.username.invalid
+Continue: Continuar
+'Type a city to see it''s presential voting places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'

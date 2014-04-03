@@ -1,3 +1,7 @@
+vpr:
+    resource: "@PROCERGSVPRCoreBundle/Controller/"
+    type: annotation
+
 procergsvpr_core_homepage:
     pattern:  /
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:index }
@@ -83,10 +87,6 @@ procergsvpr_core_sem_nfg:
     defaults:
         _controller: FrameworkBundle:Template:template
         template:    'PROCERGSVPRCoreBundle:Default:sem_nfg.html.twig'
-
-procergsvpr_core_places:
-    pattern:  /places
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:places }
 
 procergsvpr_core_ballots:
     pattern:  /ballots

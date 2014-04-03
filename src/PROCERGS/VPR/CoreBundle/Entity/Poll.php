@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Poll
  *
  * @ORM\Table(name="poll")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\PollRepository")
  */
 class Poll
 {
@@ -73,7 +73,7 @@ class Poll
      * @ORM\OneToMany(targetEntity="Step", mappedBy="poll")
      */
     protected $steps;
-    
+
     public function __construct()
     {
         //$this->ballotBoxes = new ArrayCollection();
@@ -212,5 +212,5 @@ class Poll
     public function getSteps()
     {
         return $this->steps;
-    }     
+    }
 }

@@ -1,0 +1,53 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>{{ 'Voting Places' | trans }}</h3>
+
+        <p>{% trans %}Type a city to see it's presential voting places.{% endtrans %}</p>
+
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
+        <div class="form-group">
+            {{ form_label(form.city) }}
+            {{ form_errors(form.city) }}
+            {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
+        </div>
+          {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search'}) }}
+        {{ form_end(form) }}
+
+        {% if boxes %}
+        <div class="table-responsive" style="margin-top:100px">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Votação</th>
+                        <th>Endereço</th>
+                    </tr>
+                </thead>
+                <tbody>
+              {% for box in boxes %}
+                    <tr>
+                        <td>{{ box.poll.name }}</td>
+                        <td>{{ box.address }}</td>
+                    </tr>
+              {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+<script>
+    var citiesList = {{ cities | raw }};
+</script>
+    {% javascripts
+            '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
