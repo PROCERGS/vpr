@@ -1,10 +1,10 @@
 {% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
-{% set contentName = 'Urna' %}
-{% set actionName = 'Visualizar' %}
+{% set contentName = 'admin.ballotBox'|trans %}
+{% set actionName = 'admin.show'|trans %}
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('ballotbox') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
+        <a class="btn btn-default" href="{{ path('ballotbox') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
@@ -18,110 +18,110 @@
 
     <form class="form-horizontal" role="form">
         <div class="form-group">
-            <label class="col-sm-3 control-label">Id</label>
+            <label class="col-sm-3 control-label">{{ 'admin.id'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.id }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Nome</label>
+            <label class="col-sm-3 control-label">{{ 'admin.name'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.name }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Eleição</label>
+            <label class="col-sm-3 control-label">{{ 'admin.poll'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{% if(entity.poll) %}{{ entity.poll.name }}{% endif %}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Data abertura</label>
+            <label class="col-sm-3 control-label">{{ 'admin.opening_time'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.openingTime|date('d/m/Y H:i:s') }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Data fechamento</label>
+            <label class="col-sm-3 control-label">{{ 'admin.closing_time'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.closingTime|date('d/m/Y H:i:s') }}</p>
             </div>
         </div>            
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Secret</label>
+            <label class="col-sm-3 control-label">{{ 'admin.secret'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.secret }}</p>
             </div>
         </div>            
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Chave privada</label>
+            <label class="col-sm-3 control-label">{{ 'admin.private_key'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.privateKey }}</p>
             </div>
         </div>            
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Chave pública</label>
+            <label class="col-sm-3 control-label">{{ 'admin.public_key'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.publicKey }}</p>
             </div>
         </div>            
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Cidade</label>
+            <label class="col-sm-3 control-label">{{ 'admin.city'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{% if(entity.city) %}{{ entity.city.name }}{% endif %}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Endereço</label>
+            <label class="col-sm-3 control-label">{{ 'admin.address'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.address }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Latitude</label>
+            <label class="col-sm-3 control-label">{{ 'admin.latitude'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.latitude }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Longitude</label>
+            <label class="col-sm-3 control-label">{{ 'admin.longitude'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.longitude }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Total de votos inválidos</label>
+            <label class="col-sm-3 control-label">{{ 'admin.total_invalid_vote'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.totalInvalidVotes }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Urna online?</label>
+            <label class="col-sm-3 control-label">{{ 'admin.ballotbox_online'|trans }}?</label>
             <div class="col-sm-9">
-                <p class="form-control-static">{% if(entity.isOnline) %}Sim{% else %}Não{% endif %}</p>
+                <p class="form-control-static">{% if(entity.isOnline) %}{{ 'admin.yeas'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</p>
             </div>
         </div>
     </form>
 
     <div class="form-group form-actions">
         <div class="col-lg-10 col-lg-offset-2">            
-            <a href="{{ path('ballotbox_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">Editar</a>
+            <a href="{{ path('ballotbox_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">{{ 'admin.edit'|trans }}</a>
 
             {{ form_start(delete_form) }}
-            {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'Remover'}) }}
+            {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
             {{ form_end(delete_form) }}
         </div>
     </div>

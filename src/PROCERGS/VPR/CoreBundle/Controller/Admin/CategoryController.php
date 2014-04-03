@@ -60,7 +60,9 @@ class CategoryController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Registro adicionado com sucesso!');
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
+
             return $this->redirect($this->generateUrl('category_show', array('id' => $entity->getId())));
         }
 
@@ -201,7 +203,9 @@ class CategoryController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Registro alterado com sucesso!');
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
+            
             return $this->redirect($this->generateUrl('category_show', array('id' => $id)));
         }
 
@@ -234,7 +238,8 @@ class CategoryController extends Controller
             $em->remove($entity);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Registro removido com sucesso!');
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
         }
 
         return $this->redirect($this->generateUrl('category'));

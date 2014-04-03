@@ -9,15 +9,46 @@ form.city-selection.tried-different-city: 'Embora você tenha digitado uma cidad
 Previous: Anterior
 Next: Próximo
 admin.category: Categorias
+admin.poll: Votação
+admin.steps: Etapas
+admin.step: Etapa
+admin.ballotBox: Urnas
 admin.list: Listar
 admin.add: Adicionar
-admin.id: Id
-admin.name: Name
-admin.sorting: Ordem
-admin.actions: Actions
 admin.show: Visualizar
 admin.edit: Editar
 admin.save: Salvar
 admin.delete: Remover
+admin.id: Id
+admin.name: Nome
+admin.sorting: Ordem
+admin.actions: Ações
+admin.city: Cidade
+admin.opening_time: 'Data abertura'
+admin.closing_time: 'Data fechamento'
+admin.total_invalid_vote: 'Votos inválidos'
+admin.is_online: Online
+admin.yeas: Sim
+admin.no: Não
 admin.no_record_found: 'Nenhum registro encontrado'
 admin.back_to_list: 'Voltar para lista'
+admin.successfully_added_record: 'Registro adicionado com sucesso!'
+admin.successfully_removed_record: 'Registro removido com sucesso!'
+admin.successfully_changed_record: 'Registro alterado com sucesso!'
+admin.max_selection: 'Qtde de seleção'
+admin.description: Descrição
+admin.public_key: 'Chave Pública'
+admin.private_key: 'Chave Privada'
+admin.secret: Secret
+admin.address: Endereço
+admin.latitude: Latitude
+admin.longitude: Longitude
+admin.ballotbox_online: 'Urna Online'
+'What''s your voting city?': '__What''s your voting city?'
+'You need to type the city where you vote so that we can show you the relevant options for you.': '__You need to type the city where you vote so that we can show you the relevant options for you.'
+'Please be aware that informing the wrong city will cause your vote to be discarted.': '__Please be aware that informing the wrong city will cause your vote to be discarted.'
+City: __City
+'Alternatively you can type your voter registration, without the need to type your city.': '__Alternatively you can type your voter registration, without the need to type your city.'
+'Voter Registration': '__Voter Registration'
+Continue: __Continue
+form.username.invalid: __form.username.invalid
