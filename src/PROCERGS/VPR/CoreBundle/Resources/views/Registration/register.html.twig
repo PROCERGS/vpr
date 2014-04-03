@@ -2,9 +2,9 @@
 
 {% block body %}
 {% trans_default_domain 'messages' %}
-<h2 id="try-header">{{ 'register.title' | trans }}</h2>
-<div class="row">
-    <div class="col-md-6">
+<h2 id="try-header" class="text-center">{{ 'register.title' | trans }}</h2>
+<div class="row register-box">
+    <div class="col-md-5">
         <h3>{{ 'register.login.simple' | trans }}</h3>
         {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
         <div class="form-group has-feedback">
@@ -19,21 +19,38 @@
             {{ form_label(form.surname, 'form.surname' | trans, {'label_attr': {'class': 'sr-only'}}) }} {{ form_widget(form.surname, {'attr': {'class': 'form-control', 'placeholder' : 'form.surname' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
             <div class="input-error alert-danger">{{ form_errors(form.surname) }}</div>
         </div>
-        <button type="submit" class="btn btn-default">{{ 'form.submit' | trans }}</button>
+        <button type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.submit' | trans }}</button>
         {{ form_end(form) }}
     </div>
-
-    <div class="col-md-6">
+    <div class="col-md-2 spacer hidden-xs hidden-sm"><hr></div>
+    <div class="col-md-5">
         <h3>{{ 'register.login.lc'|trans }}</h3>
-        <div class="well">
-            <h3 class="text-center">
-                {% for owner in hwi_oauth_resource_owners() %} <a href="{{ hwi_oauth_login_url(owner) }}">Isso será um botão</a> <br /> {% endfor %}
-            </h3>
-            <p class="text-right">
-                <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50"> <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
-            </p>
+        {% for owner in hwi_oauth_resource_owners() %}
+          <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block" role="button">{{ 'register.login.lc'|trans }}</a>
+        {% endfor %}
+        <div class="about-lc text-right">
+          <a href="" class="about-lc" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
+        </div>
+        <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+          <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50"> <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
         </div>
     </div>
+</div>
+
+<div class="row info-box">
+  <div class="col-md-6 text-center">
+    <a href="" role="button">
+      <span class="glyphicon glyphicon-list-alt"></span>
+      {% trans %}Check the ballot of your region{% endtrans %}
+    </a>
+  </div>
+  <div class="col-md-6 text-center">
+    <a href="" role="button">
+      <span class="glyphicon glyphicon-map-marker"></span>
+      {% trans %}Check the poll places{% endtrans %}
+    </a>
+  </div>
 </div>
 {% endblock %}
 
@@ -42,25 +59,25 @@
 <script type="text/javascript">
 var usernameId = '#{{ form.username.vars.id }}';
 var messages = {
-	    '0' : "{{ 'form.username.invalid' | trans }}"
+      '0' : "{{ 'form.username.invalid' | trans }}"
 };
 </script>
 
 <script type="text/javascript">
 $(function () {
-			$(usernameId).on('blur', function () {
-				if (!this.value.length) {
-					return;
-				}
-				this.value = completaZerosEsquerda(this.value, 12);
-				if (validarTitulo(this.value)) {
+      $(usernameId).on('blur', function () {
+        if (!this.value.length) {
+          return;
+        }
+        this.value = completaZerosEsquerda(this.value, 12);
+        if (validarTitulo(this.value)) {
 
-					} else {
-						alert(messages[0]);
-						}
+          } else {
+            alert(messages[0]);
+            }
 
-				});
-		});
+        });
+    });
 </script>
 
 {% endblock %}

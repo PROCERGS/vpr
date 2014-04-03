@@ -144,6 +144,7 @@ class DefaultController extends Controller
                 ->getQuery();
             $pollOptions = $query->getResult();
 
+
             foreach ($pollOptions as $option) {
               $step = $option->getStep()->getName();
 

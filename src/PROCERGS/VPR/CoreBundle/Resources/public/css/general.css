@@ -40,8 +40,8 @@ body > .container {
 }
 
 header {
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03732e', endColorstr='#003302',GradientType=0 ); /* IE6-9 */
-  background-image: linear-gradient(to bottom, #03732e, #003302);
+  background-image: linear-gradient(to bottom, #2c8f47, #184a25);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c8f47', endColorstr='#184a25',GradientType=0 ); /* IE6-9 */
 }
 
 header {
@@ -49,6 +49,71 @@ header {
 }
 
 footer {
-  background-color: #03732e;
+  background-color: #2c8f47;
   height: 45px;
+}
+
+/* override boostrap */
+.form-control {
+  background-color: #d8e6a5;
+  border: none;
+  border-radius: 0;
+  color: #2e8f48;
+}
+
+.form-control:-moz-placeholder {
+  color: #2e8f48;
+}
+
+.form-control::-moz-placeholder {
+  color: #2e8f48;
+  opacity: 1;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #2e8f48;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: #2e8f48;
+}
+
+.form-control-feedback {
+  visibility: hidden;
+}
+
+.has-error .form-control-feedback {
+  visibility: visible;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.btn-success {
+  background-color: #2e8f48;
+}
+
+
+.register-box {
+  margin-bottom: 20px;
+}
+
+.register-box h3 {
+  color: #ffcc99;
+}
+
+.register-box .spacer hr {
+  border: none;
+  border-right: solid 1px #ffcc99;
+  height: 350px;
+  width: 1px;
+}
+
+.register-box .about-lc {
+  margin: 20px 0;
+}
+
+.info-box {
+  font-size: 30px;
 }
