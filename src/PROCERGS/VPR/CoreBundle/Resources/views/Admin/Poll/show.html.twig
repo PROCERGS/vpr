@@ -4,7 +4,7 @@
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('poll') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span>  {% trans %}admin.back_to_list{% endtrans %}</a>
+        <a class="btn btn-default" href="{{ path('admin_poll') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span>  {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     <div class="row">
@@ -72,7 +72,7 @@
 
                     <div class="form-group form-actions">
                         <div class="col-lg-10 col-lg-offset-2">            
-                            <a href="{{ path('poll_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">{{ 'admin.edit'|trans }}</a>
+                            <a href="{{ path('admin_poll_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">{{ 'admin.edit'|trans }}</a>
 
                             {{ form_start(delete_form) }}
                             {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}

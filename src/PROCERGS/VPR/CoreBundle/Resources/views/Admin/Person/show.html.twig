@@ -1,10 +1,10 @@
 {% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
-{% set contentName = 'Usuários' %}
-{% set actionName = 'Visualizar' %}
+{% set contentName = 'admin_users'|trans %}
+{% set actionName = 'admin.show'|trans %}
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('admin_person') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> Voltar para lista</a>
+        <a class="btn btn-default" href="{{ path('admin_person') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
@@ -18,56 +18,56 @@
 
     <form class="form-horizontal" role="form">
         <div class="form-group">
-            <label class="col-sm-3 control-label">Id</label>
+            <label class="col-sm-3 control-label">{{ 'admin.id'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.id }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Username</label>
+            <label class="col-sm-3 control-label">{{ 'admin.username'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.username }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Nome</label>
+            <label class="col-sm-3 control-label">{{ 'admin.name'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.firstName }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Sobrenome</label>
+            <label class="col-sm-3 control-label">{{ 'admin.surname'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.surname }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Email</label>
+            <label class="col-sm-3 control-label">{{ 'admin.email'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.email }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Habilitado?</label>
+            <label class="col-sm-3 control-label">{{ 'admin.enabled'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{% if(entity.enabled) %}Sim{% else %}Não{% endif %}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Último login</label>
+            <label class="col-sm-3 control-label">{{ 'admin.last_login'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.lastLogin|date('d/m/Y H:i:s') }}</p>
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-3 control-label">Criado em</label>
+            <label class="col-sm-3 control-label">{{ 'admin.created_at'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.createdAt|date('d/m/Y H:i:s') }}</p>
             </div>
@@ -76,7 +76,7 @@
 
     <div class="form-group form-actions">
         <div class="col-lg-10 col-lg-offset-2">            
-            <a href="#" class="btn btn-sm btn-primary">Editar</a>
+            <a href="#" class="btn btn-sm btn-primary">{{ 'admin.edit'|trans }}</a>
        </div>
     </div>
 {% endblock %}

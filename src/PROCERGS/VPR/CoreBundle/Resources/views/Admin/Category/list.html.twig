@@ -12,12 +12,12 @@
             {% if(entities) %}
                 {% for entity in entities %}
                     <tr>
-                        <td><a href="{{ path('category_show', { 'id': entity.id }) }}" title="{{ 'admin.show'|trans }}">{{ entity.id }}</a></td>
+                        <td><a href="{{ path('admin_category_show', { 'id': entity.id }) }}" title="{{ 'admin.show'|trans }}">{{ entity.id }}</a></td>
                         <td>{{ entity.name }}</td>
                         <td>{{ entity.sorting }}</td>
                         <td>
-                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('category_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('category_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_category_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_category_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                         </td>
                     </tr>
                 {% endfor %}

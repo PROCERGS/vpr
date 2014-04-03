@@ -15,15 +15,15 @@
             {% if(entities) %}
                 {% for entity in entities %}
                     <tr>
-                        <td><a title="{{ 'admin.show'|trans }}" href="{{ path('poll_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                        <td><a title="{{ 'admin.show'|trans }}" href="{{ path('admin_poll_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                         <td>{{ entity.name }}</td>
                         <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{% if entity.closingTime %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{{ entity.description }}</td>
                         <td>{{ entity.publicKey }}</td>
                         <td>
-                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                         </td>
                     </tr>
                 {% endfor %}

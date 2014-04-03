@@ -16,6 +16,11 @@ vpr_person:
     type:     annotation
 
 #Admin
+vpr_admin:
+    resource: "@PROCERGSVPRCoreBundle/Controller/Admin/DefaultController.php"
+    type:     annotation
+    prefix:   /admin
+
 vpr_admin_poll:
     resource: "@PROCERGSVPRCoreBundle/Controller/Admin/PollController.php"
     type:     annotation

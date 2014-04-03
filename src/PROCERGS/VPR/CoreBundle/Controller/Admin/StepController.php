@@ -21,7 +21,7 @@ class StepController extends Controller
     /**
      * Lists all Step entities.
      *
-     * @Route("/", name="step")
+     * @Route("/", name="admin_step")
      * @Method("GET")
      * @Template()
      */
@@ -39,7 +39,7 @@ class StepController extends Controller
     /**
      * Creates a new Step entity.
      *
-     * @Route("/", name="step_create")
+     * @Route("/", name="admin_step_create")
      * @Method("POST")
      * @Template("PROCERGSVPRCoreBundle:Step:new.html.twig")
      */
@@ -57,7 +57,7 @@ class StepController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
 
-            return $this->redirect($this->generateUrl('step_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_step_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -76,7 +76,7 @@ class StepController extends Controller
     private function createCreateForm(Step $entity)
     {
         $form = $this->createForm(new StepType(), $entity, array(
-            'action' => $this->generateUrl('step_create'),
+            'action' => $this->generateUrl('admin_step_create'),
             'method' => 'POST',
         ));
 
@@ -88,7 +88,7 @@ class StepController extends Controller
     /**
      * Displays a form to create a new Step entity.
      *
-     * @Route("/new", name="step_new")
+     * @Route("/new", name="admin_step_new")
      * @Method("GET")
      * @Template()
      */
@@ -106,7 +106,7 @@ class StepController extends Controller
     /**
      * Finds and displays a Step entity.
      *
-     * @Route("/{id}", name="step_show")
+     * @Route("/{id}", name="admin_step_show")
      * @Method("GET")
      * @Template()
      */
@@ -131,7 +131,7 @@ class StepController extends Controller
     /**
      * Displays a form to edit an existing Step entity.
      *
-     * @Route("/{id}/edit", name="step_edit")
+     * @Route("/{id}/edit", name="admin_step_edit")
      * @Method("GET")
      * @Template()
      */
@@ -165,7 +165,7 @@ class StepController extends Controller
     private function createEditForm(Step $entity)
     {
         $form = $this->createForm(new StepType(), $entity, array(
-            'action' => $this->generateUrl('step_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_step_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -176,7 +176,7 @@ class StepController extends Controller
     /**
      * Edits an existing Step entity.
      *
-     * @Route("/{id}", name="step_update")
+     * @Route("/{id}", name="admin_step_update")
      * @Method("PUT")
      * @Template("PROCERGSVPRCoreBundle:Step:edit.html.twig")
      */
@@ -200,7 +200,7 @@ class StepController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
 
-            return $this->redirect($this->generateUrl('step_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_step_show', array('id' => $id)));
         }
 
         return array(
@@ -212,7 +212,7 @@ class StepController extends Controller
     /**
      * Deletes a Step entity.
      *
-     * @Route("/{id}", name="step_delete")
+     * @Route("/{id}", name="admin_step_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -235,7 +235,7 @@ class StepController extends Controller
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
         }
 
-        return $this->redirect($this->generateUrl('step'));
+        return $this->redirect($this->generateUrl('admin_step'));
     }
 
     /**
@@ -248,7 +248,7 @@ class StepController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('step_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_step_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

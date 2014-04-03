@@ -21,7 +21,7 @@ class BallotBoxController extends Controller
     /**
      * Lists all BallotBox entities.
      *
-     * @Route("/", name="ballotbox")
+     * @Route("/", name="admin_ballotbox")
      * @Method("GET")
      * @Template()
      */
@@ -38,7 +38,7 @@ class BallotBoxController extends Controller
     /**
      * Creates a new BallotBox entity.
      *
-     * @Route("/", name="ballotbox_create")
+     * @Route("/", name="admin_ballotbox_create")
      * @Method("POST")
      * @Template("PROCERGSVPRCoreBundle:BallotBox:new.html.twig")
      */
@@ -56,7 +56,7 @@ class BallotBoxController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
 
-            return $this->redirect($this->generateUrl('ballotbox_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_ballotbox_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -75,7 +75,7 @@ class BallotBoxController extends Controller
     private function createCreateForm(BallotBox $entity)
     {
         $form = $this->createForm(new BallotBoxType(), $entity, array(
-            'action' => $this->generateUrl('ballotbox_create'),
+            'action' => $this->generateUrl('admin_ballotbox_create'),
             'method' => 'POST',
         ));
 
@@ -87,7 +87,7 @@ class BallotBoxController extends Controller
     /**
      * Displays a form to create a new BallotBox entity.
      *
-     * @Route("/new", name="ballotbox_new")
+     * @Route("/new", name="admin_ballotbox_new")
      * @Method("GET")
      * @Template()
      */
@@ -105,7 +105,7 @@ class BallotBoxController extends Controller
     /**
      * Finds and displays a BallotBox entity.
      *
-     * @Route("/{id}", name="ballotbox_show")
+     * @Route("/{id}", name="admin_ballotbox_show")
      * @Method("GET")
      * @Template()
      */
@@ -130,7 +130,7 @@ class BallotBoxController extends Controller
     /**
      * Displays a form to edit an existing BallotBox entity.
      *
-     * @Route("/{id}/edit", name="ballotbox_edit")
+     * @Route("/{id}/edit", name="admin_ballotbox_edit")
      * @Method("GET")
      * @Template()
      */
@@ -164,7 +164,7 @@ class BallotBoxController extends Controller
     private function createEditForm(BallotBox $entity)
     {
         $form = $this->createForm(new BallotBoxType(), $entity, array(
-            'action' => $this->generateUrl('ballotbox_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_ballotbox_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -175,7 +175,7 @@ class BallotBoxController extends Controller
     /**
      * Edits an existing BallotBox entity.
      *
-     * @Route("/{id}", name="ballotbox_update")
+     * @Route("/{id}", name="admin_ballotbox_update")
      * @Method("PUT")
      * @Template("PROCERGSVPRCoreBundle:BallotBox:edit.html.twig")
      */
@@ -199,7 +199,7 @@ class BallotBoxController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
 
-            return $this->redirect($this->generateUrl('ballotbox_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_ballotbox_show', array('id' => $id)));
         }
 
         return array(
@@ -211,7 +211,7 @@ class BallotBoxController extends Controller
     /**
      * Deletes a BallotBox entity.
      *
-     * @Route("/{id}", name="ballotbox_delete")
+     * @Route("/{id}", name="admin_ballotbox_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -234,7 +234,7 @@ class BallotBoxController extends Controller
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));            
         }
 
-        return $this->redirect($this->generateUrl('ballotbox'));
+        return $this->redirect($this->generateUrl('admin_ballotbox'));
     }
 
     /**
@@ -247,7 +247,7 @@ class BallotBoxController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('ballotbox_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_ballotbox_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

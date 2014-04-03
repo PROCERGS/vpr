@@ -21,7 +21,7 @@ class CategoryController extends Controller
     /**
      * Lists all Category entities.
      *
-     * @Route("/", name="category")
+     * @Route("/", name="admin_category")
      * @Method("GET")
      * @Template()
      */
@@ -45,7 +45,7 @@ class CategoryController extends Controller
     /**
      * Creates a new Category entity.
      *
-     * @Route("/", name="category_create")
+     * @Route("/", name="admin_category_create")
      * @Method("POST")
      * @Template("PROCERGSVPRCoreBundle:Category:new.html.twig")
      */
@@ -63,7 +63,7 @@ class CategoryController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
 
-            return $this->redirect($this->generateUrl('category_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_category_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -82,7 +82,7 @@ class CategoryController extends Controller
     private function createCreateForm(Category $entity)
     {
         $form = $this->createForm(new CategoryType(), $entity, array(
-            'action' => $this->generateUrl('category_create'),
+            'action' => $this->generateUrl('admin_category_create'),
             'method' => 'POST',
         ));
 
@@ -94,7 +94,7 @@ class CategoryController extends Controller
     /**
      * Displays a form to create a new Category entity.
      *
-     * @Route("/new", name="category_new")
+     * @Route("/new", name="admin_category_new")
      * @Method("GET")
      * @Template()
      */
@@ -112,7 +112,7 @@ class CategoryController extends Controller
     /**
      * Finds and displays a Category entity.
      *
-     * @Route("/{id}", name="category_show")
+     * @Route("/{id}", name="admin_category_show")
      * @Method("GET")
      * @Template()
      */
@@ -137,7 +137,7 @@ class CategoryController extends Controller
     /**
      * Displays a form to edit an existing Category entity.
      *
-     * @Route("/{id}/edit", name="category_edit")
+     * @Route("/{id}/edit", name="admin_category_edit")
      * @Method("GET")
      * @Template()
      */
@@ -171,7 +171,7 @@ class CategoryController extends Controller
     private function createEditForm(Category $entity)
     {
         $form = $this->createForm(new CategoryType(), $entity, array(
-            'action' => $this->generateUrl('category_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_category_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -182,7 +182,7 @@ class CategoryController extends Controller
     /**
      * Edits an existing Category entity.
      *
-     * @Route("/{id}", name="category_update")
+     * @Route("/{id}", name="admin_category_update")
      * @Method("PUT")
      * @Template("PROCERGSVPRCoreBundle:Category:edit.html.twig")
      */
@@ -206,7 +206,7 @@ class CategoryController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
             
-            return $this->redirect($this->generateUrl('category_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
         }
 
         return array(
@@ -219,7 +219,7 @@ class CategoryController extends Controller
     /**
      * Deletes a Category entity.
      *
-     * @Route("/{id}", name="category_delete")
+     * @Route("/{id}", name="admin_category_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -242,7 +242,7 @@ class CategoryController extends Controller
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
         }
 
-        return $this->redirect($this->generateUrl('category'));
+        return $this->redirect($this->generateUrl('admin_category'));
     }
 
     /**
@@ -255,7 +255,7 @@ class CategoryController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('category_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_category_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

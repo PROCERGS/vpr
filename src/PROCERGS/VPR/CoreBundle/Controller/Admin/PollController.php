@@ -21,7 +21,7 @@ class PollController extends Controller
     /**
      * Lists all Poll entities.
      *
-     * @Route("/", name="poll")
+     * @Route("/", name="admin_poll")
      * @Method("GET")
      * @Template()
      */
@@ -38,7 +38,7 @@ class PollController extends Controller
     /**
      * Creates a new Poll entity.
      *
-     * @Route("/", name="poll_create")
+     * @Route("/", name="admin_poll_create")
      * @Method("POST")
      * @Template("PROCERGSVPRCoreBundle:Poll:new.html.twig")
      */
@@ -56,7 +56,7 @@ class PollController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
 
-            return $this->redirect($this->generateUrl('poll_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -75,7 +75,7 @@ class PollController extends Controller
     private function createCreateForm(Poll $entity)
     {
         $form = $this->createForm(new PollType(), $entity, array(
-            'action' => $this->generateUrl('poll_create'),
+            'action' => $this->generateUrl('admin_poll_create'),
             'method' => 'POST',
         ));
 
@@ -87,7 +87,7 @@ class PollController extends Controller
     /**
      * Displays a form to create a new Poll entity.
      *
-     * @Route("/new", name="poll_new")
+     * @Route("/new", name="admin_poll_new")
      * @Method("GET")
      * @Template()
      */
@@ -105,7 +105,7 @@ class PollController extends Controller
     /**
      * Finds and displays a Poll entity.
      *
-     * @Route("/{id}", name="poll_show")
+     * @Route("/{id}", name="admin_poll_show")
      * @Method("GET")
      * @Template()
      */
@@ -133,7 +133,7 @@ class PollController extends Controller
     /**
      * Displays a form to edit an existing Poll entity.
      *
-     * @Route("/{id}/edit", name="poll_edit")
+     * @Route("/{id}/edit", name="admin_poll_edit")
      * @Method("GET")
      * @Template()
      */
@@ -170,7 +170,7 @@ class PollController extends Controller
     private function createEditForm(Poll $entity)
     {
         $form = $this->createForm(new PollType(), $entity, array(
-            'action' => $this->generateUrl('poll_update', array('id' => $entity->getId())),
+            'action' => $this->generateUrl('admin_poll_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -181,7 +181,7 @@ class PollController extends Controller
     /**
      * Edits an existing Poll entity.
      *
-     * @Route("/{id}", name="poll_update")
+     * @Route("/{id}", name="admin_poll_update")
      * @Method("PUT")
      * @Template("PROCERGSVPRCoreBundle:Poll:edit.html.twig")
      */
@@ -205,7 +205,7 @@ class PollController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
 
-            return $this->redirect($this->generateUrl('poll_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_poll_show', array('id' => $id)));
         }
 
         return array(
@@ -217,7 +217,7 @@ class PollController extends Controller
     /**
      * Deletes a Poll entity.
      *
-     * @Route("/{id}", name="poll_delete")
+     * @Route("/{id}", name="admin_poll_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -240,7 +240,7 @@ class PollController extends Controller
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));            
         }
 
-        return $this->redirect($this->generateUrl('poll'));
+        return $this->redirect($this->generateUrl('admin_poll'));
     }
 
     /**
@@ -253,7 +253,7 @@ class PollController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('poll_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('admin_poll_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

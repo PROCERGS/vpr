@@ -17,17 +17,17 @@
             {% if(entities) %}
                 {% for entity in entities %}
                     <tr>
-                        <td><a title="{{ 'admin.show'|trans }}" href="{{ path('ballotbox_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                        <td><a title="{{ 'admin.show'|trans }}" href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                         <td>{{ entity.name }}</td>
                         <td>{% if (entity.poll) %}{{ entity.poll.name }}{% endif %}</td>
                         <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
                         <td>{% if (entity.openingTime) %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{% if (entity.closingTime) %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td class="text-center">{{ entity.totalInvalidVotes }}</td>
-                        <td class="text-center">{% if entity.isOnline %}{{ 'admin.yeas'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
+                        <td class="text-center">{% if entity.isOnline %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
                         <td class="text-center">
-                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('ballotbox_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('ballotbox_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                         </td>
                     </tr>
                 {% endfor %}
