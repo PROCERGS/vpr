@@ -15,16 +15,6 @@ services:
         tags:
             - { name: form.type, alias: vpr_person_registration }
 
-    procergs_vpr.listener.authentication:
-        class: %procergs_vpr.listener.authentication.class%
-        arguments: [ "@fos_user.security.login_manager", %fos_user.firewall_name% ]
-        #parent: fos_user.listener.authentication        
-        #abstract: true
-        calls:
-            - [setContainer, ["@service_container"]]        
-        tags:
-            - { name: kernel.event_subscriber }
-
     kernel.listener.logged_in_user_listener:
         class: %kernel.listener.logged_in_user_listener.class%
         tags:

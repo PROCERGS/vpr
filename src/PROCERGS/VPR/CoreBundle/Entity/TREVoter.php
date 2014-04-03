@@ -53,6 +53,19 @@ class TREVoter
     protected $city;
 
     /**
+     * Set name
+     *
+     * @param string $name
+     * @return TREVoter
+     */
+    public function setId($var)
+    {
+        $this->id = $var;
+    
+        return $this;
+    }    
+    
+    /**
      * Get id
      *
      * @return integer
