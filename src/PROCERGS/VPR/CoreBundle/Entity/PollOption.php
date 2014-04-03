@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation\Groups;
  * PollOption
  *
  * @ORM\Table(name="poll_option")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository")
  */
 class PollOption
 {
