@@ -22,7 +22,7 @@
         <button type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.submit' | trans }}</button>
         {{ form_end(form) }}
     </div>
-    <div class="col-md-2 spacer hidden-xs hidden-sm"><hr></div>
+    <div class="col-md-2 hidden-xs hidden-sm"><hr class="spacer"></div>
     <div class="col-md-5">
         <h3>{{ 'register.login.lc'|trans }}</h3>
         {% for owner in hwi_oauth_resource_owners() %}

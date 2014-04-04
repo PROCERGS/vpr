@@ -33,4 +33,10 @@
             '@PROCERGSVPRCoreBundle/Resources/public/js/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+<!--[if lt IE 10]>
+    <script type="text/javascript">
+    $('input[placeholder], textarea[placeholder]').placeholder();
+    </script>
+<![endif]-->
 {% endblock %}

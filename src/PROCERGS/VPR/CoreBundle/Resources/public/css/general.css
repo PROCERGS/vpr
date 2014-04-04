@@ -110,7 +110,7 @@ footer {
   margin-bottom: 30px;
 }
 
-.register-box .spacer hr {
+.register-box .spacer {
   border: none;
   border-right: solid 1px #ffcc99;
   height: 350px;
