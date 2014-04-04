@@ -42,7 +42,9 @@
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
+    {% stylesheets 'bundles/procergsvprcore/css/boostrap.min.css' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />    
+    {% endstylesheets %}
 
     {% stylesheets 'bundles/procergsvprcore/css/admin/*.css' filter='cssrewrite' %}
         <link rel="stylesheet" href="{{ asset_url }}" />    
@@ -52,7 +54,11 @@
 {% block javascripts %}
     {{ parent() }}
 
-    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/*' %}
+    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/jquery-sortable.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/admin.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}

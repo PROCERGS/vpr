@@ -71,6 +71,7 @@ class Poll
 
     /**
      * @ORM\OneToMany(targetEntity="Step", mappedBy="poll")
+     * @ORM\OrderBy({"sorting" = "asc"})
      */
     protected $steps;
 

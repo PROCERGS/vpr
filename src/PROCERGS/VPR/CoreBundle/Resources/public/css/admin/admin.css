@@ -28,3 +28,13 @@
     float: left;
     margin-right: 10px;
 }
+.table > thead > tr > th, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {
+    vertical-align: inherit;
+}
+
+a.save-sorted{position: relative;top:-20px;display: none;}

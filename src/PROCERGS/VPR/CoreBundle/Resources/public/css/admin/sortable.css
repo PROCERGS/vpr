@@ -1,0 +1,69 @@
+body.dragging, body.dragging * {
+    cursor: move !important; 
+}
+.dragged {
+    position: absolute;
+    top: 0;
+    opacity: 2;
+    z-index: 2000; 
+}
+.switch-container {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80px; 
+}
+.navbar-sort-container {
+    height: 200px; 
+}
+.sorted_table tr {
+    cursor: move; 
+}
+.sorted_table tr.placeholder {
+    display: block;
+    background: red;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none; 
+}
+.sorted_table tr.placeholder:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-left-color: #428BCA;
+    margin-top: -5px;
+    left: -5px;
+    border-right: none; 
+}
+.sorted_table thead tr{
+    cursor: default; 
+}
+.sorted_head th.placeholder {
+    display: block;
+    background: red;
+    position: relative;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0; 
+}
+.sorted_head th.placeholder:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+    border-top-color: red;
+    top: -6px;
+    margin-left: -5px;
+    border-bottom: none; 
+}
+.sorted_table > tbody > tr:hover > td:first-child, .sorted_table > tbody > tr:hover > th:first-child {
+    background: url('https://ssl.gstatic.com/ui/v1/icons/mail/grippy_large.png') no-repeat scroll 1px 50% #FFFFCC;
+}
+.sorted_table > tbody > tr:hover > td, .sorted_table > tbody > tr:hover > th {
+    background: #FFFFCC;
+}
