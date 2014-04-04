@@ -93,7 +93,3 @@ procergsvpr_core_sem_nfg:
         _controller: FrameworkBundle:Template:template
         template:    'PROCERGSVPRCoreBundle:Default:sem_nfg.html.twig'
 
-procergsvpr_core_ballots:
-    pattern:  /ballots
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:ballots }
-

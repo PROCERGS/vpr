@@ -28,7 +28,7 @@ class PollOptionRepository extends EntityRepository
                         ->select('o')
                         ->from('PROCERGSVPRCoreBundle:PollOption', 'o')
                         ->join('PROCERGSVPRCoreBundle:Step', 's', 'WITH', 'o.step = s')
-                        ->where('o.poll = :poll')
+                        ->where('s.poll = :poll')
                         ->andWhere('o.corede = :corede')
                         ->addOrderBy('s.sorting', 'ASC')
                         ->addOrderBy('o.categorySorting', 'ASC');

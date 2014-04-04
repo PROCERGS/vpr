@@ -28,6 +28,7 @@ class DefaultController extends Controller
                 'closingTime' => $poll->getClosingTime()
             ));            
         }
+        
         return array('voter' => $voter);
     }
 
@@ -113,61 +114,5 @@ class DefaultController extends Controller
             // checker (not enabled, expired, etc.).
         }
     }
-
-    public function ballotsAction(Request $request)
-    {
-        $form = $this->createFormBuilder()
-                     ->add('city', 'text', array(
-                        'required' => true
-                      ))
-                     ->add('submit', 'submit')
-                     ->getForm();
-
-        $form->handleRequest($request);
-
-        $steps = array();
-
-        if ($form->isValid()) {
-          $em = $this->getDoctrine()->getManager();
-          $data = $form->getData();
-
-          $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
-          $city = $cityRepo->findOneBy(array('name' => $data['city']));
-
-          if ($city) {
-            $pollRepo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll');
-
-            $query = $pollRepo->createQueryBuilder('p')
-                ->select('min(p.id) id') // TESTE - trocar para max !
-                // ->select('max(p.id) id')
-                ->getQuery();
-            $poll = $query->getOneOrNullResult();
-
-            $pollOptionsRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-
-            $query = $pollOptionsRepo->createQueryBuilder('p')
-                ->Where('p.poll = :poll')
-                ->andWhere('p.corede = :corede')
-                ->setParameter('poll', $poll['id'])
-                ->setParameter('corede', $city->getCorede())
-                ->getQuery();
-            $pollOptions = $query->getResult();
-
-
-            foreach ($pollOptions as $option) {
-              $step = $option->getStep()->getName();
-
-              if ( !array_key_exists($step, $steps) ) {
-                $steps[$step] = array();
-              }
-              array_push($steps[$step], $option);
-            }
-          }
-        }
-
-        $form = $form->createView();
-
-        return $this->render('PROCERGSVPRCoreBundle:Default:ballots.html.twig', compact('form', 'steps'));
-    }
-
+    
 }
