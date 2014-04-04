@@ -65,13 +65,6 @@ class PollOption
     private $categorySorting;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Poll")
-     * @ORM\JoinColumn(name="poll_id", referencedColumnName="id")
-     * @Groups({"vote"})
-     */
-    protected $poll;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Step", inversedBy="pollOptions")
      * @ORM\JoinColumn(name="step_id", referencedColumnName="id")
      * @Groups({"vote"})

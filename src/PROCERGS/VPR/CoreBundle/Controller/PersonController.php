@@ -77,7 +77,7 @@ class PersonController extends Controller
                 $userManager = $this->get('fos_user.user_manager');
                 $userManager->updateUser($person);
 
-                $url = $this->generateUrl('procergsvpr_core_cedula');
+                $url = $this->generateUrl('procergsvpr_core_homepage');
                 return $this->redirect($url);
             }
         } catch (FormException $e) {

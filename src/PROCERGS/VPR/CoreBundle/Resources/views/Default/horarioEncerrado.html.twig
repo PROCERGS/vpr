@@ -1,14 +1,18 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
+{% if name is not defined %}
+{% set name = 'default.closing_time.poll.name' | trans %}
+{% endif %}
+{% if closingTime is not defined %}
+{% set closingTime = '' %}
+{% endif %}
 <div class="row">
     <div class="col-md-12">
-
         <div class="alert alert-danger fade in">
-            <h4>Horário encerrado</h4>
-            <p>O horário da votação já foi encerrado!</p>
+            <h4>{{ 'default.closing_time.title' | trans }}</h4>
+            <p>{{ 'default.closing_time.message' | trans({'%poll%' : name, '%closingTime%': closingTime |date('d/m/Y H:i:s')}) }}</p>
         </div>
-
     </div>
 </div>
 {% endblock %}

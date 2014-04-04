@@ -12,7 +12,7 @@ class PollRepository extends EntityRepository
         return $this->getEntityManager()
                         ->createQuery(
                                 'SELECT p FROM PROCERGSVPRCoreBundle:Poll p ORDER BY p.openingTime DESC'
-                        )->setMaxResults(1)->getResult();
+                        )->setMaxResults(1)->getOneOrNullResult();
     }
 
 }

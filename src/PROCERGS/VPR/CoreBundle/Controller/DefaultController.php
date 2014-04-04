@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
 use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
+use PROCERGS\VPR\CoreBundle\Entity\Poll;
 
 class DefaultController extends Controller
 {
@@ -19,6 +20,14 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $voter = $this->get('security.context')->getToken()->getUser();
+        $em = $this->getDoctrine()->getManager();        
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
+        if ($poll->getClosingTime() < new \DateTime()) {
+            return $this->render('PROCERGSVPRCoreBundle:Default:horarioEncerrado.html.twig', array(
+                'name' => $poll->getName(), 
+                'closingTime' => $poll->getClosingTime()
+            ));            
+        }
         return array('voter' => $voter);
     }
 
@@ -81,7 +90,7 @@ class DefaultController extends Controller
                 }
             }
         }
-        return $this->container->get('templating')->renderResponse('PROCERGSVPRCoreBundle:Registration:register.html.twig', array(
+        return $this->render('PROCERGSVPRCoreBundle:Registration:register.html.twig', array(
             'form' => $form->createView()
         ));
     }

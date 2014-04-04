@@ -63,3 +63,7 @@ City: Cidade
 'Voter Registration': '__Voter Registration'
 Continue: Continuar
 'Type a city to see it''s presential voting places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
+default.closing_time.title: 'O horário da votação já foi encerrado!'
+default.closing_time.poll.name: 'votação'
+default.closing_time.message: 'A %poll% foi encerrada as %closingTime%'
+
