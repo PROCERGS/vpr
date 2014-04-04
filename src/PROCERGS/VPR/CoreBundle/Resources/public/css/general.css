@@ -18,16 +18,17 @@
 
 
 /* base */
-html,
-body {
-  height: 100%;
-  margin-bottom: -337px;
+html {
   min-height: 100%;
   position: relative;
 }
 
+body {
+  margin-bottom: 45px;
+}
+
 body > .container {
-  min-height: 100%;
+  padding-bottom: 100px;
 }
 
 .navbar {
@@ -37,20 +38,24 @@ body > .container {
 header {
   background-image: linear-gradient(to bottom, #2c8f47, #184a25);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c8f47', endColorstr='#184a25',GradientType=0 ); /* IE6-9 */
-}
-
-header {
   height: 240px;
 }
 
 footer {
   background-color: #2c8f47;
+  bottom: 0;
   height: 45px;
+  position: absolute;
+  width: 100%;
 }
 
-
-
 /* override boostrap */
+.alert,
+.btn,
+.form-control {
+  border-radius: 0;
+}
+
 .has-feedback .sr-only ~ .form-control-feedback {
   top: 0;
 }
@@ -58,7 +63,6 @@ footer {
 .form-control {
   background-color: #d8e6a5;
   border: none;
-  border-radius: 0;
   color: #2e8f48;
 }
 
@@ -88,7 +92,7 @@ footer {
 }
 
 .btn {
-  border-radius: 0;
+  border:none;
 }
 
 .btn-success {
@@ -103,6 +107,7 @@ footer {
 
 .register-box h3 {
   color: #ffcc99;
+  margin-bottom: 30px;
 }
 
 .register-box .spacer hr {
