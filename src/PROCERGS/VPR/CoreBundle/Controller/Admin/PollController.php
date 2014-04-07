@@ -29,7 +29,18 @@ class PollController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findAll();
+        $query = $em->createQueryBuilder()
+            ->select('p')
+            ->from('PROCERGSVPRCoreBundle:Poll', 'p')
+            ->orderBy('p.openingTime','DESC')
+            ->getQuery();
+
+        $paginator  = $this->get('knp_paginator');
+        $entities = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            10
+        );
 
         return array(
             'entities' => $entities,

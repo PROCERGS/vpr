@@ -62,6 +62,7 @@ admin.category_sorting: __admin.category_sorting
 admin.save_sorted: 'Salvar Ordenação'
 admin.success_save_sorting: 'Ordenação atualizada com sucesso!'
 admin.unable_to_save_sorting: 'Não foi possível salvar a ordenação!'
+admin.saving: Salvando...
 'What''s your voting city?': 'Qual seu domicílio eleitoral?'
 'You need to type the city where you vote so that we can show you the relevant options for you.': 'Você precisa digitar a cidade onde você vota para que possamos lhe mostrar as opções relevantes para sua região.'
 'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Por favor, note que ao informar a cidade errada seu voto não poderá ser contado para o programa de participação popular.'

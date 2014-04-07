@@ -25,9 +25,13 @@ class PersonController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $dql   = "SELECT p FROM PROCERGSVPRCoreBundle:Person p";
-        $query = $em->createQuery($dql);
-        
+
+        $query = $em->createQueryBuilder()
+            ->select('p')
+            ->from('PROCERGSVPRCoreBundle:Person', 'p')
+            ->orderBy('p.firstName','ASC')
+            ->getQuery();
+
         $paginator  = $this->get('knp_paginator');
         $entities = $paginator->paginate(
             $query,

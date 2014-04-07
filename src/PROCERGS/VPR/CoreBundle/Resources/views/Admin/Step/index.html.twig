@@ -17,4 +17,8 @@
     {% endfor %}
 
     {% include 'PROCERGSVPRCoreBundle:Admin/Step:list.html.twig' with {'entities': entities} %}
+
+    <div class="row text-center">
+        {{ knp_pagination_render(entities) }}
+    </div>
 {% endblock %}

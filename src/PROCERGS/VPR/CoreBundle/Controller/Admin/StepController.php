@@ -30,7 +30,21 @@ class StepController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:Step')->findAll();
+        $query = $em->createQueryBuilder()
+            ->select('s')
+            ->from('PROCERGSVPRCoreBundle:Step', 's')
+            ->innerJoin('s.poll','p')
+            ->orderBy('p.openingTime','DESC')
+            ->addOrderBy('s.sorting','ASC')
+            ->getQuery();
+
+        $paginator  = $this->get('knp_paginator');
+        $entities = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            10,
+            array('distinct' => true)
+        );
 
         return array(
             'entities' => $entities,
