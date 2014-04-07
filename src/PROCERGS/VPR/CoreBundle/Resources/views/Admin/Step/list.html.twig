@@ -1,10 +1,13 @@
 {% if(sorted is defined) and (sorted) %}
-    <a class="btn btn-success save-sorted" href="#" role="button">
-        <span class="glyphicon glyphicon-floppy-disk"></span> {%trans%}Salvar Ordenação{%endtrans%}
+    <a class="btn btn-success save-sorted" href="#" role="button" data-loading-text="Salvando...">
+        <span class="glyphicon glyphicon-floppy-disk"></span> {%trans%}admin.save_sorted{%endtrans%}
     </a>
+    <div class="alert alert-save-sorted"></div>
 {% endif %}
 
 <div class="table-responsive">
+
+    
     <table class="table table-striped table-bordered table-hover records_list {{ (sorted is defined) and (sorted) ? 'sorted_table' }}">
         <thead>
             <tr>
@@ -18,7 +21,7 @@
         <tbody>
             {% if(entities) %}
                 {% for entity in entities %}
-                    <tr data-id=="{{entity.id}}" data-ordered=="{{entity.sorting}}">
+                    <tr data-id="{{entity.id}}">
                         <td class="text-center">
                             <span class="order">{{ entity.sorting }}</span>
                         </td>

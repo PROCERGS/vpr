@@ -61,6 +61,10 @@
     {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/admin.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script type="text/javascript">
+        var saveStepSortingUrl = '{{ path('admin_step_save_sorting') }}';
+    </script>
 {% endblock %}
 
 {% block body %}

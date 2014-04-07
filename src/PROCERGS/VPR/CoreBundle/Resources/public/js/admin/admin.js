@@ -15,19 +15,37 @@ $(function() {
                 $(this).find('span.order').html( $(this).index() + 1);
             });
 
+            $('.alert-save-sorted').hide();
             $('.save-sorted').show();
         }
     });
-    
+
+    // Save sorting
     $('.save-sorted').click(function(){
-        var actions = [];
+        var steps = [];
         $.each($('tbody tr'), function() {
-            actions.push($(this).data('id'));
+            steps.push($(this).data('id'));
         });
-        
-        //console.log(actions);
-        
-        $('.save-sorted').hide();
+
+        $(this).button('loading');
+
+        $.ajax({
+            url: saveStepSortingUrl,
+            type: 'POST',
+            data: ({
+                steps: steps
+            }),
+            dataType: 'json',
+            success: function(result) {
+                if (result.success) {
+                    $('.alert-save-sorted').removeClass('alert-danger').addClass('alert-success')
+                    $('.save-sorted').hide();
+                }else{
+                    $('.alert-save-sorted').removeClass('alert-success').addClass('alert-danger')
+                }
+                $('.alert-save-sorted').html(result.message).show();
+            }
+        });        
     });
 
 });

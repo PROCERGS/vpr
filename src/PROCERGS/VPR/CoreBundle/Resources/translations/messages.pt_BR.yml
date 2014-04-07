@@ -49,12 +49,19 @@ admin_users: Usuários
 admin.username: Username
 admin.firstname: Nome
 admin.email: Email
-admin.enabled: Habilitado?
-admin.created_at: Criado em
+admin.enabled: 'Habilitado?'
+admin.created_at: 'Criado em'
 admin.surname: Sobrenome
 admin.last_login: 'Último login'
 admin.welcome: Bem-Vindo!
 admin.logout: Sair
+admin.pollOption: Opções
+admin.scope: __admin.scope
+admin.cost: __admin.cost
+admin.category_sorting: __admin.category_sorting
+admin.save_sorted: 'Salvar Ordenação'
+admin.success_save_sorting: 'Ordenação atualizada com sucesso!'
+admin.unable_to_save_sorting: 'Não foi possível salvar a ordenação!'
 'What''s your voting city?': 'Qual seu domicílio eleitoral?'
 'You need to type the city where you vote so that we can show you the relevant options for you.': 'Você precisa digitar a cidade onde você vota para que possamos lhe mostrar as opções relevantes para sua região.'
 'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Por favor, note que ao informar a cidade errada seu voto não poderá ser contado para o programa de participação popular.'
@@ -64,5 +71,10 @@ City: Cidade
 Continue: Continuar
 'Type a city to see it''s presential voting places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
 default.closing_time.title: 'O horário da votação já foi encerrado!'
-default.closing_time.poll.name: 'votação'
+default.closing_time.poll.name: votação
 default.closing_time.message: 'A %poll% foi encerrada as %closingTime%'
+'Voting Places': '__Voting Places'
+'What is Citizen Login?': '__What is Citizen Login?'
+'Check the ballot of your region': '__Check the ballot of your region'
+'Check the poll places': '__Check the poll places'
+form.username.invalid: __form.username.invalid

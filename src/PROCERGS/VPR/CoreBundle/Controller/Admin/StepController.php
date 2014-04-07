@@ -4,6 +4,7 @@ namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -253,5 +254,40 @@ class StepController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Save sorting steps
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/save_sorting", name="admin_step_save_sorting")
+     */
+    public function saveSortingAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get('translator');
+        $steps = $request->get('steps');
+
+        try{
+            foreach($steps as $i => $step){
+                $entity = $em->getRepository('PROCERGSVPRCoreBundle:Step')->find($step);
+
+                if (!$entity) {
+                    throw new \Exception('error!');
+                }
+
+                $entity->setSorting($i+1);
+                $em->flush();
+            }
+
+            $data = array('success' => true, 'message' => $translator->trans("admin.success_save_sorting"));
+
+        } catch (\Exception $e) {
+            $data = array('success' => false, 'message' => $translator->trans("admin.unable_to_save_sorting"));
+        }
+
+        $response = new JsonResponse();
+        $response->setData($data);
+
+        return $response;        
     }
 }
