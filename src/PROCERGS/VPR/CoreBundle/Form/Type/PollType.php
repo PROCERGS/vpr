@@ -30,7 +30,7 @@ class PollType extends AbstractType
             ))                
                 
             ->add('description')
-            ->add('publicKey', 'text')
+            ->add('publicKey', 'textarea')
         ;
     }
     

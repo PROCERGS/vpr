@@ -17,8 +17,8 @@ class BallotBoxType extends AbstractType
         $builder
             ->add('name')
             ->add('secret', 'text')
-            ->add('publicKey', 'text')
-            ->add('privateKey', 'text')
+            ->add('publicKey', 'textarea')
+            ->add('privateKey', 'textarea')
             ->add('address', 'text', array(
                 'required' => false
             ))

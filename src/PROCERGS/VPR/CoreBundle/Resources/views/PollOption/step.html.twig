@@ -8,7 +8,7 @@
             {{ form_errors(form) }}
 
             {% if options %}
-            <dl>
+            <dl class="step">
             {% for currStep,categories in options %}
                 <dt>{{ currStep }}</dt>
                 <dd>
@@ -59,8 +59,8 @@
 var oba = {};
 oba.label = {'limit' : '{{ 'step.limit.selection' |trans }}'};
 oba.maxItens = {{ step.getMaxSelection }};
-$(document).on('click', '#itens input', function (event) {
-	var sel = $('#itens input:checked');
+$(document).on('click', '.step input', function (event) {
+	var sel = $('.step input:checked');
 	if (sel.length > oba.maxItens) {
 		event.preventDefault();
 		alert(oba.label['limit'] + oba.maxItens);
