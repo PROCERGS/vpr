@@ -24,11 +24,16 @@ html {
 }
 
 body {
+  font-family: 'Roboto', sans-serif;
   margin-bottom: 45px;
 }
 
 body > .container {
   padding-bottom: 100px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
 }
 
 .navbar {
@@ -61,9 +66,9 @@ footer {
 }
 
 .form-control {
-  background-color: #d8e6a5;
+  background-color: #a5d6b3;
   border: none;
-  color: #2e8f48;
+  color: #007034;
 }
 
 .form-control:-moz-placeholder {
@@ -105,7 +110,12 @@ footer {
   margin-bottom: 20px;
 }
 
-.register-box h3 {
+.register-box form {
+  height: 200px;
+  position: relative;
+}
+
+.register-box .title {
   color: #ffcc99;
   margin-bottom: 30px;
 }
@@ -117,13 +127,64 @@ footer {
   width: 1px;
 }
 
+.register-box .col-md-5,
+.info-box .col-md-5 {
+  padding: 0 50px;
+}
+
 .register-box .about-lc {
   margin: 20px 0;
 }
 
 .info-box {
-  font-size: 30px;
+  font-size: 24px;
 }
+
+.info-box .link-check {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .register-box {
+    margin-bottom: 0;
+  }
+
+  .register-box form {
+    display: none;
+    margin-top: 20px;
+  }
+
+  .register-box .col-md-5,
+  .info-box .col-md-5 {
+    border-bottom: solid 1px #CCC;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+
+  .register-box .title {
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .register-box .title .icon,
+  .info-box .link-check .icon {
+    float: left;
+    width: 10%;
+  }
+
+  .register-box .title .text,
+  .info-box .link-check .text {
+    float: right;
+    padding-left: 20px;
+    width: 90%;
+  }
+
+}
+
+
+
+
+
 
 .twitter-typeahead {
   display: block !important;

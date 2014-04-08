@@ -5,7 +5,11 @@
 <h2 id="try-header" class="text-center">{{ 'register.title' | trans }}</h2>
 <div class="row register-box">
     <div class="col-md-5">
-        <h3>{{ 'register.login.simple' | trans }}</h3>
+        <h3 class="title vote-doc clearfix">
+          <span class="glyphicon glyphicon-user icon visible-xs"></span>
+          <span class="text">{{ 'register.login.simple' | trans }}</span>
+        </h3>
+
         {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
         <div class="form-group has-feedback">
             {{ form_label(form.username, 'form.username' | trans, {'label_attr': {'class': 'sr-only'}}) }} {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder' : 'form.username' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
@@ -24,14 +28,17 @@
     </div>
     <div class="col-md-2 hidden-xs hidden-sm"><hr class="spacer"></div>
     <div class="col-md-5">
-        <h3>{{ 'register.login.lc'|trans }}</h3>
+        <h3 class="title clearfix">
+          <span class="glyphicon glyphicon-user icon visible-xs"></span>
+          <span class="text">{{ 'register.login.lc'|trans }}</span>
+        </h3>
         {% for owner in hwi_oauth_resource_owners() %}
-          <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block" role="button">{{ 'register.login.lc'|trans }}</a>
+          <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">{{ 'register.login.lc'|trans }}</a>
         {% endfor %}
-        <div class="about-lc text-right">
+        <div class="about-lc text-right hidden-xs">
           <a href="" class="about-lc" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
         </div>
-        <div class="alert alert-success alert-dismissable">
+        <div class="alert alert-success alert-dismissable hidden-xs">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
           <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50"> <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
         </div>
@@ -39,16 +46,17 @@
 </div>
 
 <div class="row info-box">
-  <div class="col-md-6 text-center">
-    <a href="" role="button">
-      <span class="glyphicon glyphicon-list-alt"></span>
-      {% trans %}Check the ballot of your region{% endtrans %}
+  <div class="col-md-5 ballot">
+    <a href="" role="button" class="link-check clearfix">
+      <span class="glyphicon glyphicon-list-alt icon"></span>
+      <span class="text">{% trans %}Check the ballot of your region{% endtrans %}</span>
     </a>
   </div>
-  <div class="col-md-6 text-center">
-    <a href="" role="button">
-      <span class="glyphicon glyphicon-map-marker"></span>
-      {% trans %}Check the poll places{% endtrans %}
+  <div class="col-md-2"></div>
+  <div class="col-md-5">
+    <a href="" role="button" class="link-check clearfix">
+      <span class="glyphicon glyphicon-map-marker icon"></span>
+      <span class="text">{% trans %}Check the poll places{% endtrans %}</span>
     </a>
   </div>
 </div>
