@@ -105,7 +105,9 @@ footer {
 }
 
 
-/* general */
+/*
+ * Register/Login section
+ */
 .register-box {
   margin-bottom: 20px;
 }
@@ -182,10 +184,9 @@ footer {
 }
 
 
-
-
-
-
+/*
+ * Typeahed plugin style
+ */
 .twitter-typeahead {
   display: block !important;
 }
