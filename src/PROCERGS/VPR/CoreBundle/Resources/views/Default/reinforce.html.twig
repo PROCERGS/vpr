@@ -1,0 +1,25 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">     
+        <h3>{{ 'posvote.reinforce.nfg.title'|trans }}</h3>
+        <p>{{ 'posvote.reinforce.nfg.message'|trans }}</p>
+        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+        {{ form_errors(form) }}
+        <div class="form-group">
+        {{ form_label(form.cpf, 'form.cpf'| trans) }} 
+        {{ form_errors(form.cpf) }} 
+        {{ form_widget(form.cpf) }}
+        </div>
+        <div class="form-group">
+        {{ form_label(form.birthdate, 'form.birthdate'| trans) }} 
+        {{ form_errors(form.birthdate) }} 
+        {{ form_widget(form.birthdate) }}
+        </div>
+        <p><a id="btn-continue" class="btn btn-primary" role="button" type="submit" >{{ 'posvote.continue.click' }}</a></p>
+        <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'posvote.skip.click' | trans }}</a></p>
+        {{ form_end(form) }}        
+    </div>
+</div>
+{% endblock %}

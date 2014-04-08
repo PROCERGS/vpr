@@ -82,14 +82,15 @@ procergsvpr_core_solicita_titulo:
         template:    'PROCERGSVPRCoreBundle:Default:solicita_titulo.html.twig'
 
 procergsvpr_core_reforcar_voto:
-    pattern:  /reforcar_voto
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:reforcar_voto.html.twig'
-
+    pattern:  /reinforce
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforce }
+    
 procergsvpr_core_sem_nfg:
-    pattern:  /sem_nfg
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:sem_nfg.html.twig'
-
+    pattern:  /reinforce/offer    
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceOffer }
+    
+procergsvpr_core_end:
+    pattern:  /end
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:end }
+        
+        

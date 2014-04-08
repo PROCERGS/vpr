@@ -80,7 +80,7 @@ class PollOptionController extends Controller
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
         $em = $this->getDoctrine()->getManager();
-        if ($vote->getLastStep()->getId() != $id) {
+        if (!$vote->getLastStep() || $vote->getLastStep()->getId() != $id) {
             return 'do something mutley';
         }
         $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
@@ -114,7 +114,11 @@ class PollOptionController extends Controller
             )));
             $vote->setPlainOptions($serializedOptions);
             $vote->finishMe();
+            $vote->setLastStep(null);
+            $em->persist($vote);
+            $em->flush();
             $session->set('vote', $vote);
+            return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));            
         }
         $pollOptions = $pollOptionRepo->findByPollCoredeStep($poll, $corede, $step);
         

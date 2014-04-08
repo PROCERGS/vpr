@@ -19,3 +19,8 @@ parameters:
     login_cidadao_base_url: http://meu.rs.gov.br
 
     privateKeyFile: 'file:///home/user/some/folder/privkey.pem'
+    nfg_register_url: 'https://nfg.sefaz.rs.gov.br/site/index.aspx'
+    nfg_ws_url: ~
+    soe_organization: ~
+    soe_username: ~
+    soe_password: ~
