@@ -23,3 +23,14 @@
     </div>
 </div>
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+var posvote = {};
+posvote.cpfId = '#{{ form.cpf.vars.id }}';
+$(document).ready(function() {   
+    $(posvote.cpfId).mask('000.000.000-00');    
+});
+</script>
+{% endblock %}
