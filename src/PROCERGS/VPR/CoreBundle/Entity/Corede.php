@@ -22,7 +22,7 @@ class Corede
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"vote"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class Corede
      * @ORM\Column(name="name", type="string", length=255)
      * @Groups({"vote"})
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\OneToMany(targetEntity="City", mappedBy="corede")

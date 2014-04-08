@@ -22,7 +22,7 @@ class PollOption
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"vote"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class PollOption
      * @ORM\Column(name="title", type="string", length=255)
      * @Groups({"vote"})
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
@@ -38,7 +38,7 @@ class PollOption
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Groups({"vote"})
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class PollOption
      * @ORM\Column(name="coverage", type="text", nullable=true)
      * @Groups({"vote"})
      */
-    private $scope;
+    protected $scope;
 
     /**
      * @var string
@@ -54,7 +54,7 @@ class PollOption
      * @ORM\Column(name="cost", type="decimal")
      * @Groups({"vote"})
      */
-    private $cost;
+    protected $cost;
 
     /**
      * @var integer
@@ -62,7 +62,7 @@ class PollOption
      * @ORM\Column(name="category_sorting", type="integer")
      * @Groups({"vote"})
      */
-    private $categorySorting;
+    protected $categorySorting;
 
     /**
      * @ORM\ManyToOne(targetEntity="Step", inversedBy="pollOptions")
@@ -216,6 +216,17 @@ class PollOption
     public function getStep()
     {
         return $this->step;
+    }
+    
+    public function setCategory($var)
+    {
+        $this->category = $var;
+        return $this;
+    }
+    
+    public function getCategory()
+    {
+        return $this->category;
     }
 
 }

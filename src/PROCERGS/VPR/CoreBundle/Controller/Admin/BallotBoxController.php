@@ -28,8 +28,9 @@ class BallotBoxController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
 
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findAll();
+        $entities = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(compact('poll'), array('id' => 'asc'));
 
         return array(
             'entities' => $entities,

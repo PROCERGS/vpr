@@ -23,28 +23,28 @@ class TREVoter
      * @ORM\Id
      * @ORM\Column(name="id", type="string", length=12)
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="city_name", type="string", length=255)
      */
-    private $cityName;
+    protected $cityName;
 
     /**
      * @var string
      *
      * @ORM\Column(name="voting_zone", type="string", length=255)
      */
-    private $votingZone;
+    protected $votingZone;
 
     /**
      * @ORM\ManyToOne(targetEntity="City")

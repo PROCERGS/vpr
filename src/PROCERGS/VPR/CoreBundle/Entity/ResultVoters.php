@@ -19,21 +19,21 @@ class ResultVoters
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="signature", type="string", length=255)
      */
-    private $signature;
+    protected $signature;
 
     /**
      * @var string
      *
      * @ORM\Column(name="auth_type", type="string", length=255)
      */
-    private $authType;
+    protected $authType;
 
 
     /**

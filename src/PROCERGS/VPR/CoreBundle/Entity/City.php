@@ -21,21 +21,21 @@ class City
      * @ORM\Id
      * @Groups({"autocomplete"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="ibge_code", type="integer")
      */
-    private $ibgeCode;
+    protected $ibgeCode;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="cod_sefa", type="integer")
      */
-    private $codSefa;
+    protected $codSefa;
 
     /**
      * @var string
@@ -43,14 +43,14 @@ class City
      * @Groups({"autocomplete"})
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="is_capital", type="boolean")
      */
-    private $isCapital;
+    protected $isCapital;
 
     /**
      * @ORM\ManyToOne(targetEntity="Corede", inversedBy="cities")

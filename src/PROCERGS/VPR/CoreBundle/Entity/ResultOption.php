@@ -19,35 +19,35 @@ class ResultOption
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="auth_type", type="string", length=255)
      */
-    private $authType;
+    protected $authType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="voter_tegistration", type="string", length=12)
      */
-    private $voterRegistration;
+    protected $voterRegistration;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="is_null", type="boolean")
      */
-    private $isNull;
+    protected $isNull;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="votes", type="bigint")
      */
-    private $votes;
+    protected $votes;
 
 
     /**

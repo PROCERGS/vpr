@@ -19,21 +19,21 @@ class ResultPreview
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="auth_type", type="string", length=255)
      */
-    private $authType;
+    protected $authType;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="votes", type="bigint")
      */
-    private $votes;
+    protected $votes;
 
 
     /**

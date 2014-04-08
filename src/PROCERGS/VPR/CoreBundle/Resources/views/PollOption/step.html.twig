@@ -1,0 +1,80 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron">
+            {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+            {{ form_errors(form) }}
+
+            {% if pollOptions %}
+            <section>
+            <dl id="itens">
+                {% set a1 = '' %}
+                {% set a2 = '' %}
+                {% for option in pollOptions %}
+                    {% if option.step.name != a1 %}
+                        {% if a1 != '' %}
+                        </ul></dd></dl></dd>
+                        {% endif %}
+                        {% set a1 = option.step.name %}
+                        <dt>{{ a1|trans }}</dt>
+                        <dd><dl>
+                        {% set a2 = '' %}
+                    {% endif %}
+                    {% if option.category.name != a2 %}
+                        {% if a2 != '' %}
+                        </ul></dd>
+                        {% endif %}
+                        {% set a2 = option.category.name %}                        
+                        <dt>{{ a2|trans }}</dt>
+                        <dd><ul>
+                    {% endif %}
+                        <li>
+                        <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
+                        <label for="cb6">{{ option.title |trans }}</label>
+                        </li>
+                {% endfor %}
+                </ul></dd></dl></dd>
+                </dl>                
+            </section>
+            {% endif %}
+            <div id="button-bar">
+            <button id="btn-vote" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.vote' | trans }}</button>
+            <div id="confirmation" style="display: none;">
+            <button id="btn-confirm" type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.confirm' | trans }}</button>
+            <button id="btn-cancel" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.cancel' | trans }}</button>
+            </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}    
+<script>
+var oba = {};
+oba.label = {'limit' : '{{ 'step.limit.selection' |trans }}'};
+oba.maxItens = {{ step.getMaxSelection }};
+$(document).on('click', '#itens input', function (event) {
+	var sel = $('#itens input:checked');
+	if (sel.length > oba.maxItens) {
+		event.preventDefault();
+		alert(oba.label['limit'] + oba.maxItens);
+    }
+});
+$(document).on('click', '#btn-vote', function(event) {
+	//debugger;
+	var a = $('#itens input').not(':checked').parent().parent().parent(); a.hide();a.prev().hide();
+	$(this).hide();
+	$('#confirmation').show();
+});
+$(document).on('click', '#btn-cancel', function(event) {
+	var a = $('#itens input').not(':checked').parent().parent().parent(); a.show();a.prev().show();
+	$('#confirmation').hide();
+	$('#btn-vote').show();	
+});
+</script>    
+{% endblock %}

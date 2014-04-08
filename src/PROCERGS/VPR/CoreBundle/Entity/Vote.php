@@ -32,7 +32,7 @@ class Vote
      * @Groups({"vote"})
      */
     protected $options;
-    private $plainOptions;
+    protected $plainOptions;
 
     /**
      * @var \DateTime
@@ -103,6 +103,10 @@ class Vote
      * @Groups({"vote"})
      */
     protected $corede;
+    
+    protected $lastStep;
+    
+    protected $pollOption = array();
 
     /**
      * Get id
@@ -383,6 +387,54 @@ class Vote
         $this->setPlainOptions($openVote);
 
         return $this;
+    }
+    
+    public function setCorede($var)
+    {
+        $this->corede = $var;
+    
+        return $this;
+    }
+    
+    public function getCorede()
+    {
+        return $this->corede;
+    }
+    
+    public function setLastStep($var)
+    {
+        $this->lastStep = $var;
+    
+        return $this;
+    }
+    
+    public function getLastStep()
+    {
+        return $this->lastStep;
+    }
+    
+    public function addPollOption($var)
+    {
+        if (!$this->pollOption) {
+            $this->pollOption = $var;            
+        } else {
+            $this->pollOption = array_merge($this->pollOption, $var);
+        }
+        return $this;
+    }
+    
+    public function getPollOption() 
+    {
+        return $this->pollOption;
+    }
+    
+    public function finishMe()
+    {
+        if (!$this->plainOptions) {
+            throw new \ErrorException('no plainOptions');
+        }
+        $this->signature = $this->ballotBox->sign($this->plainOptions);
+        $this->encryptVote();
     }
 
 }

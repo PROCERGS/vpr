@@ -23,7 +23,7 @@ class BallotBox
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"vote"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -31,28 +31,28 @@ class BallotBox
      * @ORM\Column(name="name", type="string", length=255)
      * @Groups({"vote"})
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="secret", type="string", length=255)
      */
-    private $secret;
+    protected $secret;
 
     /**
      * @var string
      *
      * @ORM\Column(name="public_key", type="text")
      */
-    private $publicKey;
+    protected $publicKey;
 
     /**
      * @var string
      *
      * @ORM\Column(name="private_key", type="text")
      */
-    private $privateKey;
+    protected $privateKey;
 
     /**
      * @var string
@@ -60,7 +60,7 @@ class BallotBox
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
      * @Groups({"vote"})
      */
-    private $address;
+    protected $address;
 
     /**
      * @var string
@@ -68,7 +68,7 @@ class BallotBox
      * @ORM\Column(name="latitude", type="string", length=255, nullable=true)
      * @Groups({"vote"})
      */
-    private $latitude;
+    protected $latitude;
 
     /**
      * @var string
@@ -76,7 +76,7 @@ class BallotBox
      * @ORM\Column(name="longitude", type="string", length=255, nullable=true)
      * @Groups({"vote"})
      */
-    private $longitude;
+    protected $longitude;
 
     /**
      * @var \DateTime
@@ -84,7 +84,7 @@ class BallotBox
      * @ORM\Column(name="opening_time", type="datetime", nullable=true)
      * @Groups({"vote"})
      */
-    private $openingTime;
+    protected $openingTime;
 
     /**
      * @var \DateTime
@@ -92,14 +92,14 @@ class BallotBox
      * @ORM\Column(name="closing_time", type="datetime", nullable=true)
      * @Groups({"vote"})
      */
-    private $closingTime;
+    protected $closingTime;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="total_invalid_votes", type="integer")
      */
-    private $totalInvalidVotes;
+    protected $totalInvalidVotes;
 
     /**
      * @var boolean
@@ -107,7 +107,7 @@ class BallotBox
      * @ORM\Column(name="is_online", type="boolean")
      * @Groups({"vote"})
      */
-    private $isOnline;
+    protected $isOnline;
 
     /**
      * @ORM\ManyToOne(targetEntity="Poll", inversedBy="ballotBoxes")

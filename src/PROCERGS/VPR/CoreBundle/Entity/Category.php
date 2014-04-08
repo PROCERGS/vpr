@@ -22,7 +22,7 @@ class Category
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"vote"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -30,7 +30,7 @@ class Category
      * @ORM\Column(name="name", type="string", length=255)
      * @Groups({"vote"})
      */
-    private $name;
+    protected $name;
 
     /**
      * @var integer
@@ -38,7 +38,7 @@ class Category
      * @ORM\Column(name="sorting", type="integer")
      * @Groups({"vote"})
      */
-    private $sorting;
+    protected $sorting;
 
     /**
      * @ORM\OneToMany(targetEntity="PollOption", mappedBy="step")

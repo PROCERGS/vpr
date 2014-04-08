@@ -23,7 +23,7 @@ class Poll
      * @ORM\GeneratedValue(strategy="AUTO")
      * @Groups({"vote"})
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -31,7 +31,7 @@ class Poll
      * @ORM\Column(name="name", type="string", length=255)
      * @Groups({"vote"})
      */
-    private $name;
+    protected $name;
 
     /**
      * @var \DateTime
@@ -39,7 +39,7 @@ class Poll
      * @ORM\Column(name="opening_time", type="datetime", nullable=false)
      * @Groups({"vote"})
      */
-    private $openingTime;
+    protected $openingTime;
 
     /**
      * @var \DateTime
@@ -47,7 +47,7 @@ class Poll
      * @ORM\Column(name="closing_time", type="datetime", nullable=false)
      * @Groups({"vote"})
      */
-    private $closingTime;
+    protected $closingTime;
 
     /**
      * @var string
@@ -55,14 +55,14 @@ class Poll
      * @ORM\Column(name="description", type="text")
      * @Groups({"vote"})
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      *
      * @ORM\Column(name="public_key", type="text")
      */
-    private $publicKey;
+    protected $publicKey;
 
     /**
      * @ORM\OneToMany(targetEntity="BallotBox", mappedBy="poll")
