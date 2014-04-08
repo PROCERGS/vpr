@@ -117,7 +117,13 @@ class PollOptionController extends Controller
             $session->set('vote', $vote);
         }
         $pollOptions = $pollOptionRepo->findByPollCoredeStep($poll, $corede, $step);
+        
+        $options = array();
+        foreach ($pollOptions as $option) {
+            $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
+        }
+        
         $form = $form->createView();
-        return compact('form', 'pollOptions', 'step');
+        return compact('form', 'pollOptions', 'step', 'options');
     }
 }

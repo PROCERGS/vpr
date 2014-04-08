@@ -7,37 +7,29 @@
             {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
             {{ form_errors(form) }}
 
-            {% if pollOptions %}
-            <section>
-            <dl id="itens">
-                {% set a1 = '' %}
-                {% set a2 = '' %}
-                {% for option in pollOptions %}
-                    {% if option.step.name != a1 %}
-                        {% if a1 != '' %}
-                        </ul></dd></dl></dd>
-                        {% endif %}
-                        {% set a1 = option.step.name %}
-                        <dt>{{ a1|trans }}</dt>
-                        <dd><dl>
-                        {% set a2 = '' %}
-                    {% endif %}
-                    {% if option.category.name != a2 %}
-                        {% if a2 != '' %}
-                        </ul></dd>
-                        {% endif %}
-                        {% set a2 = option.category.name %}                        
-                        <dt>{{ a2|trans }}</dt>
-                        <dd><ul>
-                    {% endif %}
-                        <li>
-                        <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                        <label for="cb6">{{ option.title |trans }}</label>
-                        </li>
+            {% if options %}
+            <dl>
+            {% for currStep,categories in options %}
+                <dt>{{ currStep }}</dt>
+                <dd>
+                    <dl>
+                {% for category,pollOptions in categories %}
+	                <dt>{{ category }}</dt>
+	                <dd class="category">
+	                   <ol>
+	                {% for option in pollOptions %}
+	                       <li>
+	                            <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
+                                <label for="cb6">{{ option.title |trans }}</label>
+	                       </li>
+                    {% endfor %}
+                        </ol>
+                    </dd>
                 {% endfor %}
-                </ul></dd></dl></dd>
-                </dl>                
-            </section>
+                    </dl>
+                </dd>
+            {% endfor %}
+            </dl>
             {% endif %}
             <div id="button-bar">
             <button id="btn-vote" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.vote' | trans }}</button>
@@ -50,6 +42,15 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+.category li {
+    list-style: none outside none;
+}
+</style>
 {% endblock %}
 
 {% block javascripts %}
@@ -67,12 +68,15 @@ $(document).on('click', '#itens input', function (event) {
 });
 $(document).on('click', '#btn-vote', function(event) {
 	//debugger;
-	var a = $('#itens input').not(':checked').parent().parent().parent(); a.hide();a.prev().hide();
-	$(this).hide();
+	$('input:checked').parents('.category').prev('dt').addClass('lero');
+	$('dd dt').not('.lero').slideUp('medium');
+	$('dd dt').not('.lero').next().slideUp('medium');
+	$("li input").not(':checked').parents('li').slideUp('medium');
+	$('#btn-vote').hide();	
 	$('#confirmation').show();
 });
 $(document).on('click', '#btn-cancel', function(event) {
-	var a = $('#itens input').not(':checked').parent().parent().parent(); a.show();a.prev().show();
+	$('dt,dd,li').slideDown('medium').removeClass('lero');	
 	$('#confirmation').hide();
 	$('#btn-vote').show();	
 });
