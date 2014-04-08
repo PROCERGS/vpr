@@ -108,6 +108,25 @@ footer {
 /*
  * Register/Login section
  */
+ #how-to-vote {
+  display: inline-block;
+  margin: 30px;
+ }
+
+ #how-to-vote:before {
+  content: "?";
+  border: solid 2px orange;
+  border-radius: 50%;
+  display: block;
+  float: left;
+  font-size: 30px;
+  height: 40px;
+  margin-right: 10px;
+  position: relative;
+  top: -5px;
+  width: 40px;
+ }
+
 .register-box {
   margin-bottom: 20px;
 }
@@ -115,6 +134,14 @@ footer {
 .register-box form {
   height: 200px;
   position: relative;
+}
+
+.register-box .tooltip {
+  font-size: 15px;
+}
+
+.register-box .tooltip a {
+  color: #FFF;
 }
 
 .register-box .title {
@@ -134,8 +161,12 @@ footer {
   padding: 0 50px;
 }
 
-.register-box .about-lc {
+.register-box #about-lc-link {
   margin: 20px 0;
+}
+
+.register-box #about-lc {
+  display: none;
 }
 
 .info-box {
@@ -147,6 +178,11 @@ footer {
 }
 
 @media (max-width: 768px) {
+
+  header {
+    height: 80px;
+  }
+
   .register-box {
     margin-bottom: 0;
   }
@@ -157,7 +193,7 @@ footer {
   }
 
   .register-box .col-md-5,
-  .info-box .col-md-5 {
+  .info-box .ballot {
     border-bottom: solid 1px #CCC;
     margin-bottom: 20px;
     padding-bottom: 20px;
@@ -234,3 +270,20 @@ footer {
   margin: 0;
   font-size: 14px;
 }
+
+
+
+
+
+
+/*
+ * steps/poll style
+ */
+ .step-box {
+  height: 100%;
+  min-height: 500px;
+ }
+
+ .step-box .loader {
+  display: none;
+ }

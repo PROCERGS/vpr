@@ -2,7 +2,10 @@
 
 {% block body %}
 {% trans_default_domain 'messages' %}
-<h2 id="try-header" class="text-center">{{ 'register.title' | trans }}</h2>
+{# <h2 id="try-header" class="text-center">{{ 'register.title' | trans }}</h2> #}
+<div class="center-block text-center">
+  <h3 id="how-to-vote">{{ 'register.title' | trans }}</h3>
+</div>
 <div class="row register-box">
     <div class="col-md-5">
         <h3 class="title vote-doc clearfix">
@@ -12,7 +15,7 @@
 
         {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
         <div class="form-group has-feedback">
-            {{ form_label(form.username, 'form.username' | trans, {'label_attr': {'class': 'sr-only'}}) }} {{ form_widget(form.username, {'attr': {'class': 'form-control', 'placeholder' : 'form.username' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+            {{ form_label(form.username, 'form.username' | trans, {'label_attr': {'class': 'sr-only'}}) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip', 'placeholder' : 'form.username' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
             <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
         </div>
         <div class="form-group has-feedback">
@@ -35,11 +38,10 @@
         {% for owner in hwi_oauth_resource_owners() %}
           <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">{{ 'register.login.lc'|trans }}</a>
         {% endfor %}
-        <div class="about-lc text-right hidden-xs">
-          <a href="" class="about-lc" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
+        <div class="text-right hidden-xs" id="about-lc-link">
+          <a href="" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
         </div>
-        <div class="alert alert-success alert-dismissable hidden-xs">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <div class="alert alert-success alert-dismissable hidden-xs" id="about-lc">
           <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50"> <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
         </div>
     </div>

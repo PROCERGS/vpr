@@ -3,33 +3,39 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <div class="jumbotron">
-            {{ form_start(form, {'attr' : {'role' : 'form'}}) }} 
+        <div class="jumbotron" style="min-height:500px;">
+            {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
             {{ form_errors(form) }}
 
             {% if options %}
-            <dl class="step">
-            {% for currStep,categories in options %}
-                <dt>{{ currStep }}</dt>
-                <dd>
+            <div class="step-box">
+              {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
+              <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="loader">
+              {% endimage %}
+              <dl class="step">
+                {% for currStep,categories in options %}
+                  <dt>{{ currStep }}</dt>
+                  <dd>
                     <dl>
-                {% for category,pollOptions in categories %}
-	                <dt>{{ category }}</dt>
-	                <dd class="category">
-	                   <ol>
-	                {% for option in pollOptions %}
-	                       <li>
-	                            <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                                <label for="cb6">{{ option.title |trans }}</label>
-	                       </li>
-                    {% endfor %}
-                        </ol>
-                    </dd>
-                {% endfor %}
+                      {% for category,pollOptions in categories %}
+                        <dt>{{ category }}</dt>
+                        <dd class="category">
+                          <ul>
+                            {% for option in pollOptions %}
+                            <li>
+                              <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
+                              <label for="cb6">{{ option.title |trans }}</label>
+                            </li>
+                            {% endfor %}
+                          </ul>
+                        </dd>
+                      {% endfor %}
                     </dl>
-                </dd>
-            {% endfor %}
-            </dl>
+                  </dd>
+                {% endfor %}
+              </dl>
+            </div>
+
             {% endif %}
             <div id="button-bar">
             <button id="btn-vote" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.vote' | trans }}</button>
@@ -54,31 +60,78 @@
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}    
+{{ parent() }}
 <script>
-var oba = {};
-oba.label = {'limit' : '{{ 'step.limit.selection' |trans }}'};
-oba.maxItens = {{ step.getMaxSelection }};
-$(document).on('click', '.step input', function (event) {
-	var sel = $('.step input:checked');
-	if (sel.length > oba.maxItens) {
-		event.preventDefault();
-		alert(oba.label['limit'] + oba.maxItens);
+$(function() {
+
+  var oba = {
+    label: {
+      'limit' : '{{ 'step.limit.selection' |trans }}'
+    },
+    maxItens: {{ step.getMaxSelection }}
+  };
+
+  $(".step input").on("click", function(event) {
+    var sel = $('.step input:checked');
+    if (sel.length > oba.maxItens) {
+      event.preventDefault();
+      alert(oba.label['limit'] + oba.maxItens);
     }
+  });
+
+  $("#btn-vote").on("click", function() {
+    $(".step").slideUp("slow", function() {
+      $('input:checked').closest('.category').prev('dt').addClass('lero');
+      $('dd dt').not('.lero').hide();
+      $('dd dt').not('.lero').next().hide();
+      $("li input").not(':checked').closest('li').hide();
+      $(".loader").fadeIn();
+      $('#btn-vote').hide();
+    });
+
+    setTimeout(function() {
+      $(".loader").fadeOut();
+      $(".step").slideDown("slow", function() {
+        $('#confirmation').show();
+      });
+    }, 3000);
+
+  });
+
+  $("#btn-cancel").on("click", function() {
+    $('dt,dd,li').show().removeClass('lero');
+    $('#confirmation').hide();
+    $('#btn-vote').show();
+  });
+
+
 });
-$(document).on('click', '#btn-vote', function(event) {
-	//debugger;
-	$('input:checked').parents('.category').prev('dt').addClass('lero');
-	$('dd dt').not('.lero').slideUp('medium');
-	$('dd dt').not('.lero').next().slideUp('medium');
-	$("li input").not(':checked').parents('li').slideUp('medium');
-	$('#btn-vote').hide();	
-	$('#confirmation').show();
-});
-$(document).on('click', '#btn-cancel', function(event) {
-	$('dt,dd,li').slideDown('medium').removeClass('lero');	
-	$('#confirmation').hide();
-	$('#btn-vote').show();	
-});
-</script>    
+</script>
+
+<script>
+// var oba = {};
+// oba.label = {'limit' : '{{ 'step.limit.selection' |trans }}'};
+// oba.maxItens = {{ step.getMaxSelection }};
+// $(document).on('click', '.step input', function (event) {
+//   var sel = $('.step input:checked');
+//   if (sel.length > oba.maxItens) {
+//     event.preventDefault();
+//     alert(oba.label['limit'] + oba.maxItens);
+//     }
+// });
+// $(document).on('click', '#btn-vote', function(event) {
+//   //debugger;
+//   $('input:checked').parents('.category').prev('dt').addClass('lero');
+//   $('dd dt').not('.lero').slideUp('medium');
+//   $('dd dt').not('.lero').next().slideUp('medium');
+//   $("li input").not(':checked').parents('li').slideUp('medium');
+//   $('#btn-vote').hide();
+//   $('#confirmation').show();
+// });
+// $(document).on('click', '#btn-cancel', function(event) {
+//   $('dt,dd,li').slideDown('medium').removeClass('lero');
+//   $('#confirmation').hide();
+//   $('#btn-vote').show();
+// });
+</script>
 {% endblock %}

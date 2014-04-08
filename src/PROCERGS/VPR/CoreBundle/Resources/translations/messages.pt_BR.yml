@@ -2,7 +2,7 @@ form.username: 'Titulo eleitor'
 form.firstname: Nome
 form.surname: Sobrenome
 form.submit: Enviar
-register.title: 'Votação de Prioridades do RS'
+register.title: 'Como faço para votar?'
 register.login.simple: 'Vote com seu Título de eleitor'
 register.login.lc: 'Vote com seu Login Cidadão'
 form.city-selection.tried-different-city: 'Embora você tenha digitado uma cidade diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'
