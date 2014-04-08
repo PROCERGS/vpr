@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Category;
-use PROCERGS\VPR\CoreBundle\Form\Type\CategoryType;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\CategoryType;
 
 /**
  * Category controller.
@@ -209,7 +209,7 @@ class CategoryController extends Controller
 
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
-            
+
             return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));
         }
 

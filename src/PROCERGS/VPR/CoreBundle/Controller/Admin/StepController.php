@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Step;
-use PROCERGS\VPR\CoreBundle\Form\Type\StepType;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\StepType;
 
 /**
  * Step controller.

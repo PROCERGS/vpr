@@ -1,14 +1,14 @@
 <?php
 
-namespace PROCERGS\VPR\CoreBundle\Form\Type;
+namespace PROCERGS\VPR\CoreBundle\Form\Type\Admin;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class StepType extends AbstractType
+class CategoryType extends AbstractType
 {
-    /**
+        /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
@@ -17,23 +17,16 @@ class StepType extends AbstractType
         $builder
             ->add('name')
             ->add('sorting')
-            ->add('maxSelection')
-            ->add('poll', 'entity', array(
-                'class' => 'PROCERGSVPRCoreBundle:Poll',
-                'property' => 'name',
-                'empty_value' => '',
-                'required' => true
-            ))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'PROCERGS\VPR\CoreBundle\Entity\Step'
+            'data_class' => 'PROCERGS\VPR\CoreBundle\Entity\Category'
         ));
     }
 
@@ -42,6 +35,6 @@ class StepType extends AbstractType
      */
     public function getName()
     {
-        return 'procergs_vpr_corebundle_step';
+        return 'procergs_vpr_corebundle_category';
     }
 }

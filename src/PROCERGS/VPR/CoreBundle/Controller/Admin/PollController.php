@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
-use PROCERGS\VPR\CoreBundle\Form\Type\PollType;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollType;
 
 /**
  * Poll controller.
@@ -63,7 +63,7 @@ class PollController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            
+
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
 
@@ -131,7 +131,7 @@ class PollController extends Controller
         }
 
         $steps = $entity->getSteps();
-        
+
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -159,7 +159,7 @@ class PollController extends Controller
         }
 
         $steps = $entity->getSteps();
-        
+
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -248,7 +248,7 @@ class PollController extends Controller
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));            
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
         }
 
         return $this->redirect($this->generateUrl('admin_poll'));

@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\VPR\CoreBundle\Form\Type;
+namespace PROCERGS\VPR\CoreBundle\Form\Type\Admin;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -44,15 +44,15 @@ class BallotBoxType extends AbstractType
                 'property' => 'name',
                 'empty_value' => '',
                 'required' => true
-            ))                
+            ))
             ->add('city', 'entity', array(
                 'class' => 'PROCERGSVPRCoreBundle:City',
                 'property' => 'name',
                 'required' => false
-            ))                
+            ))
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

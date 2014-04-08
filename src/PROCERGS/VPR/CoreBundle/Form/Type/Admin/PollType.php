@@ -1,6 +1,6 @@
 <?php
 
-namespace PROCERGS\VPR\CoreBundle\Form\Type;
+namespace PROCERGS\VPR\CoreBundle\Form\Type\Admin;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,13 +27,13 @@ class PollType extends AbstractType
                 'date_format' => 'dd MMMM yyyy',
                 'widget' => 'choice',
                 'years' => range(date('Y'), date('Y') - 70)
-            ))                
-                
+            ))
+
             ->add('description')
             ->add('publicKey', 'textarea')
         ;
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

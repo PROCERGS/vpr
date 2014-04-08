@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
-use PROCERGS\VPR\CoreBundle\Form\Type\BallotBoxType;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxType;
 
 /**
  * BallotBox controller.
@@ -53,7 +53,7 @@ class BallotBoxController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            
+
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
 
@@ -230,9 +230,9 @@ class BallotBoxController extends Controller
 
             $em->remove($entity);
             $em->flush();
-            
+
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));            
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
         }
 
         return $this->redirect($this->generateUrl('admin_ballotbox'));
