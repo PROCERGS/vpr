@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="jumbotron" style="min-height:500px;">
-            {{ form_start(form, {'attr' : {'role' : 'form'}}) }}
+            {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkbox ac-checkmark'}}) }}
             {{ form_errors(form) }}
 
             {% if options %}
@@ -14,17 +14,17 @@
               {% endimage %}
               <dl class="step">
                 {% for currStep,categories in options %}
-                  <dt>{{ currStep }}</dt>
+                  <dt class="step-title">{{ currStep }}</dt>
                   <dd>
                     <dl>
                       {% for category,pollOptions in categories %}
-                        <dt>{{ category }}</dt>
+                        <dt class="step-category">{{ category }}</dt>
                         <dd class="category">
                           <ul>
                             {% for option in pollOptions %}
                             <li>
                               <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                              <label for="cb6">{{ option.title |trans }}</label>
+                              <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
                             </li>
                             {% endfor %}
                           </ul>
@@ -52,86 +52,38 @@
 
 {% block stylesheets %}
 {{ parent() }}
-<style>
-.category li {
-    list-style: none outside none;
-}
-</style>
+
+  {% stylesheets 'bundles/procergsvprcore/css/step/step.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
+
+  <style>
+  .category li {
+      list-style: none outside none;
+  }
+  </style>
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-<script>
-$(function() {
 
-  var oba = {
-    label: {
-      'limit' : '{{ 'step.limit.selection' |trans }}'
-    },
-    maxItens: {{ step.getMaxSelection }}
-  };
+  {% javascripts
+          'bundles/procergsvprcore/js/step/svgcheckbx.js' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 
-  $(".step input").on("click", function(event) {
-    var sel = $('.step input:checked');
-    if (sel.length > oba.maxItens) {
-      event.preventDefault();
-      alert(oba.label['limit'] + oba.maxItens);
-    }
-  });
-
-  $("#btn-vote").on("click", function() {
-    $(".step").slideUp("slow", function() {
-      $('input:checked').closest('.category').prev('dt').addClass('lero');
-      $('dd dt').not('.lero').hide();
-      $('dd dt').not('.lero').next().hide();
-      $("li input").not(':checked').closest('li').hide();
-      $(".loader").fadeIn();
-      $('#btn-vote').hide();
-    });
-
-    setTimeout(function() {
-      $(".loader").fadeOut();
-      $(".step").slideDown("slow", function() {
-        $('#confirmation').show();
-      });
-    }, 3000);
-
-  });
-
-  $("#btn-cancel").on("click", function() {
-    $('dt,dd,li').show().removeClass('lero');
-    $('#confirmation').hide();
-    $('#btn-vote').show();
-  });
-
-
-});
-</script>
+  {% javascripts
+          'bundles/procergsvprcore/js/step/step.js' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 
 <script>
-// var oba = {};
-// oba.label = {'limit' : '{{ 'step.limit.selection' |trans }}'};
-// oba.maxItens = {{ step.getMaxSelection }};
-// $(document).on('click', '.step input', function (event) {
-//   var sel = $('.step input:checked');
-//   if (sel.length > oba.maxItens) {
-//     event.preventDefault();
-//     alert(oba.label['limit'] + oba.maxItens);
-//     }
-// });
-// $(document).on('click', '#btn-vote', function(event) {
-//   //debugger;
-//   $('input:checked').parents('.category').prev('dt').addClass('lero');
-//   $('dd dt').not('.lero').slideUp('medium');
-//   $('dd dt').not('.lero').next().slideUp('medium');
-//   $("li input").not(':checked').parents('li').slideUp('medium');
-//   $('#btn-vote').hide();
-//   $('#confirmation').show();
-// });
-// $(document).on('click', '#btn-cancel', function(event) {
-//   $('dt,dd,li').slideDown('medium').removeClass('lero');
-//   $('#confirmation').hide();
-//   $('#btn-vote').show();
-// });
+var oba = {
+  label: {
+    'limit' : '{{ 'step.limit.selection' |trans }}'
+  },
+  maxItens: {{ step.getMaxSelection }}
+};
 </script>
+
 {% endblock %}

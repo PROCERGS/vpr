@@ -1,5 +1,8 @@
 $(function() {
 
+  /*
+   * Register check username
+   */
   $(usernameId).on('blur', function () {
     if (!this.value.length) {
       return;
@@ -12,6 +15,7 @@ $(function() {
     }
 
   });
+
 
   /*
    * Mobile behavior to register form
