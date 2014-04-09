@@ -29,7 +29,7 @@ body {
 }
 
 body > .container {
-  padding-bottom: 100px;
+  padding-bottom: 50px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -109,27 +109,26 @@ footer {
  * Register/Login section
  */
  #how-to-vote {
+  color: #2E8F48;
   display: inline-block;
+  font-weight: 100;
   margin: 30px;
  }
 
  #how-to-vote:before {
   content: "?";
-  border: solid 2px orange;
+  border: solid 1px #db954b;
   border-radius: 50%;
+  color: #db954b;
   display: block;
   float: left;
   font-size: 30px;
   height: 40px;
   margin-right: 10px;
   position: relative;
-  top: -5px;
+  top: -2px;
   width: 40px;
  }
-
-.register-box {
-  margin-bottom: 20px;
-}
 
 .register-box .tooltip {
   font-size: 15px;
@@ -140,30 +139,28 @@ footer {
 }
 
 .register-box .title {
-  color: #ffcc99;
+  color: #db954b;
   margin-bottom: 30px;
   text-align: center;
 }
 
 .register-box .spacer {
   border: none;
-  border-right: solid 1px #ffcc99;
-  height: 350px;
+  border-right: solid 2px #db954b;
+  height: 300px;
+  margin-bottom: 50px;
   width: 1px;
 }
 
 .register-box .col-md-5,
 .info-box .col-md-5 {
+  margin-bottom: 50px;
   padding: 0 50px;
   text-align: center;
 }
 
 .register-box #about-lc-link {
   margin: 20px 0;
-}
-
-.register-box #about-lc {
-  display: none;
 }
 
 .info-box {
@@ -200,7 +197,7 @@ footer {
 
   .register-box .col-md-5,
   .info-box .col-md-5 {
-    padding: 0 20px;
+    padding: 0 10px;
   }
 
   .register-box .col-md-5,

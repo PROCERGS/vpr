@@ -4,7 +4,7 @@
 {% trans_default_domain 'messages' %}
 {# <h2 id="try-header" class="text-center">{{ 'register.title' | trans }}</h2> #}
 <div class="center-block text-center">
-  <h3 id="how-to-vote">{{ 'register.title' | trans }}</h3>
+  <h2 id="how-to-vote">{{ 'register.title' | trans }}</h2>
 </div>
 <div class="row register-box">
     <div class="col-md-5">
@@ -43,8 +43,9 @@
         <div class="text-right hidden-xs" id="about-lc-link">
           <a href="" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
         </div>
-        <div class="alert alert-success alert-dismissable hidden-xs" id="about-lc">
-          <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50"> <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
+        <div class="alert alert-success hidden-xs hidden" id="about-lc">
+          <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50">
+          <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
         </div>
     </div>
 </div>
@@ -68,32 +69,16 @@
 
 {% block javascripts %}
 {{ parent() }}
+
+  <script type="text/javascript">
+  var usernameId = '#{{ form.username.vars.id }}';
+  var messages = {
+        '0' : "{{ 'form.username.invalid' | trans }}"
+  };
+  </script>
+
   {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/register/register.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
-
-<script type="text/javascript">
-var usernameId = '#{{ form.username.vars.id }}';
-var messages = {
-      '0' : "{{ 'form.username.invalid' | trans }}"
-};
-</script>
-
-<script type="text/javascript">
-$(function () {
-      $(usernameId).on('blur', function () {
-        if (!this.value.length) {
-          return;
-        }
-        this.value = completaZerosEsquerda(this.value, 12);
-        if (validarTitulo(this.value)) {
-
-          } else {
-            alert(messages[0]);
-            }
-
-        });
-    });
-</script>
 
 {% endblock %}

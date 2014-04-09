@@ -1,5 +1,18 @@
 $(function() {
 
+  $(usernameId).on('blur', function () {
+    if (!this.value.length) {
+      return;
+    }
+    this.value = completaZerosEsquerda(this.value, 12);
+    if (validarTitulo(this.value)) {
+
+    } else {
+      alert(messages[0]);
+    }
+
+  });
+
   /*
    * Mobile behavior to register form
    */
@@ -12,8 +25,8 @@ $(function() {
   });
 
   $(window).resize(function() {
-    if ($(window).width() > 768 && registerForm.is(":hidden") ) {
-      registerForm.show();
+    if ($(window).width() > 768 && formContainer.is(":hidden") ) {
+      formContainer.show();
     }
   });
 
@@ -23,7 +36,7 @@ $(function() {
    */
    $("#about-lc-link a").on("click", function(e) {
     e.preventDefault();
-    $("#about-lc").toggle();
+    $("#about-lc").toggleClass("hidden");
    });
 
 
