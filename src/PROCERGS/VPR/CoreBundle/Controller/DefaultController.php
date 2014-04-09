@@ -30,7 +30,7 @@ class DefaultController extends Controller
         if (! $vote) {
             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
             if (false && $poll->getClosingTime() < new \DateTime()) {
-                return $this->render('PROCERGSVPRCoreBundle:Default:horarioEncerrado.html.twig', array(
+                return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOverAction.html.twig', array(
                     'name' => $poll->getName(),
                     'closingTime' => $poll->getClosingTime()
                 ));
@@ -51,27 +51,13 @@ class DefaultController extends Controller
             }
             $vote1 = $em->getRepository('PROCERGSVPRCoreBundle:Vote')->findBy($filter);
             if ($vote1) {
-                if ($vote1->getNfgCpf()) {
-                    die('go to nfg');
+                if ($vote1[0]->getNfgCpf()) {
+                    return $this->redirect($this->generateUrl('procergsvpr_core_end'));                    
                 } else {
-                    return $this->redirect($this->generateUrl('procergsvpr_core_end'));
+                    return $this->redirect($this->generateUrl('procergsvpr_core_tituloVotou'));
                 }
             }
-            $vote = new Vote();
-            $vote->setBallotBox($ballotBox[0]);
-            $vote->setCorede($voter->getCity()
-                ->getCorede());
-            if ($voter->getTreVoter()) {
-                $vote->setVoterRegistration($voter->getTreVoter()
-                    ->getId());
-            }
-            if ($voter->getLoginCidadaoId()) {
-                $vote->setLoginCidadaoId($voter->getLoginCidadaoId());
-            }
-            $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-            $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
-            $em->detach($vote);
-            $session->set('vote', $vote);
+            $vote = $this->_createVote($em, $session, $voter, $ballotBox[0]);
         } else {
             if (! $vote->getLastStep()) {
                 if (! $vote->getVoterRegistration()) {
@@ -82,13 +68,21 @@ class DefaultController extends Controller
                 if ($vote->getLoginCidadaoId()) {
                     $filter['loginCidadaoId'] = $vote->getLoginCidadaoId();
                 }
-                $vote1 = $em->getRepository('PROCERGSVPRCoreBundle:Vote')->findBy($filter);
-                if ($vote1) {
-                    if (! $vote1->getNfgCpf()) {
-                        return $this->redirect($this->generateUrl('procergsvpr_core_sem_nfg'));
+                if (!$vote->getNfgCpf()) {
+                    $vote1 = $em->getRepository('PROCERGSVPRCoreBundle:Vote')->findBy($filter);
+                    if ($vote1) {
+                        if (! $vote1[0]->getNfgCpf()) {
+                            return $this->redirect($this->generateUrl('procergsvpr_core_sem_nfg'));
+                        } else {
+                            return $this->redirect($this->generateUrl('procergsvpr_core_end'));
+                        }
                     } else {
-                        return $this->redirect($this->generateUrl('procergsvpr_core_end'));
+                        $session->set('vote', null);
+                        return $this->indexAction();
                     }
+                } else {
+                    $session->set('vote', null);
+                    return $this->redirect($this->generateUrl('procergsvpr_core_end'));
                 }
             }
         }
@@ -124,8 +118,8 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             $session = $request->getSession();
             $vote = $session->get('vote');
-            if (! $vote) {
-                return 'do something mutley';
+            if (! $vote || $vote->getLastStep()) {
+                return $this->indexAction();
             }
             $voter = $this->get('security.context')
                 ->getToken()
@@ -137,22 +131,30 @@ class DefaultController extends Controller
             $nfgWs->setDataNascimento($form->get('birthdate')
                 ->getData());
             $nfgWs->setNome($voter->getFirstName() . ' ' . $voter->getSurname());
-            // $return = $nfgWs->consultaCadastro();
-            $return['CodSitRetorno'] = 1;
+            $return = $nfgWs->consultaCadastro();            
             if (is_numeric($return['CodSitRetorno'])) {
                 switch ($return['CodSitRetorno']) {
-                    case 1:                        
-                        return $this->redirect($this->generateUrl('procergsvpr_core_end'));
-                        break;
-                    case 2:
-                        return $this->redirect($this->generateUrl('procergsvpr_core_end'));
-                        break;
-                    case 3:
-                        return $this->redirect($this->generateUrl('procergsvpr_core_end'));
-                        break;
-                    default:
-                        $form->addError(new FormError('posvote.reinforce.nfg.return.problem'));
-                        break;
+                	case 1:
+                	    if ($return['CodNivelAcesso'] >= 2) {
+                	        $em = $this->getDoctrine()->getManager();
+                	        $vote->setNfgCpf(1);
+                	        $vote = $em->merge($vote);
+                	        $em->persist($vote);
+                	        $em->flush();
+                	        return $this->indexAction();
+                	    } else {
+                	        return $this->redirect($this->generateUrl('procergsvpr_core_nfgFraca'));
+                	    }
+                	    return $this->indexAction();
+                	case 2:
+                	    $form->addError(new FormError('posvote.reinforce.nfg.user.wrongdata'));
+                	    break;
+                	case 9:
+                	    $form->addError(new FormError('posvote.reinforce.nfg.user.notfound'));
+                	    break;
+                	default:
+                	    $form->addError(new FormError('posvote.reinforce.nfg.return.problem'));
+                	    break;
                 }
             } else {
                 $form->addError(new FormError('posvote.reinforce.nfg.query.problem'));
@@ -164,9 +166,103 @@ class DefaultController extends Controller
         ));
     }
 
+    public function reinforcePunyAction()
+    {
+        return $this->render('PROCERGSVPRCoreBundle:Default:reinforcePuny.html.twig');
+    }
+
     public function endAction()
     {
         return $this->render('PROCERGSVPRCoreBundle:Default:end.html.twig');
+    }
+
+    public function endTimeOverAction()
+    {
+        return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOver.html.twig');
+    }
+    
+    public function endPunyAction()
+    {
+        return $this->render('PROCERGSVPRCoreBundle:Default:endPuny.html.twig');
+    }    
+
+    public function endChangeAction(Request $request)
+    {
+        $session = $this->getRequest()->getSession();
+        $vote = $session->get('vote');
+        if ($vote) {
+            return $this->indexAction();
+        }
+        $voter = $this->get('security.context')
+            ->getToken()
+            ->getUser();        
+        $chan = new \stdClass();
+        $chan->trevote = null;
+        $chan->cpf = null;
+        $chan->birthdate = null;
+        if ($voter->getTreVoter()) {
+            $chan->trevoter = $voter->getTreVoter()->getId();
+        }
+        
+        $formBuilder = $this->createFormBuilder($chan);
+        $formBuilder->add('cpf', 'text', array(
+            'required' => true
+        ));
+        $formBuilder->add('birthdate', 'birthday', array(
+            'required' => true,
+            'format' => 'dd MMMM yyyy',
+            'widget' => 'choice',
+            'years' => range(date('Y'), date('Y') - 70)
+        ));
+        $formBuilder->add('trevoter', 'text', array(
+            'required' => true,
+            'max_length' => 12
+        ));
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+        $messages = '';
+        if ($form->isValid()) {            
+            $nfgWs = $this->get('procergs.nfgws');
+            //$nfgWs->setTituloEleitor($form->get('trevoter')->getData());
+            $nfgWs->setCpf($form->get('cpf')->getData());
+            //$nfgWs->setDataNascimento($form->get('birthdate')->getData()->format('Y-m-d'));
+            //$nfgWs->setNome($voter->getFirstName() . ' ' . $voter->getSurname());
+            $return = $nfgWs->consultaCadastro();
+            //$return['CodSitRetorno'] = mt_rand(1, 4);
+            if (is_numeric($return['CodSitRetorno'])) {
+                switch ($return['CodSitRetorno']) {
+                	case 1:
+                	    if ($return['CodNivelAcesso'] >= 2) {
+                	        $em = $this->getDoctrine()->getManager();
+                	        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
+                	        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(array(
+                	            'poll' => $poll,
+                	            'isOnline' => 1
+                	        ));
+                	        $vote = $this->_createVote($em, $session, $voter, $ballotBox[0]);                	        
+                	        return $this->indexAction();
+                	    } else {
+                	        return $this->redirect($this->generateUrl('procergsvpr_core_end_change_puny'));
+                	    }
+                        return $this->indexAction();
+                    case 2:
+                        $form->addError(new FormError('end.change.nfg.user.wrongdata'));
+                	    break;
+                	case 9:
+                	    $form->addError(new FormError('end.change.nfg.user.notfound'));
+                	    break;
+                	default:
+                	    $form->addError(new FormError('end.change.nfg.return.problem'));
+                	    break;
+                }
+            } else {
+                $form->addError(new FormError('end.change.nfg.query.problem'));
+            }            
+        }
+        return $this->render('PROCERGSVPRCoreBundle:Default:endChange.html.twig', array(
+            'form' => $form->createView(),
+            'messages' => $messages
+        ));
     }
 
     /**
@@ -255,5 +351,26 @@ class DefaultController extends Controller
             // We simply do not authenticate users which do not pass the user
             // checker (not enabled, expired, etc.).
         }
+    }
+    
+    private function _createVote($em, $session, $voter, $ballotBox)
+    {
+        $vote = new Vote();
+        $vote->setAuthType($voter->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
+        $vote->setBallotBox($ballotBox);
+        $vote->setCorede($voter->getCity()
+            ->getCorede());
+        if ($voter->getTreVoter()) {
+            $vote->setVoterRegistration($voter->getTreVoter()
+                ->getId());
+        }
+        if ($voter->getLoginCidadaoId()) {
+            $vote->setLoginCidadaoId($voter->getLoginCidadaoId());
+        }
+        $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+        $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
+        $em->detach($vote);
+        $session->set('vote', $vote);
+        return $vote;        
     }
 }

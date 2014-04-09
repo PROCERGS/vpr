@@ -76,16 +76,16 @@ class PollOptionController extends Controller
         $request = $this->getRequest();
         $session = $request->getSession();
         $vote = $session->get('vote');
-        if (! $vote) {
+        if (! $vote || ! $vote->getLastStep()) {
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
         $em = $this->getDoctrine()->getManager();
-        if (!$vote->getLastStep() || $vote->getLastStep()->getId() != $id) {
+        if ($vote->getLastStep()->getId() != $id) {
             return 'do something mutley';
         }
         $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $poll = $em->merge($vote->getBallotBox()
-            ->getPoll());
+            ->getPoll());        
         $corede = $em->merge($vote->getCorede());
         $step = $em->merge($vote->getLastStep());
         
@@ -111,14 +111,19 @@ class PollOptionController extends Controller
             $serializedOptions = $serializer->serialize($options, 'json', SerializationContext::create()->setSerializeNull(true)
                 ->setGroups(array(
                 'vote'
-            )));
+            )));            
+            //$ballotBox = $em->merge($vote->getBallotBox());
+            //$vote->setBallotBox($ballotBox->setPoll($poll));
             $vote->setPlainOptions($serializedOptions);
             $vote->finishMe();
-            $vote->setLastStep(null);
+            $vote->setCreatedAtValue();
+            $vote = $em->merge($vote);
             $em->persist($vote);
             $em->flush();
+            $vote->setLastStep(null);
+            $vote->setPollOption(null);
             $session->set('vote', $vote);
-            return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));            
+            return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
         $pollOptions = $pollOptionRepo->findByPollCoredeStep($poll, $corede, $step);
         

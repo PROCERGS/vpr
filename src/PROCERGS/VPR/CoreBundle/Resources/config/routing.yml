@@ -50,24 +50,21 @@ procergsvpr_core_municipio:
     pattern:  /municipio
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:municipio }
 
+procergsvpr_core_end:
+    pattern:  /end
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:end }
 
 procergsvpr_core_tituloVotou:
-    pattern:  /tituloVotou
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:tituloVotou.html.twig'
+    pattern:  /end/change
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChange }
 
-procergsvpr_core_nfgFraca:
-    pattern:  /nfgFraca
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:nfgFraca.html.twig'
+procergsvpr_core_end_change_puny:
+    pattern:  /end/change/puny
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChangePuny }
 
 procergsvpr_core_horarioEncerrado:
-    pattern:  /horarioEncerrado
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:horarioEncerrado.html.twig'
+    pattern:  /end/timeover
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endTimeOver }
 
 procergsvpr_core_cedula:
     pattern:  /cedula
@@ -75,22 +72,20 @@ procergsvpr_core_cedula:
         _controller: FrameworkBundle:Template:template
         template:    'PROCERGSVPRCoreBundle:Default:cedula.html.twig'
 
+procergsvpr_core_reforcar_voto:
+    pattern:  /reinforce
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforce }   
+
+procergsvpr_core_nfgFraca:
+    pattern:  /reinforce/puny
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforcePuny }
+
 procergsvpr_core_solicita_titulo:
-    pattern:  /solicita_titulo
+    pattern:  /reinforce/doc
     defaults:
         _controller: FrameworkBundle:Template:template
         template:    'PROCERGSVPRCoreBundle:Default:solicita_titulo.html.twig'
-
-procergsvpr_core_reforcar_voto:
-    pattern:  /reinforce
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforce }
     
 procergsvpr_core_sem_nfg:
     pattern:  /reinforce/offer    
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceOffer }
-    
-procergsvpr_core_end:
-    pattern:  /end
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:end }
-        
-        

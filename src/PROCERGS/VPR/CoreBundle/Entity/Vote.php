@@ -14,6 +14,9 @@ use JMS\Serializer\Annotation\Groups;
  */
 class Vote
 {
+    
+    const AUTH_LOGIN_CIDADAO = 'lc';
+    const AUTH_VOTER_REGISTRATION = 'doc';
 
     /**
      * @var integer
@@ -53,7 +56,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="passphrase", type="string", length=255)
+     * @ORM\Column(name="passphrase", type="text")
      * @Groups({"vote"})
      */
     protected $passphrase;
@@ -69,7 +72,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="login_cidadao_id", type="string", length=255)
+     * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
      * @Groups({"vote"})
      */
     protected $loginCidadaoId;
@@ -77,7 +80,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="nfg_cpf", type="string", length=255)
+     * @ORM\Column(name="nfg_cpf", type="string", length=255, nullable=true)
      * @Groups({"vote"})
      */
     protected $nfgCpf;
@@ -85,7 +88,7 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="voter_registration", type="string", length=12)
+     * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true)
      * @Groups({"vote"})
      */
     protected $voterRegistration;
@@ -356,13 +359,14 @@ class Vote
         }
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+
     public function encryptVote()
     {
         $crypted = null;
         $ballotBox = $this->getBallotBox();
+        if (!$ballotBox) {
+        	return false;
+        }
         $poll = $ballotBox->getPoll();
         $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
         $options = $this->getPlainOptions();
@@ -422,6 +426,12 @@ class Vote
         }
         return $this;
     }
+
+    public function setPollOption($var)
+    {
+        $this->pollOption = $var;
+        return $this;
+    }    
     
     public function getPollOption() 
     {
@@ -431,9 +441,9 @@ class Vote
     public function finishMe()
     {
         if (!$this->plainOptions) {
-            throw new \ErrorException('no plainOptions');
+            return false;
         }
-        $this->signature = $this->ballotBox->sign($this->plainOptions);
+        $this->signature = $this->ballotBox->sign($this->plainOptions);        
         $this->encryptVote();
     }
 

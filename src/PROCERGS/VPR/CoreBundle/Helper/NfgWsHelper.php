@@ -1,5 +1,5 @@
 <?php
-namespace PROCERGS\LoginCidadao\CoreBundle\Helper;
+namespace PROCERGS\VPR\CoreBundle\Helper;
 
 /* sample http to test raw send
  
@@ -110,8 +110,8 @@ class NfgWsHelper
                 ));
             }
             $result = $this->client->ConsultaCadastro(array(
-                'cpf' => $this->cpf ? $this->cpf : '',
-                'tituloEleitor' => $this->tituloEleitor ? $this->tituloEleitor : '',
+                'cpf' => $this->cpf ? preg_replace('/[^0-9]/', '', $this->cpf) : '',
+                'tituloEleitor' => $this->tituloEleitor ? preg_replace('/[^0-9]/', '',$this->tituloEleitor) : '',
                 'nome' => $this->nome ? $this->nome : '',
                 'dataNascimento' => $this->dataNascimento ? $this->dataNascimento : '',
                 'organizacao' => $this->organizacao ? $this->organizacao : '',
@@ -126,7 +126,7 @@ class NfgWsHelper
         if (! @$dom->loadXML($a = $result->ConsultaCadastroResult)) {
             return false;
         }
-        foreach (array('CodNivelAcesso', 'CodSitRetorno', 'NomeConsumidor', 'MsgRetorno') as $val) {
+        foreach (array('CodNivelAcesso', 'CodSitRetorno', 'NomeConsumidor', 'MsgRetorno', 'CodCpfOK', 'NroTitEleitorOK', 'DtNascOK') as $val) {
             $node = $dom->getElementsByTagName($val);
             if (!$node->length) {
                 return false;

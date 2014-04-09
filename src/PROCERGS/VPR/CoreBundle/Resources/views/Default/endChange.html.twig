@@ -1,0 +1,58 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">     
+        <h3>{{ 'end.change.nfg.title'|trans }}</h3>
+        <p>{{ 'end.change.nfg.message'|trans }}</p>
+        {{ form_start(form, {'attr' : {'role' : 'form', 'id': 'form-end-change'}}) }} 
+        {{ form_errors(form) }}
+        <div class="form-group">
+        {{ form_label(form.trevoter, 'form.trevoter'| trans) }} 
+        {{ form_errors(form.trevoter) }} 
+        {{ form_widget(form.trevoter) }}
+        </div>        
+        <div class="form-group">
+        {{ form_label(form.cpf, 'form.cpf'| trans) }} 
+        {{ form_errors(form.cpf) }} 
+        {{ form_widget(form.cpf) }}
+        </div>
+        <div class="form-group">
+        {{ form_label(form.birthdate, 'form.birthdate'| trans) }} 
+        {{ form_errors(form.birthdate) }} 
+        {{ form_widget(form.birthdate) }}
+        </div>
+        <p><a id="btn-continue" class="btn btn-primary" role="button">{{ 'end.change.continue.click' }}</a></p>
+        <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'end.change.skip.click' | trans }}</a></p>
+        {{ form_end(form) }}        
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+var messages = {
+	      '0' : "{{ 'form.trevoter.invalid' | trans }}"
+	};
+var posvote = {};
+posvote.cpfId = '#{{ form.cpf.vars.id }}';
+posvote.trevoterId = '#{{ form.trevoter.vars.id }}';
+$(document).ready(function() {
+	$("#btn-continue").click(function(){ $('#form-end-change').submit(); }); 
+    $(posvote.cpfId).mask('000.000.000-00'); 
+    $(posvote.trevoterId).on('blur', function () {
+        if (!this.value.length) {
+          return;
+        }
+        this.value = completaZerosEsquerda(this.value, 12);
+        if (validarTitulo(this.value)) {
+
+          } else {
+            alert(messages[0]);
+            }
+
+        });       
+});
+</script>
+{% endblock %}

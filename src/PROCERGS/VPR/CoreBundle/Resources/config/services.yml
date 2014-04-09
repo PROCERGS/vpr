@@ -3,7 +3,7 @@ parameters:
     procergs_person.registration.form.type.class: PROCERGS\VPR\CoreBundle\Form\Type\RegistrationFormType
     kernel.listener.logged_in_user_listener.class: PROCERGS\VPR\CoreBundle\EventListener\LoggedInUserListener
     procergs_vpr.listener.authentication.class: PROCERGS\VPR\CoreBundle\EventListener\AuthenticationListener
-    procergs.nfgws.class: PROCERGS\LoginCidadao\CoreBundle\Helper\NfgWsHelper
+    procergs.nfgws.class: PROCERGS\VPR\CoreBundle\Helper\NfgWsHelper
 
 services:
     user_provider:

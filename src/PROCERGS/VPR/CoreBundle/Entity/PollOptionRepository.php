@@ -71,10 +71,9 @@ class PollOptionRepository extends EntityRepository
     {
         $query = $this->getEntityManager()->createQueryBuilder()
         ->select('s')
-        ->from('PROCERGSVPRCoreBundle:PollOption', 's')
-        ->where('s.step = :step')
-        ->andWhere('s.id in (:ids)');
-        return $query->getQuery()->setParameters(array('step' => $vote->getLastStep(), 'ids' => $vote->getPollOption()))->getResult();
+        ->from('PROCERGSVPRCoreBundle:PollOption', 's')        
+        ->where('s.id in (:ids)');
+        return $query->getQuery()->setParameters(array('ids' => $vote->getPollOption()))->getResult();
     }
     
 }

@@ -1,0 +1,14 @@
+{% block body %}
+{% if nfgRegisterUrl is not defined %}
+{% set nfgRegisterUrl = '' %}
+{% endif %}
+
+{% include "PROCERGSVPRCoreBundle::base.reinforce.message.html.twig" with {
+'rTitle' : 'end.change.nfg.puny.title'|trans , 
+'rMsg1' : 'end.change.nfg.puny.message'|trans,
+'rMsg2' : 'end.change.nfg.puny.offer'|trans,
+'rClass' : 'alert-danger',
+'nfgRegisterUrl' : nfgRegisterUrl,
+'continueUrl': path('procergsvpr_core_tituloVotou')
+} %}
+{% endblock %}
