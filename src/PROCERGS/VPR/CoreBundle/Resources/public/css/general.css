@@ -20,11 +20,13 @@
 /* base */
 html {
   min-height: 100%;
+  /*font-size: 62.5%;*/
   position: relative;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
+  font-size: 10px;
   margin-bottom: 45px;
 }
 
@@ -43,7 +45,7 @@ h1, h2, h3, h4, h5, h6 {
 header {
   background-image: linear-gradient(to bottom, #2c8f47, #184a25);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c8f47', endColorstr='#184a25',GradientType=0 ); /* IE6-9 */
-  height: 240px;
+  height: 140px;
 }
 
 footer {
@@ -131,11 +133,6 @@ footer {
   margin-bottom: 20px;
 }
 
-.register-box form {
-  height: 200px;
-  position: relative;
-}
-
 .register-box .tooltip {
   font-size: 15px;
 }
@@ -146,7 +143,9 @@ footer {
 
 .register-box .title {
   color: #ffcc99;
+  font-size: 2.2em;
   margin-bottom: 30px;
+  text-align: center;
 }
 
 .register-box .spacer {
@@ -159,6 +158,7 @@ footer {
 .register-box .col-md-5,
 .info-box .col-md-5 {
   padding: 0 50px;
+  text-align: center;
 }
 
 .register-box #about-lc-link {
@@ -179,17 +179,31 @@ footer {
 
 @media (max-width: 768px) {
 
-  header {
-    height: 80px;
-  }
-
   .register-box {
     margin-bottom: 0;
   }
 
-  .register-box form {
-    display: none;
+  .register-form-container {
+    max-height: 0;
+    overflow: hidden;
+    position: relative;
+    -webkit-transition: 1s ease-in-out;
+    -moz-transition: 1s ease-in-out;
+    -o-transition: 1s ease-in-out;
+    transition: 1s ease-in-out;
+  }
+
+  .register-form-container.slide {
+    max-height: 1000px;
+  }
+
+  .register-form {
     margin-top: 20px;
+  }
+
+  .register-box .col-md-5,
+  .info-box .col-md-5 {
+    padding: 0 20px;
   }
 
   .register-box .col-md-5,
@@ -206,15 +220,8 @@ footer {
 
   .register-box .title .icon,
   .info-box .link-check .icon {
-    float: left;
-    width: 10%;
-  }
-
-  .register-box .title .text,
-  .info-box .link-check .text {
-    float: right;
-    padding-left: 20px;
-    width: 90%;
+    display: inline-block !important;
+    margin-right: 10px;
   }
 
 }
