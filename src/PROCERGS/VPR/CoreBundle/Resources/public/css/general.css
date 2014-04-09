@@ -20,13 +20,11 @@
 /* base */
 html {
   min-height: 100%;
-  /*font-size: 62.5%;*/
   position: relative;
 }
 
 body {
   font-family: 'Roboto', sans-serif;
-  font-size: 10px;
   margin-bottom: 45px;
 }
 
@@ -143,7 +141,6 @@ footer {
 
 .register-box .title {
   color: #ffcc99;
-  font-size: 2.2em;
   margin-bottom: 30px;
   text-align: center;
 }
