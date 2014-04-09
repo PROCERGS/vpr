@@ -1,95 +1,110 @@
+.step {
+  -webkit-transition: 0.2s ease-in-out;
+  -moz-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+  opacity: 1;
+}
+
+.step.slide {
+  opacity: 0;
+}
+
 .step .step-title {
   font-size: 25px;
+  font-weight: normal;
 }
 
 .step .step-category {
   font-size: 20px;
-  margin: 10px 0;
+  font-weight: normal;
+  margin: 30px 0 10px;
 }
 
 .ac-custom {
-    padding: 0 3em;
-    max-width: 900px;
-    margin: 0 auto;
+  padding: 0 3em;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .ac-custom li {
-    margin: 0 auto;
-    padding: 1em 0;
-    position: relative;
+  list-style: none;
+  margin: 0 auto;
+  padding: 1em 0;
+  position: relative;
 }
 
 .ac-custom label {
-    display: inline-block;
-    line-height: normal;
-    position: relative;
-    font-size: 20px;
-    padding: 0 0 0 80px;
-    vertical-align: top;
-    color: rgba(0,0,0,0.2);
-    cursor: pointer;
-    -webkit-transition: color 0.3s;
-    transition: color 0.3s;
+  display: inline-block;
+  line-height: normal;
+  position: relative;
+  font-size: 20px;
+  font-weight: normal;
+  padding: 0 0 0 50px;
+  vertical-align: top;
+  cursor: pointer;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
 }
 
 .ac-custom input[type="checkbox"],
 .ac-custom input[type="radio"],
 .ac-custom label::before {
-    width: 30px;
-    height: 30px;
-    left: 0;
-    position: absolute;
-    top: 50%;
-    margin-top: -15px;
-    cursor: pointer;
+  width: 30px;
+  height: 30px;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
+  cursor: pointer;
 }
 
 .ac-custom input[type="checkbox"],
 .ac-custom input[type="radio"] {
-    opacity: 0;
-    -webkit-appearance: none;
-    display: inline-block;
-    vertical-align: middle;
-    z-index: 100;
+  opacity: 0;
+  -webkit-appearance: none;
+  display: inline-block;
+  vertical-align: middle;
+  z-index: 100;
 }
 
 .ac-custom label::before {
-    content: '';
-    border: 2px solid #fff;
-    -webkit-transition: opacity 0.3s;
-    transition: opacity 0.3s;
+  content: '';
+  border: 2px solid #a5d6b3;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
 }
 
 .ac-radio label::before {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 .ac-custom input[type="checkbox"]:checked + label,
 .ac-custom input[type="radio"]:checked + label {
-    color: #fff;
+  color: #007034;
 }
 
 .ac-custom input[type="checkbox"]:checked + label::before,
 .ac-custom input[type="radio"]:checked + label::before {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 /* General SVG and path styles */
 
 .ac-custom svg {
-    position: absolute;
-    width: 20px;
-    height: 30px;
-    left: 5px;
-    pointer-events: none;
-    margin-top: -18px;
-    top: 50%;
+  position: absolute;
+  width: 20px;
+  height: 30px;
+  left: 5px;
+  pointer-events: none;
+  margin-top: -18px;
+  top: 50%;
 }
 
 .ac-custom svg path {
-    stroke: #fdfcd3;
-    stroke-width: 13px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
+  stroke: #007034;
+  stroke-width: 13px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
 }

@@ -1,3 +1,8 @@
+/*
+ * by @crnacura
+ * http://tympanus.net/Development/AnimatedCheckboxes/
+ */
+
 if( document.createElement('svg').getAttributeNS ) {
 
     var checkbxsCross = Array.prototype.slice.call( document.querySelectorAll( 'form.ac-cross input[type="checkbox"]' ) ),
@@ -122,6 +127,8 @@ if( document.createElement('svg').getAttributeNS ) {
     }
 
     function reset( el ) {
+      console.log(el);
+      console.log(el.parentNode);
         Array.prototype.slice.call( el.parentNode.querySelectorAll( 'svg > path' ) ).forEach( function( el ) { el.parentNode.removeChild( el ); } );
     }
 

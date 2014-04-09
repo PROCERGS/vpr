@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="jumbotron" style="min-height:500px;">
-            {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkbox ac-checkmark'}}) }}
+            {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
             {{ form_errors(form) }}
 
             {% if options %}
@@ -19,7 +19,7 @@
                     <dl>
                       {% for category,pollOptions in categories %}
                         <dt class="step-category">{{ category }}</dt>
-                        <dd class="category">
+                        <dd class="options">
                           <ul>
                             {% for option in pollOptions %}
                             <li>
@@ -37,13 +37,15 @@
             </div>
 
             {% endif %}
+
             <div id="button-bar">
-            <button id="btn-vote" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.vote' | trans }}</button>
-            <div id="confirmation" style="display: none;">
-            <button id="btn-confirm" type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.confirm' | trans }}</button>
-            <button id="btn-cancel" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.cancel' | trans }}</button>
+              <button id="btn-vote" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.vote' | trans }}</button>
+              <div id="confirmation" style="display: none;">
+                <button id="btn-confirm" type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.confirm' | trans }}</button>
+                <button id="btn-cancel" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.cancel' | trans }}</button>
+              </div>
             </div>
-            </div>
+
             {{ form_end(form) }}
         </div>
     </div>
