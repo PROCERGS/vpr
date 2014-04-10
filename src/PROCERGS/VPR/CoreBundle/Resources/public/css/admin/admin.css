@@ -60,3 +60,13 @@ a.save-sorted{
 .poll-option-step table tbody {
     background: #F5F5F5
 }
+.poll-option-step p.step, .poll-option-step p.category  {
+    border: 1px solid #DDDDDD;
+    padding: 8px;
+}
+.poll-option-step p.step {
+
+}
+.poll-option-step p.category {
+    
+}

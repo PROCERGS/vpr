@@ -3,19 +3,19 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="poll-option-step">
-                    <p><strong>{{'admin.step'|trans}}</strong>: {{ currStep }}</p>    
+                    <p class="step"><strong>{{'admin.step'|trans}}</strong>: {{ currStep }}</p>    
 
                     {% for category,pollOptions in categories %}
                         <div class="row">
                             <div class="col-md-11 col-md-offset-1">
-                                <p><strong>{{'admin.category'|trans}}</strong>: {{ category }}</p>
+                                <p class="category"><strong>{{'admin.category'|trans}}</strong>: {{ category }}</p>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-10 col-md-offset-2">
                                 <div class="table-responsive">
-                                    <table class="table table-hover records_list">
+                                    <table class="table table-hover table-bordered records_list">
                                         <thead>
                                             <tr>
                                                 <th width="90%">{{ 'admin.pollOption'|trans }}</th>

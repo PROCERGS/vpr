@@ -26,7 +26,8 @@
                 <label>{{ 'admin.corede'|trans }}</label>
                 {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <button type="submit" class="btn btn-default">{{ 'admin.filter'|trans }}</button>
+            <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+            <a href="{{ path('admin_poll_option', {'clear_filter':'true' }) }}" class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
         {{ form_end(form) }}
     </div>
 

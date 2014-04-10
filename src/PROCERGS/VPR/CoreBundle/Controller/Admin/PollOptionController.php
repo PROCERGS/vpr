@@ -27,6 +27,14 @@ class PollOptionController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        
+        if($request->get('clear_filter')){
+            $session->clear();
+            return $this->redirect($this->generateUrl('admin_poll_option'));
+        }
+        
+        $filterOptions = $session->get('filterOptions');
 
         $polls = $em->createQueryBuilder()
             ->select('p')
@@ -60,8 +68,14 @@ class PollOptionController extends Controller
             ->getForm();
 
         $entities = array();
-        if ($request->isMethod('POST')) {
-            $form->bind($request);
+        if ($request->isMethod('POST') || $filterOptions) {
+            if(!$request->isMethod('POST') && $filterOptions){
+                $form->bind($filterOptions);
+                
+            }else{
+                $form->bind($request);
+                $session->set('filterOptions', $request);
+            }
             $selected = $form->getData();
 
             $corede = $selected['corede'];
@@ -269,7 +283,7 @@ class PollOptionController extends Controller
             $translator = $this->get('translator');
             $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
 
-            return $this->redirect($this->generateUrl('admin_poll_option_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_poll_option'));
         }
 
         return array(
