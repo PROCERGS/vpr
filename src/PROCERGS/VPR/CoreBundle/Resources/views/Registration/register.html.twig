@@ -4,16 +4,11 @@
 {% trans_default_domain 'messages' %}
 {# <h2 id="try-header" class="text-center">{{ 'register.title' | trans }}</h2> #}
 <div class="center-block text-center">
-  <h2 id="how-to-vote">
-    <span class="icon"></span>
-    <span class="text">{{ 'register.title' | trans }}</span>
-  </h2>
+  <h2 id="how-to-vote">{{ 'register.title' | trans }}</h2>
 </div>
 <div class="row register-box">
     <div class="col-md-5">
-        <h3 class="title register-label clearfix">
-            {{ 'register.login.simple' | trans }}
-        </h3>
+        <h3 class="title register-label clearfix"><span class="text">{{ 'register.login.simple' | trans }}</span></h3>
 
         <div class="register-form-container">
           {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }} {{ form_errors(form) }}
@@ -35,9 +30,7 @@
     </div>
     <div class="col-md-2 hidden-xs hidden-sm"><hr class="spacer"></div>
     <div class="col-md-5">
-        <h3 class="title clearfix">
-          {{ 'register.login.lc'|trans }}
-        </h3>
+        <h3 class="title login-label clearfix"><span class="text">{{ 'register.login.lc'|trans }}</span></h3>
         {% for owner in hwi_oauth_resource_owners() %}
           <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">{{ 'register.login.lc'|trans }}</a>
         {% endfor %}
@@ -54,14 +47,12 @@
 <div class="row info-box">
   <div class="col-md-5 col-ballot text-center">
     <a href="" role="button" class="link-check ballot-check clearfix">
-      <span class="icon"></span>
       <span class="text">{% trans %}Check the ballot of your region{% endtrans %}</span>
     </a>
   </div>
   <div class="col-md-2"></div>
   <div class="col-md-5 text-center">
     <a href="" role="button" class="link-check place-check clearfix">
-      <span class="icon"></span>
       <span class="text">{% trans %}Check the poll places{% endtrans %}</span>
     </a>
   </div>
