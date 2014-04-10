@@ -2,6 +2,9 @@ $(function() {
     // add bootstrap classes to forms
     $('.form-group select').not('.form-control').addClass('form-control');
 
+    // add mask input money
+    $('.money').mask('000.000.000.000.000,00', {reverse: true});
+
     // Sortable rows
     $('.sorted_table tbody').sortable({
         containerSelector: 'tr',
