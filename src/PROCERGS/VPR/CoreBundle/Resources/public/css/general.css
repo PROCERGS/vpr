@@ -116,14 +116,15 @@ footer {
 /*
  * Register/Login section
  */
+
  #how-to-vote {
   display: inline-block;
   font-weight: 100;
   margin: 30px;
   position: relative;
- }
+}
 
- #how-to-vote .icon {
+#how-to-vote .icon {
   background: url('../images/icon_set.png') no-repeat;
   background-position: -19px -153px;
   display: inline-block;
@@ -132,23 +133,37 @@ footer {
   position: relative;
   top: 10px;
   width: 39px;
- }
-
- #how-to-vote .text {
-  display: inline-block;
- }
-
-.register-box .tooltip {
-  font-size: 15px;
 }
 
-.register-box .tooltip a {
-  color: #FFF;
+#how-to-vote .text {
+  display: inline-block;
+}
+
+.register-box {
+  margin-bottom: 0;
+}
+
+.register-box .col-md-5 {
+  margin-bottom: 50px;
+  padding: 0 50px;
+  text-align: center;
+}
+
+.register-box .col-md-5,
+.info-box .col-md-5 {
+  padding: 0 10px;
+}
+
+.register-box .col-md-5,
+.info-box .col-ballot {
+  border-bottom: solid 1px #CCC;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 .register-box .title {
   color: #db954b;
-  margin-bottom: 30px;
+  cursor: pointer;
   text-align: center;
 }
 
@@ -160,10 +175,30 @@ footer {
   width: 1px;
 }
 
-.register-box .col-md-5 {
-  margin-bottom: 50px;
-  padding: 0 50px;
-  text-align: center;
+.register-form-container {
+  max-height: 0;
+  overflow: hidden;
+  position: relative;
+  -webkit-transition: 1s ease-in-out;
+  -moz-transition: 1s ease-in-out;
+  -o-transition: 1s ease-in-out;
+  transition: 1s ease-in-out;
+}
+
+.register-form-container.slide {
+  max-height: 1000px;
+}
+
+.register-form {
+  margin-top: 20px;
+}
+
+.register-form .tooltip {
+  font-size: 15px;
+}
+
+.register-form .tooltip a {
+  color: #FFF;
 }
 
 .register-box #about-lc-link {
@@ -180,6 +215,7 @@ footer {
   position: relative;
 }
 
+
 @media (min-width: 768px) and (max-width: 991px) {
   .info-box .col-ballot {
     margin-bottom: 100px;
@@ -187,6 +223,23 @@ footer {
 }
 
 @media (min-width: 768px) {
+
+  .register-form-container {
+    max-height: none;
+  }
+
+  .register-box .col-md-5, .info-box .col-ballot {
+    border-bottom: none;
+  }
+
+  .register-box .title {
+    cursor: default;
+    margin-bottom: 30px;
+  }
+
+  .register-form {
+    margin-top: 0;
+  }
 
   .link-check .icon {
     background: url('../images/icon_set.png') no-repeat;
@@ -209,54 +262,6 @@ footer {
     top: -25px;
     width: 77px;
   }
-}
-
-@media (max-width: 767px) {
-
-  .register-box {
-    margin-bottom: 0;
-  }
-
-  .register-form-container {
-    max-height: 0;
-    overflow: hidden;
-    position: relative;
-    -webkit-transition: 1s ease-in-out;
-    -moz-transition: 1s ease-in-out;
-    -o-transition: 1s ease-in-out;
-    transition: 1s ease-in-out;
-  }
-
-  .register-form-container.slide {
-    max-height: 1000px;
-  }
-
-  .register-form {
-    margin-top: 20px;
-  }
-
-  .register-box .col-md-5,
-  .info-box .col-md-5 {
-    padding: 0 10px;
-  }
-
-  .register-box .col-md-5,
-  .info-box .col-ballot {
-    border-bottom: solid 1px #CCC;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-  }
-
-  .register-box .title {
-    cursor: pointer;
-    margin-bottom: 0;
-  }
-
-  .register-box .title .icon,
-  .info-box .link-check .icon {
-    display: inline-block !important;
-    margin-right: 10px;
-  }
 
 }
 
@@ -264,7 +269,7 @@ footer {
 /*
  * Typeahed plugin style
  */
-.twitter-typeahead {
+ .twitter-typeahead {
   display: block !important;
 }
 
@@ -311,20 +316,3 @@ footer {
   margin: 0;
   font-size: 14px;
 }
-
-
-
-
-
-
-/*
- * steps/poll style
- */
- .step-box {
-  height: 100%;
-  min-height: 500px;
- }
-
- .step-box .loader {
-  display: none;
- }
