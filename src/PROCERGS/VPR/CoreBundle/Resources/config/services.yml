@@ -2,7 +2,6 @@ parameters:
     user_provider.class: PROCERGS\VPR\CoreBundle\Security\FOSUBUserProvider
     procergs_person.registration.form.type.class: PROCERGS\VPR\CoreBundle\Form\Type\RegistrationFormType
     kernel.listener.logged_in_user_listener.class: PROCERGS\VPR\CoreBundle\EventListener\LoggedInUserListener
-    procergs_vpr.listener.authentication.class: PROCERGS\VPR\CoreBundle\EventListener\AuthenticationListener
     procergs.nfgws.class: PROCERGS\VPR\CoreBundle\Helper\NfgWsHelper
 
 services:
@@ -25,7 +24,7 @@ services:
     procergs.nfgws:
         class: %procergs.nfgws.class%
         calls:
-            - [setUrl, [%nfg_ws_url%]]            
+            - [setUrl, [%nfg_ws_url%]]
             - [setOrganizacao, [%soe_organization%]]
             - [setUsuario, [%soe_username%]]
-            - [setSenha, [%soe_password%]]        
+            - [setSenha, [%soe_password%]]
