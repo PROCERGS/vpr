@@ -17,7 +17,7 @@
         {{ form_errors(form.birthdate) }} 
         {{ form_widget(form.birthdate) }}
         </div>
-        <p><a id="btn-continue" class="btn btn-primary" role="button" >{{ 'posvote.continue.click' }}</a></p>
+        <p><a id="btn-continue" class="btn btn-primary" role="button" >{{ 'posvote.continue.click'|trans }}</a></p>
         <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'posvote.skip.click' | trans }}</a></p>
         {{ form_end(form) }}        
     </div>

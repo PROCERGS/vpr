@@ -202,6 +202,14 @@ class DefaultController extends Controller
             'nfgRegisterUrl' => $nfgRegisterUrl
         ));
     }
+    
+    public function endChangeOfferAction()
+    {
+        $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
+        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig', array(
+            'nfgRegisterUrl' => $nfgRegisterUrl
+        ));
+    }    
 
     public function endChangeAction(Request $request)
     {

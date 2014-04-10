@@ -55,8 +55,12 @@ procergsvpr_core_end:
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:end }
 
 procergsvpr_core_tituloVotou:
+    pattern:  /end/change/offer
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChangeOffer }
+    
+procergsvpr_core_end_change:
     pattern:  /end/change
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChange }
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChange }    
 
 procergsvpr_core_end_change_puny:
     pattern:  /end/change/puny
