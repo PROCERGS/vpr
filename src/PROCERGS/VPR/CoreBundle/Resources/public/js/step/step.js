@@ -6,29 +6,25 @@ $(function() {
     if (sel.length > oba.maxItens) {
       event.preventDefault();
       alert(oba.label['limit'] + oba.maxItens);
-      self.siblings("label").click();
+      resetCheckbox(self[0]);
     }
-
-
   });
 
   $("#btn-vote").on("click", function() {
 
     $(".step").addClass("slide");
-    $(".loader").fadeIn();
-
-    setTimeout(function() {
+    $(".loader").fadeIn("normal", function() {
       $('#btn-vote').hide();
       $(".step input").not(":checked").parent().addClass("hidden"); //hide li
       $("input:checked").closest(".options").prev(".step-category").addClass("checked"); //hide step category
       $(".step-category").not(".checked").addClass("hidden");
-    }, 2000);
 
-    setTimeout(function() {
-      $(".loader").fadeOut();
-      $(".step").removeClass("slide");
-      $('#confirmation').show();
-    }, 3000);
+      setTimeout(function() {
+        $(".loader").fadeOut();
+        $(".step").removeClass("slide");
+        $('#confirmation').show();
+      }, 3000);
+    });
 
   });
 
