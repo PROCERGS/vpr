@@ -62,10 +62,10 @@ procergsvpr_core_end:
 procergsvpr_core_tituloVotou:
     pattern:  /end/change/offer
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChangeOffer }
-    
+
 procergsvpr_core_end_change:
     pattern:  /end/change
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChange }    
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChange }
 
 procergsvpr_core_end_change_puny:
     pattern:  /end/change/puny
@@ -75,15 +75,9 @@ procergsvpr_core_horarioEncerrado:
     pattern:  /end/timeover
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:endTimeOver }
 
-procergsvpr_core_cedula:
-    pattern:  /cedula
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:cedula.html.twig'
-
 procergsvpr_core_reforcar_voto:
     pattern:  /reinforce
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforce }   
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforce }
 
 procergsvpr_core_nfgFraca:
     pattern:  /reinforce/puny
@@ -94,7 +88,7 @@ procergsvpr_core_solicita_titulo:
     defaults:
         _controller: FrameworkBundle:Template:template
         template:    'PROCERGSVPRCoreBundle:Default:solicita_titulo.html.twig'
-    
+
 procergsvpr_core_sem_nfg:
-    pattern:  /reinforce/offer    
+    pattern:  /reinforce/offer
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceOffer }
