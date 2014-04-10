@@ -24,6 +24,7 @@ html {
 }
 
 body {
+  color: #2e8f48;
   font-family: 'Roboto', sans-serif;
   margin-bottom: 45px;
 }
@@ -41,9 +42,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
-  background-image: linear-gradient(to bottom, #2c8f47, #184a25);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c8f47', endColorstr='#184a25',GradientType=0 ); /* IE6-9 */
+  background-image: url(../images/header.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
   height: 140px;
+  line-height: 140px;
+  vertical-align: middle;
+}
+
+header .img-responsive {
+  display: inline-block;
 }
 
 footer {
@@ -109,25 +117,25 @@ footer {
  * Register/Login section
  */
  #how-to-vote {
-  color: #2E8F48;
   display: inline-block;
   font-weight: 100;
   margin: 30px;
+  position: relative;
  }
 
- #how-to-vote:before {
-  content: "?";
-  border: solid 1px #db954b;
-  border-radius: 50%;
-  color: #db954b;
-  display: block;
-  float: left;
-  font-size: 30px;
-  height: 40px;
-  margin-right: 10px;
+ #how-to-vote .icon {
+  background: url('../images/icon_set.png') no-repeat;
+  background-position: -19px -153px;
+  display: inline-block;
+  height: 41px;
+  right: 10px;
   position: relative;
-  top: -2px;
-  width: 40px;
+  top: 10px;
+  width: 39px;
+ }
+
+ #how-to-vote .text {
+  display: inline-block;
  }
 
 .register-box .tooltip {
@@ -152,8 +160,7 @@ footer {
   width: 1px;
 }
 
-.register-box .col-md-5,
-.info-box .col-md-5 {
+.register-box .col-md-5 {
   margin-bottom: 50px;
   padding: 0 50px;
   text-align: center;
@@ -165,13 +172,46 @@ footer {
 
 .info-box {
   font-size: 24px;
+  margin-bottom: 50px;
 }
 
-.info-box .link-check {
-  display: block;
+.link-check {
+  color: #2e8f48;
+  position: relative;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) and (max-width: 991px) {
+  .info-box .col-ballot {
+    margin-bottom: 100px;
+  }
+}
+
+@media (min-width: 768px) {
+
+  .link-check .icon {
+    background: url('../images/icon_set.png') no-repeat;
+    display: block;
+    position: absolute;
+  }
+
+  .ballot-check .icon {
+    background-position: -12px -76px;
+    height: 72px;
+    left: -70px;
+    top: -15px;
+    width: 54px;
+  }
+
+  .place-check .icon {
+    background-position: 0 -1px;
+    height: 72px;
+    left: -92px;
+    top: -25px;
+    width: 77px;
+  }
+}
+
+@media (max-width: 767px) {
 
   .register-box {
     margin-bottom: 0;
@@ -201,7 +241,7 @@ footer {
   }
 
   .register-box .col-md-5,
-  .info-box .ballot {
+  .info-box .col-ballot {
     border-bottom: solid 1px #CCC;
     margin-bottom: 20px;
     padding-bottom: 20px;
@@ -251,7 +291,7 @@ footer {
 
 .tt-dropdown-menu {
   background-color: #d8e6a5;
-  color: #2e8f48;
+
   width: 100%;
 }
 

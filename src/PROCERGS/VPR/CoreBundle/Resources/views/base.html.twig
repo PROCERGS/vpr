@@ -2,7 +2,11 @@
 
 {% block header %}
 {% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
-<header></header>
+<header class="text-center">
+  {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
+  <img src="{{ asset_url }}" alt="{%trans%}Votação de prioridades{%endtrans%}" class="img-responsive">
+  {% endimage %}
+</header>
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
     <div class="alert alert-info">
