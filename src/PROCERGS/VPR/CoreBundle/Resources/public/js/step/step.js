@@ -6,7 +6,7 @@ $(function() {
     if (sel.length > oba.maxItens) {
       event.preventDefault();
       alert(oba.label['limit'] + oba.maxItens);
-      ;;self.siblings("label").click();
+      self.siblings("label").click();
     }
 
 
