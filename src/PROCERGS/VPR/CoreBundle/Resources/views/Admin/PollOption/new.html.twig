@@ -1,0 +1,97 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'admin.pollOption'|trans %}
+{% set actionName = 'admin.add'|trans %}
+
+{% block content -%}
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('admin_poll_option') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
+    </div>
+
+    {{ form_start(form, {'attr': {'role':'form', 'class':'form-horizontal poll-option'}}) }}
+        {{ form_errors(form) }}
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.poll'|trans }}</label>
+            <div class="col-sm-5">
+                <select class="form-control" required="required" name="poll_select" id="poll_select">
+                    <option value=""></option>
+                    {% if(polls) %}
+                        {% for poll in polls %}
+                            <option {{ (poll_selected_id is defined and poll_selected_id == poll.id)?'selected="selected"' }} value="{{ poll.id }}">{{ poll.name }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.step'|trans }}</label>
+            <div class="col-sm-10">
+                {{ form_errors(form.step) }}
+                {{ form_widget(form.step, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.category'|trans }}</label>
+            <div class="col-sm-6">
+                {{ form_errors(form.category) }}
+                {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.corede'|trans }}</label>
+            <div class="col-sm-6">
+                {{ form_errors(form.corede) }}
+                {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.title'|trans }}</label>
+            <div class="col-sm-10">
+                {{ form_errors(form.title) }}
+                {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.description'|trans }}</label>
+            <div class="col-sm-10">
+                {{ form_errors(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.scope'|trans }}</label>
+            <div class="col-sm-10">
+                {{ form_errors(form.scope) }}
+                {{ form_widget(form.scope, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.cost'|trans }}</label>
+            <div class="col-sm-10">
+                {{ form_errors(form.cost) }}
+                {{ form_widget(form.cost, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.sorting'|trans }}</label>
+            <div class="col-sm-1">
+                {{ form_errors(form.categorySorting) }}
+                {{ form_widget(form.categorySorting, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group form-actions">
+            <div class="col-lg-10 col-lg-offset-2">
+                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'admin.save'|trans}) }}
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

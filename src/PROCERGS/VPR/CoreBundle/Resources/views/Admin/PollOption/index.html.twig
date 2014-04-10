@@ -1,0 +1,34 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'admin.pollOption'|trans %}
+{% set actionName = 'admin.list'|trans %}
+
+{% block content -%}
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('admin_poll_option_new') }}" role="button"><span class="glyphicon glyphicon-file"></span> {%trans%}admin.add{%endtrans%}</a>
+    </div>
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="jumbotron">
+        {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
+            <div class="form-group">
+                <label>{{ 'admin.poll'|trans }}</label>
+                {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                <label>{{ 'admin.corede'|trans }}</label>
+                {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <button type="submit" class="btn btn-default">{{ 'admin.filter'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+
+    {% include 'PROCERGSVPRCoreBundle:Admin/Polloption:list.html.twig' with {'entities': entities} %}
+{% endblock %}

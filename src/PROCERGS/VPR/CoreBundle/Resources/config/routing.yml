@@ -46,6 +46,11 @@ vpr_admin_person:
     type:     annotation
     prefix:   /admin/person
 
+vpr_admin_poll_option:
+    resource: "@PROCERGSVPRCoreBundle/Controller/Admin/PollOptionController.php"
+    type:     annotation
+    prefix:   /admin/poll_option
+
 procergsvpr_core_municipio:
     pattern:  /municipio
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:municipio }

@@ -27,7 +27,8 @@ $(function() {
             steps.push($(this).data('id'));
         });
 
-        $(this).button('loading');
+        $btnSave = $(this);
+        $btnSave.button('loading');
 
         $.ajax({
             url: saveStepSortingUrl,
@@ -37,15 +38,47 @@ $(function() {
             }),
             dataType: 'json',
             success: function(result) {
-                if (result.success) {
-                    $('.alert-save-sorted').removeClass('alert-danger').addClass('alert-success')
-                    $('.save-sorted').hide();
+                if(result.success){
+                    $btnSave.button('reset');
+                    $btnSave.hide();
                 }else{
-                    $('.alert-save-sorted').removeClass('alert-success').addClass('alert-danger')
+                    $('.alert-save-sorted')
+                        .removeClass('alert-success')
+                        .addClass('alert-danger')
+                        .html(result.message)
+                        .show();
                 }
-                $('.alert-save-sorted').html(result.message).show();
             }
         });        
     });
 
+    $('form.poll-option select#poll_select').change(function(){
+        var poll_id = $(this).val();
+        var $elmStep = $('#procergs_vpr_corebundle_polloption_step');
+
+        $.ajax({
+            url: loadPollStepsUrl,
+            type: 'POST',
+            beforeSend: function(){
+                $elmStep.find('option').remove();
+                $elmStep.append(new Option('Aguarde...', ''));
+            },
+            data: ({
+                poll_id: poll_id
+            }),
+            dataType: 'json',
+            success: function(result) {
+                $elmStep.find('option').remove();
+
+                if(result.success){
+                    $.each(result.steps, function(i, data) {
+                        $elmStep.append(new Option(data.value, data.id));
+                    });
+                    $elmStep.removeAttr('disabled');
+                }else{
+                    $elmStep.attr('disabled','disabled');
+                }
+            }
+        });
+    });
 });

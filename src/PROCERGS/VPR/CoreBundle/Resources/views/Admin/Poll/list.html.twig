@@ -2,12 +2,10 @@
     <table class="table table-striped table-bordered table-hover records_list">
         <thead>
             <tr>
-                <th width="5%">{{ 'admin.id'|trans }}</th>
-                <th width="20%">{{ 'admin.name'|trans }}</th>
+                <th width="30%">{{ 'admin.name'|trans }}</th>
                 <th width="15%">{{ 'admin.opening_time'|trans }}</th>
                 <th width="15%">{{ 'admin.closing_time'|trans }}</th>
-                <th width="25%">{{ 'admin.description'|trans }}</th>
-                <th width="12%">{{ 'admin.public_key'|trans }}</th>
+                <th width="30%">{{ 'admin.description'|trans }}</th>
                 <th width="8%">{{ 'admin.actions'|trans }}</th>
             </tr>
         </thead>
@@ -15,12 +13,10 @@
             {% if(entities) %}
                 {% for entity in entities %}
                     <tr>
-                        <td><a title="{{ 'admin.show'|trans }}" href="{{ path('admin_poll_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                         <td>{{ entity.name }}</td>
                         <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{% if entity.closingTime %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{{ entity.description }}</td>
-                        <td>{{ entity.publicKey }}</td>
                         <td>
                             <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
                             <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>

@@ -36,6 +36,27 @@
 .table > tfoot > tr > td {
     vertical-align: inherit;
 }
-
-a.save-sorted{position: relative;top:-20px;display: none;}
-.alert-save-sorted{padding: 8px 15px; display: none;}
+a.save-sorted{
+    position: relative;
+    top:-20px;
+    display: none;
+}
+.alert-save-sorted{
+    padding: 8px 15px; 
+    display: none;
+}
+.container .jumbotron {
+    padding: 20px 35px;
+}
+.container .jumbotron form div.form-group{
+    margin-right: 30px
+}
+.poll-option-step {
+    border: 1px solid #DDDDDD;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.poll-option-step table tbody {
+    background: #F5F5F5
+}

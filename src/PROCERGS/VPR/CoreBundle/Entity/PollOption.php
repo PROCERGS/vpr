@@ -210,6 +210,12 @@ class PollOption
         return $this->categorySorting;
     }
 
+    public function setStep($var)
+    {
+        $this->step = $var;
+        return $this;
+    }
+
     /**
      * @return \PROCERGS\VPR\CoreBundle\Entity\Step
      */
@@ -227,6 +233,17 @@ class PollOption
     public function getCategory()
     {
         return $this->category;
+    }
+    
+    public function setCorede($var)
+    {
+        $this->corede = $var;
+        return $this;
+    }
+    
+    public function getCorede()
+    {
+        return $this->corede;
     }
 
 }

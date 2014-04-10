@@ -28,9 +28,7 @@ class BallotBoxController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
-
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(compact('poll'), array('id' => 'asc'));
+        $entities = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findAll();
 
         return array(
             'entities' => $entities,
@@ -41,7 +39,7 @@ class BallotBoxController extends Controller
      *
      * @Route("/", name="admin_ballotbox_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:BallotBox:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\BallotBox:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -178,7 +176,7 @@ class BallotBoxController extends Controller
      *
      * @Route("/{id}", name="admin_ballotbox_update")
      * @Method("PUT")
-     * @Template("PROCERGSVPRCoreBundle:BallotBox:edit.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\BallotBox:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {

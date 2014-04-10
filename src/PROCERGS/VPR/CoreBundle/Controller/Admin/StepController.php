@@ -56,7 +56,7 @@ class StepController extends Controller
      *
      * @Route("/", name="admin_step_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:Step:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Step:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -188,12 +188,13 @@ class StepController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing Step entity.
      *
      * @Route("/{id}", name="admin_step_update")
      * @Method("PUT")
-     * @Template("PROCERGSVPRCoreBundle:Step:edit.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Step:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
@@ -224,6 +225,7 @@ class StepController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a Step entity.
      *
@@ -252,7 +254,7 @@ class StepController extends Controller
 
         return $this->redirect($this->generateUrl('admin_step'));
     }
-
+ 
     /**
      * Creates a form to delete a Step entity by id.
      *
@@ -269,7 +271,7 @@ class StepController extends Controller
             ->getForm()
         ;
     }
-    
+
     /**
      * Save sorting steps
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -304,4 +306,42 @@ class StepController extends Controller
 
         return $response;        
     }
+
+    /**
+     * Load steps by poll
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/select_steps", name="admin_select_steps")
+     * @Method("POST")
+     */
+    public function selectStepsAction(Request $request)
+    {
+        $data = array();
+        $poll_id = $request->get('poll_id');
+        try{        
+            $em = $this->getDoctrine()->getManager();
+
+            if(!$poll_id){
+                throw new \Exception('error!');
+            }            
+            
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findOneById($poll_id);
+            $steps = $poll->getSteps();
+            
+            $data['steps'][] = array('id'=>'','value'=>'');
+            foreach($steps as $step){
+                $data['steps'][] = array('id'=>$step->getId(),'value'=>$step->getName());
+            }
+            $data['success'] = true;
+
+        } catch (\Exception $e) {
+            $data = array('success' => false);
+        }
+        
+        $response = new JsonResponse();
+        $response->setData($data);
+
+        return $response;
+    }
+    
+  
 }

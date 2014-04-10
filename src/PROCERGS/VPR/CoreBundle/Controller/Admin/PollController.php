@@ -51,7 +51,7 @@ class PollController extends Controller
      *
      * @Route("/", name="admin_poll_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:Poll:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -194,7 +194,7 @@ class PollController extends Controller
      *
      * @Route("/{id}", name="admin_poll_update")
      * @Method("PUT")
-     * @Template("PROCERGSVPRCoreBundle:Poll:edit.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {

@@ -51,7 +51,7 @@ class CategoryController extends Controller
      *
      * @Route("/", name="admin_category_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:Category:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Category:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -188,7 +188,7 @@ class CategoryController extends Controller
      *
      * @Route("/{id}", name="admin_category_update")
      * @Method("PUT")
-     * @Template("PROCERGSVPRCoreBundle:Category:edit.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Category:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
