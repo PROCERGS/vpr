@@ -1,53 +1,75 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
+
 <div class="row">
-    <div class="col-md-12">
-        <h3>{{ 'Voting Places' | trans }}</h3>
+  <div class="col-md-12 text-left">
+    <h2 class="main-title ballot-search-title">{{ 'Voting Places' | trans }}</h2>
+  </div>
+</div>
 
-        <p>{% trans %}Type a city to see it's presential voting places.{% endtrans %}</p>
-
-        {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
-        <div class="form-group">
-            {{ form_label(form.city) }}
-            {{ form_errors(form.city) }}
-            {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
-        </div>
-          {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search'}) }}
-        {{ form_end(form) }}
-
-        {% if boxes %}
-        <div class="table-responsive" style="margin-top:100px">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Votação</th>
-                        <th>Endereço</th>
-                    </tr>
-                </thead>
-                <tbody>
-              {% for box in boxes %}
-                    <tr>
-                        <td>{{ box.poll.name }}</td>
-                        <td>{{ box.address }}</td>
-                    </tr>
-              {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="center-block">
+      <p>{% trans %}Type a city to see it's presential voting places.{% endtrans %}</p>
+      {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
+      <div class="form-group">
+        {{ form_label(form.city) }}
+      </div>
+      <div class="form-group">
+        {{ form_errors(form.city) }}
+        {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
+      </div>
+      <div class="form-group">
+        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success btn-block'},'label':'form.search' | trans}) }}
+      </div>
 
     </div>
+    {{ form_end(form) }}
+  </div>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    {% if boxes %}
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Votação</th>
+            <th>Endereço</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for box in boxes %}
+          <tr>
+            <td>{{ box.poll.name }}</td>
+            <td>{{ box.address }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{% stylesheets 'bundles/procergsvprcore/css/search/search.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+{{ parent() }}
 <script>
-    var citiesList = {{ cities | raw }};
+  var citiesList = {{ cities | raw }};
 </script>
-    {% javascripts
-            '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-{% endblock %}
+{% javascripts
+  '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
+  <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+  {% endblock %}

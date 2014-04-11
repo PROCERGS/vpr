@@ -19,7 +19,7 @@ class BallotBoxController extends Controller
     public function listByCityAction(Request $request)
     {
         $form = $this->createFormBuilder()
-                ->add('city', 'text', array('required' => true, 'label' => 'form.cityselect'))
+                ->add('city', 'text', array('required' => true, 'label' => 'form.city.select'))
                 ->add('submit', 'submit')
                 ->getForm();
 

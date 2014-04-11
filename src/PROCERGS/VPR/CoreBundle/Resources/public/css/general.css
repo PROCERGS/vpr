@@ -70,13 +70,21 @@ footer {
   font-weight: normal;
 }
 
+.form-inline {
+  margin: 30px 0;
+}
+
 .form-inline label {
   height: 32px;
   line-height: 32px;
 }
 
 .form-inline .form-group {
-  margin: 0 5px;
+  margin-bottom: 0;
+}
+
+.form-inline .btn-block {
+  padding: 6px 10px;
 }
 
 .alert,
@@ -193,6 +201,10 @@ footer {
     background-image: url('../images/icon-set.png');
   }
 
+  .twitter-typeahead {
+    margin-bottom: 10px;
+  }
+
 }
 
 
@@ -207,7 +219,9 @@ footer {
  * Large devices
  */
  @media (min-width: 768px) {
-
+  .twitter-typeahead {
+    min-width: 300px;
+  }
  }
 
 
@@ -217,7 +231,7 @@ footer {
  * Typeahed plugin style
  */
  .twitter-typeahead {
-  min-width: 300px;
+  width: 100%;
 }
 
 .twitter-typeahead .form-control {

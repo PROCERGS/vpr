@@ -1,10 +1,16 @@
+.search-box {
+  background-color: #fcf4de;
+  margin-bottom: 10px;
+  padding: 20px;
+}
+
 /*
  * Large devices
  */
  @media (min-width: 768px) {
 
   .main-title {
-    margin-bottom: 80px;
+    margin-bottom: 60px;
     padding-left: 80px;
   }
 
@@ -17,6 +23,11 @@
     height: 72px;
     top: -22px;
     width: 54px;
+  }
+
+  .form-inline .form-group {
+    margin-left: 10px;
+    margin-right: 10px;
   }
 
 }
