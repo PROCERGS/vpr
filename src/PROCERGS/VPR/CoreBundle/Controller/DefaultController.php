@@ -367,7 +367,7 @@ class DefaultController extends Controller
         }
         return $this->render('PROCERGSVPRCoreBundle:Registration:register.html.twig', array(
             'form' => $form->createView(),
-            'tre_voter_search' => $this->container->getParameter('tre_voter_search')
+            'tre_search_link' => $this->container->getParameter('tre_search_link')
         ));
     }
 

@@ -55,7 +55,7 @@ $(function() {
     "container" : ".register-label",
     "html" : true,
     "placement" : "top",
-    "title" : tooltipContent,
+    "title" : "<span>" + tooltipContent.text + "</span><a href='" + tooltipContent.link + "' target='blank'>" + tooltipContent.link_text + "</a>",
     "trigger" : "focus"
    });
 

@@ -63,12 +63,16 @@
 {{ parent() }}
 
   <script type="text/javascript">
-  var usernameId = '#{{ form.username.vars.id }}';
+  var usernameId = "#{{ form.username.vars.id }}";
   var messages = {
-        '0' : "{{ 'form.username.invalid' | trans }}"
+        "0" : "{{ 'form.username.invalid' | trans }}"
   };
 
-  var tooltipContent = "<span>{{ 'register.search.tre' | trans }}</span><a href='{{ tre_voter_search }}' target='blank'>{{ 'register.search.tre.click' | trans }}</a>";
+  var tooltipContent = {
+    "text": "{{ 'register.search.tre' | trans }}",
+    "link": "{{ tre_search_link }}",
+    "link_text": "{{ 'register.search.tre.click' | trans }}"
+  }
   </script>
 
   {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/register/register.js' %}
