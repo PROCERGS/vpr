@@ -24,13 +24,18 @@ $(function() {
 
   $(".register-label").on("click", function() {
     if ($(window).width() <= 768) {
-      formContainer.toggleClass("slide");
+      formContainer.toggleClass("animate");
+      $(".register-tooltip").tooltip('hide');
     }
   });
 
   $(window).resize(function() {
     if ($(window).width() > 768 && formContainer.is(":hidden") ) {
       formContainer.show();
+    }
+
+    if ($(window).width() <= 768) {
+     $(".register-tooltip").tooltip('hide');
     }
   });
 
@@ -48,9 +53,10 @@ $(function() {
    * Add tooltip at register form
    */
    $(".register-tooltip").tooltip({
+    "container" : ".register-label",
     "html" : true,
     "placement" : "top",
-    "title" : "<a href=''>Encontre seu título clicando aqui</a>",
+    "title" : "<span>Não lembra seu título?</span><a href=''>Consulte aqui</a>",
     "trigger" : "focus"
    });
 

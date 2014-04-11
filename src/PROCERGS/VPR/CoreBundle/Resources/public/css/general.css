@@ -62,6 +62,33 @@ footer {
   width: 100%;
 }
 
+.tooltip.in {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+.tooltip-inner {
+  background-color: #007136;
+  border-radius: 0;
+  font-size: 15px;
+  padding: 8px;
+}
+
+.tooltip-inner span,
+.tooltip-inner a {
+  display: block;
+}
+
+.tooltip-inner a {
+  color: #FFF;
+  font-size: 18px;
+  text-decoration: underline;
+}
+
+.tooltip.top .tooltip-arrow {
+  border-top-color: #007136;
+}
+
 /* override boostrap */
 .alert,
 .btn,
@@ -177,20 +204,12 @@ footer {
   transition: 1s ease-in-out;
 }
 
-.register-form-container.slide {
+.register-form-container.animate {
   max-height: 1000px;
 }
 
 .register-form {
   margin-top: 20px;
-}
-
-.register-form .tooltip {
-  font-size: 15px;
-}
-
-.register-form .tooltip a {
-  color: #FFF;
 }
 
 .register-box #about-lc-link {
@@ -298,11 +317,13 @@ footer {
   }
 
   .register-box {
+    margin-bottom: 30px;
     margin-top: 30px;
   }
 
   .register-form-container {
     max-height: none;
+    overflow: visible;
   }
 
   .register-box .col-md-5, .info-box .col-ballot {
