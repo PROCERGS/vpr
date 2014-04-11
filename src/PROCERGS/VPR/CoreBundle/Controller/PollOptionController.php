@@ -18,34 +18,35 @@ class PollOptionController extends Controller
     {
         $form = $this->createFormBuilder()
             ->add('city', 'text', array(
-            'required' => true
+            'required' => true,
+            'label' => 'form.city.select'
         ))
             ->add('submit', 'submit')
             ->getForm();
-        
+
         $form->handleRequest($request);
-        
+
         $steps = array();
-        
+
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $data = $form->getData();
-            
+
             $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
             $city = $cityRepo->findOneBy(array(
                 'name' => $data['city']
             ));
-            
+
             if ($city) {
                 $pollRepo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll');
                 $pollOptionsRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-                
+
                 $poll = $pollRepo->findActivePoll();
                 $pollOptions = $pollOptionsRepo->findByPollCorede($poll, $city->getCorede());
-                
+
                 foreach ($pollOptions as $option) {
                     $step = $option->getStep()->getName();
-                    
+
                     if (! array_key_exists($step, $steps)) {
                         $steps[$step] = array();
                     }
@@ -53,9 +54,9 @@ class PollOptionController extends Controller
                 }
             }
         }
-        
+
         $form = $form->createView();
-        
+
         $serializer = $this->container->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
@@ -63,7 +64,7 @@ class PollOptionController extends Controller
             ->setGroups(array(
             'autocomplete'
         )));
-        
+
         return compact('form', 'steps', 'cities');
     }
 
@@ -85,10 +86,10 @@ class PollOptionController extends Controller
         }
         $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $poll = $em->merge($vote->getBallotBox()
-            ->getPoll());        
+            ->getPoll());
         $corede = $em->merge($vote->getCorede());
         $step = $em->merge($vote->getLastStep());
-        
+
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -111,7 +112,7 @@ class PollOptionController extends Controller
             $serializedOptions = $serializer->serialize($options, 'json', SerializationContext::create()->setSerializeNull(true)
                 ->setGroups(array(
                 'vote'
-            )));            
+            )));
             //$ballotBox = $em->merge($vote->getBallotBox());
             //$vote->setBallotBox($ballotBox->setPoll($poll));
             $vote->setPlainOptions($serializedOptions);
@@ -126,12 +127,12 @@ class PollOptionController extends Controller
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
         $pollOptions = $pollOptionRepo->findByPollCoredeStep($poll, $corede, $step);
-        
+
         $options = array();
         foreach ($pollOptions as $option) {
             $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
         }
-        
+
         $form = $form->createView();
         return compact('form', 'pollOptions', 'step', 'options');
     }

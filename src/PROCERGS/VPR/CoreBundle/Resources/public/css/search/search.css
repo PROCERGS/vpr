@@ -1,0 +1,22 @@
+/*
+ * Large devices
+ */
+ @media (min-width: 768px) {
+
+  .main-title {
+    margin-bottom: 80px;
+    padding-left: 80px;
+  }
+
+  .main-title:before {
+    background-image: url('../../images/icon-set-desktop.png');
+  }
+
+  .ballot-search-title:before {
+    background-position: -12px -76px;
+    height: 72px;
+    top: -22px;
+    width: 54px;
+  }
+
+}

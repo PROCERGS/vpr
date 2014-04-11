@@ -1,44 +1,65 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="jumbotron">
-            {{ form_start(form, {'attr' : {'role' : 'form'}}) }} {{ form_errors(form) }}
-                <div class="form-group">
-                    {{ form_label(form.city) }}
-                    {{ form_errors(form.city) }}
-                    {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
-                </div>
-                {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search'}) }}
-            {{ form_end(form) }}
 
-            {% if steps %}
-            <section>
-                <form class="ac-custom ac-checkbox ac-checkmark" autocomplete="off">
-                {% for key, step in steps %}
-                    <p>{{ key }}</p>
-                    <ul>
-                    {% for option in step %}
-                        <li><label for="cb6">{{ option.title }}</label></li>
-                    {% endfor %}
-                    </ul>
-                {% endfor %}
-                </form>
-            </section>
-            {% endif %}
+<div class="row">
+  <div class="col-sm-12 text-left">
+    <h2 class="main-title ballot-search-title">{% trans %}Ballot Search{% endtrans %}</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <div class="center-block text-center">
+      {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
+        <div class="form-group">
+          {{ form_label(form.city) }}
         </div>
+        <div class="form-group">
+          {{ form_errors(form.city) }}
+          {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
+        </div>
+        <div class="form-group">
+          {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'form.search' | trans}) }}
+        </div>
+
+      </div>
+      {{ form_end(form) }}
     </div>
+
+
+    {% if steps %}
+    <section>
+      <form class="ac-custom ac-checkbox ac-checkmark" autocomplete="off">
+        {% for key, step in steps %}
+        <p>{{ key }}</p>
+        <ul>
+          {% for option in step %}
+          <li><label for="cb6">{{ option.title }}</label></li>
+          {% endfor %}
+        </ul>
+        {% endfor %}
+      </form>
+    </section>
+    {% endif %}
+  </div>
 </div>
 {% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-<script>
-    var citiesList = {{ cities | raw }};
-</script>
-    {% javascripts
-            '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets 'bundles/procergsvprcore/css/search/search.css' filter='cssrewrite' %}
+  <link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+  var citiesList = {{ cities | raw }};
+</script>
+{% javascripts
+  '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
+  <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+  {% endblock %}

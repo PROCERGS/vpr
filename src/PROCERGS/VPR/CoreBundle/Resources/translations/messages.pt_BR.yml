@@ -130,3 +130,6 @@ posvote.reinforce.nfg.puny.message: 'Foi detectado que seu cadastro na NFg cont�
 posvote.reinforce.nfg.puny.offer: 'Vá agora na NFg complemente seu dados e continue com o processo de votação'
 register.search.tre: 'Não lembra seu título?'
 register.search.tre.click: 'Consulte aqui'
+'Ballot Search': 'Consulta de cédula'
+form.city.select : 'Informe sua cidade:'
+form.search: 'Pesquisar'
