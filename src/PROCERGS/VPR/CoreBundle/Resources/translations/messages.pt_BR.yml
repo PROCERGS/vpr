@@ -72,6 +72,7 @@ admin.cost: Custo
 admin.scope: Abrangência
 admin.select_a_poll: 'Selecione uma Votação'
 admin.clear_filters: 'Limpar filtros'
+admin.add_poll_option: 'Adicionar opção'
 'What''s your voting city?': 'Qual seu domicílio eleitoral?'
 'You need to type the city where you vote so that we can show you the relevant options for you.': 'Você precisa digitar a cidade onde você vota para que possamos lhe mostrar as opções relevantes para sua região.'
 'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Por favor, note que ao informar a cidade errada seu voto não poderá ser contado para o programa de participação popular.'
