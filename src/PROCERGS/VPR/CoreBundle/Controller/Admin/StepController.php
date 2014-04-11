@@ -281,11 +281,11 @@ class StepController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get('translator');
-        $steps = $request->get('steps');
+        $ids = $request->get('ids');
 
         try{
-            foreach($steps as $i => $step){
-                $entity = $em->getRepository('PROCERGSVPRCoreBundle:Step')->find($step);
+            foreach($ids as $i => $id){
+                $entity = $em->getRepository('PROCERGSVPRCoreBundle:Step')->find($id);
 
                 if (!$entity) {
                     throw new \Exception('error!');
@@ -317,16 +317,16 @@ class StepController extends Controller
     {
         $data = array();
         $poll_id = $request->get('poll_id');
-        try{        
+        try{
             $em = $this->getDoctrine()->getManager();
 
             if(!$poll_id){
                 throw new \Exception('error!');
-            }            
-            
+            }
+
             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findOneById($poll_id);
             $steps = $poll->getSteps();
-            
+
             $data['steps'][] = array('id'=>'','value'=>'');
             foreach($steps as $step){
                 $data['steps'][] = array('id'=>$step->getId(),'value'=>$step->getName());
@@ -336,7 +336,7 @@ class StepController extends Controller
         } catch (\Exception $e) {
             $data = array('success' => false);
         }
-        
+
         $response = new JsonResponse();
         $response->setData($data);
 

@@ -11,33 +11,51 @@ $(function() {
         itemSelector: 'tr',
         placeholder: '<tr class="placeholder"/>',
         onDrop:function ($item) {
-            $item.removeClass("dragged").removeAttr("style");
-            $("body").removeClass("dragging");
+            $elmTable = $item.closest('table');
 
-            $('tbody tr').each(function(){
+            $item.removeClass('dragged').removeAttr('style');
+            $('body').removeClass("dragging");
+
+            $elmTable.find('tbody tr').each(function(){
                 $(this).find('span.order').html( $(this).index() + 1);
             });
 
-            $('.alert-save-sorted').hide();
-            $('.save-sorted').show();
+            var dataTable = $elmTable.attr('id');
+            $('body').find('a[data-table="'+dataTable+'"]').css('display','inline-block').show();
         }
     });
 
     // Save sorting
     $('.save-sorted').click(function(){
-        var steps = [];
-        $.each($('tbody tr'), function() {
-            steps.push($(this).data('id'));
+        var tableId = $(this).attr('data-table');
+        $elmTable = $('#'+tableId);
+        var dataType = $elmTable.attr('data-type');
+
+        var ids = [];
+        $.each($elmTable.find('tbody tr'), function() {
+            ids.push($(this).data('id'));
         });
 
         $btnSave = $(this);
         $btnSave.button('loading');
 
+        switch(dataType){
+            case 'step':
+              saveSortingUrl = saveStepSortingUrl;
+              break;
+            case 'pollOption':
+              saveSortingUrl = savePollOptionSortingUrl;
+              break;
+            default:
+              alert('error');
+              return false;
+        }
+
         $.ajax({
-            url: saveStepSortingUrl,
+            url: saveSortingUrl,
             type: 'POST',
             data: ({
-                steps: steps
+                ids: ids
             }),
             dataType: 'json',
             success: function(result) {
@@ -52,7 +70,8 @@ $(function() {
                         .show();
                 }
             }
-        });        
+        });
+        return false;
     });
 
     $('form.poll-option select#poll_select').change(function(){

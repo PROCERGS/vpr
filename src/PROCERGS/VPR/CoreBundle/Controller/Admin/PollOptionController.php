@@ -4,6 +4,7 @@ namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -362,4 +363,39 @@ class PollOptionController extends Controller
         
         return $stepOptions;
     }
+
+    /**
+     * Save sorting pollOption
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/save_sorting", name="admin_poll_option_save_sorting")
+     */
+    public function saveSortingAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get('translator');
+        $ids = $request->get('ids');
+
+        try{
+            foreach($ids as $i => $id){
+                $entity = $em->getRepository('PROCERGSVPRCoreBundle:PollOption')->find($id);
+
+                if (!$entity) {
+                    throw new \Exception('error!');
+                }
+
+                $entity->setCategorySorting($i+1);
+                $em->flush();
+            }
+
+            $data = array('success' => true, 'message' => $translator->trans("admin.success_save_sorting"));
+
+        } catch (\Exception $e) {
+            $data = array('success' => false, 'message' => $translator->trans("admin.unable_to_save_sorting"));
+        }
+
+        $response = new JsonResponse();
+        $response->setData($data);
+
+        return $response;        
+    }    
 }

@@ -37,10 +37,14 @@
     vertical-align: inherit;
 }
 a.save-sorted{
+    display: none;
+    margin-bottom: 7px;
+}
+a.save-sorted-step{
     position: relative;
     top:-20px;
-    display: none;
 }
+
 .alert-save-sorted{
     padding: 8px 15px; 
     display: none;
@@ -58,7 +62,7 @@ a.save-sorted{
     margin-bottom: 10px;
 }
 .poll-option-step table tbody {
-    background: #F5F5F5
+    background: #FCFCFC
 }
 .poll-option-step p.step, .poll-option-step p.category  {
     border: 1px solid #DDDDDD;

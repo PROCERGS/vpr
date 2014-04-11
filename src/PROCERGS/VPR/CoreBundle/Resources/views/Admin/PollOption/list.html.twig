@@ -1,11 +1,13 @@
 {% if (entities) %}
     {% for currStep,categories in entities %}
+        {% set indexStep = loop.index %}
         <div class="row">
             <div class="col-md-12">
                 <div class="poll-option-step">
                     <p class="step"><strong>{{'admin.step'|trans}}</strong>: {{ currStep }}</p>    
 
                     {% for category,pollOptions in categories %}
+                        {% set indexCategory = loop.index %}
                         <div class="row">
                             <div class="col-md-11 col-md-offset-1">
                                 <p class="category"><strong>{{'admin.category'|trans}}</strong>: {{ category }}</p>
@@ -14,17 +16,24 @@
 
                         <div class="row">
                             <div class="col-md-10 col-md-offset-2">
+                                <a class="btn btn-success btn-xs save-sorted" data-table="records_list_{{ indexStep }}_{{ indexCategory }}" href="#" role="button" data-loading-text="{{'admin.saving'|trans}}">
+                                    <span class="glyphicon glyphicon-floppy-disk"></span> {%trans%}admin.save_sorted{%endtrans%}
+                                </a>
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-bordered records_list">
+                                    <table id="records_list_{{ indexStep }}_{{ indexCategory }}" data-type="pollOption" class="table table-hover table-bordered records_list_{{ loop.index }} sorted_table">
                                         <thead>
                                             <tr>
-                                                <th width="90%">{{ 'admin.pollOption'|trans }}</th>
+                                                <th width="10%">{{ 'admin.sorting'|trans }}</th>
+                                                <th width="80%">{{ 'admin.pollOption'|trans }}</th>
                                                 <th width="10%">{{ 'admin.actions'|trans }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for option in pollOptions %}
-                                                <tr data-id="{{option.id}}" data-ordered=="{{option.categorySorting}}">
+                                                <tr data-id="{{option.id}}">
+                                                    <td class="text-center">
+                                                        <span class="order">{{ option.categorySorting }}</span>
+                                                    </td>
                                                     <td>{{ option.title }}</td>
                                                     <td class="text-center">
                                                         <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_option_show', { 'id': option.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
