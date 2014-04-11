@@ -183,7 +183,7 @@ footer {
   margin: 0;
   padding-left: 50px;
   position: relative;
-  text-align: left;
+  text-align: center;
 }
 
 .register-box .spacer {
@@ -226,7 +226,6 @@ footer {
   font-size: 20px;
   padding-left: 50px;
   position: relative;
-  text-align: left;
 }
 
 .link-check .text {
@@ -334,7 +333,6 @@ footer {
     cursor: default;
     margin-bottom: 30px;
     padding-left: 0;
-    text-align: center;
   }
 
   .register-form {

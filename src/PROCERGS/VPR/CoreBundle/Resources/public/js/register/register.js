@@ -34,9 +34,8 @@ $(function() {
       formContainer.show();
     }
 
-    if ($(window).width() <= 768) {
-     $(".register-tooltip").tooltip('hide');
-    }
+    $(".register-tooltip").tooltip('hide');
+
   });
 
 
@@ -56,7 +55,7 @@ $(function() {
     "container" : ".register-label",
     "html" : true,
     "placement" : "top",
-    "title" : "<span>Não lembra seu título?</span><a href=''>Consulte aqui</a>",
+    "title" : tooltipContent,
     "trigger" : "focus"
    });
 

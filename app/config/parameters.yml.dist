@@ -24,3 +24,5 @@ parameters:
     soe_organization: ~
     soe_username: ~
     soe_password: ~
+
+    tre_voter_search: 'http://www.tse.jus.br/eleitor/servicos/titulo-e-local-de-votacao/consulta-por-nome'

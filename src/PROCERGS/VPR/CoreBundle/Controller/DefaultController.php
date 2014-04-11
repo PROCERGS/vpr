@@ -24,7 +24,7 @@ class DefaultController extends Controller
             ->getToken()
             ->getUser();
         $em = $this->getDoctrine()->getManager();
-        
+
         $session = $this->getRequest()->getSession();
         $vote = $session->get('vote');
         if (! $vote) {
@@ -35,7 +35,7 @@ class DefaultController extends Controller
                     'closingTime' => $poll->getClosingTime()
                 ));
             }
-            
+
             $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(array(
                 'poll' => $poll,
                 'isOnline' => 1
@@ -54,7 +54,7 @@ class DefaultController extends Controller
                 foreach ($vote1 as $try) {
                     if ($try->getNfgCpf()) {
                         return $this->redirect($this->generateUrl('procergsvpr_core_end'));
-                    }                    
+                    }
                 }
                 return $this->redirect($this->generateUrl('procergsvpr_core_tituloVotou'));
             }
@@ -202,14 +202,14 @@ class DefaultController extends Controller
             'nfgRegisterUrl' => $nfgRegisterUrl
         ));
     }
-    
+
     public function endChangeOfferAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
         return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig', array(
             'nfgRegisterUrl' => $nfgRegisterUrl
         ));
-    }    
+    }
 
     public function endChangeAction(Request $request)
     {
@@ -228,7 +228,7 @@ class DefaultController extends Controller
         if ($voter->getTreVoter()) {
             $chan->trevoter = $voter->getTreVoter()->getId();
         }
-        
+
         $formBuilder = $this->createFormBuilder($chan);
         $formBuilder->add('cpf', 'text', array(
             'required' => true
@@ -318,11 +318,11 @@ class DefaultController extends Controller
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $formFactory = $this->container->get('fos_user.registration.form.factory');
-        
+
         $user = new Person();
         $form = $formFactory->createForm();
         $form->setData($user);
-        
+
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
@@ -366,7 +366,8 @@ class DefaultController extends Controller
             }
         }
         return $this->render('PROCERGSVPRCoreBundle:Registration:register.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'tre_voter_search' => $this->container->getParameter('tre_voter_search')
         ));
     }
 
