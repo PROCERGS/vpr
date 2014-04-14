@@ -49,13 +49,13 @@
 
 <div class="row info-box">
   <div class="col-md-5 col-ballot text-center">
-    <a href="" role="button" class="link-check ballot-check clearfix">
+    <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix">
       <span class="text">{% trans %}Check the ballot of your region{% endtrans %}</span>
     </a>
   </div>
   <div class="col-md-2"></div>
   <div class="col-md-5 text-center">
-    <a href="" role="button" class="link-check place-check clearfix">
+    <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix">
       <span class="text">{% trans %}Check the poll places{% endtrans %}</span>
     </a>
   </div>

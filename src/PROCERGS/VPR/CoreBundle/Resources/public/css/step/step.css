@@ -3,7 +3,7 @@
   position: absolute;
 }
 
-.step {
+.ballot {
   -webkit-transition: 0.2s ease-in-out;
   -moz-transition: 0.2s ease-in-out;
   -o-transition: 0.2s ease-in-out;
@@ -11,25 +11,20 @@
   opacity: 1;
 }
 
-.step.animate {
+.ballot.animate {
   opacity: 0;
 }
 
-.step .step-title {
+.ballot .step-title {
   font-size: 25px;
   font-weight: normal;
+  margin-bottom: 10px;
 }
 
-.step .step-category {
+.ballot .step-category {
   font-size: 20px;
   font-weight: normal;
   margin: 30px 0 10px;
-}
-
-.ac-custom {
-  padding: 0 3em;
-  max-width: 900px;
-  margin: 0 auto;
 }
 
 .ac-custom li {
@@ -112,4 +107,8 @@
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
+}
+
+#button-bar #confirmation {
+  display: none;
 }

@@ -8,10 +8,10 @@
             {{ form_errors(form) }}
 
             {% if options %}
-            <div class="step-box">
-              {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
-              <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="loader">
-              {% endimage %}
+            {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
+            <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="loader">
+            {% endimage %}
+            <div class="ballot">
               <dl class="step">
                 {% for currStep,categories in options %}
                   <dt class="step-title">{{ currStep }}</dt>
@@ -40,7 +40,7 @@
 
             <div id="button-bar">
               <button id="btn-vote" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.vote' | trans }}</button>
-              <div id="confirmation" style="display: none;">
+              <div id="confirmation">
                 <button id="btn-confirm" type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.confirm' | trans }}</button>
                 <button id="btn-cancel" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.cancel' | trans }}</button>
               </div>

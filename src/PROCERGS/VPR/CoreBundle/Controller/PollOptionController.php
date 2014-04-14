@@ -44,16 +44,13 @@ class PollOptionController extends Controller
                 $poll = $pollRepo->findActivePoll();
                 $pollOptions = $pollOptionsRepo->findByPollCorede($poll, $city->getCorede());
 
+                $options = array();
                 foreach ($pollOptions as $option) {
-                    $step = $option->getStep()->getName();
-
-                    if (! array_key_exists($step, $steps)) {
-                        $steps[$step] = array();
-                    }
-                    array_push($steps[$step], $option);
+                    $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
                 }
             }
         }
+
 
         $form = $form->createView();
 
@@ -65,7 +62,7 @@ class PollOptionController extends Controller
             'autocomplete'
         )));
 
-        return compact('form', 'steps', 'cities');
+        return compact('form', 'options', 'cities');
     }
 
     /**
