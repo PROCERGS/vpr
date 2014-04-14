@@ -6,9 +6,9 @@
         <h3>{{ 'posvote.reinforce.nfg.title'|trans }}</h3>
         <p>{{ 'posvote.reinforce.nfg.message'|trans }}</p>
         {{ form_start(form, {'attr' : {'role' : 'form', 'id': 'form-posvote-reinforce'}}) }}
-        {% trans %} 
+        
         {{ form_errors(form) }}
-        {% endtrans %}
+        
         <div class="form-group">
         {{ form_label(form.cpf, 'form.cpf'| trans) }} 
         {{ form_errors(form.cpf) }} 
