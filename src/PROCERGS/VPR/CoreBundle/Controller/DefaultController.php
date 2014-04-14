@@ -29,11 +29,8 @@ class DefaultController extends Controller
         $vote = $session->get('vote');
         if (! $vote) {
             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
-            if (false && $poll->getClosingTime() < new \DateTime()) {
-                return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOverAction.html.twig', array(
-                    'name' => $poll->getName(),
-                    'closingTime' => $poll->getClosingTime()
-                ));
+            if ($poll->getClosingTime() < new \DateTime()) {
+                return $this->redirect($this->generateUrl('procergsvpr_core_horarioEncerrado'));
             }
 
             $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(array(
@@ -45,8 +42,7 @@ class DefaultController extends Controller
             );
             if ($voter->getTreVoter()) {
                 $filter['voterRegistration'] = $voter->getTreVoter()->getId();
-            }
-            if ($voter->getLoginCidadaoId()) {
+            } else if ($voter->getLoginCidadaoId()) {
                 $filter['loginCidadaoId'] = $voter->getLoginCidadaoId();
             }
             $vote1 = $em->getRepository('PROCERGSVPRCoreBundle:Vote')->findBy($filter);
@@ -67,8 +63,9 @@ class DefaultController extends Controller
                     return $this->redirect($this->generateUrl('procergsvpr_core_endvote'));
                 }
                 $filter['ballotBox'] = $vote->getBallotBox();
-                $filter['voterRegistration'] = $vote->getVoterRegistration();
-                if ($vote->getLoginCidadaoId()) {
+                if ($vote->getVoterRegistration()) {
+                    $filter['voterRegistration'] = $vote->getVoterRegistration();
+                } else if ($vote->getLoginCidadaoId()) {
                     $filter['loginCidadaoId'] = $vote->getLoginCidadaoId();
                 }
                 if (! $vote->getNfgCpf()) {
@@ -134,7 +131,7 @@ class DefaultController extends Controller
             $nfgWs->setDataNascimento($form->get('birthdate')
                 ->getData());
             $nfgWs->setNome($voter->getFirstName() . ' ' . $voter->getSurname());
-            if (false) {
+            if ($this->container->getParameter('nfg_ws_rand')) {
                 $return = $nfgWs->consultaCadastro();
             } else {
                 $return['CodSitRetorno'] = mt_rand(1, 4);
@@ -190,9 +187,13 @@ class DefaultController extends Controller
         return $this->render('PROCERGSVPRCoreBundle:Default:end.html.twig');
     }
 
-    public function endTimeOverAction()
+    public function endTimeOverAction($poll = null)
     {
-        return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOver.html.twig');
+        $poll = $this->getDoctrine()->getManager()->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
+        return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOver.html.twig', array(
+            'name' => $poll->getName(),
+            'closingTime' => $poll->getClosingTime()
+        ));
     }
 
     public function endChangePunyAction()
@@ -256,7 +257,7 @@ class DefaultController extends Controller
                 ->getData()
                 ->format('Y-m-d'));
             $nfgWs->setNome($voter->getFirstName() . ' ' . $voter->getSurname());
-            if (false) {
+            if ($this->container->getParameter('nfg_ws_rand')) {
                 $return = $nfgWs->consultaCadastro();
             } else {
                 $return['CodSitRetorno'] = mt_rand(1, 4);
@@ -330,7 +331,8 @@ class DefaultController extends Controller
                 $new->setId($form->get('username')
                     ->getData());
                 $user1 = $userManager->findUserBy(array(
-                    'treVoter' => $new
+                    'treVoter' => $new,
+                    'loginCidadaoAccessToken' => null
                 ));
                 if ($user1) {
                     if ($this->_testName($form->get('firstname')
@@ -350,6 +352,7 @@ class DefaultController extends Controller
                     ));
                     if ($voter) {
                         if ($this->_testName($voter->getName(), $user->getFirstName())) {
+                            $user->setUsername(uniqid(mt_rand(), true));
                             $user->setTreVoter($voter);
                             $user->setCity($voter->getCity());
                             $userManager->updateUser($user);

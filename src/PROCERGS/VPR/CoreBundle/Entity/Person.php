@@ -54,14 +54,14 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      */
     protected $firstName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="surname", type="string", length=255)
+     * @ORM\Column(name="surname", type="string", length=255, nullable=true)
      */
     protected $surname;
 
@@ -102,7 +102,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="TREVoter")
-     * @ORM\JoinColumn(name="tre_voter_id", referencedColumnName="id", nullable=true, unique=true)
+     * @ORM\JoinColumn(name="tre_voter_id", referencedColumnName="id", nullable=true, unique=false)
      * @Groups({"vote"})
      */
     protected $treVoter;

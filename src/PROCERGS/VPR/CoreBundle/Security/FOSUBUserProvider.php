@@ -54,8 +54,8 @@ class FOSUBUserProvider extends BaseClass
         if (null === $user) {
             $userData = $response->getResponse();
             $email = $response->getEmail();
-            $firstName = $userData['first_name'];
-            $surname = $userData['surname'];
+            $firstName = isset($userData['first_name']) ? $userData['first_name'] : null;
+            $surname = isset($userData['surname']) ? $userData['surname'] : null;
 
             $service = $response->getResourceOwner()->getName();
             $setter = 'set' . ucfirst($service);
