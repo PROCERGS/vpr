@@ -85,9 +85,7 @@ procergsvpr_core_nfgFraca:
 
 procergsvpr_core_solicita_titulo:
     pattern:  /reinforce/doc
-    defaults:
-        _controller: FrameworkBundle:Template:template
-        template:    'PROCERGSVPRCoreBundle:Default:solicita_titulo.html.twig'
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceDoc }
 
 procergsvpr_core_sem_nfg:
     pattern:  /reinforce/offer

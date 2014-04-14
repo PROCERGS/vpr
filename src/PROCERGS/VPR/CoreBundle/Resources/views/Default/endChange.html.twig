@@ -46,11 +46,9 @@ $(document).ready(function() {
           return;
         }
         this.value = completaZerosEsquerda(this.value, 12);
-        if (validarTitulo(this.value)) {
-
-          } else {
+        if (!validarTitulo(this.value)) {
             alert(messages[0]);
-            }
+        }
 
         });       
 });

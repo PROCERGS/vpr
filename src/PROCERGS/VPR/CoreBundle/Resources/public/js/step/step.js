@@ -12,8 +12,8 @@ $(function() {
   $("#btn-vote").on("click", function() {
     $(".step").addClass("animate");
     $(".loader").fadeIn("normal", function() {
-      // $('#btn-vote').hide();
-      $('#btn-vote').text("Confirmar");
+      $('#btn-vote').hide();
+      //$('#btn-vote').text("Confirmar");
       $(".step input").not(":checked").parent().addClass("hidden"); //hide li
       $("input:checked").closest(".options").prev(".step-category").addClass("checked"); //hide step category
       $(".step-category").not(".checked").addClass("hidden");

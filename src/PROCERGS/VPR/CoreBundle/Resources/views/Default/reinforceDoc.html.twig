@@ -1,0 +1,42 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">     
+        <h3>{{ 'posvote.reinforce.doc.title'|trans }}</h3>
+        <p>{{ 'posvote.reinforce.doc.message'|trans }}</p>
+        {{ form_start(form, {'attr' : {'role' : 'form', 'id': 'form-posvote-reinforce'}}) }}
+        
+        {{ form_errors(form) }}
+        
+        <div class="form-group">
+        {{ form_label(form.trevoter, 'form.trevoter'| trans) }} 
+        {{ form_errors(form.trevoter) }} 
+        {{ form_widget(form.trevoter) }}
+        </div>        
+        <p><a id="btn-continue" class="btn btn-primary" role="button" >{{ 'posvote.continue.click'|trans }}</a></p>
+        <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_homepage') }}">{{ 'posvote.skip.click' | trans }}</a></p>
+        {{ form_end(form) }}        
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+var posvote = {};
+posvote.trevoterId = '#{{ form.trevoter.vars.id }}';
+$(document).ready(function() {
+	$("#btn-continue").click(function(){ $('#form-posvote-reinforce').submit(); });
+    $(posvote.trevoterId).on('blur', function () {
+        if (!this.value.length) {
+          return;
+        }
+        this.value = completaZerosEsquerda(this.value, 12);
+        if (!validarTitulo(this.value)) {
+            alert(messages[0]);
+        }
+    });
+});
+</script>
+{% endblock %}

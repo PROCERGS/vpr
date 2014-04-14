@@ -20,11 +20,9 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $voter = $this->get('security.context')
-            ->getToken()
-            ->getUser();
+        $voter = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
-
+        
         $session = $this->getRequest()->getSession();
         $vote = $session->get('vote');
         if (! $vote) {
@@ -32,7 +30,7 @@ class DefaultController extends Controller
             if ($poll->getClosingTime() < new \DateTime()) {
                 return $this->redirect($this->generateUrl('procergsvpr_core_horarioEncerrado'));
             }
-
+            
             $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(array(
                 'poll' => $poll,
                 'isOnline' => 1
@@ -42,7 +40,7 @@ class DefaultController extends Controller
             );
             if ($voter->getTreVoter()) {
                 $filter['voterRegistration'] = $voter->getTreVoter()->getId();
-            } else if ($voter->getLoginCidadaoId()) {
+            } elseif ($voter->getLoginCidadaoId()) {
                 $filter['loginCidadaoId'] = $voter->getLoginCidadaoId();
             }
             $vote1 = $em->getRepository('PROCERGSVPRCoreBundle:Vote')->findBy($filter);
@@ -60,12 +58,12 @@ class DefaultController extends Controller
         } else {
             if (! $vote->getLastStep()) {
                 if (! $vote->getVoterRegistration()) {
-                    return $this->redirect($this->generateUrl('procergsvpr_core_endvote'));
+                    return $this->redirect($this->generateUrl('procergsvpr_core_solicita_titulo'));
                 }
                 $filter['ballotBox'] = $vote->getBallotBox();
                 if ($vote->getVoterRegistration()) {
                     $filter['voterRegistration'] = $vote->getVoterRegistration();
-                } else if ($vote->getLoginCidadaoId()) {
+                } elseif ($vote->getLoginCidadaoId()) {
                     $filter['loginCidadaoId'] = $vote->getLoginCidadaoId();
                 }
                 if (! $vote->getNfgCpf()) {
@@ -87,8 +85,7 @@ class DefaultController extends Controller
             }
         }
         return $this->redirect($this->generateUrl('procergsvpr_step', array(
-            'id' => $vote->getLastStep()
-                ->getId()
+            'id' => $vote->getLastStep()->getId()
         )));
     }
 
@@ -121,17 +118,13 @@ class DefaultController extends Controller
             if (! $vote || $vote->getLastStep()) {
                 return $this->indexAction();
             }
-            $voter = $this->get('security.context')
-                ->getToken()
-                ->getUser();
+            $voter = $this->get('security.context')->getToken()->getUser();
             $nfgWs = $this->get('procergs.nfgws');
             $nfgWs->setTituloEleitor($vote->getVoterRegistration());
-            $nfgWs->setCpf($form->get('cpf')
-                ->getData());
-            $nfgWs->setDataNascimento($form->get('birthdate')
-                ->getData());
+            $nfgWs->setCpf($form->get('cpf')->getData());
+            $nfgWs->setDataNascimento($form->get('birthdate')->getData());
             $nfgWs->setNome($voter->getFirstName() . ' ' . $voter->getSurname());
-            if ($this->container->getParameter('nfg_ws_rand')) {
+            if (!$this->container->getParameter('nfg_ws_rand')) {
                 $return = $nfgWs->consultaCadastro();
             } else {
                 $return['CodSitRetorno'] = mt_rand(1, 4);
@@ -153,17 +146,17 @@ class DefaultController extends Controller
                         }
                         return $this->indexAction();
                     case 2:
-                        $form->addError(new FormError('posvote.reinforce.nfg.user.wrongdata'));
+                        $form->addError(new FormError($this->get('translator')->trans('posvote.reinforce.nfg.user.wrongdata')));
                         break;
                     case 9:
-                        $form->addError(new FormError('posvote.reinforce.nfg.user.notfound'));
+                        $form->addError(new FormError($this->get('translator')->trans('posvote.reinforce.nfg.user.notfound')));
                         break;
                     default:
-                        $form->addError(new FormError('posvote.reinforce.nfg.return.problem'));
+                        $form->addError(new FormError($this->get('translator')->trans('posvote.reinforce.nfg.return.problem')));
                         break;
                 }
             } else {
-                $form->addError(new FormError('posvote.reinforce.nfg.query.problem'));
+                $form->addError(new FormError($this->get('translator')->trans('posvote.reinforce.nfg.query.problem')));
             }
         }
         return $this->render('PROCERGSVPRCoreBundle:Default:reinforce.html.twig', array(
@@ -177,6 +170,50 @@ class DefaultController extends Controller
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
         return $this->render('PROCERGSVPRCoreBundle:Default:reinforcePuny.html.twig', array(
             'nfgRegisterUrl' => $nfgRegisterUrl
+        ));
+    }
+
+    public function reinforceDocAction(Request $request)
+    {
+        $formBuilder = $this->createFormBuilder();
+        $formBuilder->add('trevoter', 'text', array(
+            'required' => true,
+            'max_length' => 12
+        ));
+        $form = $formBuilder->getForm();
+        $form->handleRequest($request);
+        $messages = '';
+        if ($form->isValid()) {
+            $session = $request->getSession();
+            $vote = $session->get('vote');
+            if (! $vote || $vote->getLastStep()) {
+                return $this->indexAction();
+            }
+            $voter = $this->get('security.context')->getToken()->getUser();
+            
+            $em = $this->getDoctrine()->getManager();
+            $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
+            $voter1 = $treRepo->findOneBy(array(
+                'id' => $form->get('trevoter')->getData()
+            ));
+            if ($voter1) {
+                if ($this->_testName($voter1->getName(), $voter->getFirstName())) {
+                    $vote = $em->merge($vote);
+                    $vote->setVoterRegistration($form->get('trevoter')->getData());
+                    $em->persist($vote);
+                    $em->flush();
+                    $session->set('vote', $vote);
+                    return $this->indexAction();
+                } else {
+                    $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.mismatch')));
+                }
+            } else {
+                $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.notfound')));
+            }
+        }
+        return $this->render('PROCERGSVPRCoreBundle:Default:reinforceDoc.html.twig', array(
+            'form' => $form->createView(),
+            'messages' => $messages
         ));
     }
 
@@ -219,9 +256,7 @@ class DefaultController extends Controller
         if ($vote) {
             return $this->indexAction();
         }
-        $voter = $this->get('security.context')
-            ->getToken()
-            ->getUser();
+        $voter = $this->get('security.context')->getToken()->getUser();
         $chan = new \stdClass();
         $chan->trevote = null;
         $chan->cpf = null;
@@ -229,7 +264,7 @@ class DefaultController extends Controller
         if ($voter->getTreVoter()) {
             $chan->trevoter = $voter->getTreVoter()->getId();
         }
-
+        
         $formBuilder = $this->createFormBuilder($chan);
         $formBuilder->add('cpf', 'text', array(
             'required' => true
@@ -249,15 +284,11 @@ class DefaultController extends Controller
         $messages = '';
         if ($form->isValid()) {
             $nfgWs = $this->get('procergs.nfgws');
-            $nfgWs->setTituloEleitor($form->get('trevoter')
-                ->getData());
-            $nfgWs->setCpf($form->get('cpf')
-                ->getData());
-            $nfgWs->setDataNascimento($form->get('birthdate')
-                ->getData()
-                ->format('Y-m-d'));
+            $nfgWs->setTituloEleitor($form->get('trevoter')->getData());
+            $nfgWs->setCpf($form->get('cpf')->getData());
+            $nfgWs->setDataNascimento($form->get('birthdate')->getData()->format('Y-m-d'));
             $nfgWs->setNome($voter->getFirstName() . ' ' . $voter->getSurname());
-            if ($this->container->getParameter('nfg_ws_rand')) {
+            if (!$this->container->getParameter('nfg_ws_rand')) {
                 $return = $nfgWs->consultaCadastro();
             } else {
                 $return['CodSitRetorno'] = mt_rand(1, 4);
@@ -283,17 +314,17 @@ class DefaultController extends Controller
                         }
                         return $this->indexAction();
                     case 2:
-                        $form->addError(new FormError('end.change.nfg.user.wrongdata'));
+                        $form->addError(new FormError($this->get('translator')->trans('end.change.nfg.user.wrongdata')));
                         break;
                     case 9:
-                        $form->addError(new FormError('end.change.nfg.user.notfound'));
+                        $form->addError(new FormError($this->get('translator')->trans('end.change.nfg.user.notfound')));
                         break;
                     default:
-                        $form->addError(new FormError('end.change.nfg.return.problem'));
+                        $form->addError(new FormError($this->get('translator')->trans('end.change.nfg.return.problem')));
                         break;
                 }
             } else {
-                $form->addError(new FormError('end.change.nfg.query.problem'));
+                $form->addError(new FormError($this->get('translator')->trans('end.change.nfg.query.problem')));
             }
         }
         return $this->render('PROCERGSVPRCoreBundle:Default:endChange.html.twig', array(
@@ -307,9 +338,7 @@ class DefaultController extends Controller
      */
     public function municipioAction()
     {
-        $voter = $this->get('security.context')
-            ->getToken()
-            ->getUser();
+        $voter = $this->get('security.context')->getToken()->getUser();
         return array(
             'voter' => $voter
         );
@@ -319,36 +348,33 @@ class DefaultController extends Controller
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $formFactory = $this->container->get('fos_user.registration.form.factory');
-
+        
         $user = new Person();
         $form = $formFactory->createForm();
         $form->setData($user);
-
+        
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
                 $new = new TREVoter();
-                $new->setId($form->get('username')
-                    ->getData());
+                $new->setId($form->get('username')->getData());
                 $user1 = $userManager->findUserBy(array(
                     'treVoter' => $new,
                     'loginCidadaoAccessToken' => null
                 ));
                 if ($user1) {
-                    if ($this->_testName($form->get('firstname')
-                        ->getData(), $user1->getFirstName())) {
+                    if ($this->_testName($form->get('firstname')->getData(), $user1->getFirstName())) {
                         $response = $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
                         $this->_auth($user1, $response);
                         return $response;
                     } else {
-                        $form->addError(new FormError('register.voter_registration.mismatch'));
+                        $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.mismatch')));
                     }
                 } else {
                     $em = $this->getDoctrine()->getManager();
                     $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
                     $voter = $treRepo->findOneBy(array(
-                        'id' => $form->get('username')
-                            ->getData()
+                        'id' => $form->get('username')->getData()
                     ));
                     if ($voter) {
                         if ($this->_testName($voter->getName(), $user->getFirstName())) {
@@ -360,10 +386,10 @@ class DefaultController extends Controller
                             $this->_auth($user, $response);
                             return $response;
                         } else {
-                            $form->addError(new FormError('register.voter_registration.mismatch'));
+                            $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.mismatch')));
                         }
                     } else {
-                        $form->addError(new FormError('register.voter_registration.notfound'));
+                        $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.notfound')));
                     }
                 }
             }
@@ -398,11 +424,9 @@ class DefaultController extends Controller
         $vote = new Vote();
         $vote->setAuthType($voter->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
-        $vote->setCorede($voter->getCity()
-            ->getCorede());
+        $vote->setCorede($voter->getCity()->getCorede());
         if ($voter->getTreVoter()) {
-            $vote->setVoterRegistration($voter->getTreVoter()
-                ->getId());
+            $vote->setVoterRegistration($voter->getTreVoter()->getId());
         }
         if ($voter->getLoginCidadaoId()) {
             $vote->setLoginCidadaoId($voter->getLoginCidadaoId());
