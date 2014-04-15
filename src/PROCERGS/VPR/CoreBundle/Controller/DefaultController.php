@@ -85,7 +85,8 @@ class DefaultController extends Controller
             }
         }
         return $this->redirect($this->generateUrl('procergsvpr_step', array(
-            'id' => $vote->getLastStep()->getId()
+            'stepid' => $vote->getLastStep()->getId(),
+            'coredeid' => $vote->getCorede()->getid()
         )));
     }
 

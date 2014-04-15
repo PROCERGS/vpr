@@ -66,10 +66,10 @@ class PollOptionController extends Controller
     }
 
     /**
-     * @Route("/step/{id}", name="procergsvpr_step")
+     * @Route("/step/{stepid}/corede/{coredeid}", name="procergsvpr_step")
      * @Template()
      */
-    public function stepAction($id)
+    public function stepAction($stepid, $coredeid)
     {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -78,7 +78,7 @@ class PollOptionController extends Controller
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
         $em = $this->getDoctrine()->getManager();
-        if ($vote->getLastStep()->getId() != $id) {
+        if ($vote->getLastStep()->getId() != $stepid || $vote->getCorede()->getId() != $coredeid) {
             return 'do something mutley';
         }
         $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
@@ -131,6 +131,6 @@ class PollOptionController extends Controller
         }
 
         $form = $form->createView();
-        return compact('form', 'pollOptions', 'step', 'options');
+        return compact('form', 'corede', 'step', 'options');
     }
 }
