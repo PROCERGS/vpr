@@ -4,26 +4,26 @@
 
 <div class="row">
   <div class="col-md-12 text-left">
-    <h2 class="main-title ballot-search-title">{% trans %}Ballot Search{% endtrans %}</h2>
+    <h2 class="main-title ballot-search-title">
+      <span class="icon"></span>
+      <span>{% trans %}Ballot Search{% endtrans %}</h2></span>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-12">
-    <div class="center-block">
-      {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-horizontal'}}) }} {{ form_errors(form) }}
-      <div class="form-group">
-        <div class="col-sm-4">
+    <div class="inner-content">
+      {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
+        <div class="form-group">
           {{ form_label(form.city) }}
         </div>
-        <div class="col-sm-4">
+        <div class="form-group">
           {{ form_errors(form.city) }}
           {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
         </div>
-        <div class="col-sm-4">
+        <div class="form-group">
           {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'form.search' | trans}) }}
         </div>
-      </div>
     </div>
     {{ form_end(form) }}
   </div>
@@ -32,29 +32,31 @@
 <div class="row">
   <div class="col-md-12">
     {% if options %}
-    <div class="search-box">
-      <dl class="ballot ac-custom ac-checkmark">
-        {% for currStep,categories in options %}
-          <dt class="step-title">{{ currStep }}</dt>
-          <dd>
-            <dl>
-              {% for category,pollOptions in categories %}
-                <dt class="step-category">{{ category }}</dt>
-                <dd class="options">
-                  <ul>
-                    {% for option in pollOptions %}
-                    <li>
-                      <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                      <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
-                    </li>
-                    {% endfor %}
-                  </ul>
-                </dd>
-              {% endfor %}
-            </dl>
-          </dd>
-        {% endfor %}
-      </dl>
+    <div class="inner-content">
+      <div class="search-box">
+        <dl class="ballot ac-custom ac-checkmark">
+          {% for currStep,categories in options %}
+            <dt class="step-title">{{ currStep }}</dt>
+            <dd>
+              <dl>
+                {% for category,pollOptions in categories %}
+                  <dt class="step-category">{{ category }}</dt>
+                  <dd class="options">
+                    <ul>
+                      {% for option in pollOptions %}
+                      <li>
+                        <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
+                        <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </dd>
+                {% endfor %}
+              </dl>
+            </dd>
+          {% endfor %}
+        </dl>
+      </div>
     </div>
     {% endif %}
   </div>

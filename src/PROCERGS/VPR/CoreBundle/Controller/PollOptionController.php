@@ -44,7 +44,6 @@ class PollOptionController extends Controller
                 $poll = $pollRepo->findActivePoll();
                 $pollOptions = $pollOptionsRepo->findByPollCorede($poll, $city->getCorede());
 
-                $options = array();
                 foreach ($pollOptions as $option) {
                     $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
                 }
