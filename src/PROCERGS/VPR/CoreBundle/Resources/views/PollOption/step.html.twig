@@ -3,8 +3,9 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <h3>{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h3>
-        <div class="alert alert-success">        
+        <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
+
+        <div class="alert alert-success">
         {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
         </div>
     </div>
@@ -17,8 +18,8 @@
             {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
             <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="loader">
             {% endimage %}
-            
-            <div class="ballot">              
+
+            <div class="ballot">
               <dl class="step">
                 {% for currStep,categories in options %}
                   <dt class="step-title">{{ currStep }}</dt>

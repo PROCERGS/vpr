@@ -22,7 +22,6 @@ $(function() {
         $(".ballot").removeClass("animate");
         $('#confirmation').show();
       });
-
     });
   });
 
