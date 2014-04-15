@@ -26,7 +26,7 @@ class PollOptionController extends Controller
 
         $form->handleRequest($request);
 
-        $steps = array();
+        $options = array();
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
