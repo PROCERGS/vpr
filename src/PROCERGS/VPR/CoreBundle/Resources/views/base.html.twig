@@ -1,6 +1,8 @@
 {% extends '::base.html.twig' %}
 
 {% block header %}
+<script src="http://lc.des.dona.to/app_dev.php/external/navbar.js"></script>
+<script> citizenLogin.navbar.init(); </script>
 {% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
 <header class="text-center">
   {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
