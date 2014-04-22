@@ -80,11 +80,11 @@ City: Cidade
 'Alternatively you can type your voter registration, without the need to type your city.': 'Alternativamente, você pode digitar seu título de eleitor para não precisar digitar a cidade. Essa informação será solicitada ao fim da votação.'
 'Voter Registration': 'Título de Eleitor'
 Continue: Continuar
-'Type a city to see it''s presential voting places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
+'Type a city to see it''s presential polling places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
 default.closing_time.title: 'O horário da votação já foi encerrado!'
 default.closing_time.poll.name: votação
 default.closing_time.message: 'A %poll% foi encerrada as %closingTime%'
-'Voting Places': '__Voting Places'
+'Polling Places': 'Locais de votação'
 'What is Citizen Login?': '__What is Citizen Login?'
 'Check the ballot of your region': '__Check the ballot of your region'
 'Check the poll places': '__Check the poll places'

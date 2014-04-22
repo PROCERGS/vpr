@@ -6,7 +6,7 @@
   <div class="col-md-12 text-left">
     <h2 class="main-title place-search-title">
       <span class="icon"></span>
-      <span>{{ 'Voting Places' | trans }}</span>
+      <span>{{ 'Polling Places' | trans }}</span>
     </h2>
   </div>
 </div>
@@ -14,7 +14,7 @@
 <div class="row">
   <div class="col-md-12">
     <div class="inner-content">
-      <p>{% trans %}Type a city to see it's presential voting places.{% endtrans %}</p>
+      <p>{% trans %}Type a city to see it's presential polling places.{% endtrans %}</p>
       {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
       <div class="form-group">
           {{ form_label(form.city) }}
@@ -35,7 +35,8 @@
   <div class="col-md-12">
     {% if boxes %}
     <div class="inner-content">
-      <table class="table table-bordered">
+      <h3 class="subtitle">{% trans %}Polling places in your city.{% endtrans %}</h3>
+      <table class="table table-striped">
         <thead>
           <tr>
             <th>Votação</th>

@@ -29,7 +29,6 @@ body {
   color: #007136;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
-  margin-bottom: 150px;
 }
 
 body > .container {
@@ -63,9 +62,28 @@ footer {
   background: linear-gradient(to bottom, #2c8f48, #006b32); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c8f48', endColorstr='#006b32',GradientType=0 ); /* IE6-9 */
   bottom: 0;
-  height: 150px;
-  position: absolute;
+  padding: 20px 0 0;
   width: 100%;
+}
+
+footer hr {
+  border-top: solid 1px #CCC;
+  margin-bottom: 15px;
+}
+
+footer .images div[class^="col"] {
+  height: 80px;
+  line-height: 80px;
+  margin-bottom: 20px;
+  vertical-align: middle;
+}
+
+footer .about .col-sm-6 {
+  margin-bottom: 10px;
+}
+
+footer .about a {
+  color: #FFF;
 }
 
 ul {
@@ -197,6 +215,11 @@ ul {
   height: 35px;
 }
 
+.subtitle {
+  color: #F0AD4E;
+  margin-bottom: 40px;
+}
+
 .ballot-search-title .icon:before {
   background-position: -7px -193px;
   width: 26px;
@@ -291,6 +314,7 @@ ul {
     margin-bottom: 10px;
   }
 
+
 }
 
 
@@ -362,4 +386,18 @@ ul {
 
 .search-box dd dl {
   margin-left: 20px;
+}
+
+
+.table-striped {
+  font-size: 15px;
+}
+
+.table-striped thead {
+  background-color: #007136;
+  color: #FFF;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+  background-color: #A5D6B3;
 }

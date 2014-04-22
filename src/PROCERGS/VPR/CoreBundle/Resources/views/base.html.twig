@@ -29,7 +29,51 @@
 {% endblock %}
 
 {% block footer %}
-<footer></footer>
+<footer>
+  <div class="container">
+    <div class="row images">
+      <div class="col-xs-6 col-sm-4 col-md-3 text-center">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-PPCF.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}PPC{%endtrans%}">
+        {% endimage %}
+      </div>
+
+      <div class="col-xs-6 col-sm-4 col-md-3 text-center">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-Coredes.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}COREDES{%endtrans%}">
+        {% endimage %}
+      </div>
+
+      <div class="col-xs-12 col-sm-4 col-md-3 text-center">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-ONU.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}ONU{%endtrans%}">
+        {% endimage %}
+      </div>
+
+      <div class="col-xs-12 col-sm-12 col-md-3 text-center">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-gov.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}Rio Grande do Sul{%endtrans%}">
+        {% endimage %}
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="container">
+    <div class="row about">
+      <div class="col-sm-6 text-center">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-PROCERGS.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}PROCERGS{%endtrans%}">
+        {% endimage %}
+      </div>
+      <div class="col-sm-6 text-center">
+        <a href="">Termos de uso</a>
+      </div>
+    </div>
+  </div>
+
+</footer>
 {% endblock %}
 
 {% block javascripts %}
