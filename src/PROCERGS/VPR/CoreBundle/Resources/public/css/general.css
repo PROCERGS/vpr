@@ -20,7 +20,7 @@
 /*
  * Base css and override bootstrap
  */
- html {
+html {
   min-height: 100%;
   position: relative;
 }
@@ -68,6 +68,12 @@ footer {
   width: 100%;
 }
 
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .form-inline {
   margin: 20px 0;
 }
@@ -92,6 +98,11 @@ footer {
 .btn,
 .form-control {
   border-radius: 0;
+}
+
+.alert {
+  border: none;
+  font-size: 14px;
 }
 
 .has-feedback .sr-only ~ .form-control-feedback {
@@ -196,6 +207,9 @@ footer {
   width: 38px;
 }
 
+.inner-content {
+  margin-top: 30px;
+}
 
 
 
@@ -210,7 +224,6 @@ footer {
 
   .main-title {
     line-height: 72px;
-    margin-bottom: 30px;
   }
 
   .main-title .icon {

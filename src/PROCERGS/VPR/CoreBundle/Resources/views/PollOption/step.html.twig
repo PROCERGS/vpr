@@ -2,98 +2,103 @@
 
 {% block body %}
 <div class="row">
-    <div class="col-md-12">
-        <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
-
-        <div class="alert alert-success">
-        {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
-        </div>
+  <div class="col-md-12 text-left">
+    <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
+    <div class="alert alert-success js-toggle">
+      {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
     </div>
-    <div class="col-md-12">
-        <div class="jumbotron" style="min-height:500px; position:relative;">
-            {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
-            {{ form_errors(form) }}
-
-            {% if options %}
-            {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
-            <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="loader">
-            {% endimage %}
-
-            <div class="ballot">
-              <dl class="step">
-                {% for currStep,categories in options %}
-                  <dt class="step-title">{{ currStep }}</dt>
-                  <dd>
-                    <dl>
-                      {% for category,pollOptions in categories %}
-                        <dt class="step-category">{{ category }}</dt>
-                        <dd class="options">
-                          <ul>
-                            {% for option in pollOptions %}
-                            <li>
-                              <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                              <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
-                            </li>
-                            {% endfor %}
-                          </ul>
-                        </dd>
-                      {% endfor %}
-                    </dl>
-                  </dd>
-                {% endfor %}
-              </dl>
-            </div>
-
-            {% endif %}
-
-            <div id="button-bar">
-              <button id="btn-vote" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.vote' | trans }}</button>
-              <div id="confirmation">
-                <button id="btn-confirm" type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.confirm' | trans }}</button>
-                <button id="btn-cancel" type="button" class="btn btn-success btn-lg btn-block">{{ 'form.cancel' | trans }}</button>
-              </div>
-            </div>
-
-            {{ form_end(form) }}
-        </div>
-    </div>
+    <div class="alert alert-info js-toggle" style="display:none">{{ 'step.selection.confirm' | trans }}</div>
+  </div>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="inner-content">
+      {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
+      {{ form_errors(form) }}
+
+      {% if options %}
+      {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
+      <img src="{{ asset_url }}" alt="{%trans%}Logo Nota Fiscal Gaúcha{%endtrans%}" class="loader" width="43" height="11">
+      {% endimage %}
+
+      <div class="ballot">
+        <dl class="step">
+          {% for currStep,categories in options %}
+          <dt class="step-title">{{ currStep }}</dt>
+          <dd>
+            <dl>
+              {% for category,pollOptions in categories %}
+              <dt class="step-category">{{ category }}</dt>
+              <dd class="options">
+                <ul>
+                  {% for option in pollOptions %}
+                  <li>
+                    <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
+                    <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </dd>
+              {% endfor %}
+            </dl>
+          </dd>
+          {% endfor %}
+        </dl>
+        <div class="alert alert-danger hidden" id="vote-empty">Nenhuma opção selecionada</div>
+      </div>
+
+      {% endif %}
+
+      <div id="button-bar">
+        <button id="btn-vote" type="button" class="btn btn-success btn-lg js-toggle">{{ 'form.vote' | trans }}</button>
+        <div id="confirmation" class="js-toggle" style="display:none">
+          <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'form.confirm' | trans }}</button>
+          <button id="btn-correct" type="button" class="btn btn-warning btn-lg">{{ 'form.correct' | trans }}</button>
+        </div>
+      </div>
+
+      {{ form_end(form) }}
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 {% block stylesheets %}
 {{ parent() }}
 
-  {% stylesheets 'bundles/procergsvprcore/css/step/step.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-  {% endstylesheets %}
+{% stylesheets 'bundles/procergsvprcore/css/step/step.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
 
-  <style>
+<style>
   .category li {
-      list-style: none outside none;
+    list-style: none outside none;
   }
-  </style>
+</style>
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
 
-  {% javascripts
-          'bundles/procergsvprcore/js/step/svgcheckbx.js' %}
-      <script type="text/javascript" src="{{ asset_url }}"></script>
+{% javascripts
+  'bundles/procergsvprcore/js/step/svgcheckbx.js' %}
+  <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 
   {% javascripts
-          'bundles/procergsvprcore/js/step/step.js' %}
-      <script type="text/javascript" src="{{ asset_url }}"></script>
+  'bundles/procergsvprcore/js/step/step.js' %}
+  <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 
-<script>
-var oba = {
-  label: {
-    'limit' : '{{ 'step.limit.selection' |trans }}'
-  },
-  maxItens: {{ step.getMaxSelection }}
-};
-</script>
+  <script>
+    var oba = {
+      label: {
+        'limit' : '{{ 'step.limit.selection' |trans }}'
+      },
+      maxItens: {{ step.getMaxSelection }}
+    };
+  </script>
 
-{% endblock %}
+  {% endblock %}

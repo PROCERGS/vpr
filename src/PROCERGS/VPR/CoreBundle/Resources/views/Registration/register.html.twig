@@ -14,7 +14,8 @@
         <h3 class="title register-label clearfix"><span class="text">{{ 'register.login.simple' | trans }}</span></h3>
 
         <div class="register-form-container">
-          {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }} {{ form_errors(form) }}
+          {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
+          <div class="alert alert-danger">{{ form_errors(form) }}</div>
           <div class="form-group has-feedback">
               {{ form_label(form.username, 'form.username' | trans, {'label_attr': {'class': 'sr-only'}}) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip', 'placeholder' : 'form.username' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
               <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>

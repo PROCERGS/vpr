@@ -13,7 +13,7 @@ $(function() {
     $(".ballot").addClass("animate");
 
     $(".loader").fadeIn("normal", function() {
-      $("#btn-vote").hide();
+      $(".js-toggle").toggle();
       $(".ballot input").not(":checked").parent().addClass("hidden");
       $("input:checked").closest(".options").prev(".step-category").addClass("checked");
       $(".step-category").not(".checked").addClass("hidden");
@@ -21,15 +21,19 @@ $(function() {
       $(".loader").delay(1000).fadeOut("normal", function() {
         $(".ballot").removeClass("animate");
         $("#confirmation").show();
+
+        if (!$(".ballot input:checked").length) {
+          $("#vote-empty").removeClass("hidden");
+        }
       });
     });
   });
 
-  $("#btn-cancel").on("click", function() {
+  $("#btn-correct").on("click", function() {
+    $("#vote-empty").addClass("hidden");
+    $(".ballot li, .step-category").removeClass("hidden");
     $(".ballot").removeClass("animate");
-    $(".ballot li, .step-category").removeClass("hidden")
-    $("#confirmation").hide();
-    $("#btn-vote").show();
+    $(".js-toggle").toggle();
   });
 
 });

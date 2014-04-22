@@ -1,5 +1,7 @@
 .loader {
   display: none;
+  left: 50%;
+  margin-left: -21px;
   position: absolute;
 }
 
@@ -9,6 +11,8 @@
   -o-transition: 0.2s ease-in-out;
   transition: 0.2s ease-in-out;
   opacity: 1;
+  margin-bottom: 50px;
+  min-height: 400px;
 }
 
 .ballot.animate {
@@ -25,12 +29,13 @@
   font-size: 20px;
   font-weight: normal;
   margin: 30px 0 10px;
+  padding-left: 20px;
 }
 
 .ac-custom li {
   list-style: none;
   margin: 0 auto;
-  padding: 1em 0;
+  padding: 10px 0 10px 40px;
   position: relative;
 }
 
@@ -38,7 +43,7 @@
   display: inline-block;
   line-height: normal;
   position: relative;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: normal;
   padding: 0 0 0 50px;
   vertical-align: top;
@@ -95,7 +100,7 @@
   position: absolute;
   width: 20px;
   height: 30px;
-  left: 5px;
+  left: 45px;
   pointer-events: none;
   margin-top: -18px;
   top: 50%;
@@ -109,6 +114,39 @@
   fill: none;
 }
 
+#button-bar .btn {
+  display: block;
+  margin: 10px auto;
+  width: 300px;
+}
+
+#btn-vote {
+  margin-top: 40px;
+}
+
+#msg-confirm,
 #button-bar #confirmation {
-  display: none;
+  /*display: none;*/
+}
+
+/*
+ * Small devices
+ */
+ @media (max-width: 767px)  {
+  .ballot {
+    margin-bottom: 0;
+  }
+
+  #button-bar {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+  }
+
+  #button-bar .btn {
+    margin: 0;
+    width: 100%;
+  }
 }
