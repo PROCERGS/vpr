@@ -2,7 +2,7 @@
  * Register/Login section
  */
 
- #how-to-vote {
+#how-to-vote {
   color: #D2750E;
   display: inline-block;
   margin: 20px;
@@ -168,6 +168,10 @@
  * Large devices
  */
  @media (min-width: 768px) {
+
+  #how-to-vote {
+    color: #007136;
+  }
 
   #how-to-vote:before {
     background: url('../../images/icon-set-desktop.png') -19px -153px no-repeat;
