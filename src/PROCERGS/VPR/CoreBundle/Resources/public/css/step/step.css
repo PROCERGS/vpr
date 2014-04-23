@@ -128,9 +128,6 @@
  * Small devices
  */
  @media (max-width: 767px)  {
-  body {
-    margin-bottom: 43px;
-  }
 
   .ballot {
     margin-bottom: 0;
