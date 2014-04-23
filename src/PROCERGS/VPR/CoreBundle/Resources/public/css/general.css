@@ -29,6 +29,7 @@ body {
   color: #007136;
   font-size: 16px;
   font-family: 'Roboto', sans-serif;
+  margin-bottom: 326px;
 }
 
 body > .container {
@@ -63,7 +64,12 @@ footer {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c8f48', endColorstr='#006b32',GradientType=0 ); /* IE6-9 */
   bottom: 0;
   padding: 20px 0 0;
+  position: absolute;
   width: 100%;
+}
+
+footer .img-responsive {
+  display: inline-block;
 }
 
 footer hr {
@@ -197,6 +203,7 @@ ul {
 .main-title {
   color: #007136;
   line-height: 35px;
+  margin-top: 0;
   position: relative;
   vertical-align: middle;
 }
@@ -241,6 +248,10 @@ ul {
  */
  @media (min-width: 768px) {
 
+  body {
+    margin-bottom: 194px;
+  }
+
   .form-inline .form-group {
     margin-right: 10px;
   }
@@ -284,6 +295,7 @@ ul {
  * Medium devices
  */
  @media (min-width: 768px) and (max-width: 991px) {
+
   .main-title .icon {
     text-align: left;
     width: auto;
