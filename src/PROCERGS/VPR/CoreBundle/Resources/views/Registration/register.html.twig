@@ -3,6 +3,18 @@
 {% block body %}
 {% trans_default_domain 'messages' %}
 
+        <div class="row">
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                <div class="col-md-12">
+                    <div class="text-center bg-success flash-{{ type }}">
+                        {{ message }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
 <div class="row">
   <div class="col-md-12 text-center">
     <h2 id="how-to-vote">{{ 'register.title' | trans }}</h2>

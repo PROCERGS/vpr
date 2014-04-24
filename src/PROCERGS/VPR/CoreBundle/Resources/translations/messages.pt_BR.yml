@@ -143,3 +143,6 @@ posvote.reinforce.doc.message: 'Muito obrigado por ter votado, você ainda pode 
 step.limit.selection.offer.title: 'Cédula do corede %name%'
 step.limit.selection.offer.message: 'Por favor, selecione até %max% itens das opções abaixo'
 step.selection.confirm: 'Por favor, confirme o voto nos itens selecionados'
+lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
+lc.first_name: 'Nome'
+lc.surname: 'Sobrenome'

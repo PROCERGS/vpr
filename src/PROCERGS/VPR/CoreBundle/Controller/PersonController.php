@@ -31,6 +31,9 @@ class PersonController extends Controller
         if ($person->getTreVoter() instanceof TREVoter) {
             $data['voterRegistration'] = $person->getTreVoter()->getId();
         }
+        if ($person->getCity() !== null) {
+            $data['city']['name'] = $person->getCity()->getName();
+        }
         $form = $this->createForm(new CitySelectionType());
         $form->setData($data);
 
