@@ -129,15 +129,7 @@
  */
  @media (max-width: 767px)  {
 
-  .ballot {
-    margin-bottom: 0;
-  }
-
   #button-bar {
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    z-index: 100;
     width: 100%;
   }
 

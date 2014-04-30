@@ -249,7 +249,7 @@ ul {
  @media (min-width: 768px) {
 
   body {
-    margin-bottom: 194px;
+    margin-bottom: 194px!important;
   }
 
   .form-inline .form-group {
