@@ -1,5 +1,6 @@
+/*global $:false */
 $(function() {
-
+  "use strict";
   /*
    * Register check username
    */
@@ -25,7 +26,7 @@ $(function() {
   $(".register-label").on("click", function() {
     if ($(window).width() <= 768) {
       formContainer.toggleClass("animate");
-      $(".register-tooltip").tooltip('hide');
+      $(".register-tooltip").tooltip("hide");
     }
   });
 
@@ -34,7 +35,7 @@ $(function() {
       formContainer.show();
     }
 
-    $(".register-tooltip").tooltip('hide');
+    $(".register-tooltip").tooltip("hide");
 
   });
 
@@ -51,12 +52,22 @@ $(function() {
   /*
    * Add tooltip at register form
    */
-   $(".register-tooltip").tooltip({
-    "container" : ".register-label",
-    "html" : true,
-    "placement" : "top",
-    "title" : "<span>" + tooltipContent.text + "</span><a href='" + tooltipContent.link + "' target='blank'>" + tooltipContent.link_text + "</a>",
-    "trigger" : "focus"
+   $(".register-tooltip").on({
+    focusin: function() {
+      $(".tre-search-link").fadeIn().css("display", "block");
+    },
+    focusout: function() {
+      $(".tre-search-link").fadeOut();
+    }
    });
+
+
+   // $(".register-tooltip").tooltip({
+   //  "container" : ".register-label",
+   //  "html" : true,
+   //  "placement" : "top",
+   //  "title" : "<span>" + tooltipContent.text + "</span><a href='" + tooltipContent.link + "' target='blank'>" + tooltipContent.link_text + "</a>",
+   //  "trigger" : "focus"
+   // });
 
 });

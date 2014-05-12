@@ -20,7 +20,7 @@
 /*
  * Base css and override bootstrap
  */
-html {
+ html {
   min-height: 100%;
   position: relative;
 }

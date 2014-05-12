@@ -70,6 +70,14 @@
   margin-top: 20px;
 }
 
+.register-form .tre-search-link {
+  display: none;
+  font-size: 12px;
+  margin: 5px 0;
+  line-height: 15px;
+  padding: 4px 9px;
+}
+
 .register-box #about-lc-link {
   margin: 20px 0;
 }
