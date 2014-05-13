@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
 class FOSUBUserProvider extends BaseClass
 {
     protected $em;
-    
+
     public function setEntityManager(EntityManager $var)
     {
         $this->em = $var;
@@ -23,15 +23,15 @@ class FOSUBUserProvider extends BaseClass
     {
         $property = $this->getProperty($response);
         $username = $response->getUsername();
-        
+
         // on connect - get the access token and the user ID
         $service = $response->getResourceOwner()->getName();
-        
+
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
         $setter_token = $setter . 'AccessToken';
         $setter_username = $setter . 'Username';
-        
+
         // we "disconnect" previously connected users
         $previousUser = $this->userManager->findUserBy(array(
             $property => $username
@@ -42,12 +42,12 @@ class FOSUBUserProvider extends BaseClass
             $previousUser->$setter_username(null);
             $this->userManager->updateUser($previousUser);
         }
-        
+
         // we connect current user
         $user->$setter_id($username);
         $user->$setter_username($response->getNickname());
         $user->$setter_token($response->getAccessToken());
-        
+
         $this->userManager->updateUser($user);
     }
 
@@ -63,7 +63,7 @@ class FOSUBUserProvider extends BaseClass
         $user = $this->userManager->findUserBy(array(
             $this->getProperty($response) => $serviceId
         ));
-        
+
         if (null === $user) {
             $user = $this->userManager->createUser();
         }
@@ -77,24 +77,24 @@ class FOSUBUserProvider extends BaseClass
         }
         $firstName = $userData['first_name'];
         $surname = $userData['surname'];
-        
+
         $service = $response->getResourceOwner()->getName();
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
         $setter_token = $setter . 'AccessToken';
         $setter_username = $setter . 'Username';
-        
+
         $user->$setter_id($serviceId);
         $user->$setter_token($response->getAccessToken());
         $user->$setter_username($response->getNickname());
-        
+
         $user->setUsername($username);
         $user->setFirstName($firstName);
         $user->setSurname($surname);
         $user->setEmail($email);
         $user->setPassword('');
         $user->setEnabled(true);
-        if (is_numeric($userData['city']['id'])) {
+        if (array_key_exists('city', $userData) && is_numeric($userData['city']['id'])) {
             $cityRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:City');
             $city = $cityRepo->findOneBy(array('ibgeCode' => $userData['city']['id']));
             if ($city) {
@@ -102,16 +102,16 @@ class FOSUBUserProvider extends BaseClass
             }
         }
         $this->userManager->updateUser($user);
-        
+
         // if user exists - go with the HWIOAuth way
         $user = parent::loadUserByOAuthUserResponse($response);
-        
+
         $serviceName = $response->getResourceOwner()->getName();
         $setter = 'set' . ucfirst($serviceName) . 'AccessToken';
-        
+
         // update access token
         $user->$setter($response->getAccessToken());
-        
+
         return $user;
     }
 }
