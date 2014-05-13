@@ -17,12 +17,12 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Links <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href="{{ path('procergsvpr_core_municipio') }}">Seleção de município</a></li>
-                    <li><a href="{{ path('procergsvpr_core_tituloVotou') }}">Título já votou</a></li>
+                    <li><a href="{{ path('procergsvpr_core_voter_registration_voted') }}">Título já votou</a></li>
                     <li><a href="{{ path('procergsvpr_core_nfgFraca') }}">NFG fraca</a></li>
-                    <li><a href="{{ path('procergsvpr_core_horarioEncerrado') }}">Horário encerrado</a></li>
-                    <li><a href="{{ path('procergsvpr_core_solicita_titulo') }}">Solicita título</a></li>
+                    <li><a href="{{ path('procergsvpr_core_voting_timeout') }}">Horário encerrado</a></li>
+                    <li><a href="{{ path('procergsvpr_core_ask_voter_registration') }}">Solicita título</a></li>
                     <li><a href="{{ path('procergsvpr_core_reforcar_voto') }}">Reforçar voto</a></li>
-                    <li><a href="{{ path('procergsvpr_core_sem_nfg') }}">Sem NFG</a></li>
+                    <li><a href="{{ path('procergsvpr_core_ask_nfg') }}">Sem NFG</a></li>
                 </ul>
             </li>
             {% if app.user is not null and (is_granted('ROLE_STATS') or is_granted('ROLE_CRUD_POLL') or is_granted('ROLE_CRUD_BALLOTBOX') or is_granted('ROLE_MANAGE_USER')) %}

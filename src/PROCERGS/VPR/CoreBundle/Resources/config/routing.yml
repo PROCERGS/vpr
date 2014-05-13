@@ -59,7 +59,7 @@ procergsvpr_core_end:
     pattern:  /end
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:end }
 
-procergsvpr_core_tituloVotou:
+procergsvpr_core_voter_registration_voted:
     pattern:  /end/change/offer
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChangeOffer }
 
@@ -71,7 +71,7 @@ procergsvpr_core_end_change_puny:
     pattern:  /end/change/puny
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChangePuny }
 
-procergsvpr_core_horarioEncerrado:
+procergsvpr_core_voting_timeout:
     pattern:  /end/timeover
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:endTimeOver }
 
@@ -83,10 +83,10 @@ procergsvpr_core_nfgFraca:
     pattern:  /reinforce/puny
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforcePuny }
 
-procergsvpr_core_solicita_titulo:
+procergsvpr_core_ask_voter_registration:
     pattern:  /reinforce/doc
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceDoc }
 
-procergsvpr_core_sem_nfg:
+procergsvpr_core_ask_nfg:
     pattern:  /reinforce/offer
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceOffer }

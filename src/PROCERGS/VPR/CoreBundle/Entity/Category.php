@@ -41,7 +41,7 @@ class Category
     protected $sorting;
 
     /**
-     * @ORM\OneToMany(targetEntity="PollOption", mappedBy="step")
+     * @ORM\OneToMany(targetEntity="PollOption", mappedBy="category")
      */
     protected $pollOptions;
 

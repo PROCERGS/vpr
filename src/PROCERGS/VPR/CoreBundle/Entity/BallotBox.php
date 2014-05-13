@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation\Groups;
  * BallotBox
  *
  * @ORM\Table(name="ballot_box")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class BallotBox
@@ -453,8 +453,8 @@ class BallotBox
     public function getCity()
     {
         return $this->city;
-    }    
-    
+    }
+
     public function sign($serializedOptions)
     {
         $encryptedPrivate = $this->getPrivateKey();

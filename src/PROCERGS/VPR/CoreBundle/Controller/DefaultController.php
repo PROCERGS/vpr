@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,6 +12,9 @@ use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\PollOption;
+use PROCERGS\VPR\CoreBundle\Exception\VotingTimeoutException;
+use PROCERGS\VPR\CoreBundle\Exception\VoterAlreadyVotedException;
+use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationAlreadyVotedException;
 
 class DefaultController extends Controller
 {
@@ -20,91 +24,60 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        $voter = $this->get('security.context')->getToken()->getUser();
-        $em = $this->getDoctrine()->getManager();
-        
-        $session = $this->getRequest()->getSession();
-        $vote = $session->get('vote');
-        if (! $vote) {
-            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
-            if ($poll->getClosingTime() < new \DateTime()) {
-                return $this->redirect($this->generateUrl('procergsvpr_core_horarioEncerrado'));
+        $person = $this->getUser();
+        $votingSession = $this->get('vpr_voting_session_provider');
+
+        try {
+            $vote = $votingSession->enforceVotingSession($person);
+        } catch (VotingTimeoutException $e) {
+            return $this->redirect($this->generateUrl('procergsvpr_core_voting_timeout'));
+        } catch (VoterRegistrationAlreadyVotedException $e) {
+            return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
+        } catch (VoterAlreadyVotedException $e) {
+            return $this->redirect($this->generateUrl('procergsvpr_core_end'));
+        }
+
+        $stepId = $votingSession->getNextStep();
+        if (!$stepId) {
+            if (!$vote->getVoterRegistration()) {
+                return $this->redirect($this->generateUrl('procergsvpr_core_ask_voter_registration'));
             }
-            
-            $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(array(
-                'poll' => $poll,
-                'isOnline' => 1
-            ));
-            $filter = array(
-                'ballotBox' => $ballotBox[0]
-            );
-            if ($voter->getTreVoter()) {
-                $filter['voterRegistration'] = $voter->getTreVoter()->getId();
-            } elseif ($voter->getLoginCidadaoId()) {
-                $filter['loginCidadaoId'] = $voter->getLoginCidadaoId();
-            }
-            $vote1 = $em->getRepository('PROCERGSVPRCoreBundle:Vote')->findBy($filter);
-            if ($vote1) {
-                foreach ($vote1 as $try) {
-                    if ($try->getNfgCpf()) {
-                        return $this->redirect($this->generateUrl('procergsvpr_core_end'));
-                    }
-                }
-                return $this->redirect($this->generateUrl('procergsvpr_core_tituloVotou'));
-            }
-            $vote = $this->_createVote($em, $session, $voter, $ballotBox[0]);
-            $em->detach($vote);
-            $session->set('vote', $vote);
-        } else {
-            if (! $vote->getLastStep()) {
-                if (! $vote->getVoterRegistration()) {
-                    return $this->redirect($this->generateUrl('procergsvpr_core_solicita_titulo'));
-                }
-                $filter['ballotBox'] = $vote->getBallotBox();
-                if ($vote->getVoterRegistration()) {
-                    $filter['voterRegistration'] = $vote->getVoterRegistration();
-                } elseif ($vote->getLoginCidadaoId()) {
-                    $filter['loginCidadaoId'] = $vote->getLoginCidadaoId();
-                }
-                if (! $vote->getNfgCpf()) {
-                    $vote1 = $em->getRepository('PROCERGSVPRCoreBundle:Vote')->findBy($filter);
-                    if ($vote1) {
-                        foreach ($vote1 as $try) {
-                            if ($try->getNfgCpf()) {
-                                return $this->redirect($this->generateUrl('procergsvpr_core_end'));
-                            }
-                        }
-                        return $this->redirect($this->generateUrl('procergsvpr_core_sem_nfg'));
-                    } else {
-                        $session->set('vote', null);
-                        return $this->indexAction();
-                    }
-                } else {
-                    return $this->redirect($this->generateUrl('procergsvpr_core_end'));
-                }
+            try {
+                $votingSession->checkExistingVotes($person);
+                $votingSession->flush();
+                return $this->indexAction();
+            } catch (VoterRegistrationAlreadyVotedException $e) {
+                return $this->redirect($this->generateUrl('procergsvpr_core_ask_nfg'));
+            } catch (VoterAlreadyVotedException $e) {
+                return $this->redirect($this->generateUrl('procergsvpr_core_end'));
             }
         }
-        return $this->redirect($this->generateUrl('procergsvpr_step', array(
-            'stepid' => $vote->getLastStep()->getId(),
-            'coredeid' => $vote->getCorede()->getid()
+
+        return $this->redirect($this->generateUrl('procergsvpr_step',
+                                array(
+                            'stepid' => $vote->getLastStep()->getId(),
+                            'coredeid' => $vote->getCorede()->getid()
         )));
     }
 
     public function reinforceOfferAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
-        return $this->render('PROCERGSVPRCoreBundle:Default:reinforceOffer.html.twig', array(
-            'nfgRegisterUrl' => $nfgRegisterUrl
+        return $this->render('PROCERGSVPRCoreBundle:Default:reinforceOffer.html.twig',
+                        array(
+                    'nfgRegisterUrl' => $nfgRegisterUrl
         ));
     }
 
     public function reinforceAction(Request $request)
     {
         $formBuilder = $this->createFormBuilder();
-        $formBuilder->add('cpf', 'text', array(
+        $formBuilder->add('cpf', 'text',
+                array(
             'required' => true
         ));
-        $formBuilder->add('birthdate', 'birthday', array(
+        $formBuilder->add('birthdate', 'birthday',
+                array(
             'required' => true,
             'format' => 'dd MMMM yyyy',
             'widget' => 'choice',
@@ -116,7 +89,7 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             $session = $request->getSession();
             $vote = $session->get('vote');
-            if (! $vote || $vote->getLastStep()) {
+            if (!$vote || $vote->getLastStep()) {
                 return $this->indexAction();
             }
             $voter = $this->get('security.context')->getToken()->getUser();
@@ -160,24 +133,27 @@ class DefaultController extends Controller
                 $form->addError(new FormError($this->get('translator')->trans('posvote.reinforce.nfg.query.problem')));
             }
         }
-        return $this->render('PROCERGSVPRCoreBundle:Default:reinforce.html.twig', array(
-            'form' => $form->createView(),
-            'messages' => $messages
+        return $this->render('PROCERGSVPRCoreBundle:Default:reinforce.html.twig',
+                        array(
+                    'form' => $form->createView(),
+                    'messages' => $messages
         ));
     }
 
     public function reinforcePunyAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
-        return $this->render('PROCERGSVPRCoreBundle:Default:reinforcePuny.html.twig', array(
-            'nfgRegisterUrl' => $nfgRegisterUrl
+        return $this->render('PROCERGSVPRCoreBundle:Default:reinforcePuny.html.twig',
+                        array(
+                    'nfgRegisterUrl' => $nfgRegisterUrl
         ));
     }
 
     public function reinforceDocAction(Request $request)
     {
         $formBuilder = $this->createFormBuilder();
-        $formBuilder->add('trevoter', 'text', array(
+        $formBuilder->add('trevoter', 'text',
+                array(
             'required' => true,
             'max_length' => 12
         ));
@@ -187,11 +163,11 @@ class DefaultController extends Controller
         if ($form->isValid()) {
             $session = $request->getSession();
             $vote = $session->get('vote');
-            if (! $vote || $vote->getLastStep()) {
+            if (!$vote || $vote->getLastStep()) {
                 return $this->indexAction();
             }
             $voter = $this->get('security.context')->getToken()->getUser();
-            
+
             $em = $this->getDoctrine()->getManager();
             $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
             $voter1 = $treRepo->findOneBy(array(
@@ -212,9 +188,10 @@ class DefaultController extends Controller
                 $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.notfound')));
             }
         }
-        return $this->render('PROCERGSVPRCoreBundle:Default:reinforceDoc.html.twig', array(
-            'form' => $form->createView(),
-            'messages' => $messages
+        return $this->render('PROCERGSVPRCoreBundle:Default:reinforceDoc.html.twig',
+                        array(
+                    'form' => $form->createView(),
+                    'messages' => $messages
         ));
     }
 
@@ -228,25 +205,28 @@ class DefaultController extends Controller
     public function endTimeOverAction($poll = null)
     {
         $poll = $this->getDoctrine()->getManager()->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
-        return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOver.html.twig', array(
-            'name' => $poll->getName(),
-            'closingTime' => $poll->getClosingTime()
+        return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOver.html.twig',
+                        array(
+                    'name' => $poll->getName(),
+                    'closingTime' => $poll->getClosingTime()
         ));
     }
 
     public function endChangePunyAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
-        return $this->render('PROCERGSVPRCoreBundle:Default:endChangePuny.html.twig', array(
-            'nfgRegisterUrl' => $nfgRegisterUrl
+        return $this->render('PROCERGSVPRCoreBundle:Default:endChangePuny.html.twig',
+                        array(
+                    'nfgRegisterUrl' => $nfgRegisterUrl
         ));
     }
 
     public function endChangeOfferAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
-        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig', array(
-            'nfgRegisterUrl' => $nfgRegisterUrl
+        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig',
+                        array(
+                    'nfgRegisterUrl' => $nfgRegisterUrl
         ));
     }
 
@@ -265,18 +245,21 @@ class DefaultController extends Controller
         if ($voter->getTreVoter()) {
             $chan->trevoter = $voter->getTreVoter()->getId();
         }
-        
+
         $formBuilder = $this->createFormBuilder($chan);
-        $formBuilder->add('cpf', 'text', array(
+        $formBuilder->add('cpf', 'text',
+                array(
             'required' => true
         ));
-        $formBuilder->add('birthdate', 'birthday', array(
+        $formBuilder->add('birthdate', 'birthday',
+                array(
             'required' => true,
             'format' => 'dd MMMM yyyy',
             'widget' => 'choice',
             'years' => range(date('Y'), date('Y') - 70)
         ));
-        $formBuilder->add('trevoter', 'text', array(
+        $formBuilder->add('trevoter', 'text',
+                array(
             'required' => true,
             'max_length' => 12
         ));
@@ -301,11 +284,9 @@ class DefaultController extends Controller
                         if ($return['CodNivelAcesso'] >= 2) {
                             $em = $this->getDoctrine()->getManager();
                             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
-                            $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findBy(array(
-                                'poll' => $poll,
-                                'isOnline' => 1
-                            ));
-                            $vote = $this->_createVote($em, $session, $voter, $ballotBox[0]);
+                            $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
+                            $vote = $this->_createVote($em, $session, $voter,
+                                    $ballotBox);
                             $vote->setNfgCpf('1');
                             $em->detach($vote);
                             $session->set('vote', $vote);
@@ -328,9 +309,10 @@ class DefaultController extends Controller
                 $form->addError(new FormError($this->get('translator')->trans('end.change.nfg.query.problem')));
             }
         }
-        return $this->render('PROCERGSVPRCoreBundle:Default:endChange.html.twig', array(
-            'form' => $form->createView(),
-            'messages' => $messages
+        return $this->render('PROCERGSVPRCoreBundle:Default:endChange.html.twig',
+                        array(
+                    'form' => $form->createView(),
+                    'messages' => $messages
         ));
     }
 
@@ -349,11 +331,11 @@ class DefaultController extends Controller
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $formFactory = $this->container->get('fos_user.registration.form.factory');
-        
+
         $user = new Person();
         $form = $formFactory->createForm();
         $form->setData($user);
-        
+
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
             if ($form->isValid()) {
@@ -364,7 +346,8 @@ class DefaultController extends Controller
                     'loginCidadaoAccessToken' => null
                 ));
                 if ($user1) {
-                    if ($this->_testName($form->get('firstname')->getData(), $user1->getFirstName())) {
+                    if ($this->_testName($form->get('firstname')->getData(),
+                                    $user1->getFirstName())) {
                         $response = $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
                         $this->_auth($user1, $response);
                         return $response;
@@ -378,7 +361,8 @@ class DefaultController extends Controller
                         'id' => $form->get('username')->getData()
                     ));
                     if ($voter) {
-                        if ($this->_testName($voter->getName(), $user->getFirstName())) {
+                        if ($this->_testName($voter->getName(),
+                                        $user->getFirstName())) {
                             $user->setUsername(uniqid(mt_rand(), true));
                             $user->setTreVoter($voter);
                             $user->setCity($voter->getCity());
@@ -395,9 +379,10 @@ class DefaultController extends Controller
                 }
             }
         }
-        return $this->render('PROCERGSVPRCoreBundle:Registration:register.html.twig', array(
-            'form' => $form->createView(),
-            'tre_search_link' => $this->container->getParameter('tre_search_link')
+        return $this->render('PROCERGSVPRCoreBundle:Registration:register.html.twig',
+                        array(
+                    'form' => $form->createView(),
+                    'tre_search_link' => $this->container->getParameter('tre_search_link')
         ));
     }
 
@@ -436,4 +421,5 @@ class DefaultController extends Controller
         $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
         return $vote;
     }
+
 }
