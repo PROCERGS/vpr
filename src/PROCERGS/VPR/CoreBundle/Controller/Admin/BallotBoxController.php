@@ -28,7 +28,24 @@ class BallotBoxController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findAll();
+        
+        $query = $em->createQueryBuilder()
+            ->select('b')
+            ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
+            ->innerJoin('b.city','c')
+            ->innerJoin('b.poll','p')
+            ->orderBy('p.openingTime','DESC')
+            ->addOrderBy('c.name','ASC')
+            ->addOrderBy('b.address','ASC')
+            ->getQuery();
+
+        $paginator  = $this->get('knp_paginator');
+        
+        $entities = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            20
+        );
 
         return array(
             'entities' => $entities,

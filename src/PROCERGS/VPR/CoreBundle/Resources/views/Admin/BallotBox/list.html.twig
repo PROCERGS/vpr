@@ -2,11 +2,9 @@
     <table class="table table-striped table-bordered table-hover records_list">
         <thead>
             <tr>
-                <th width="20%">{{ 'admin.name'|trans }}</th>
-                <th width="15%">{{ 'admin.poll'|trans }}</th>
+                <th width="20%">{{ 'admin.poll'|trans }}</th>
                 <th width="15%">{{ 'admin.city'|trans }}</th>
-                <th width="15%">{{ 'admin.opening_time'|trans }}</th>
-                <th width="15%">{{ 'admin.closing_time'|trans }}</th>
+                <th width="30%">{{ 'admin.address'|trans }}</th>
                 <th width="5%">{{ 'admin.total_invalid_vote'|trans }}</th>
                 <th width="5%">{{ 'admin.is_online'|trans }}?</th>
                 <th width="8%">{{ 'admin.actions'|trans }}</th>
@@ -16,11 +14,9 @@
             {% if(entities) %}
                 {% for entity in entities %}
                     <tr>
-                        <td>{{ entity.name }}</td>
                         <td>{% if (entity.poll) %}{{ entity.poll.name }}{% endif %}</td>
                         <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
-                        <td>{% if (entity.openingTime) %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
-                        <td>{% if (entity.closingTime) %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
+                        <td>{{ entity.address }}</td>
                         <td class="text-center">{{ entity.totalInvalidVotes }}</td>
                         <td class="text-center">{% if entity.isOnline %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
                         <td class="text-center">
@@ -34,4 +30,8 @@
             {% endif %}
         </tbody>
     </table>
+</div>
+
+<div class="row text-center">
+    {{ knp_pagination_render(entities) }}
 </div>
