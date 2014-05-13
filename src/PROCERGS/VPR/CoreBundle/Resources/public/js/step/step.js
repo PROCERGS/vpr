@@ -1,4 +1,6 @@
+/*global $:false */
 $(function() {
+  "use strict";
 
   $(".ballot input").on("click", function(event) {
     var sel = $(".ballot input:checked");
@@ -34,6 +36,10 @@ $(function() {
     $(".ballot li, .step-category").removeClass("hidden");
     $(".ballot").removeClass("animate");
     $(".js-toggle").toggle();
+  });
+
+  $(".step-category").on("click", function() {
+    $(this).next(".options").toggle();
   });
 
 });

@@ -5,6 +5,42 @@
   position: absolute;
 }
 
+.ballot-nav {
+  background-color: #ffcf9e;
+  margin: -20px -20px 0;
+  height: 42px;
+  line-height: 42px;
+  padding: 0 10px;
+  vertical-align: middle;
+}
+
+#btn-categories {
+  background: none;
+}
+
+#dropdown-categories li {
+  margin: 10px 0;
+}
+
+#dropdown-categories li a {
+  display: inline-block;
+  float: left;
+  line-height: 40px;
+  padding: 0;
+  position: relative;
+  vertical-align: middle;
+  width: 100%;
+}
+
+#dropdown-categories li a:before {
+  background-image: url(../../images/cat-icons.svg);
+  content: "";
+  display: inline-block;
+  height: 40px;
+  float: left;
+  width: 60px;
+}
+
 .ballot {
   -webkit-transition: 0.2s ease-in-out;
   -moz-transition: 0.2s ease-in-out;
@@ -26,10 +62,94 @@
 }
 
 .ballot .step-category {
+  border-bottom: solid 1px #CCC;
+  cursor: pointer;
   font-size: 20px;
   font-weight: normal;
   margin: 30px 0 10px;
-  padding-left: 20px;
+  padding-bottom: 10px;
+  padding-left: 60px;
+  position: relative;
+}
+
+.ballot .step-category:before {
+  background-image: url(../../images/cat-icons.svg);
+  content: "";
+  display: block;
+  height: 40px;
+  left: 0;
+  margin-top: -25px;
+  position: absolute;
+  top: 50%;
+  width: 60px;
+}
+
+.ctg-1:before {
+  background-position: 0 -9px;
+}
+
+.ctg-2:before {
+  background-position: 0 -68px;
+}
+
+.ctg-3:before {
+  background-position: 0 -130px;
+}
+
+.ctg-4:before {
+  background-position: 0 -191px;
+}
+
+.ctg-5:before {
+  background-position: 0 -250px;
+}
+
+.ctg-6:before {
+  background-position: 0 -310px;
+}
+
+.ctg-7:before {
+  background-position: 0 -370px;
+}
+
+.ctg-8:before {
+  background-position: 0 -430px;
+}
+
+.ctg-9:before {
+  background-position: 0 -490px;
+}
+
+.ctg-10:before {
+  background-position: 0 -550px;
+}
+
+.ctg-11:before {
+  background-position: 0 -610px;
+}
+
+.ctg-12:before {
+  background-position: 0 -670px;
+}
+
+.ctg-13:before {
+  background-position: 0 -730px;
+}
+
+.ctg-14:before {
+  background-position: 0 -790px;
+}
+
+.ctg-15:before {
+  background-position: 0 -850px;
+}
+
+.ctg-16:before {
+  background-position: 0 -910px;
+}
+
+.ballot .options {
+  display: none;
 }
 
 .ac-custom li {

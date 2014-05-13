@@ -3,11 +3,22 @@
 {% block body %}
 <div class="row">
   <div class="col-md-12 text-left">
-    <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
-    <div class="alert alert-success js-toggle">
+    <div class="ballot-nav clearfix">
+      <span class="pull-left">{{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}</span>
+      <div class="dropdown pull-right">
+        <button class="btn dropdown-toggle" type="button" id="btn-categories" data-toggle="dropdown">Categorias</button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="dropdown-categories">
+          {% for category,id in categoriesId %}
+          <li role="presentation"><a class="ctg-{{id}}" role="menuitem" tabindex="-1" href="#"><span>{{category}}</span></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {# <div class="alert alert-success js-toggle">
       {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
     </div>
-    <div class="alert alert-info js-toggle" style="display:none">{{ 'step.selection.confirm' | trans }}</div>
+    <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
+    <div class="alert alert-info js-toggle" style="display:none">{{ 'step.selection.confirm' | trans }}</div> #}
   </div>
 </div>
 
@@ -25,11 +36,12 @@
       <div class="ballot">
         <dl class="step">
           {% for currStep,categories in options %}
+
           <dt class="step-title">{{ currStep }}</dt>
           <dd>
             <dl>
               {% for category,pollOptions in categories %}
-              <dt class="step-category">{{ category }}</dt>
+              <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">{{ category }}</dt>
               <dd class="options">
                 <ul>
                   {% for option in pollOptions %}

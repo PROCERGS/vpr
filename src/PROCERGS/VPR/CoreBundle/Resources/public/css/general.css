@@ -295,6 +295,9 @@ ul {
  * Medium devices
  */
  @media (min-width: 768px) and (max-width: 991px) {
+  body > .container {
+    padding: 20px 0;
+  }
 
   .main-title .icon {
     text-align: left;
