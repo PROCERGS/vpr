@@ -9,6 +9,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Poll;
 
 class DefaultController extends Controller
 {
+
     /**
      * @Route("/count/{pollId}")
      * @Template()
@@ -20,8 +21,33 @@ class DefaultController extends Controller
 
         $voteRepo = $em->getRepository('PROCERGSVPRCoreBundle:Vote');
         $votes = $voteRepo->findByPoll($poll);
-        var_dump($votes); die();
 
-        return array('name' => $name);
+        $privateKeyFile = $this->container->getParameter('privateKeyFile');
+        $privatePollKey = openssl_pkey_get_private($privateKeyFile, 'test');
+        $serializer = $this->container->get('jms_serializer');
+        $openVotes = array();
+        $votedOptions = array();
+        $optionsCount = array();
+        foreach ($votes as $vote) {
+            $openVote = $vote->openVote($privatePollKey);
+            $openVotes[] = $openVote;
+            $openOptions = $serializer->deserialize($openVote->getPlainOptions(),
+                    'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\PollOption>',
+                    'json');
+            $openVote->setPollOption($openOptions);
+
+            foreach ($openOptions as $option) {
+                $id = 'option' . $option->getId();
+                if (array_key_exists($id, $optionsCount)) {
+                    $optionsCount[$id] += 1;
+                } else {
+                    $optionsCount[$id] = 1;
+                }
+                $votedOptions[$id] = $option;
+            }
+        }
+
+        return compact('openVotes', 'votedOptions', 'optionsCount');
     }
+
 }
