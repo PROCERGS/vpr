@@ -11,7 +11,7 @@ class VoteRepository extends EntityRepository
     {
         return $this->getEntityManager()
                         ->createQuery(
-                                'SELECT v FROM PROCERGSVPRCoreBundle:Vote v INNER JOIN PROCERGSVPRCoreBundle:BallotBox b WHERE b.poll = :poll'
+                                'SELECT v FROM PROCERGSVPRCoreBundle:Vote v JOIN PROCERGSVPRCoreBundle:BallotBox b WITH v.ballotBox = b WHERE b.poll = :poll'
                         )->setParameter('poll', $poll)->getResult();
     }
 
