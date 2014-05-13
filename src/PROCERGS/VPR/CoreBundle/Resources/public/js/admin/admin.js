@@ -27,35 +27,19 @@ $(function() {
 
     // Save sorting
     $('.save-sorted').click(function(){
-        var tableId = $(this).attr('data-table');
-        $elmTable = $('#'+tableId);
-        var dataType = $elmTable.attr('data-type');
-
-        var ids = [];
-        $.each($elmTable.find('tbody tr'), function() {
-            ids.push($(this).data('id'));
+        var steps = [];
+        $.each($('tbody tr'), function() {
+            steps.push($(this).data('id'));
         });
 
         $btnSave = $(this);
         $btnSave.button('loading');
 
-        switch(dataType){
-            case 'step':
-              saveSortingUrl = saveStepSortingUrl;
-              break;
-            case 'pollOption':
-              saveSortingUrl = savePollOptionSortingUrl;
-              break;
-            default:
-              alert('error');
-              return false;
-        }
-
         $.ajax({
-            url: saveSortingUrl,
+            url: saveStepSortingUrl,
             type: 'POST',
             data: ({
-                ids: ids
+                steps: steps
             }),
             dataType: 'json',
             success: function(result) {
@@ -70,8 +54,7 @@ $(function() {
                         .show();
                 }
             }
-        });
-        return false;
+        });        
     });
 
     $('form.poll-option select#poll_select').change(function(){

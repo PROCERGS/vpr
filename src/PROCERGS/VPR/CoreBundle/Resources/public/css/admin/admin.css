@@ -1,3 +1,6 @@
+#lc-navbar{
+    margin-bottom: 0 !important;
+}
 #procergs_vpr_corebundle_poll_closingTime select, 
 #procergs_vpr_corebundle_poll_openingTime select, 
 #procergs_vpr_corebundle_ballotbox_openingTime select, 

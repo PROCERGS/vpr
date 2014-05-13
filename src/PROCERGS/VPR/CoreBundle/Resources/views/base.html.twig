@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block header %}
-<script src="http://lc.des.dona.to/app_dev.php/external/navbar.js"></script>
+<script src="{{login_cidadao_navbar_url}}"></script>
 <script> citizenLogin.navbar.init(); </script>
 {% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
 <header class="text-center">

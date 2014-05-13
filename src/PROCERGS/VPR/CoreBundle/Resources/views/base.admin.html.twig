@@ -1,6 +1,8 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block header %}
+    <script src="{{login_cidadao_navbar_url}}"></script>
+    <script> citizenLogin.navbar.init(); </script>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -84,3 +86,4 @@
     </div>
     {% block content %}{% endblock %}
 {% endblock %}
+{% block footer %}{% endblock %}

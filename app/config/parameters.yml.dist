@@ -16,7 +16,8 @@ parameters:
 
     login_cidadao_id: oauth_id
     login_cidadao_secret: oauth_secret
-    login_cidadao_base_url: http://meu.rs.gov.br
+    login_cidadao_base_url: 'http://meu.rs.gov.br'
+    login_cidadao_navbar_url: 'http://meu.rs.gov.br/external/navbar.js'
 
     privateKeyFile: 'file:///home/user/some/folder/privkey.pem'
     nfg_register_url: 'https://nfg.sefaz.rs.gov.br/site/index.aspx'

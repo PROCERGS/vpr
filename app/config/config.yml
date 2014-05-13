@@ -26,6 +26,8 @@ framework:
 
 # Twig Configuration
 twig:
+    globals:
+        login_cidadao_navbar_url: %login_cidadao_navbar_url%
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
