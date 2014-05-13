@@ -42,6 +42,8 @@ security:
                 path: /logout
 
     access_control:
+        - { path: ^/counting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - { path: ^/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/places, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/ballot, roles: IS_AUTHENTICATED_ANONYMOUSLY }

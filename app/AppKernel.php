@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Donato\Generic\HWIOAuthProxyBundle\DonatoGenericHWIOAuthProxyBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new PROCERGS\VPR\CountingBundle\PROCERGSVPRCountingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,3 +1,8 @@
+procergsvpr_counting:
+    resource: "@PROCERGSVPRCountingBundle/Controller/"
+    type:     annotation
+    prefix:   /counting
+
 procergsvpr_core:
     resource: "@PROCERGSVPRCoreBundle/Resources/config/routing.yml"
     prefix:   /
