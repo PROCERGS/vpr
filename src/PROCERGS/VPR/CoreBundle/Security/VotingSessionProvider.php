@@ -105,6 +105,8 @@ class VotingSessionProvider
         $vote = $this->createVotingSession($person);
         $this->em->detach($vote);
         $this->session->set('vote', $vote);
+
+        return $vote;
     }
 
     public function getNextStep()
