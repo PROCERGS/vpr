@@ -378,13 +378,33 @@
     background-color: #DBEAE3;
   }
 
+  .ballot .options .desc-toggle {
+    color: #f0731f;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 25px;
+    margin-left: 10px;
+    position: absolute;
+    right: 15px;
+    text-shadow: 0 0 0 #000;
+    top: 10px;
+  }
+
+  .ballot .options .desc {
+    display: none;
+    font-size: 14px;
+    margin: 5px 5px 40px;
+  }
+
 /* ==========================================================================
    ballot custom checkbox
    ========================================================================== */
    .ac-custom li {
-    list-style: none;
-    margin: 0 auto 4px;
-    padding: 10px 10px 10px 50px;
+    margin-bottom: 5px;
+   }
+
+   .ac-custom li .content {
+    padding: 10px 30px 10px 50px;
     position: relative;
   }
 
