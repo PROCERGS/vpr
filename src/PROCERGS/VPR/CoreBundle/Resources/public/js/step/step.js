@@ -37,9 +37,4 @@ $(function() {
     $(".ballot").removeClass("animate");
     $(".js-toggle").toggle();
   });
-
-  $(".step-category").on("click", function() {
-    $(this).next(".options").toggle();
-  });
-
 });

@@ -10,25 +10,12 @@
         <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Categorias<span class="caret"></span></button>
         <ul class="dropdown-menu dropdown-menu-right" role="menu" id="dropdown-categories">
           {% for category,id in categoriesId %}
-          <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="ctg-{{id}}">{{category}}</span></a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}"><span class="ctg-{{id}}">{{category}}</span></a></li>
           {% endfor %}
         </ul>
       </div>
     </div>
 
-
-
-    {# <div class="ballot-nav clearfix">
-      <span class="pull-left">{{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}</span>
-      <div class="dropdown pull-right">
-        <button class="btn dropdown-toggle" type="button" id="btn-categories" data-toggle="dropdown">Categorias</button>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1" id="dropdown-categories">
-          {% for category,id in categoriesId %}
-          <li role="presentation"><a class="ctg-{{id}}" role="menuitem" tabindex="-1" href="#">{{category}}</a></li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div> #}
     {# <div class="alert alert-success js-toggle">
       {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
     </div>
@@ -39,6 +26,7 @@
 
 <div class="row">
   <div class="col-md-12">
+    <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
     <div class="inner-content">
       {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
       {{ form_errors(form) }}
@@ -56,11 +44,14 @@
           <dd>
             <dl>
               {% for category,pollOptions in categories %}
-              <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">{{ category }}</dt>
+              <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">
+                <span class="icon"></span>
+                <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
+              </dt>
               <dd class="options">
                 <ul>
                   {% for option in pollOptions %}
-                  <li>
+                  <li class="ctg-{{ attribute(categoriesId, category) }}">
                     <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
                     <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
                   </li>

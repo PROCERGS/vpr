@@ -5,300 +5,494 @@
   position: absolute;
 }
 
-.ballot-nav {
-  background-color: #ffcf9e;
-  margin: -20px -15px 0;
-  height: 42px;
-  line-height: 42px;
-  padding: 0 10px;
-  vertical-align: middle;
-}
-
-.ballot-nav .btn-group {
-  float: right;
-  margin-top: 5px;
-  position: static;
-}
-
-#btn-categories {
-  background: none;
+.main-title {
   color: #f0731f;
+  margin: 10px 0;
 }
 
-#btn-categories:active {
-  box-shadow: none;
-  color: #007136;
-  -webkit-box-shadow: none;
+.inner-content {
+  margin-top: 0;
 }
 
-#btn-categories .caret {
-  margin-left: 5px;
-}
+/* ==========================================================================
+   category icons background
+   ========================================================================== */
+   .ctg-1:before,
+   .ctg-1 .icon:before {
+    background-position: 0 -9px;
+  }
 
-#dropdown-categories {
-  border-radius: 0;
-  border-top: 0;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
+  .ctg-2:before,
+  .ctg-2 .icon:before {
+    background-position: 0 -68px;
+  }
 
- @media (min-width: 768px) {
-  .ballot-nav {
+  .ctg-3:before,
+  .ctg-3 .icon:before {
+    background-position: 0 -130px;
+  }
+
+  .ctg-4:before,
+  .ctg-4 .icon:before {
+    background-position: 0 -191px;
+  }
+
+  .ctg-5:before,
+  .ctg-5 .icon:before {
+    background-position: 0 -250px;
+  }
+
+  .ctg-6:before,
+  .ctg-6 .icon:before {
+    background-position: 0 -310px;
+  }
+
+  .ctg-7:before,
+  .ctg-7 .icon:before {
+    background-position: 0 -370px;
+  }
+
+  .ctg-8:before,
+  .ctg-8 .icon:before {
+    background-position: 0 -430px;
+  }
+
+  .ctg-9:before,
+  .ctg-9 .icon:before {
+    background-position: 0 -490px;
+  }
+
+  .ctg-10:before,
+  .ctg-10 .icon:before {
+    background-position: 0 -550px;
+  }
+
+  .ctg-11:before,
+  .ctg-11 .icon:before {
+    background-position: 0 -610px;
+  }
+
+  .ctg-12:before,
+  .ctg-12 .icon:before {
+    background-position: 0 -670px;
+  }
+
+  .ctg-13:before,
+  .ctg-13 .icon:before {
+    background-position: 0 -730px;
+  }
+
+  .ctg-14:before,
+  .ctg-14 .icon:before {
+    background-position: 0 -790px;
+  }
+
+  .ctg-15:before,
+  .ctg-15 .icon:before {
+    background-position: 0 -850px;
+  }
+
+  .ctg-16:before,
+  .ctg-16 .icon:before {
+    background-position: 0 -910px;
+  }
+
+/* ==========================================================================
+   ballot nav + categories dropdown menu
+   ========================================================================== */
+   .ballot-nav {
+    background-color: #ffcf9e;
     margin: -20px -15px 0;
+    height: 42px;
+    line-height: 42px;
+    padding: 0 10px;
+    vertical-align: middle;
+  }
+
+  .ballot-nav .btn-group {
+    float: right;
+    margin-top: 5px;
+    position: static;
+  }
+
+  #btn-categories {
+    background: none;
+    color: #f0731f;
+  }
+
+  #btn-categories:active {
+    box-shadow: none;
+    color: #007136;
+    -webkit-box-shadow: none;
+  }
+
+  #btn-categories .caret {
+    margin-left: 5px;
   }
 
   #dropdown-categories {
-    width: auto;
-  }
-}
-
-#dropdown-categories li {
-  border-bottom: solid 1px #CCC;
-}
-
-#dropdown-categories li a {
-  display: block;
-  line-height: 40px;
-  padding: 5px 0 0;
-  white-space: normal;
-  width: 100%;
-}
-
-#dropdown-categories li a span {
-  display: inline-block;
-  line-height: normal;
-  padding-left: 60px;
-  padding-right: 20px;
-  position: relative;
-}
-
-#dropdown-categories li a span:before {
-  background-image: url(../../images/cat-icons.svg);
-  content: "";
-  display: block;
-  height: 40px;
-  margin-top: -20px;
-  left: 0;
-  position: absolute;
-  top: 50%;
-  width: 60px;
-}
-
-.ballot {
-  -webkit-transition: 0.2s ease-in-out;
-  -moz-transition: 0.2s ease-in-out;
-  -o-transition: 0.2s ease-in-out;
-  transition: 0.2s ease-in-out;
-  opacity: 1;
-  margin-bottom: 50px;
-  min-height: 400px;
-}
-
-.ballot.animate {
-  opacity: 0;
-}
-
-.ballot .step-title {
-  font-size: 25px;
-  font-weight: normal;
-  margin-bottom: 10px;
-}
-
-.ballot .step-category {
-  border-bottom: solid 1px #CCC;
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: normal;
-  margin: 30px 0 10px;
-  padding-bottom: 10px;
-  padding-left: 60px;
-  position: relative;
-}
-
-.ballot .step-category:before {
-  background-image: url(../../images/cat-icons.svg);
-  content: "";
-  display: block;
-  height: 40px;
-  left: 0;
-  margin-top: -25px;
-  position: absolute;
-  top: 50%;
-  width: 60px;
-}
-
-.ctg-1:before {
-  background-position: 0 -9px;
-}
-
-.ctg-2:before {
-  background-position: 0 -68px;
-}
-
-.ctg-3:before {
-  background-position: 0 -130px;
-}
-
-.ctg-4:before {
-  background-position: 0 -191px;
-}
-
-.ctg-5:before {
-  background-position: 0 -250px;
-}
-
-.ctg-6:before {
-  background-position: 0 -310px;
-}
-
-.ctg-7:before {
-  background-position: 0 -370px;
-}
-
-.ctg-8:before {
-  background-position: 0 -430px;
-}
-
-.ctg-9:before {
-  background-position: 0 -490px;
-}
-
-.ctg-10:before {
-  background-position: 0 -550px;
-}
-
-.ctg-11:before {
-  background-position: 0 -610px;
-}
-
-.ctg-12:before {
-  background-position: 0 -670px;
-}
-
-.ctg-13:before {
-  background-position: 0 -730px;
-}
-
-.ctg-14:before {
-  background-position: 0 -790px;
-}
-
-.ctg-15:before {
-  background-position: 0 -850px;
-}
-
-.ctg-16:before {
-  background-position: 0 -910px;
-}
-
-.ballot .options {
-  display: none;
-}
-
-.ac-custom li {
-  list-style: none;
-  margin: 0 auto;
-  padding: 10px 0 10px 40px;
-  position: relative;
-}
-
-.ac-custom label {
-  display: inline-block;
-  line-height: normal;
-  position: relative;
-  font-size: 17px;
-  font-weight: normal;
-  padding: 0 0 0 50px;
-  vertical-align: top;
-  cursor: pointer;
-  -webkit-transition: color 0.3s;
-  transition: color 0.3s;
-}
-
-.ac-custom input[type="checkbox"],
-.ac-custom input[type="radio"],
-.ac-custom label::before {
-  width: 30px;
-  height: 30px;
-  left: 0;
-  position: absolute;
-  top: 50%;
-  margin-top: -15px;
-  cursor: pointer;
-}
-
-.ac-custom input[type="checkbox"],
-.ac-custom input[type="radio"] {
-  opacity: 0;
-  -webkit-appearance: none;
-  display: inline-block;
-  vertical-align: middle;
-  z-index: 100;
-}
-
-.ac-custom label::before {
-  content: '';
-  border: 2px solid #a5d6b3;
-  -webkit-transition: opacity 0.3s;
-  transition: opacity 0.3s;
-}
-
-.ac-radio label::before {
-  border-radius: 50%;
-}
-
-.ac-custom input[type="checkbox"]:checked + label,
-.ac-custom input[type="radio"]:checked + label {
-  color: #007034;
-}
-
-.ac-custom input[type="checkbox"]:checked + label::before,
-.ac-custom input[type="radio"]:checked + label::before {
-  opacity: 0.8;
-}
-
-/* General SVG and path styles */
-
-.ac-custom svg {
-  position: absolute;
-  width: 20px;
-  height: 30px;
-  left: 45px;
-  pointer-events: none;
-  margin-top: -18px;
-  top: 50%;
-}
-
-.ac-custom svg path {
-  stroke: #007034;
-  stroke-width: 13px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: none;
-}
-
-#button-bar .btn {
-  display: block;
-  margin: 10px auto;
-  width: 300px;
-}
-
-#btn-vote {
-  margin-top: 40px;
-}
-
-/*
- * Small devices
- */
- @media (max-width: 767px)  {
-
-  #button-bar {
+    border-radius: 0;
+    border-top: 0;
+    margin: 0;
+    padding: 0;
     width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .ballot-nav {
+      margin: -20px -15px 0;
+    }
+
+    #dropdown-categories {
+      width: auto;
+    }
+  }
+
+  #dropdown-categories li {
+    border-bottom: solid 1px #CCC;
+  }
+
+  #dropdown-categories li a {
+    display: block;
+    line-height: 40px;
+    padding: 5px 0 0;
+    white-space: normal;
+    width: 100%;
+  }
+
+  #dropdown-categories li a span {
+    display: inline-block;
+    line-height: normal;
+    padding-left: 60px;
+    padding-right: 20px;
+    position: relative;
+  }
+
+  #dropdown-categories li a span:before {
+    background-image: url(../../images/cat-icons.svg);
+    content: "";
+    display: block;
+    height: 40px;
+    margin-top: -20px;
+    left: 0;
+    position: absolute;
+    top: 50%;
+    width: 60px;
+  }
+
+/* ==========================================================================
+   ballot
+   ========================================================================== */
+   .ballot {
+    -webkit-transition: 0.2s ease-in-out;
+    -moz-transition: 0.2s ease-in-out;
+    -o-transition: 0.2s ease-in-out;
+    transition: 0.2s ease-in-out;
+    opacity: 1;
+    margin-bottom: 50px;
+    min-height: 400px;
+  }
+
+  .ballot.animate {
+    opacity: 0;
+  }
+
+  .ballot .step-title {
+    font-size: 18px;
+    font-weight: normal;
+    margin-bottom: 10px;
+  }
+
+  .ballot .step-category {
+    color: #FFF;
+    cursor: pointer;
+    font-size: 17px;
+    font-weight: normal;
+    margin: 30px 0 0;
+    min-height: 40px;
+    line-height: 40px;
+    padding-left: 50px;
+    padding-right: 10px;
+    position: relative;
+  }
+
+  .ballot .step-category .icon {
+    background-color:rgba(0, 0,0,0.5);
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    width: 40px;
+  }
+
+  .ballot .step-category .icon:before {
+    background-image: url(../../images/cat-icons.svg);
+    background-position-x: -65px;
+    content: "";
+    display: block;
+    height: 40px;
+    margin-top: -20px;
+    position: absolute;
+    top: 50%;
+    width: 40px;
+  }
+
+  .ballot .step-category .title {
+    color: #FFF;
+    display: inline-block;
+    line-height: normal;
+    padding-top: 5px;
+  }
+
+/* ==========================================================================
+   ballot categories title background
+   ========================================================================== */
+   .ballot .step-category.ctg-1 {
+    background-color: #3B65DB;
+  }
+
+  .ballot .step-category.ctg-2 {
+    background-color: #44B752;
+  }
+
+  .ballot .step-category.ctg-3 {
+    background-color: #C9B435;
+  }
+
+  .ballot .step-category.ctg-4 {
+    background-color: #CC5252;
+  }
+
+  .ballot .step-category.ctg-5 {
+    background-color: #DD863E;
+  }
+
+  .ballot .step-category.ctg-6 {
+    background-color: #40C0DD;
+  }
+
+  .ballot .step-category.ctg-7 {
+    background-color: #784C9B;
+  }
+
+  .ballot .step-category.ctg-8 {
+    background-color: #93C445;
+  }
+
+  .ballot .step-category.ctg-9 {
+    background-color: #CE57B7;
+  }
+
+  .ballot .step-category.ctg-10 {
+    background-color: #B8BC2A;
+  }
+
+  .ballot .step-category.ctg-11 {
+    background-color: #4C845A;
+  }
+
+  .ballot .step-category.ctg-12 {
+    background-color: #A31414;
+  }
+
+  .ballot .step-category.ctg-13 {
+    background-color: #487CA3;
+  }
+
+  .ballot .step-category.ctg-14 {
+    background-color: #7F7F7F;
+  }
+
+  .ballot .step-category.ctg-15 {
+    background-color: #AF5715;
+  }
+
+  .ballot .step-category.ctg-16 {
+    background-color: #46AF91;
+  }
+
+/* ==========================================================================
+   ballot categories options background
+   ========================================================================== */
+   .ballot .options .ctg-1 {
+    background-color: #D2D8F5;
+  }
+
+  .ballot .options .ctg-2 {
+    background-color: #DCECD6;
+  }
+
+  .ballot .options .ctg-3 {
+    background-color: #EFECD0;
+  }
+
+  .ballot .options .ctg-4 {
+    background-color: #ECD4D4;
+  }
+
+  .ballot .options .ctg-5 {
+    background-color: #F1E0D0;
+  }
+
+  .ballot .options.ctg-6 {
+    background-color: #DDEFF6;
+  }
+
+  .ballot .options .ctg-7 {
+    background-color: #DAD2E5;
+  }
+
+  .ballot .options .ctg-8 {
+    background-color: #E7F0D3;
+  }
+
+  .ballot .options .ctg-9 {
+    background-color: #ECD5EC;
+  }
+
+  .ballot .options .ctg-10 {
+    background-color: #EDEECE;
+  }
+
+  .ballot .options .ctg-11 {
+    background-color: #D7E0D6;
+  }
+
+  .ballot .options .ctg-12 {
+    background-color: #E2C6C6;
+  }
+
+  .ballot .options .ctg-13 {
+    background-color: #D6DEE7;
+  }
+
+  .ballot .options .ctg-14 {
+    background-color: #DEDEDE;
+  }
+
+  .ballot .options .ctg-15 {
+    background-color: #E6D5C7;
+  }
+
+  .ballot .options .ctg-16 {
+    background-color: #DBEAE3;
+  }
+
+/* ==========================================================================
+   ballot custom checkbox
+   ========================================================================== */
+   .ac-custom li {
+    list-style: none;
+    margin: 0 auto 4px;
+    padding: 10px 10px 10px 50px;
+    position: relative;
+  }
+
+  .ac-custom label {
+    display: inline-block;
+    line-height: normal;
+    font-size: 17px;
+    font-weight: normal;
+    vertical-align: top;
+    cursor: pointer;
+    -webkit-transition: color 0.3s;
+    transition: color 0.3s;
+  }
+
+  .ac-custom input[type="checkbox"],
+  .ac-custom input[type="radio"],
+  .ac-custom label::before {
+    width: 30px;
+    height: 30px;
+    left: 5px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    cursor: pointer;
+  }
+
+  .ac-custom input[type="checkbox"],
+  .ac-custom input[type="radio"] {
+    opacity: 0;
+    -webkit-appearance: none;
+    display: inline-block;
+    vertical-align: middle;
+    z-index: 100;
+  }
+
+  .ac-custom label::before {
+    content: '';
+    border: 2px solid #036e35;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+  }
+
+  .ac-radio label::before {
+    border-radius: 50%;
+  }
+
+  .ac-custom input[type="checkbox"]:checked + label,
+  .ac-custom input[type="radio"]:checked + label {
+    color: #007034;
+  }
+
+  .ac-custom input[type="checkbox"]:checked + label::before,
+  .ac-custom input[type="radio"]:checked + label::before {
+    opacity: 0.8;
+  }
+
+/* ==========================================================================
+   General SVG and path styles
+   ========================================================================== */
+   .ac-custom svg {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    left: 10px;
+    pointer-events: none;
+    margin-top: -16px;
+    top: 50%;
+  }
+
+  .ac-custom svg path {
+    stroke: #f59453;
+    stroke-width: 13px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
   }
 
   #button-bar .btn {
-    margin: 0;
-    width: 100%;
+    display: block;
+    margin: 10px auto;
+    width: 300px;
   }
-}
+
+  #btn-vote {
+    margin-top: 40px;
+  }
+
+/* ==========================================================================
+   Small devices
+   ========================================================================== */
+   @media (max-width: 767px)  {
+
+    #button-bar {
+      width: 100%;
+    }
+
+    #button-bar .btn {
+      margin: 0;
+      width: 100%;
+    }
+  }
+
+
+/* ==========================================================================
+   Large devices
+   ========================================================================== */
+   @media (min-width: 768px) {
+    .ballot .step-title {
+      font-size: 25px;
+    }
+  }
