@@ -394,6 +394,20 @@
     display: none;
     font-size: 14px;
     margin: 5px 5px 40px;
+    position: relative;
+  }
+
+  .ballot .options .desc:before {
+    content: "";
+    left: 50%;
+    margin-left: -4px;
+    top: -13px;
+    width: 0;
+    height: 0;
+    border-bottom: 8px solid #FFF;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    position: absolute;
   }
 
 /* ==========================================================================
@@ -401,9 +415,9 @@
    ========================================================================== */
    .ac-custom li {
     margin-bottom: 5px;
-   }
+  }
 
-   .ac-custom li .content {
+  .ac-custom li .content {
     padding: 10px 30px 10px 50px;
     position: relative;
   }
