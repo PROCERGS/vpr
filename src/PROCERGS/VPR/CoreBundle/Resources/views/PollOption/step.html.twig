@@ -3,17 +3,32 @@
 {% block body %}
 <div class="row">
   <div class="col-md-12 text-left">
-    <div class="ballot-nav clearfix">
+    <div class="ballot-nav">
       <span class="pull-left">{{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}</span>
-      <div class="dropdown pull-right">
-        <button class="btn dropdown-toggle" type="button" id="btn-categories" data-toggle="dropdown">Categorias</button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="dropdown-categories">
+      <!-- Single button -->
+      <div class="btn-group">
+        <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Categorias<span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu" id="dropdown-categories">
           {% for category,id in categoriesId %}
-          <li role="presentation"><a class="ctg-{{id}}" role="menuitem" tabindex="-1" href="#"><span>{{category}}</span></a></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="ctg-{{id}}">{{category}}</span></a></li>
           {% endfor %}
         </ul>
       </div>
     </div>
+
+
+
+    {# <div class="ballot-nav clearfix">
+      <span class="pull-left">{{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}</span>
+      <div class="dropdown pull-right">
+        <button class="btn dropdown-toggle" type="button" id="btn-categories" data-toggle="dropdown">Categorias</button>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1" id="dropdown-categories">
+          {% for category,id in categoriesId %}
+          <li role="presentation"><a class="ctg-{{id}}" role="menuitem" tabindex="-1" href="#">{{category}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div> #}
     {# <div class="alert alert-success js-toggle">
       {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
     </div>

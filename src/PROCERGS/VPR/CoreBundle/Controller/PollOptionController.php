@@ -115,8 +115,7 @@ class PollOptionController extends Controller
             $session->set('vote', $vote);
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
-        // $pollOptions = $pollOptionRepo->findByPollCoredeStep($poll, $corede, $step);
-        $pollOptions = $pollOptionRepo->findByPollCorede($poll, $corede);
+        $pollOptions = $pollOptionRepo->findByPollCoredeStep($poll, $corede, $step);
 
         $options = array();
         $categoriesId = array();
