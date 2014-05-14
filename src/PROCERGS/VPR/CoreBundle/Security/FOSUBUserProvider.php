@@ -75,8 +75,8 @@ class FOSUBUserProvider extends BaseClass
         if (!isset($userData['surname'])) {
             throw new LcException('lc.missing.required.field', 'lc.surname');
         }
-        $firstName = $userData['first_name'];
-        $surname = $userData['surname'];
+        $firstName = trim($userData['first_name']);
+        $surname = trim($userData['surname']);
 
         $service = $response->getResourceOwner()->getName();
         $setter = 'set' . ucfirst($service);
@@ -89,8 +89,7 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_username($response->getNickname());
 
         $user->setUsername($username);
-        $user->setFirstName($firstName);
-        $user->setSurname($surname);
+        $user->setFirstName($firstName . ' '. $surname);
         $user->setEmail($email);
         $user->setPassword('');
         $user->setEnabled(true);

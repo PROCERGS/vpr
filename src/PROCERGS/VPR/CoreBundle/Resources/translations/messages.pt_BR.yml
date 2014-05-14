@@ -1,6 +1,7 @@
 form.username: 'Titulo eleitor'
 form.firstname: Nome
-form.surname: Sobrenome
+form.email: E-mail
+form.mobile: Telefone
 form.submit: Enviar
 register.title: 'Como faço para votar?'
 register.login.simple: 'Vote com seu Título de eleitor'
@@ -56,7 +57,6 @@ admin.firstname: Nome
 admin.email: Email
 admin.enabled: 'Habilitado?'
 admin.created_at: 'Criado em'
-admin.surname: Sobrenome
 admin.last_login: 'Último login'
 admin.welcome: Bem-Vindo!
 admin.logout: Sair

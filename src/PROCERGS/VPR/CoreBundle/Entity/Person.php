@@ -61,13 +61,6 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="surname", type="string", length=255, nullable=true)
-     */
-    protected $surname;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
      */
     protected $loginCidadaoId;
@@ -106,6 +99,11 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      * @Groups({"vote"})
      */
     protected $treVoter;
+    
+    /**
+     * @ORM\Column(name="mobile", type="string", nullable=true)
+     */
+    protected $mobile;
 
     /**
      * Get id
@@ -138,29 +136,6 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     public function getFirstName()
     {
         return $this->firstName;
-    }
-
-    /**
-     * Set surname
-     *
-     * @param string $surname
-     * @return Person
-     */
-    public function setSurname($surname)
-    {
-        $this->surname = $surname;
-
-        return $this;
-    }
-
-    /**
-     * Get surname
-     *
-     * @return string
-     */
-    public function getSurname()
-    {
-        return $this->surname;
     }
 
     /**
@@ -293,5 +268,17 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
         return $this;
     }
+    
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+    
+    public function setMobile($mobile)
+    {
+        $mobile = preg_replace('/[^0-9]/', '', $mobile);
+        $this->mobile = $mobile;
+    }
+    
 
 }

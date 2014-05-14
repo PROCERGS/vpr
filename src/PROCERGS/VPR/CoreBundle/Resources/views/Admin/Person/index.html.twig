@@ -17,8 +17,7 @@
             <thead>
                 <tr>
                     <th width="20%">{{ 'admin.username'|trans }}</th>
-                    <th width="15%">{{ 'admin.firstname'|trans }}</th>
-                    <th width="15%">{{ 'admin.surname'|trans }}</th>
+                    <th width="30%">{{ 'admin.firstname'|trans }}</th>
                     <th width="20%">{{ 'admin.email'|trans }}</th>
                     <th width="5%">{{ 'admin.enabled'|trans }}</th>
                     <th width="20%">{{ 'admin.created_at'|trans }}</th>
@@ -30,7 +29,6 @@
                     <tr>
                         <td><a title="{{ 'admin.show'|trans }}" href="{{ path('admin_person_show', { 'id': entity.id }) }}">{{ entity.username }}</a></td>
                         <td>{{ entity.firstName }}</td>
-                        <td>{{ entity.surname }}</td>
                         <td>{{ entity.email }}</td>
                         <td>{% if(entity.enabled) %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
                         <td>{% if entity.createdAt %}{{ entity.createdAt|date('d/m/Y H:i:s') }}{% endif %}</td>

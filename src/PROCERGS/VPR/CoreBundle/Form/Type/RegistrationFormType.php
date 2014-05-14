@@ -13,7 +13,8 @@ class RegistrationFormType extends BaseType
     {        
         $builder->add('username', null, array('required' => true, 'max_length' => 12));
         $builder->add('firstname', 'text', array('required' => true));
-        $builder->add('surname', 'text', array('required' => true));
+        $builder->add('email', 'email', array('required' => false));
+        $builder->add('mobile', null, array('required' => false));
     }    
 
     public function getName()
