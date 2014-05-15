@@ -1,4 +1,4 @@
-/*global $:false */
+/*global $:false, maxItens:false, resetCheckbox */
 $(function() {
   "use strict";
 
@@ -6,15 +6,15 @@ $(function() {
     var sel = $(".ballot input:checked");
     if (sel.length > maxItens) {
       event.preventDefault();
-      $('#alert-limit').modal('show');
+      $("#alert-limit").modal("show");
       resetCheckbox($(this).get(0));
     }
   });
 
   $("#btn-vote").on("click", function() {
-    $("#btn-vote").button('loading')
+    $("#btn-vote").button("loading");
     $(".ballot").addClass("animate");
-    $('body').animate({
+    $("body").animate({
       scrollTop: $(".main-title").offset().top
     }, 1000, confirmation);
   });
@@ -43,11 +43,11 @@ $(function() {
     $(".ballot .options .content, .step-category").removeClass("hidden");
     $(".ballot").removeClass("animate");
     $(".js-toggle").toggle();
-    $("#btn-vote").button('reset').show();
+    $("#btn-vote").button("reset").show();
   });
 
   $(".ballot .desc-toggle").on("click", function() {
-    var desc = $(this).closest("li").find(".desc").toggle();
+    $(this).closest("li").find(".desc").toggle();
     $(this).toggleClass("less");
   });
 
