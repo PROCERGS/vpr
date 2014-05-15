@@ -29,14 +29,14 @@
           {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
           {{ form_errors(form) }}
           <div class="form-group has-feedback clearfix">
-              {{ form_label(form.username, 'form.username' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+              {{ form_label(form.username, '* ' ~ 'form.username' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
               <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
               <a href="{{ tre_search_link }}" class="label label-primary pull-left tre-search-link" target="_blank">
                 {{ 'register.search.tre' | trans }}<br>{{ 'register.search.tre.click' | trans }}
               </a>
           </div>
           <div class="form-group has-feedback">
-              {{ form_label(form.firstname, 'form.firstname' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+              {{ form_label(form.firstname, '* ' ~ 'form.firstname' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
               <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
           </div>
           <div class="form-group has-feedback">
@@ -47,6 +47,7 @@
               {{ form_label(form.mobile, 'form.mobile' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
               <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
           </div>
+          <span>{{ '* ' ~ 'required.field.messsage'|trans }}</span>
           
           <button type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.submit' | trans }}</button>
           {{ form_end(form) }}
