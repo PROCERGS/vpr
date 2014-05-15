@@ -21,7 +21,7 @@ $(function() {
 
   function confirmation () {
     $(".ballot").delay(500).addClass("animate");
-    $(".js-confirm").delay(600).fadeIn();
+    $(".js-confirm").delay(200).fadeIn();
 
     setTimeout(function() {
       $(".ballot input").not(":checked").parent().addClass("hidden");
