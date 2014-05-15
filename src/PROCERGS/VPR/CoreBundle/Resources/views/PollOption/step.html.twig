@@ -77,17 +77,9 @@
                     <div class="content ctg-{{ attribute(categoriesId, category) }}">
                       <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
                       <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
-                      <span class="desc-toggle">+</span>
+                      <span class="desc-toggle"></span>
                     </div>
-                    <div class="desc">
-                      {{ option.description }}
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </div>
+                    <div class="desc">{{ option.description }}</div>
                   </li>
                   {% endfor %}
                 </ul>
@@ -103,7 +95,7 @@
       {% endif %}
 
       <div id="button-bar">
-        <button id="btn-vote" type="button" class="btn btn-success btn-lg">{{ 'form.vote' | trans }}</button>
+        <button id="btn-vote" type="button" class="btn btn-success btn-lg" data-loading-text="Aguarde...">{{ 'form.vote' | trans }}</button>
         <div id="confirmation" class="js-toggle" style="display:none">
           <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'form.confirm' | trans }}</button>
           <button id="btn-correct" type="button" class="btn btn-warning btn-lg">{{ 'form.correct' | trans }}</button>

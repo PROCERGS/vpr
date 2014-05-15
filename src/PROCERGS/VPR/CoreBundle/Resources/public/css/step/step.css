@@ -396,15 +396,22 @@
   }
 
   .ballot .options .desc-toggle {
+    background: url(../../images/btn-toggle.png) no-repeat top left;
+    background-position: 0 0;
     color: #f0731f;
     cursor: pointer;
-    display: inline-block;
-    font-size: 25px;
+    display: block;
+    height: 17px;
     margin-left: 10px;
     position: absolute;
     right: 15px;
     text-shadow: 0 0 0 #000;
     top: 10px;
+    width: 16px;
+  }
+
+  .ballot .options .desc-toggle.less {
+    background-position: 0 -67px;
   }
 
   .ballot .options .desc {
