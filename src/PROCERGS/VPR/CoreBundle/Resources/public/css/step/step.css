@@ -102,11 +102,15 @@
    ========================================================================== */
    .ballot-nav {
     background-color: #ffcf9e;
-    margin: -20px -15px 0;
     height: 42px;
     line-height: 42px;
     padding: 0 10px;
     vertical-align: middle;
+  }
+
+  .ballot-nav .itens-count {
+    color: #f0731f;
+    font-weight: bold;
   }
 
   .ballot-nav .btn-group {
@@ -118,6 +122,8 @@
   #btn-categories {
     background: none;
     color: #f0731f;
+    font-weight: bold;
+    margin-right: -15px;
   }
 
   #btn-categories:active {
@@ -135,13 +141,11 @@
     border-top: 0;
     margin: 0;
     padding: 0;
+    top: 42px;
     width: 100%;
   }
 
   @media (min-width: 768px) {
-    .ballot-nav {
-      margin: -20px -15px 0;
-    }
 
     #dropdown-categories {
       width: auto;

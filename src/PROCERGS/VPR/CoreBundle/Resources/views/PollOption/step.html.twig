@@ -1,32 +1,41 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
-{% block body %}
-<div class="row">
-  <div class="col-md-12 text-left">
-    <div class="ballot-nav">
-      <span class="pull-left">{{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}</span>
-      <!-- Single button -->
-      <div class="btn-group">
-        <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Categorias<span class="caret"></span></button>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu" id="dropdown-categories">
-          {% for category,id in categoriesId %}
-          <li role="presentation">
-            <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}">
-              <span class="ctg-{{id}}">{{category}}</span>
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
+{% block header %}
+{{ parent() }}
+
+<div class="ballot-nav">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <span class="pull-left">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</span>
+
+        <!-- Single button -->
+        <div class="btn-group">
+          <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Categorias<span class="caret"></span></button>
+          <ul class="dropdown-menu dropdown-menu-right" role="menu" id="dropdown-categories">
+            {% for category,id in categoriesId %}
+            <li role="presentation">
+              <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}">
+                <span class="ctg-{{id}}">{{category}}</span>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
-
-    {# <div class="alert alert-success js-toggle">
-      {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
-    </div>
-    <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
-    <div class="alert alert-info js-toggle" style="display:none">{{ 'step.selection.confirm' | trans }}</div> #}
   </div>
 </div>
+
+{# <div class="alert alert-success js-toggle">
+  {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
+</div>
+<h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
+<div class="alert alert-info js-toggle" style="display:none">{{ 'step.selection.confirm' | trans }}</div> #}
+
+{% endblock %}
+
+{% block body %}
 
 <div class="row">
   <div class="col-md-12">

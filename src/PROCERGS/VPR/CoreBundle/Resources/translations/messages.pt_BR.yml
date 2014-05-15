@@ -147,3 +147,4 @@ lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser pree
 lc.first_name: 'Nome'
 lc.surname: 'Sobrenome'
 required.field.messsage: 'Itens obrigatórios'
+"Choose up to <span class='itens-count'>%max%</span> items": "Escolha até <span class='itens-count'>%max%</span> itens"
