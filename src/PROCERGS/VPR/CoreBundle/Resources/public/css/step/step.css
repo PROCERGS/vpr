@@ -17,83 +17,83 @@
 /* ==========================================================================
    category icons background
    ========================================================================== */
-   .ctg-1:before,
-   .ctg-1 .icon:before {
+   .ctg-1 .icon,
+   .ctg-1 .icon .img {
     background-position: 0 -9px;
   }
 
-  .ctg-2:before,
-  .ctg-2 .icon:before {
+  .ctg-2 .icon,
+  .ctg-2 .icon .img {
     background-position: 0 -68px;
   }
 
-  .ctg-3:before,
-  .ctg-3 .icon:before {
+  .ctg-3 .icon,
+  .ctg-3 .icon .img {
     background-position: 0 -130px;
   }
 
-  .ctg-4:before,
-  .ctg-4 .icon:before {
+  .ctg-4 .icon,
+  .ctg-4 .icon .img {
     background-position: 0 -191px;
   }
 
-  .ctg-5:before,
-  .ctg-5 .icon:before {
+  .ctg-5 .icon,
+  .ctg-5 .icon .img {
     background-position: 0 -250px;
   }
 
-  .ctg-6:before,
-  .ctg-6 .icon:before {
+  .ctg-6 .icon,
+  .ctg-6 .icon .img {
     background-position: 0 -310px;
   }
 
-  .ctg-7:before,
-  .ctg-7 .icon:before {
+  .ctg-7 .icon,
+  .ctg-7 .icon .img {
     background-position: 0 -370px;
   }
 
-  .ctg-8:before,
-  .ctg-8 .icon:before {
+  .ctg-8 .icon,
+  .ctg-8 .icon .img {
     background-position: 0 -430px;
   }
 
-  .ctg-9:before,
-  .ctg-9 .icon:before {
+  .ctg-9 .icon,
+  .ctg-9 .icon .img {
     background-position: 0 -490px;
   }
 
-  .ctg-10:before,
-  .ctg-10 .icon:before {
+  .ctg-10 .icon,
+  .ctg-10 .icon .img {
     background-position: 0 -550px;
   }
 
-  .ctg-11:before,
-  .ctg-11 .icon:before {
+  .ctg-11 .icon,
+  .ctg-11 .icon .img {
     background-position: 0 -610px;
   }
 
-  .ctg-12:before,
-  .ctg-12 .icon:before {
+  .ctg-12 .icon,
+  .ctg-12 .icon .img {
     background-position: 0 -670px;
   }
 
-  .ctg-13:before,
-  .ctg-13 .icon:before {
+  .ctg-13 .icon,
+  .ctg-13 .icon .img {
     background-position: 0 -730px;
   }
 
-  .ctg-14:before,
-  .ctg-14 .icon:before {
+  .ctg-14 .icon,
+  .ctg-14 .icon .img {
     background-position: 0 -790px;
   }
 
-  .ctg-15:before,
-  .ctg-15 .icon:before {
+  .ctg-15 .icon,
+  .ctg-15 .icon .img {
     background-position: 0 -850px;
   }
 
-  .ctg-16:before,
-  .ctg-16 .icon:before {
+  .ctg-16 .icon,
+  .ctg-16 .icon .img {
     background-position: 0 -910px;
   }
 
@@ -138,7 +138,6 @@
 
   #dropdown-categories {
     border-radius: 0;
-    border-top: 0;
     margin: 0;
     padding: 0;
     top: 42px;
@@ -172,7 +171,7 @@
     position: relative;
   }
 
-  #dropdown-categories li a span:before {
+  #dropdown-categories li a span .icon {
     background-image: url(../../images/cat-icons.svg);
     content: "";
     display: block;
@@ -229,7 +228,7 @@
     width: 40px;
   }
 
-  .ballot .step-category .icon:before {
+  .ballot .step-category .icon .img {
     background-image: url(../../images/cat-icons.svg);
     background-position-x: -65px;
     content: "";
@@ -427,7 +426,7 @@
   }
 
   .ac-custom label {
-    display: inline-block;
+    display: block;
     line-height: normal;
     font-size: 17px;
     font-weight: normal;
@@ -453,7 +452,7 @@
   .ac-custom input[type="radio"] {
     opacity: 0;
     -webkit-appearance: none;
-    display: inline-block;
+    display: block;
     vertical-align: middle;
     z-index: 100;
   }

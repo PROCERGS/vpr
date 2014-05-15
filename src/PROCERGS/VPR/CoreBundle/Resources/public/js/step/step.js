@@ -33,7 +33,7 @@ $(function() {
 
   $("#btn-correct").on("click", function() {
     $("#vote-empty").addClass("hidden");
-    $(".ballot li, .step-category").removeClass("hidden");
+    $(".ballot .options .content, .step-category").removeClass("hidden");
     $(".ballot").removeClass("animate");
     $(".js-toggle").toggle();
   });

@@ -16,7 +16,7 @@
             {% for category,id in categoriesId %}
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}">
-                <span class="ctg-{{id}}">{{category}}</span>
+                <span class="ctg-{{id}}"><i class="icon"></i>{{category}}</span>
               </a>
             </li>
             {% endfor %}
@@ -58,7 +58,7 @@
             <dl>
               {% for category,pollOptions in categories %}
               <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">
-                <span class="icon"></span>
+                <span class="icon"><i class="img"></i></span>
                 <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
               </dt>
               <dd class="options">
@@ -113,6 +113,12 @@
 
 {% stylesheets 'bundles/procergsvprcore/css/step/step.css' filter='cssrewrite' %}
 <link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+
+{% stylesheets 'bundles/procergsvprcore/css/step/ie.css' filter='cssrewrite' %}
+<!--[if lt IE 9]>
+  <link rel="stylesheet" href="{{ asset_url }}" />
+<![endif]-->
 {% endstylesheets %}
 
 {% endblock %}

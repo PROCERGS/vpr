@@ -1,0 +1,20 @@
+#dropdown-categories li a span .icon {
+  background-image: url(../../images/cat-icons.png);
+}
+
+.ballot .step-category .icon .img {
+  background-image: url(../../images/cat-icons.png);
+  background-position-x: -65px;
+  content: "";
+  display: block;
+  height: 40px;
+  margin-top: -20px;
+  position: absolute;
+  top: 50%;
+  width: 40px;
+}
+
+.ac-custom input[type="checkbox"] {
+  left: 15px;
+  position: absolute;
+}
