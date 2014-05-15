@@ -207,7 +207,7 @@
     transition: 0.2s ease-in-out;
     opacity: 1;
     margin-bottom: 50px;
-    min-height: 400px;
+    /*min-height: 400px;*/
   }
 
   .ballot.animate {

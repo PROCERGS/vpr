@@ -11,34 +11,33 @@ $(function() {
     }
   });
 
+  var ballotHeight = $(".ballot").outerHeight(true) + 32;
   $("#btn-vote").on("click", function() {
     $("#btn-vote").button("loading");
-    $(".ballot").addClass("animate");
     $("body").animate({
       scrollTop: $(".main-title").offset().top
     }, 1000, confirmation);
   });
 
   function confirmation () {
-    $("#btn-vote").hide();
-    $(".loader").fadeIn("normal", function() {
+    $(".ballot").delay(500).addClass("animate");
+    $(".js-confirm").delay(600).fadeIn();
+
+    setTimeout(function() {
       $(".ballot input").not(":checked").parent().addClass("hidden");
       $("input:checked").closest(".options").prev(".step-category").addClass("checked");
       $(".step-category").not(".checked").addClass("hidden");
+      $(".ballot").height(ballotHeight).delay(3000).removeClass("animate");
+      $(".js-toggle").delay(3000).toggle();
 
-      $(".loader").delay(1000).fadeOut("normal", function() {
-        $(".js-toggle").toggle();
-        $(".ballot").removeClass("animate");
-        $("#confirmation").show();
-
-        if (!$(".ballot input:checked").length) {
-          $("#vote-empty").removeClass("hidden");
-        }
-      });
-    });
+      if (!$(".ballot input:checked").length) {
+        $("#vote-empty").removeClass("hidden");
+      }
+    }, 1500);
   }
 
   $("#btn-correct").on("click", function() {
+    $(".js-confirm").hide();
     $("#vote-empty").addClass("hidden");
     $(".ballot .options .content, .step-category").removeClass("hidden");
     $(".ballot").removeClass("animate");

@@ -78,6 +78,10 @@
   padding: 4px 9px;
 }
 
+.register-form .btn-success {
+  margin-top: 10px;
+}
+
 .register-box #about-lc-link {
   margin: 20px 0;
 }
