@@ -12,14 +12,15 @@ $(function() {
   });
 
   $("#btn-vote").on("click", function() {
+    $(this).hide();
     $(".ballot").addClass("animate");
     $('body').animate({
       scrollTop: $(".main-title").offset().top
     }, 1000, confirmation);
   });
 
-  function confirmation () {    
-    $(".loader").fadeIn("normal", function() {      
+  function confirmation () {
+    $(".loader").fadeIn("normal", function() {
       $(".ballot input").not(":checked").parent().addClass("hidden");
       $("input:checked").closest(".options").prev(".step-category").addClass("checked");
       $(".step-category").not(".checked").addClass("hidden");
@@ -36,13 +37,11 @@ $(function() {
     });
   }
 
-    
-
   $("#btn-correct").on("click", function() {
     $("#vote-empty").addClass("hidden");
     $(".ballot .options .content, .step-category").removeClass("hidden");
     $(".ballot").removeClass("animate");
-    $(".js-toggle").toggle();
+    $("#btn-vote, .js-toggle").toggle();
   });
 
   $(".ballot .desc-toggle").on("click", function() {
