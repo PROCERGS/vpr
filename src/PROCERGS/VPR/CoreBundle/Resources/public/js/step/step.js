@@ -4,23 +4,28 @@ $(function() {
 
   $(".ballot input").on("click", function(event) {
     var sel = $(".ballot input:checked");
-    if (sel.length > oba.maxItens) {
+    if (sel.length > maxItens) {
       event.preventDefault();
-      alert(oba.label["limit"] + oba.maxItens);
+      $('#alert-limit').modal('show');
       resetCheckbox($(this).get(0));
     }
   });
 
   $("#btn-vote").on("click", function() {
     $(".ballot").addClass("animate");
+    $('body').animate({
+      scrollTop: $(".main-title").offset().top
+    }, 1000, confirmation);
+  });
 
-    $(".loader").fadeIn("normal", function() {
-      $(".js-toggle").toggle();
+  function confirmation () {    
+    $(".loader").fadeIn("normal", function() {      
       $(".ballot input").not(":checked").parent().addClass("hidden");
       $("input:checked").closest(".options").prev(".step-category").addClass("checked");
       $(".step-category").not(".checked").addClass("hidden");
 
       $(".loader").delay(1000).fadeOut("normal", function() {
+        $(".js-toggle").toggle();
         $(".ballot").removeClass("animate");
         $("#confirmation").show();
 
@@ -29,7 +34,9 @@ $(function() {
         }
       });
     });
-  });
+  }
+
+    
 
   $("#btn-correct").on("click", function() {
     $("#vote-empty").addClass("hidden");

@@ -9,9 +9,8 @@
       <div class="col-md-12">
         <span class="pull-left">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</span>
 
-        <!-- Single button -->
         <div class="btn-group">
-          <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Categorias<span class="caret"></span></button>
+          <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
           <ul class="dropdown-menu dropdown-menu-right" role="menu" id="dropdown-categories">
             {% for category,id in categoriesId %}
             <li role="presentation">
@@ -27,11 +26,19 @@
   </div>
 </div>
 
-{# <div class="alert alert-success js-toggle">
-  {{ 'step.limit.selection.offer.message'|trans({'%max%' : step.getMaxSelection }) }}
+<div class="modal fade bs-example-modal-sm" id="alert-limit" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="mySmallModalLabel">{% trans %}Attention!{% endtrans %}</h4>
+      </div>
+      <div class="modal-body">
+        {{ 'step.limit.selection' |trans }} {{ step.getMaxSelection }}
+      </div>
+    </div>
+  </div>
 </div>
-<h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
-<div class="alert alert-info js-toggle" style="display:none">{{ 'step.selection.confirm' | trans }}</div> #}
 
 {% endblock %}
 
@@ -40,6 +47,8 @@
 <div class="row">
   <div class="col-md-12">
     <h2 class="main-title">{{ 'step.limit.selection.offer.title'| trans({'%name%' : corede.name}) }}</h2>
+    <div class="alert alert-info js-toggle" style="display:none">{{ 'step.selection.confirm' | trans }}</div>
+
     <div class="inner-content">
       {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
       {{ form_errors(form) }}
@@ -136,13 +145,8 @@
   <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 
-  <script>
-    var oba = {
-      label: {
-        'limit' : '{{ 'step.limit.selection' |trans }}'
-      },
-      maxItens: {{ step.getMaxSelection }}
-    };
+  <script>    
+    var maxItens = {{ step.getMaxSelection }}
   </script>
 
   {% endblock %}

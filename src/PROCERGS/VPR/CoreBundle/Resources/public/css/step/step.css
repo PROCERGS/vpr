@@ -126,7 +126,8 @@
     margin-right: -15px;
   }
 
-  #btn-categories:active {
+  .btn-group.open #btn-categories,
+  .btn-group #btn-categories:active {
     box-shadow: none;
     color: #007136;
     -webkit-box-shadow: none;
@@ -142,6 +143,19 @@
     padding: 0;
     top: 42px;
     width: 100%;
+  }
+
+  #dropdown-categories:before {
+    border-bottom: 8px solid #FFF;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    content: "";
+    height: 0;
+    margin-left: -4px;
+    position: absolute;
+    right: 48px;
+    top: -8px;
+    width: 0;
   }
 
   @media (min-width: 768px) {
@@ -444,7 +458,7 @@
     left: 5px;
     position: absolute;
     top: 50%;
-    margin-top: -15px;
+    margin-top: -17px;
     cursor: pointer;
   }
 

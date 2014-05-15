@@ -3,7 +3,7 @@
 {% block header %}
 <script src="{{login_cidadao_navbar_url}}"></script>
 <script> citizenLogin.navbar.init(); </script>
-{# {% include "PROCERGSVPRCoreBundle::navbar.html.twig" %} #}
+{% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
 <header class="text-center">
   {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
   <img src="{{ asset_url }}" alt="{%trans%}Votação de prioridades{%endtrans%}" class="img-responsive">
