@@ -41,7 +41,7 @@ class LcExceptionListener
     {
         $exception = $event->getException();
         if ($exception instanceof LcException) {
-            $this->session->getFlashBag()->add('error', $this->translator->trans($exception->getMessage(), array(
+            $this->session->getFlashBag()->add('danger', $this->translator->trans($exception->getMessage(), array(
                 '%field%' => $this->translator->trans($exception->getPlaceHolder())
             )));
             $url = $this->router->generate('procergsvpr_core_homepage');

@@ -1,0 +1,21 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>{{ 'end.offer.title'|trans }}</h3>
+        <div class="alert alert-success">{{ 'end.offer.message'|trans }}</div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="jumbotron">
+            <p>{{ 'end.offer.nfg'|trans }}</p>
+            <p><a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{{ 'default.nfe.access.offer.click'|trans }}</a></p>
+            <p>{{ 'end.offer.lc'|trans }}</p>
+            <p><a id="btn-popup-lc" class="btn btn-primary link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'end.offer.lc.register.click'|trans }}</a></p>
+            <p>{{ 'end.offer.sm'|trans }}</p>
+            <p><a id="btn-popup-sm" class="btn btn-primary link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'end.offer.sm.register.click' | trans }}</a></p>            
+        </div>
+    </div>    
+</div>
+{% endblock %}

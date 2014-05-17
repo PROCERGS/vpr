@@ -1,8 +1,6 @@
 {% extends '::base.html.twig' %}
 
 {% block header %}
-<script src="{{login_cidadao_navbar_url}}"></script>
-<script> citizenLogin.navbar.init(); </script>
 {% include "PROCERGSVPRCoreBundle::navbar.html.twig" %}
 <header class="text-center">
   {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
@@ -89,4 +87,6 @@
     $('input[placeholder], textarea[placeholder]').placeholder();
     </script>
 <![endif]-->
+    <script src="{{login_cidadao_navbar_url}}"></script>
+    <script> citizenLogin.navbar.init(); </script>
 {% endblock %}

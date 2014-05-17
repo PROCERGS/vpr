@@ -1,14 +1,18 @@
-{% block body %}
-{% if nfgRegisterUrl is not defined %}
-{% set nfgRegisterUrl = '' %}
-{% endif %}
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
-{% include "PROCERGSVPRCoreBundle::base.reinforce.message.html.twig" with {
-'rTitle' : 'end.change.offer.title'|trans , 
-'rMsg1' : 'end.change.offer.message'|trans,
-'rMsg2' : 'end.change.nfe.register.offer'|trans,
-'rClass' : 'alert-danger',
-'nfgRegisterUrl' : nfgRegisterUrl,
-'continueUrl' : path('procergsvpr_core_end_change')
-} %}
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h3>{{ 'end.change.offer.title'|trans }}</h3>
+        <div class="alert alert-danger">{{ 'end.change.offer.message'|trans }}</div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="jumbotron">
+            <p>{{ 'end.change.nfe.register.offer'|trans }}</p>
+            <p><a class="btn btn-primary link-popup" role="button" data-specs="width=400,height=750" href="{{ link_lc }}">{{ 'end.offer.lc.register.click'|trans }}</a></p>
+            <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'default.skip.click' | trans }}</a></p>
+        </div>
+    </div>    
+</div>
 {% endblock %}

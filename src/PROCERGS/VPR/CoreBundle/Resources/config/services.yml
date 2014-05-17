@@ -44,3 +44,9 @@ services:
             - [setRouter, ["@router"]]
             - [setSession, ["@session"]]
             - [setTrans, ["@translator"]]
+            
+    vpr.logout.handler:
+      class: PROCERGS\VPR\CoreBundle\Security\AuthenticationHandler        
+      calls:
+            - [setRouter, ["@router"]]
+                 

@@ -110,6 +110,14 @@ class Vote
     protected $lastStep;
 
     protected $pollOption = array();
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sm_id", type="string", length=33, nullable=true, unique=true)
+     * @Groups({"vote"})
+     */
+    protected $smId;
 
     /**
      * Get id
@@ -446,5 +454,16 @@ class Vote
         $this->signature = $this->ballotBox->sign($this->plainOptions);
         $this->encryptVote();
     }
+    
+    public function setSmId($var)
+    {
+        $this->smId = $var;
+        return $this;
+    }
+    
+    public function getSmId()
+    {
+        return $this->smId;
+    }    
 
 }

@@ -79,3 +79,13 @@ function validarTitulo(inscricao) {
 		return false;
 	}
 }
+
+$(document).on('click', 'a.link-popup', function (event){
+    event.preventDefault();
+    var e = $(this);
+    var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
+    if (u) {
+    	window.open(u,'_blank', e.attr('data-specs'));
+    }
+    return false;
+  });

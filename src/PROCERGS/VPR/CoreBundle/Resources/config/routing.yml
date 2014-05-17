@@ -90,3 +90,7 @@ procergsvpr_core_ask_voter_registration:
 procergsvpr_core_ask_nfg:
     pattern:  /reinforce/offer
     defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceOffer }
+    
+procergsvpr_core_end_offer:
+    pattern:  /end/offer
+    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endOffer }    

@@ -10,22 +10,10 @@
     <div class="col-md-12">
         <div class="jumbotron">
             <p>{{ rMsg2 }}</p>
-            <p><a id="btn-popup-nfg" class="btn btn-primary" role="button" href="{{ nfgRegisterUrl }}">{{ 'default.nfe.access.offer.click'|trans }}</a></p>
+            <p><a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=600,height=450" href="{{ nfgRegisterUrl }}">{{ 'default.nfe.access.offer.click'|trans }}</a></p>
             <p><a id="btn-continue" class="btn btn-primary" role="button" href="{{ continueUrl }}">{{ 'default.continue.click'|trans }}</a></p>
             <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'default.skip.click' | trans }}</a></p>
         </div>
     </div>    
 </div>
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}    
-<script>
-$(document).on('click', '#btn-popup-nfg', function (event) {
-	event.preventDefault();
-    var url = $(this).attr('href');
-    window.open(url, '', "width=600,height=450");
-    return false;
-});
-</script>    
 {% endblock %}

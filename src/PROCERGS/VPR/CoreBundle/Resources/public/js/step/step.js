@@ -8,6 +8,8 @@ $(function() {
       event.preventDefault();
       $("#alert-limit").modal("show");
       resetCheckbox($(this).get(0));
+    } else if ($("#confirmation").is(":visible")) {
+    	event.preventDefault();
     }
   });
 
@@ -40,6 +42,7 @@ $(function() {
     $(".js-confirm").hide();
     $("#vote-empty").addClass("hidden");
     $(".ballot .options .content, .step-category").removeClass("hidden");
+    $(".ballot .options .content, .step-category").removeClass("checked");
     $(".ballot").removeClass("animate");
     $(".js-toggle").toggle();
     $("#btn-vote").button("reset").show();

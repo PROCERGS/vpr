@@ -68,8 +68,12 @@ class VotingSessionProvider
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
     }
 
-    public function checkExistingVotes(Person $person)
+    public function checkExistingVotes(Person $person, &$ballotBox = null)
     {
+        if (null === $ballotBox) {
+            $ballotBox = $this->getOnlineBallotBox();
+        }
+        $filter['ballotBox'] = $ballotBox;
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
         if ($person->getTreVoter() instanceof TREVoter) {
             $filter['voterRegistration'] = $person->getTreVoter()->getId();
@@ -97,9 +101,7 @@ class VotingSessionProvider
      */
     public function enforceVotingSession(Person $person)
     {
-        if (!$this->hasVotingSession()) {
-            $this->createVotingSession($person);
-        } else {
+        if ($this->hasVotingSession()) {
             return $this->getVote();
         }
         $vote = $this->createVotingSession($person);
@@ -116,14 +118,15 @@ class VotingSessionProvider
 
     private function createVotingSession(Person $person)
     {
-        if (!$this->checkExistingVotes($person)) {
+        if (!$this->checkExistingVotes($person, $ball)) {
             return;
         }
 
         $vote = new Vote();
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
-        $vote->setBallotBox($this->getOnlineBallotBox());
+        $vote->setBallotBox($ball);
         $vote->setCorede($person->getCity()->getCorede());
+        $vote->setSmId(uniqid(mt_rand(), true));
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());
         }

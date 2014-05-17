@@ -15,6 +15,7 @@ use PROCERGS\VPR\CoreBundle\Entity\PollOption;
 use PROCERGS\VPR\CoreBundle\Exception\VotingTimeoutException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterAlreadyVotedException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationAlreadyVotedException;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class DefaultController extends Controller
 {
@@ -34,7 +35,7 @@ class DefaultController extends Controller
         } catch (VoterRegistrationAlreadyVotedException $e) {
             return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
         } catch (VoterAlreadyVotedException $e) {
-            return $this->redirect($this->generateUrl('procergsvpr_core_end'));
+            return $this->redirect($this->generateUrl('fos_user_security_logout'));
         }
 
         $stepId = $votingSession->getNextStep();
@@ -42,14 +43,19 @@ class DefaultController extends Controller
             if (!$vote->getVoterRegistration()) {
                 return $this->redirect($this->generateUrl('procergsvpr_core_ask_voter_registration'));
             }
-            try {
-                $votingSession->checkExistingVotes($person);
-                $votingSession->flush();
-                return $this->indexAction();
-            } catch (VoterRegistrationAlreadyVotedException $e) {
-                return $this->redirect($this->generateUrl('procergsvpr_core_ask_nfg'));
-            } catch (VoterAlreadyVotedException $e) {
-                return $this->redirect($this->generateUrl('procergsvpr_core_end'));
+            if (! $vote->getNfgCpf()) {
+                try {                
+                    $ball = $vote->getBallotBox();
+                    $votingSession->checkExistingVotes($person, $ball);
+                    $votingSession->flush();
+                    return $this->indexAction();
+                } catch (VoterRegistrationAlreadyVotedException $e) {
+                    return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));
+                } catch (VoterAlreadyVotedException $e) {
+                    return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));
+                }
+            } else {
+                return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));                
             }
         }
 
@@ -201,6 +207,18 @@ class DefaultController extends Controller
         $session->set('vote', null);
         return $this->render('PROCERGSVPRCoreBundle:Default:end.html.twig');
     }
+    
+    public function endOfferAction(Request $request)
+    {
+        $r = $request->get('code');
+        if (!$r) {
+            $r = '';
+        }
+        $url['link_nfg'] = $this->container->getParameter('nfg_register_url');
+        $url['link_lc'] = $this->container->getParameter('lc_register_url');
+        $url['link_sm'] = $this->container->getParameter('sm_register_url').$r;
+        return $this->render('PROCERGSVPRCoreBundle:Default:endOffer.html.twig', $url);
+    }
 
     public function endTimeOverAction($poll = null)
     {
@@ -223,11 +241,8 @@ class DefaultController extends Controller
 
     public function endChangeOfferAction()
     {
-        $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
-        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig',
-                        array(
-                    'nfgRegisterUrl' => $nfgRegisterUrl
-        ));
+        $url['link_lc'] = $this->container->getParameter('lc_register_url');
+        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig', $url);
     }
 
     public function endChangeAction(Request $request)
@@ -329,6 +344,24 @@ class DefaultController extends Controller
 
     public function registerAction(Request $request)
     {
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $request->getSession();
+        
+        // get the error if any (works with forward and redirect -- see below)
+        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
+        } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
+            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+        } else {
+            $error = '';
+        }
+        
+        if ($error) {
+            $session->getFlashBag()->add('danger', $this->get('translator')->trans($error->getMessage()));
+        }
+        
+        
         $userManager = $this->container->get('fos_user.user_manager');
         $formFactory = $this->container->get('fos_user.registration.form.factory');
 
