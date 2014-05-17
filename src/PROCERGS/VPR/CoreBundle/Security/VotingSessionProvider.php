@@ -72,6 +72,9 @@ class VotingSessionProvider
     {
         if (null === $ballotBox) {
             $ballotBox = $this->getOnlineBallotBox();
+            if (!$ballotBox) {
+                throw new VotingTimeoutException();
+            }
         }
         $filter['ballotBox'] = $ballotBox;
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
