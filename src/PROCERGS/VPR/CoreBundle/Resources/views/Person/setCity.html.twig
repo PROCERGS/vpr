@@ -43,6 +43,7 @@
   	      '0' : "{{ 'form.trevoter.invalid' | trans }}"
   	};
   	var trevoterId = '#{{ form.voterRegistration.vars.id }}';
+  	$(trevoterId).mask('000000000000');
     $(trevoterId).on('blur', function () {
         if (!this.value.length) {
           return;
