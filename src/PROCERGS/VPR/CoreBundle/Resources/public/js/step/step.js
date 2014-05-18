@@ -1,55 +1,60 @@
-/*global $:false, maxItens:false, resetCheckbox */
+/*global $:false, maxItems:false, resetCheckbox */
 $(function() {
     "use strict";
 
     $(".ballot input").on("click", function(event) {
         var sel = $(".ballot input:checked");
-        if (sel.length > maxItens) {
+        if ($("#confirmation").is(":visible")) {
+            event.preventDefault();
+        }
+        if (sel.length > maxItems) {
             event.preventDefault();
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
-        } else if ($("#confirmation").is(":visible")) {
-            event.preventDefault();
         }
     });
 
-    var ballotHeight = $(".ballot").outerHeight(true) + 32;
+//    var ballotHeight = $(".ballot").outerHeight(true) + 32;
     $("#btn-vote").on("click", function() {
         $("#btn-vote").button("loading");
         $("body").animate({
             scrollTop: $(".main-title").offset().top
-        }, 1000, confirmation);
+        }, 900);
+        $(".ballot").slideUp(1100, confirmation);
     });
 
     function confirmation() {
-        $(".ballot").delay(500).addClass("animate");
-        $(".js-confirm").delay(200).fadeIn();
+        $(".confirm-message").fadeIn();
+        $(".confirmation-buttons").show();
 
-        setTimeout(function() {
-            $(".ballot input").not(":checked").parent().addClass("hidden");
-            $("input:checked").closest(".options").prev(".step-category").addClass("checked");
-            $(".step-category").not(".checked").addClass("hidden");
-            $(".ballot").height(ballotHeight).delay(3000).removeClass("animate");
-            $(".js-toggle").delay(3000).toggle();
+        $(".ballot input").not(":checked").closest('.option').addClass("hidden");
+        $("input:checked").each(function(i) {
+            $(this).closest(".option").prevAll(".step-category").first().addClass("checked");
+        });
+        $(".step-category").not(".checked").addClass("hidden");
 
-            if (!$(".ballot input:checked").length) {
-                $("#vote-empty").removeClass("hidden");
-            }
-        }, 1500);
+        if (!$(".ballot input:checked").length) {
+            $("#vote-empty").removeClass('hidden');
+        }
+
+        $(".ballot").slideDown(500, function() {
+            $("#btn-vote").hide();
+        });
     }
 
-    $("#btn-correct").on("click", function() {
-        $(".js-confirm").hide();
-        $("#vote-empty").addClass("hidden");
-        $(".ballot .options .content, .step-category").removeClass("hidden");
-        $(".ballot .options .content, .step-category").removeClass("checked");
-        $(".ballot").removeClass("animate");
-        $(".js-toggle").toggle();
-        $("#btn-vote").button("reset").show();
+    $("#btn-rectify").on("click", function() {
+        $(".ballot").slideUp(1100, function() {
+            $("#vote-empty").addClass("hidden");
+            $(".ballot .option, .step-category").removeClass("hidden");
+            $(".step-category").removeClass("checked");
+            $("#btn-vote").button("reset").show();
+            $(".ballot").slideDown(500);
+        });
+        $(".confirm-message, .confirmation-buttons").slideUp();
     });
 
     $(".ballot .desc-toggle").on("click", function() {
-        $(this).closest("li").find(".desc").toggle();
+        $(this).closest(".option").children(".desc").slideToggle();
         $(this).toggleClass("less");
     });
 

@@ -36,7 +36,7 @@
             <div class="modal-body">
                 {% set maxSelection = step.getMaxSelection %}
                 {% transchoice maxSelection %}
-                    {0} You can't select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options
+                {0} You can't select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options
                 {% endtranschoice %}
             </div>
             <div class="modal-footer">
@@ -51,7 +51,7 @@
 <div class="row">
     <div class="col-md-12">
         <h2 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h2>
-        <div class="alert alert-danger js-confirm" style="display:none">{{ 'step.selection.confirm' | trans }}</div>
+        <div class="alert alert-danger confirm-message" style="display:none">{{ 'step.selection.confirm' | trans }}</div>
 
         <div class="inner-content">
         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
@@ -63,41 +63,36 @@
             {% endimage %}
 
             <div class="ballot">
-                <dl class="step">
-          {% for currStep,categories in options %}
-
+                <dl class="steps">
+                {% for currStep,categories in options %}
                     <dt class="step-title">{{ currStep }}</dt>
                     <dd>
                         <dl>
-              {% for category,pollOptions in categories %}
+                        {% for category,pollOptions in categories %}
                             <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">
-                            <span class="icon"><i class="img"></i></span>
-                            <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
+                                <span class="icon"><i class="img"></i></span>
+                                <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
                             </dt>
-                            <dd class="options">
-                                <ul>
-                  {% for option in pollOptions %}
-                                    <li>
-                                        <div class="content ctg-{{ attribute(categoriesId, category) }}">
-                                            <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                                            <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
-                                            <span class="desc-toggle"></span>
-                                        </div>
-                                        <div class="desc">{{ option.description }}</div>
-                                    </li>
-                  {% endfor %}
-                                </ul>
+                            {% for option in pollOptions %}
+                            <dd class="option">
+                                <div class="content ctg-{{ attribute(categoriesId, category) }}">
+                                    <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
+                                    <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
+                                    {% if option.description %}<span class="desc-toggle"></span>{% endif %}
+                                </div>
+                                {% if option.description %}<div class="desc">{{ option.description }}</div>{% endif %}
                             </dd>
-              {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
                         </dl>
                     </dd>
-          {% endfor %}
+                {% endfor %}
                 </dl>
                 <div class="alert alert-danger hidden" id="vote-empty">Nenhuma opção selecionada</div>
 
-                <div id="confirmation" class="js-toggle" style="display:none">
+                <div id="confirmation" class="confirmation-buttons" style="display:none">
                     <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
-                    <button id="btn-correct" type="button" class="btn btn-warning btn-lg">{{ 'Rectify' | trans }}</button>
+                    <button id="btn-rectify" type="button" class="btn btn-warning btn-lg">{{ 'Rectify' | trans }}</button>
                 </div>
             </div>
 
@@ -116,34 +111,25 @@
 
 {% block stylesheets %}
 {{ parent() }}
+    {% stylesheets 'bundles/procergsvprcore/css/step/step.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 
-{% stylesheets 'bundles/procergsvprcore/css/step/step.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %}
-
-{% stylesheets 'bundles/procergsvprcore/css/step/ie.css' filter='cssrewrite' %}
-<!--[if lt IE 9]>
-  <link rel="stylesheet" href="{{ asset_url }}" />
-<![endif]-->
-{% endstylesheets %}
-
+    {% stylesheets 'bundles/procergsvprcore/css/step/ie.css' filter='cssrewrite' %}
+    <!--[if lt IE 9]>
+      <link rel="stylesheet" href="{{ asset_url }}" />
+    <![endif]-->
+    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
+    <script>
+        var maxItems = {{ step.getMaxSelection }}
+    </script>
 
-{% javascripts
-  'bundles/procergsvprcore/js/step/svgcheckbx.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-  {% endjavascripts %}
-
-  {% javascripts
-  'bundles/procergsvprcore/js/step/step.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-  {% endjavascripts %}
-
-<script>
-    var maxItens = {{ step.getMaxSelection }}
-</script>
-
-  {% endblock %}
+    {% javascripts 'bundles/procergsvprcore/js/step/svgcheckbx.js'
+                    'bundles/procergsvprcore/js/step/step.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
