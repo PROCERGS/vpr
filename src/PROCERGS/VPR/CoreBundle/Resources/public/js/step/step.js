@@ -4,9 +4,6 @@ $(function() {
 
     $(".ballot input").on("click", function(event) {
         var sel = $(".ballot input:checked");
-        if ($("#confirmation").is(":visible")) {
-            event.preventDefault();
-        }
         if (sel.length > maxItems) {
             event.preventDefault();
             $("#alert-limit").modal("show");
