@@ -3,17 +3,21 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <h3>{{ rTitle }}</h3>
-        <div class="alert {{ rClass }}">{{ rMsg1 }}</div>
+        <h3>{{ title }}</h3>
+        <div class="alert {{ class }}">{{ rMsg1 }}</div>
     </div>
 
     <div class="col-md-12">
         <div class="jumbotron">
             <p>{{ rMsg2 }}</p>
-            <p><a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=600,height=450" href="{{ nfgRegisterUrl }}">{{ 'default.nfe.access.offer.click'|trans }}</a></p>
-            <p><a id="btn-continue" class="btn btn-primary" role="button" href="{{ continueUrl }}">{{ 'default.continue.click'|trans }}</a></p>
-            <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'default.skip.click' | trans }}</a></p>
+            <p>
+                <a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=600,height=450" href="{{ nfgRegisterUrl }}">
+                    {% trans %}Access Nota Fiscal Gaúcha{% endtras %}
+                </a>
+            </p>
+            <p><a id="btn-continue" class="btn btn-primary" role="button" href="{{ continueUrl }}">{{ 'Continue'|trans }}</a></p>
+            <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'Skip Step' | trans }}</a></p>
         </div>
-    </div>    
+    </div>
 </div>
 {% endblock %}

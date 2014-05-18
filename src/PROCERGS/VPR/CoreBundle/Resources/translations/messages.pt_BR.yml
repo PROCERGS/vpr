@@ -1,14 +1,86 @@
-form.username: 'Titulo eleitor'
-form.firstname: Nome
-form.email: E-mail
-form.mobile: Telefone
-form.submit: Enviar
-register.title: 'Como faço para votar?'
-register.login.simple: 'Vote com seu Título de eleitor'
-register.login.lc: 'Vote com seu Login Cidadão'
+'First name': 'Primeiro Nome'
+Email: Email
+'Mobile Phone': Celular
+'Begin Voting': 'Iniciar Votação'
+'How do I vote?': 'Como faço para votar?'
+'Vote with your Voter Registration': 'Vote com seu Título de eleitor'
+'Vote with your Citizen Login': 'Vote com seu Login Cidadão'
 form.city-selection.tried-different-city: 'Embora você tenha digitado uma cidade diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'
 Previous: Anterior
 Next: Próximo
+admin_users: Usuários
+'What''s your voting city?': 'Qual seu domicílio eleitoral?'
+'You need to type the city where you vote so that we can show you the relevant options for you.': 'Você precisa digitar a cidade onde você vota para que possamos lhe mostrar as opções relevantes para sua região.'
+'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Por favor, note que ao informar a cidade errada seu voto não poderá ser contado para o programa de participação popular.'
+City: Cidade
+'Alternatively you can type your voter registration, without the need to type your city.': 'Alternativamente, você pode digitar seu título de eleitor para não precisar digitar a cidade. Essa informação será solicitada ao fim da votação.'
+'Voter Registration': 'Título de Eleitor'
+Continue: Continuar
+'Type a city to see it''s presential polling places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
+'Voting time is up!': 'Horário de Votação Encerrado'
+default.closing_time.poll.name: votação
+'The poll %poll% has ended at %closingTime%': 'A %poll% foi encerrada em %closingTime%'
+'Polling Places': 'Locais de votação'
+'What is Citizen Login?': 'O que é o Login Cidadão/Meu RS?'
+'Check the ballot for your region': 'Confira a cédula da sua região'
+'Check the polling places': 'Confira os locais de votação'
+register.voter_registration.mismatch: 'Algum dos dados informados não conferem com os dados cadastrados no TRE-RS'
+register.voter_registration.notfound: 'Cadastro não encontrado no TRE-RS'
+'Thank you for your participation': 'Obrigado pela sua participação'
+'Thank you for your collaboration in this process, your participation was very important!': 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
+CPF: CPF
+Birthdate: 'Data de Nascimento'
+form.trevoter.invalid: 'Titulo eleitor inválido'
+end.change.nfg.user.wrongdata: 'Algum dos dados informados não conferem com os dados cadastrado na Nota Fiscal Gaúcha'
+end.change.nfg.user.notfound: 'Cadastro não encontrado na Nota Fiscal Gaúcha'
+end.change.nfg.return.problem: 'Houve um retorno inesperado do sistema Nota Fiscal Gaúcha'
+end.change.nfg.query.problem: 'Há algum problema com a conexão com o sistema Nota Fiscal Gaúcha'
+end.change.offer.title: 'Já há um voto com os dados cadastrais informados.'
+end.change.offer.message: 'Caso acredite que outra pessoa tenha utilizado os seus dados para votar, você pode ainda votar caso tenha cadastro no Login Cidadão associada a sua conta da Nota Fiscal Gaucha'
+end.change.nfe.register.offer: 'Para continuar com o processo de voto é necessário ter um cadastro no Login Cidadão associada a sua conta na Nota Fiscal Gaucha'
+'Validation with Nota Fiscal Gaúcha': 'Validação com a Nota Fiscal Gaúcha'
+'To continue the votingp rocess, fill in the information below to vote with Nota Fiscal Gaúcha': 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da Nota Fiscal Gaúcha'
+end.change.nfg.puny.title: 'Cadastro muito básico com a Nota Fiscal Gaúcha'
+end.change.nfg.puny.message: 'Foi detectado que seu cadastro na Nota Fiscal Gaúcha contém apenas o dados básicos de cadastro. Para continuar com o processo de votação é necessário ter um cadastro na Nota Fiscal Gaúcha com mais dados válidos'
+end.change.nfg.puny.offer: 'Vá agora na Nota Fiscal Gaúcha complemente seu dados e continue com o processo de votação'
+default.continue.click: Continuar
+'Access Nota Fiscal Gaúcha': 'Acesse a Nota Fiscal Gaúcha'
+posvote.congratulation.title: 'Reforce seu voto'
+posvote.congratulation.message: 'Muito obrigado por ter votado, você ainda pode reforçar mais ainda a autenticidade do seu voto com a Nota Fiscal Gaúcha'
+posvote.nfe.register.offer: 'Para continuar com o processo de reforço do voto é necessário ter um cadastro com a Nota Fiscal Gaúcha'
+posvote.reinforce.nfg.title: 'Validação com a Nota Fiscal Gaúcha'
+posvote.reinforce.nfg.message: 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da Nota Fiscal Gaúcha'
+posvote.continue.click: Continuar
+posvote.reinforce.nfg.puny.title: 'Cadastro muito básico com a Nota Fiscal Gaúcha'
+posvote.reinforce.nfg.puny.message: 'Foi detectado que seu cadastro na Nota Fiscal Gaúcha contém apenas o dados básicos de cadastro. Para continuar com o processo de votação é necessário ter um cadastro na Nota Fiscal Gaúcha com mais dados válidos'
+posvote.reinforce.nfg.puny.offer: 'Vá agora na Nota Fiscal Gaúcha complemente seu dados e continue com o processo de votação'
+'Don''t know your Voter Registration?': 'Não lembra seu título?'
+'Click here to check it out': 'Consulte aqui'
+'Ballot Search': 'Consulta de cédula'
+form.city.select: 'Informe sua cidade:'
+form.search: Pesquisar
+step.limit.selection: 'Você somente pode selecionar '
+'Cast Vote': Votar
+Confirm: Confirmar
+form.cancel: Cancelar
+Rectify: Corrigir
+'Reinforce your Vote': 'Valide seu voto'
+'Thank you for casting your vote. If you vote on Rio Grande do Sul you can still reinforce your vote using your Voter Registration.': 'Obrigado por votar. Se você vota no Rio Grande do Sul, use seu título de eleitor para reforçar seu voto.'
+'To continue the voting process fill the information below to validate your vote.': 'Para continuar com o processo de votação preencha os dados abaixo para validação do seu voto'
+'Ballot for %name%': 'Cédula para %name%'
+step.selection.confirm: 'Por favor, confirme o voto nos itens selecionados'
+'Choose up to <span class=''itens-count''>%max%</span> items': 'Escolha até <span class=''itens-count''>%max%</span> itens'
+'Thank you for voting': 'Obrigado por ter votado'
+'Thank you for your collaboration on this process, your participation was very important!': 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
+'Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!': 'Você ja tem cadastro na Nota Fiscal Gaucha? Não?! Inscreva-se agora e concorra a premios!'
+'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Você ja tem cadastro no Login Cidadão? Cadastre-se agora e obtenha conteudo personalizado para o serviços do Rio Grande do Sul!'
+'World Bank wants to know your opinion! Click below to answer the Survey.': 'O Banco Mundial quer escutar sua opnião! Responda agora o questionario abaixo!'
+'Register Here': 'Cadastre-se aqui'
+'Answer Survey': 'Responder Pesquisa'
+Warning!: Atenção!
+Ok: OK
+'Required fields': 'Campos de preenchimento obrigatório'
+'Skip Step': 'Pular Etapa'
 admin.category: Categoria
 admin.categories: Categorias
 admin.users: Usuários
@@ -51,7 +123,6 @@ admin.address: Endereço
 admin.latitude: Latitude
 admin.longitude: Longitude
 admin.ballotbox_online: 'Urna Online'
-admin_users: Usuários
 admin.username: 'Título eleitor'
 admin.firstname: Nome
 admin.email: Email
@@ -61,98 +132,27 @@ admin.last_login: 'Último login'
 admin.welcome: Bem-Vindo!
 admin.logout: Sair
 admin.pollOption: Opções
-admin.scope: __admin.scope
-admin.cost: __admin.cost
+admin.scope: Abrangência
+admin.cost: Custo
 admin.category_sorting: __admin.category_sorting
 admin.save_sorted: 'Salvar Ordenação'
 admin.success_save_sorting: 'Ordenação atualizada com sucesso!'
 admin.unable_to_save_sorting: 'Não foi possível salvar a ordenação!'
 admin.saving: Salvando...
-admin.cost: Custo
-admin.scope: Abrangência
 admin.select_a_poll: 'Selecione uma Votação'
 admin.clear_filters: 'Limpar filtros'
 admin.add_poll_option: 'Adicionar opção'
-'What''s your voting city?': 'Qual seu domicílio eleitoral?'
-'You need to type the city where you vote so that we can show you the relevant options for you.': 'Você precisa digitar a cidade onde você vota para que possamos lhe mostrar as opções relevantes para sua região.'
-'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Por favor, note que ao informar a cidade errada seu voto não poderá ser contado para o programa de participação popular.'
-City: Cidade
-'Alternatively you can type your voter registration, without the need to type your city.': 'Alternativamente, você pode digitar seu título de eleitor para não precisar digitar a cidade. Essa informação será solicitada ao fim da votação.'
-'Voter Registration': 'Título de Eleitor'
-Continue: Continuar
-'Type a city to see it''s presential polling places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
-default.closing_time.title: 'O horário da votação já foi encerrado!'
-default.closing_time.poll.name: votação
-default.closing_time.message: 'A %poll% foi encerrada as %closingTime%'
-'Polling Places': 'Locais de votação'
-'What is Citizen Login?': '__What is Citizen Login?'
-'Check the ballot of your region': '__Check the ballot of your region'
-'Check the poll places': '__Check the poll places'
-form.username.invalid: __form.username.invalid
-register.voter_registration.mismatch: 'Algum dos dados informados não conferem com os dados cadastrados no TRE'
-register.voter_registration.notfound: 'Cadastro não encontrado no TRE'
-default.congratulation.vote.title: 'Obrigado pela sua participação'
-default.congratulation.vote.message: 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
-form.cpf: 'CPF'
-form.trevoter: 'Titulo eleitor'
-form.birthdate: 'Data Nascimento'
-form.trevoter.invalid: 'Titulo eleitor inválido'
-end.change.nfg.user.wrongdata: 'Algum dos dados informados não conferem com os dados cadastrado na NFg'
-end.change.nfg.user.notfound: 'Cadastro não encontrado na NFg'
-end.change.nfg.return.problem: 'Houve um retorno inesperado do sistema NFg'
-end.change.nfg.query.problem: 'Há algum problema com a conexão com o sistema NFg'
-end.change.offer.title: 'Já há um voto com os dados cadastrais informados.'
-end.change.offer.message: 'Caso acredite que outra pessoa tenha utilizado os seus dados para votar, você pode ainda votar caso tenha cadastro no Login Cidadão associada a sua conta da Nota Fiscal Gaucha'
-end.change.nfe.register.offer: 'Para continuar com o processo de voto é necessário ter um cadastro no Login Cidadão associada a sua conta na Nota Fiscal Gaucha'
-end.change.nfg.title: 'Validação com a Nfg'
-end.change.nfg.message: 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da NFg'
-end.change.continue.click: 'Continuar'
-end.change.skip.click: 'Pular etapa'
-end.change.nfg.puny.title: 'Cadastro muito básico com a NFg'
-end.change.nfg.puny.message: 'Foi detectado que seu cadastro na NFg contém apenas o dados básicos de cadastro. Para continuar com o processo de votação é necessário ter um cadastro na NFg com mais dados válidos'
-end.change.nfg.puny.offer: 'Vá agora na NFg complemente seu dados e continue com o processo de votação'
-default.continue.click: 'Continuar'
-default.skip.click: 'Pular etapa'
-default.nfe.access.offer.click: 'Acesse o site da NFg'
-end.change.nfg.user.wrongdata: 'Algum dos dados informados não conferem com os dados cadastrado na NFg'
-end.change.nfg.user.notfound: 'Cadastro não encontrado na NFg'
-end.change.nfg.return.problem: 'Houve um retorno inesperado do sistema NFg'
-end.change.nfg.query.problem: 'Há algum problema com a conexão com o sistema NFg'
-posvote.congratulation.title: 'Reforce seu voto'
-posvote.congratulation.message: 'Muito obrigado por ter votado, você ainda pode reforçar mais ainda a autenticidade do seu voto com a NFg'
-posvote.nfe.register.offer: 'Para continuar com o processo de reforço do voto é necessário ter um cadastro com a NFg'
-posvote.reinforce.nfg.title: 'Validação com a Nfg'
-posvote.reinforce.nfg.message: 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da NFg'
-posvote.continue.click: 'Continuar'
-posvote.skip.click: 'Pular etapa'
-posvote.reinforce.nfg.puny.title: 'Cadastro muito básico com a NFg'
-posvote.reinforce.nfg.puny.message: 'Foi detectado que seu cadastro na NFg contém apenas o dados básicos de cadastro. Para continuar com o processo de votação é necessário ter um cadastro na NFg com mais dados válidos'
-posvote.reinforce.nfg.puny.offer: 'Vá agora na NFg complemente seu dados e continue com o processo de votação'
-register.search.tre: 'Não lembra seu título?'
-register.search.tre.click: 'Consulte aqui'
-'Ballot Search': 'Consulta de cédula'
-form.city.select : 'Informe sua cidade:'
-form.search: 'Pesquisar'
-step.limit.selection: 'Você somente pode selecionar '
-form.vote: 'Votar'
-form.confirm: 'Confirmar'
-form.cancel: 'Cancelar'
-form.correct: 'Corrigir'
-posvote.reinforce.doc.title: 'Valide seu voto'
-posvote.reinforce.doc.message: 'Muito obrigado por ter votado, você ainda pode tornar valido seu voto com seu titulo de eleitor. Para continuar com o processo de votação preencha os dados abaixo para validação do seu voto'
-step.limit.selection.offer.title: 'Cédula do corede %name%'
-step.limit.selection.offer.message: 'Escolha até %max% itens'
-step.selection.confirm: 'Por favor, confirme o voto nos itens selecionados'
 lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
-lc.first_name: 'Nome'
-lc.surname: 'Sobrenome'
-"Choose up to <span class='itens-count'>%max%</span> items": "Escolha até <span class='itens-count'>%max%</span> itens"
-end.offer.title: 'Obrigado por ter votado'
-end.offer.message: 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
-end.offer.nfg: 'Você ja tem cadastro na Nota Fiscal Gaucha? Não?! Inscreva-se agora e concorra a premios!'
-end.offer.lc: 'Você ja tem cadastro no Login Cidadão? Não?! Cadastre-se agora e obtenha conteudo personalizado para o serviços do seu estado!'
-end.offer.sm: 'O Banco Mundial quer escutar sua opnião! Responda agora o questionario abaixo!'
-end.offer.lc.register.click: 'Cadastre-se aqui'
-end.offer.sm.register.click: 'Responda aqui'
-step.modal.header: 'Atenção!'
-step.modal.button: 'OK'
+lc.first_name: Nome
+lc.surname: Sobrenome
+'Polling places in your city.': '__Polling places in your city.'
+end.offer.lc.register.click: __end.offer.lc.register.click
+Categories: Categorias
+'Priorities Voting': 'Votação de Prioridades'
+PPC: CPP
+COREDES: COREDES
+ONU: UNO
+'Rio Grande do Sul': 'Rio Grande do Sul'
+PROCERGS: PROCERGS
+'Terms of Use': 'Termos de Uso'
+'{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '__{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'

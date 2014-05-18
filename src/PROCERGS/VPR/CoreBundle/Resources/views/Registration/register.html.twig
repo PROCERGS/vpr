@@ -3,112 +3,117 @@
 {% block body %}
 {% trans_default_domain 'messages' %}
 
-        <div class="row">
+<div class="row">
             {% for type, messages in app.session.flashbag.all() %}
                 {% for message in messages %}
-                <div class="col-md-12">
-                    <div class="text-center alert alert-{{ type }}">
+    <div class="col-md-12">
+        <div class="text-center alert alert-{{ type }}">
                         {{ message }}
-                    </div>
-                </div>
+        </div>
+    </div>
                 {% endfor %}
             {% endfor %}
-        </div>
+</div>
 
 <div class="row">
-  <div class="col-md-12 text-center">
-    <h2 id="how-to-vote">{{ 'register.title' | trans }}</h2>
-  </div>
+    <div class="col-md-12 text-center">
+        <h2 id="how-to-vote">{% trans %}How do I vote?{% endtrans %}</h2>
+    </div>
 </div>
 
 <div class="row register-box">
     <div class="col-md-5">
-        <h3 class="title register-label clearfix"><span class="text">{{ 'register.login.simple' | trans }}</span></h3>
+        <h3 class="title register-label clearfix">
+            {# span.text inside a h3? This makes absolutely NO SENSE. Somebody fix this! #}
+            <span class="text">
+                {% trans %}Vote with your Voter Registration{% endtrans %}
+            </span>
+        </h3>
 
         <div class="register-form-container">
-          {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
-          {{ form_errors(form) }}
-          <div class="form-group has-feedback clearfix">
-              {{ form_label(form.username, '* ' ~ 'form.username' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-              <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
-              <a href="{{ tre_search_link }}" class="label label-primary pull-left tre-search-link" target="_blank" tabindex="-1">
-                {{ 'register.search.tre' | trans }}<br>{{ 'register.search.tre.click' | trans }}
-              </a>
-          </div>
-          <div class="form-group has-feedback">
-              {{ form_label(form.firstname, '* ' ~ 'form.firstname' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-              <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
-          </div>
-          <div class="form-group has-feedback">
-              {{ form_label(form.email, 'form.email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-              <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
-          </div>
-          <div class="form-group has-feedback">
-              {{ form_label(form.mobile, 'form.mobile' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-              <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
-          </div>
-          <span>{{ '* ' ~ 'required.field.messsage'|trans }}</span>
+            {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
+                {{ form_errors(form) }}
+                <div class="form-group has-feedback clearfix">
+                        {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
+                    <a href="{{ tre_search_link }}" class="label label-primary pull-left tre-search-link" target="_blank" tabindex="-1">
+                            {% trans %}Don't know your Voter Registration?{% endtrans %}
+                            {% trans %}Click here to check it out{% endtrans %}
+                    </a>
+                </div>
+                <div class="form-group has-feedback">
+                        {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
+                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
+                </div>
+                <div class="form-group has-feedback">
+                        {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
+                </div>
+                <div class="form-group has-feedback">
+                        {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                    <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
+                </div>
+                <span>* {{ 'Required fields'|trans }}</span>
 
-          <button type="submit" class="btn btn-success btn-lg btn-block">{{ 'form.submit' | trans }}</button>
-          {{ form_end(form) }}
+                <button type="submit" class="btn btn-success btn-lg btn-block">{{ 'Begin Voting' | trans }}</button>
+            {{ form_end(form) }}
         </div>
     </div>
     <div class="col-md-2 hidden-xs hidden-sm"><hr class="spacer"></div>
     <div class="col-md-5">
-        <h3 class="title login-label clearfix"><span class="text">{{ 'register.login.lc'|trans }}</span></h3>
+        <h3 class="title login-label clearfix">
+            {# span.text inside a h3? This makes absolutely NO SENSE. Somebody fix this! #}
+            <span class="text">{% trans %}Vote with your Citizen Login{% endtrans %}</span>
+        </h3>
         {% for owner in hwi_oauth_resource_owners() %}
-          <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">{{ 'register.login.lc'|trans }}</a>
+        <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">
+            {% trans %}Vote with your Citizen Login{% endtrans %}
+        </a>
         {% endfor %}
         <div class="text-right hidden-xs" id="about-lc-link">
-          <a href="" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
+            <a href="" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
         </div>
         <div class="alert alert-success hidden-xs hidden" id="about-lc">
-          <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50">
-          <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
+            <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50">
+            <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
         </div>
     </div>
 </div>
 
 <div class="row info-box">
-  <div class="col-md-5 col-ballot text-center">
-    <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix">
-      <span class="text">{% trans %}Check the ballot of your region{% endtrans %}</span>
-    </a>
-  </div>
-  <div class="col-md-2"></div>
-  <div class="col-md-5 text-center">
-    <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix">
-      <span class="text">{% trans %}Check the poll places{% endtrans %}</span>
-    </a>
-  </div>
+    <div class="col-md-5 col-ballot text-center">
+        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix">
+            <span class="text">{% trans %}Check the ballot for your region{% endtrans %}</span>
+        </a>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 text-center">
+        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix">
+            <span class="text">{% trans %}Check the polling places{% endtrans %}</span>
+        </a>
+    </div>
 </div>
 {% endblock %}
 
 {% block stylesheets %}
   {{ parent() }}
   {% stylesheets 'bundles/procergsvprcore/css/register/register.css' filter='cssrewrite' %}
-  <link rel="stylesheet" href="{{ asset_url }}" />
+<link rel="stylesheet" href="{{ asset_url }}" />
   {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
 
-  <script type="text/javascript">
-  var usernameId = "#{{ form.username.vars.id }}";
-  var messages = {
-        "0" : "{{ 'form.username.invalid' | trans }}"
-  };
-  $(usernameId).mask('000000000000');  
-  var tooltipContent = {
-    "text": "{{ 'register.search.tre' | trans }}",
-    "link": "{{ tre_search_link }}",
-    "link_text": "{{ 'register.search.tre.click' | trans }}"
-  }
-  </script>
+<script type="text/javascript">
+    var usernameId = "#{{ form.username.vars.id }}";
+    $(usernameId).mask('000000000000');
+</script>
 
   {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/register/register.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+<script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 
 {% endblock %}

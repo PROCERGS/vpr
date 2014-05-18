@@ -6,29 +6,29 @@
         <h1>{% trans %}What's your voting city?{% endtrans %}</h1>
 
         {{ form_start(form, { 'action': path('vpr_city_selection'), 'attr': { 'role': 'form' } }) }}
-            <div class="row">
-                <div class="col-md-6 col-xs-12">
-                    <p>{% trans %}You need to type the city where you vote so that we can show you the relevant options for you.{% endtrans %}</p>
-                    <p>{% trans %}Please be aware that informing the wrong city will cause your vote to be discarted.{% endtrans %}</p>
-                    <div class="form-group">
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <p>{% trans %}You need to type the city where you vote so that we can show you the relevant options for you.{% endtrans %}</p>
+                <p>{% trans %}Please be aware that informing the wrong city will cause your vote to be discarted.{% endtrans %}</p>
+                <div class="form-group">
                         {{ form_label(form.city.name, 'City' | trans) }}
                         {{ form_widget(form.city.name, { 'attr': { 'class': 'form-control city' } } ) }}
                         {{ form_errors(form.city.name) }}
-                    </div>
-                </div>
-                <div class="col-md-6 col-xs-12">
-                    <p>{% trans %}Alternatively you can type your voter registration, without the need to type your city.{% endtrans %}</p>
-                    <div class="form-group">
-                        {{ form_label(form.voterRegistration, 'form.trevoter' | trans) }}
-                        {{ form_widget(form.voterRegistration, { 'attr': { 'class': 'form-control' } } ) }}
-                        {{ form_errors(form.voterRegistration) }}
-                    </div>
-                </div>
-
-                <div class="col-xs-12 text-center">
-                    {{ form_widget(form.submit, { 'attr': { 'class': 'btn btn-lg btn-primary' }, 'label': 'Continue' | trans}) }}
                 </div>
             </div>
+            <div class="col-md-6 col-xs-12">
+                <p>{% trans %}Alternatively you can type your voter registration, without the need to type your city.{% endtrans %}</p>
+                <div class="form-group">
+                        {{ form_label(form.voterRegistration, 'Voter Registration' | trans) }}
+                        {{ form_widget(form.voterRegistration, { 'attr': { 'class': 'form-control' } } ) }}
+                        {{ form_errors(form.voterRegistration) }}
+                </div>
+            </div>
+
+            <div class="col-xs-12 text-center">
+                    {{ form_widget(form.submit, { 'attr': { 'class': 'btn btn-lg btn-primary' }, 'label': 'Continue' | trans}) }}
+            </div>
+        </div>
         {{ form_end(form) }}
     </div>
 </div>
@@ -40,22 +40,10 @@
 <script>
     var citiesList = {{ cities | raw }};
     var messages = {
-  	      '0' : "{{ 'form.trevoter.invalid' | trans }}"
-  	};
-  	var trevoterId = '#{{ form.voterRegistration.vars.id }}';
-  	$(trevoterId).mask('000000000000');
-    $(trevoterId).on('blur', function () {
-        if (!this.value.length) {
-          return;
-        }
-        this.value = completaZerosEsquerda(this.value, 12);
-        if (validarTitulo(this.value)) {
-
-          } else {
-            alert(messages[0]);
-            }
-
-        });       
+        '0': "{{ 'form.trevoter.invalid' | trans }}"
+    };
+    var trevoterId = '#{{ form.voterRegistration.vars.id }}';
+    $(trevoterId).mask('000000000000');
 </script>
     {% javascripts
             '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
