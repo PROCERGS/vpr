@@ -68,7 +68,7 @@ Rectify: Corrigir
 'Thank you for casting your vote. If you vote on Rio Grande do Sul you can still reinforce your vote using your Voter Registration.': 'Obrigado por votar. Se você vota no Rio Grande do Sul, use seu título de eleitor para reforçar seu voto.'
 'To continue the voting process fill the information below to validate your vote.': 'Para continuar com o processo de votação preencha os dados abaixo para validação do seu voto'
 'Ballot for %name%': 'Cédula para %name%'
-step.selection.confirm: 'Por favor, confirme o voto nos itens selecionados'
+'Please review your choices and click confirm to proceed or rectify to correct them.': 'Por favor, revise suas escolhas e clique em Confirmar para prosseguir ou Corrigir para alterá-las.'
 'Choose up to <span class=''itens-count''>%max%</span> items': 'Escolha até <span class=''itens-count''>%max%</span> itens'
 'Thank you for voting': 'Obrigado por ter votado'
 'Thank you for your collaboration on this process, your participation was very important!': 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'

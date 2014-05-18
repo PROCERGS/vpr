@@ -51,7 +51,7 @@
 <div class="row">
     <div class="col-md-12">
         <h2 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h2>
-        <div class="alert alert-danger confirm-message" style="display:none">{{ 'step.selection.confirm' | trans }}</div>
+        <div class="alert alert-danger confirm-message" style="display:none">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</div>
 
         <div class="inner-content">
         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
