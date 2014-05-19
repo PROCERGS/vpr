@@ -77,7 +77,11 @@
                             <dd class="option">
                                 <div class="content ctg-{{ attribute(categoriesId, category) }}">
                                     <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                                    <label for="option_{{ option.id }}">{{ option.title |trans }}</label>
+                                    <label for="option_{{ option.id }}">{{ option.getCategorySorting}} - {{ option.title |trans }}
+                                    {% if option.cost is not null and option.cost > 0 %}
+                                    - {{ 'Valor: R$'|trans }} {{ option.cost|number_format(2, ',', '.') }}
+                                    {% endif %}
+                                    </label>
                                     {% if option.description %}<span class="desc-toggle"></span>{% endif %}
                                 </div>
                                 {% if option.description %}<div class="desc">{{ option.description }}</div>{% endif %}
