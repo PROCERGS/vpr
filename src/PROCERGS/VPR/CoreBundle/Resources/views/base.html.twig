@@ -3,16 +3,16 @@
 {% block header %}
 <header class="text-center">
   {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
-  <img src="{{ asset_url }}" alt="{%trans%}Priorities Voting{%endtrans%}" class="img-responsive">
+    <img src="{{ asset_url }}" alt="{%trans%}Priorities Voting{%endtrans%}" class="img-responsive">
   {% endimage %}
 </header>
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
-    <div class="alert alert-info">
-        <div class="container">
+<div class="alert alert-info">
+    <div class="container">
             {{ flashMessage }}
-        </div>
     </div>
+</div>
 {% endfor %}
 {% endblock %}
 
@@ -21,54 +21,54 @@
 
 {% block stylesheets %}
     {% stylesheets 'bundles/procergsvprcore/css/*.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+<link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
 
 {% block footer %}
 <footer>
-  <div class="container">
-    <div class="row images">
-      <div class="col-xs-4 col-sm-3 text-center">
+    <div class="container">
+        <div class="row images">
+            <div class="col-xs-4 col-sm-3 text-center">
         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-PPCF.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}PPC{%endtrans%}" class="img-responsive">
+                <img src="{{ asset_url }}" alt="{%trans%}PPC{%endtrans%}" class="img-responsive">
         {% endimage %}
-      </div>
+            </div>
 
-      <div class="col-xs-4 col-sm-3 text-center">
+            <div class="col-xs-4 col-sm-3 text-center">
         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-Coredes.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}COREDES{%endtrans%}" class="img-responsive">
+                <img src="{{ asset_url }}" alt="{%trans%}COREDES{%endtrans%}" class="img-responsive">
         {% endimage %}
-      </div>
+            </div>
 
-      <div class="col-xs-4 col-sm-3 text-center">
+            <div class="col-xs-4 col-sm-3 text-center">
         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-ONU.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}ONU{%endtrans%}" class="img-responsive">
+                <img src="{{ asset_url }}" alt="{%trans%}ONU{%endtrans%}" class="img-responsive">
         {% endimage %}
-      </div>
+            </div>
 
-      <div class="col-xs-12 col-sm-3 text-center">
+            <div class="col-xs-12 col-sm-3 text-center">
         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-gov.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Rio Grande do Sul{%endtrans%}" class="img-responsive">
+                <img src="{{ asset_url }}" alt="{%trans%}Rio Grande do Sul{%endtrans%}" class="img-responsive">
         {% endimage %}
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <hr/>
+    <hr/>
 
-  <div class="container">
-    <div class="row about">
-      <div class="col-xs-6 text-center">
+    <div class="container">
+        <div class="row about">
+            <div class="col-xs-6 text-center">
         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-PROCERGS.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}PROCERGS{%endtrans%}" class="img-responsive">
+                <img src="{{ asset_url }}" alt="{%trans%}PROCERGS{%endtrans%}" class="img-responsive">
         {% endimage %}
-      </div>
-      <div class="col-xs-6 text-center">
-        <a href="">{% trans %}Terms of Use{% endtrans %}</a>
-      </div>
+            </div>
+            <div class="col-xs-6 text-center">
+                <a href="">{% trans %}Terms of Use{% endtrans %}</a>
+            </div>
+        </div>
     </div>
-  </div>
 
 </footer>
 {% endblock %}
@@ -78,7 +78,7 @@
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     {% javascripts
             '@PROCERGSVPRCoreBundle/Resources/public/js/*' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+<script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
 <!--[if lt IE 10]>
@@ -86,6 +86,11 @@
     $('input[placeholder], textarea[placeholder]').placeholder();
     </script>
 <![endif]-->
-    <script defer async src="{{login_cidadao_navbar_url}}"></script>
-    <script defer async> citizenLogin.navbar.init(); </script>
+<script>
+    $(document).ready(function() {
+        $.getScript('{{login_cidadao_navbar_url}}', function() {
+            citizenLogin.navbar.init();
+        });
+    });
+</script>
 {% endblock %}
