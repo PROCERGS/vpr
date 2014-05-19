@@ -5,7 +5,11 @@ $(function() {
     $(".ballot input").on("click", function(event) {
         var sel = $(".ballot input:checked");
         if (sel.length > maxItems) {
-            event.preventDefault();
+            if (!event.preventDefault) {
+                event.preventDefault = function() {
+                    event.returnValue = false; //ie
+                };
+            }
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
         }
@@ -20,7 +24,11 @@ $(function() {
     });
 
     $("#dropdown-categories .scrollTo").on("click", function(event) {
-        event.preventDefault();
+        if (!event.preventDefault) {
+            event.preventDefault = function() {
+                event.returnValue = false; //ie
+            };
+        }
         var id = $(this).attr("href").replace("#", "");
         var selector = "a[name=" + id + "]";
         $("body").animate({
