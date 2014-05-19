@@ -10,6 +10,7 @@ $(function() {
                     event.returnValue = false; //ie
                 };
             }
+            event.preventDefault();
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
         }
@@ -17,7 +18,7 @@ $(function() {
 
     $("#btn-vote").on("click", function() {
         $("#btn-vote").button("loading");
-        $("body").animate({
+        $("html, body").animate({
             scrollTop: $(".main-title").offset().top
         }, 900);
         $(".ballot").slideUp(1100, confirmation);
@@ -29,12 +30,12 @@ $(function() {
                 event.returnValue = false; //ie
             };
         }
+        event.preventDefault();
         var id = $(this).attr("href").replace("#", "");
         var selector = "a[name=" + id + "]";
-        $("body").animate({
+        $("html, body").animate({
             scrollTop: $(selector).offset().top
         }, 500);
-        return false;
     });
 
     function confirmation() {
@@ -57,7 +58,7 @@ $(function() {
     }
 
     $("#btn-rectify").on("click", function() {
-        $(".ballot").slideUp(1100, function() {
+        $(".ballot").slideUp(500, function() {
             $("#vote-empty").addClass("hidden");
             $(".ballot .option, .step-category").removeClass("hidden");
             $(".step-category").removeClass("checked");
