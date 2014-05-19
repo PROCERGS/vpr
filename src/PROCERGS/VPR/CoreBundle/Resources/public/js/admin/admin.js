@@ -6,6 +6,7 @@ $(function() {
     $('.money').mask('000.000.000.000.000,00', {reverse: true});
 
     // Sortable rows
+    /*
     $('.sorted_table tbody').sortable({
         containerSelector: 'tr',
         itemSelector: 'tr',
@@ -24,6 +25,7 @@ $(function() {
             $('body').find('a[data-table="'+dataTable+'"]').css('display','inline-block').show();
         }
     });
+    */
 
     // Save sorting
     $('.save-sorted').click(function(){

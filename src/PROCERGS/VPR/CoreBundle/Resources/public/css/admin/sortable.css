@@ -14,7 +14,7 @@ body.dragging, body.dragging * {
     width: 80px; 
 }
 .navbar-sort-container {
-    height: 200px; 
+    height: 200px;  
 }
 .sorted_table tr {
     cursor: move; 
@@ -62,7 +62,7 @@ body.dragging, body.dragging * {
     border-bottom: none; 
 }
 .sorted_table > tbody > tr:hover > td:first-child, .sorted_table > tbody > tr:hover > th:first-child {
-    background: url('https://ssl.gstatic.com/ui/v1/icons/mail/grippy_large.png') no-repeat scroll 1px 50% #FFFFCC;
+    background: url('../../images/grippy_large.png') no-repeat scroll 1px 50% #FFFFCC;
 }
 .sorted_table > tbody > tr:hover > td, .sorted_table > tbody > tr:hover > th {
     background: #FFFFCC;

@@ -22,7 +22,8 @@ class PollOptionType extends AbstractType
             ->add('cost','money',array(
                 'grouping' => true,
                 'currency' => false,
-                'divisor' => 100
+                'divisor' => 100,
+                'required' => false
             ))
             ->add('categorySorting','number',array(
                 'attr'=>array('pattern'=>'[0-9]*')
