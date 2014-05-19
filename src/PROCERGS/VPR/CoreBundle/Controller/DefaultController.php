@@ -338,84 +338,12 @@ class DefaultController extends Controller
         );
     }
 
-    public function registerAction(Request $request)
-    {
-
-        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
-        $session = $request->getSession();
-
-        // get the error if any (works with forward and redirect -- see below)
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
-        } else {
-            $error = '';
-        }
-
-        if ($error) {
-            $session->getFlashBag()->add('danger', $this->get('translator')->trans($error->getMessage()));
-        }
-
-
-        $userManager = $this->container->get('fos_user.user_manager');
-        $formFactory = $this->container->get('fos_user.registration.form.factory');
-
-        $user = new Person();
-        $form = $formFactory->createForm();
-        $form->setData($user);
-
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $new = new TREVoter();
-                $new->setId($form->get('username')->getData());
-                $user1 = $userManager->findUserBy(array(
-                    'treVoter' => $new,
-                    'loginCidadaoAccessToken' => null
-                ));
-                if ($user1) {
-                    if ($this->_testName($form->get('firstname')->getData(),
-                                    $user1->getFirstName())) {
-                        $response = $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
-                        $this->_auth($user1, $response);
-                        return $response;
-                    } else {
-                        $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.mismatch')));
-                    }
-                } else {
-                    $em = $this->getDoctrine()->getManager();
-                    $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
-                    $voter = $treRepo->findOneBy(array(
-                        'id' => $form->get('username')->getData()
-                    ));
-                    if ($voter) {
-                        if ($this->_testName($voter->getName(),
-                                        $user->getFirstName())) {
-                            $user->setUsername(uniqid(mt_rand(), true));
-                            $user->setTreVoter($voter);
-                            $user->setCity($voter->getCity());
-                            $userManager->updateUser($user);
-                            $response = $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
-                            $this->_auth($user, $response);
-                            return $response;
-                        } else {
-                            $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.mismatch')));
-                        }
-                    } else {
-                        $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.notfound')));
-                    }
-                }
-            }
-        }
-        return $this->render('PROCERGSVPRCoreBundle:Registration:register.html.twig',
-                        array(
-                    'form' => $form->createView(),
-                    'tre_search_link' => $this->container->getParameter('tre_search_link')
-        ));
-    }
-
+    /**
+     * @deprecated since version 1.0
+     * @param type $val1
+     * @param type $val2
+     * @return type
+     */
     private function _testName($val1, $val2)
     {
         $a1 = explode(' ', $val1);
@@ -423,11 +351,16 @@ class DefaultController extends Controller
         return (mb_strtolower(trim($a1[0])) === mb_strtolower(trim($a2[0])));
     }
 
+    /**
+     * @deprecated since version 1.0
+     * @param type $user
+     * @param type $response
+     */
     private function _auth($user, $response)
     {
         try {
-            $loginManager = $this->container->get('fos_user.security.login_manager');
-            $firewallName = $this->container->getParameter('fos_user.firewall_name');
+            $loginManager = $this->get('fos_user.security.login_manager');
+            $firewallName = $this->getParameter('fos_user.firewall_name');
             $loginManager->loginUser($firewallName, $user, $response);
         } catch (AccountStatusException $ex) {
             // We simply do not authenticate users which do not pass the user
@@ -435,6 +368,14 @@ class DefaultController extends Controller
         }
     }
 
+    /**
+     * @deprecated since version 1.0
+     * @param type $em
+     * @param type $session
+     * @param type $voter
+     * @param type $ballotBox
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
+     */
     private function _createVote($em, $session, $voter, $ballotBox)
     {
         $vote = new Vote();
