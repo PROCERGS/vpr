@@ -31,25 +31,4 @@ $(function() {
         $("#about-lc").toggleClass("hidden");
     });
 
-
-    /*
-     * Add tooltip at register form
-     */
-    $(".register-tooltip").on({
-        focusin: function() {
-            $(".tre-search-link").fadeIn().css("display", "block");
-        },
-        focusout: function() {
-            $(".tre-search-link").fadeOut();
-        }
-    });
-
-    $('form').on('focus', 'input[type=number]', function(e) {
-        $(this).on('mousewheel.disableScroll', function(e) {
-            e.preventDefault()
-        })
-    })
-    $('form').on('blur', 'input[type=number]', function(e) {
-        $(this).off('mousewheel.disableScroll')
-    })
 });

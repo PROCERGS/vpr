@@ -28,11 +28,12 @@ framework:
 twig:
     globals:
         login_cidadao_navbar_url: %login_cidadao_navbar_url%
+        tre_search_link: %tre_search_link%
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     form:
         resources:
-            - 'PROCERGSVPRCoreBundle:Form:fields.html.twig'    
+            - 'PROCERGSVPRCoreBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:

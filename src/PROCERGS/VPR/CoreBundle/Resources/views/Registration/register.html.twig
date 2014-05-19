@@ -37,10 +37,6 @@
                         {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
-                    <a href="{{ tre_search_link }}" class="label label-primary pull-left tre-search-link" target="_blank" tabindex="-1">
-                            {% trans %}Don't know your Voter Registration?{% endtrans %}
-                            {% trans %}Click here to check it out{% endtrans %}
-                    </a>
                 </div>
                 <div class="form-group has-feedback">
                         {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}

@@ -4,8 +4,14 @@ parameters:
     procergs_person.registration.form.type.class: PROCERGS\VPR\CoreBundle\Form\Type\RegistrationFormType
     kernel.listener.logged_in_user_listener.class: PROCERGS\VPR\CoreBundle\EventListener\LoggedInUserListener
     procergs.nfgws.class: PROCERGS\VPR\CoreBundle\Helper\NfgWsHelper
+    form.type.voter_registration.class: PROCERGS\VPR\CoreBundle\Form\Type\VoterRegistrationType
 
 services:
+    form.type.voter_registration:
+        class: %form.type.voter_registration.class%
+        tags:
+            - { name: form.type, alias: voter_registration }
+
     user_provider:
         class: "%user_provider.class%"
         arguments: [ "@fos_user.user_manager", { loginCidadao: loginCidadaoId } ]
@@ -44,9 +50,8 @@ services:
             - [setRouter, ["@router"]]
             - [setSession, ["@session"]]
             - [setTrans, ["@translator"]]
-            
+
     vpr.logout.handler:
-      class: PROCERGS\VPR\CoreBundle\Security\AuthenticationHandler        
+      class: PROCERGS\VPR\CoreBundle\Security\AuthenticationHandler
       calls:
             - [setRouter, ["@router"]]
-                 

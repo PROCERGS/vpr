@@ -418,3 +418,26 @@ ul {
 .table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
   background-color: #A5D6B3;
 }
+
+/*
+ * Hide input spinners
+ */
+input[type='number'],
+input[type='tel']{
+    -moz-appearance: textfield;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+/*
+ * Voter Registration Reminder
+ */
+.tre-search-link {
+    display: none;
+    font-size: 12px;
+    margin: 5px 0;
+    line-height: 15px;
+    padding: 4px 9px;
+}

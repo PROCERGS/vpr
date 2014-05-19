@@ -68,12 +68,40 @@ function validarTitulo(inscricao) {
     }
 }
 
-$(document).on('click', 'a.link-popup', function(event) {
-    event.preventDefault();
-    var e = $(this);
-    var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
-    if (u) {
-        window.open(u, '_blank', e.attr('data-specs'));
-    }
-    return false;
+$(document).ready(function() {
+    $(document).on('click', 'a.link-popup', function(event) {
+        event.preventDefault();
+        var e = $(this);
+        var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
+        if (u) {
+            window.open(u, '_blank', e.attr('data-specs'));
+        }
+        return false;
+    });
+
+
+    /*
+     * Disable input spinner's scroll
+     */
+    $('form').on('focus', 'input[type=number]', function(e) {
+        $(this).on('mousewheel.disableScroll', function(e) {
+            e.preventDefault()
+        })
+    })
+    $('form').on('blur', 'input[type=number]', function(e) {
+        $(this).off('mousewheel.disableScroll')
+    })
+
+
+    /*
+     * Add tooltip for Voter Registration input
+     */
+    $(".voter-registration-input").on({
+        focusin: function() {
+            $(".tre-search-link").fadeIn().css("display", "block");
+        },
+        focusout: function() {
+            $(".tre-search-link").fadeOut();
+        }
+    });
 });

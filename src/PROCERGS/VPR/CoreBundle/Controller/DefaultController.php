@@ -158,7 +158,7 @@ class DefaultController extends Controller
     public function reinforceDocAction(Request $request)
     {
         $formBuilder = $this->createFormBuilder();
-        $formBuilder->add('trevoter', 'text',
+        $formBuilder->add('trevoter', 'voter_registration',
                 array(
             'required' => true,
             'max_length' => 12
@@ -273,11 +273,7 @@ class DefaultController extends Controller
             'widget' => 'choice',
             'years' => range(date('Y'), date('Y') - 70)
         ));
-        $formBuilder->add('trevoter', 'text',
-                array(
-            'required' => true,
-            'max_length' => 12
-        ));
+        $formBuilder->add('trevoter', 'voter_registration');
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         $messages = '';
