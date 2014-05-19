@@ -11,13 +11,22 @@ $(function() {
         }
     });
 
-//    var ballotHeight = $(".ballot").outerHeight(true) + 32;
     $("#btn-vote").on("click", function() {
         $("#btn-vote").button("loading");
         $("body").animate({
             scrollTop: $(".main-title").offset().top
         }, 900);
         $(".ballot").slideUp(1100, confirmation);
+    });
+
+    $("a.scrollTo").on('click', function(event) {
+        event.preventDefault();
+        var id = $(this).attr('href').replace('#', '');
+        var selector = 'a[name=' + id + ']';
+        $("body").animate({
+            scrollTop: $(selector).offset().top
+        }, 500);
+        return false;
     });
 
     function confirmation() {

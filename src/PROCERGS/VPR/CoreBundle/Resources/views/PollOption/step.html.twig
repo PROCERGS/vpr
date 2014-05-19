@@ -14,7 +14,7 @@
                     <ul class="dropdown-menu dropdown-menu-right" role="menu" id="dropdown-categories">
             {% for category,id in categoriesId %}
                         <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}">
+                            <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}" class="scrollTo">
                                 <span class="ctg-{{id}}"><i class="icon"></i>{{category}}</span>
                             </a>
                         </li>
