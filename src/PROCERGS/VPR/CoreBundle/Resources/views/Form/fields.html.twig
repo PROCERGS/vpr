@@ -11,3 +11,10 @@
         {% endif %}
     {% endspaceless %}
 {% endblock form_errors %}
+
+{% block number_widget %}
+{% spaceless %}
+    {% set type = type|default(attr['type']) %}
+    {{ block('form_widget_simple') }}
+{% endspaceless %}
+{% endblock number_widget %}
