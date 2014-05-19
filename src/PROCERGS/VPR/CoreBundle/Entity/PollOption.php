@@ -51,7 +51,7 @@ class PollOption
     /**
      * @var string
      *
-     * @ORM\Column(name="cost", type="decimal")
+     * @ORM\Column(name="cost", type="decimal", nullable=true)
      * @Groups({"vote"})
      */
     protected $cost;
