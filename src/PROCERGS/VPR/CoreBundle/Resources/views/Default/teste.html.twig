@@ -1,0 +1,36 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row temp">
+    <div class="col-md-12 text-center">
+        <h2 id="how-to-vote">{% trans %}How do I vote?{% endtrans %}</h2>
+    </div>
+</div>
+
+<div class="row temp temp-text">
+  <div class="col-md-12 text-center">
+    <h1 class="title">Votação não disponível</h1>
+    <p>Período de votação: das 07h do dia 06/08/2013 atá as 23:59 do dia 07/08/2013</p>
+  </div>
+</div>
+
+<div class="row info-box temp">
+    <div class="col-md-12 col-ballot text-center">
+        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix">
+            <span class="text">{% trans %}Check the ballot for your region{% endtrans %}</span>
+        </a>
+    </div>
+    <div class="col-md-12 text-center">
+        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix">
+            <span class="text">{% trans %}Check the polling places{% endtrans %}</span>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets 'bundles/procergsvprcore/css/register/register.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+  {% endstylesheets %}
+{% endblock %}

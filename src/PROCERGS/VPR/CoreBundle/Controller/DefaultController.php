@@ -44,7 +44,7 @@ class DefaultController extends Controller
                 return $this->redirect($this->generateUrl('procergsvpr_core_ask_voter_registration'));
             }
             if (! $vote->getNfgCpf()) {
-                try {                
+                try {
                     $ball = $vote->getBallotBox();
                     $votingSession->checkExistingVotes($person, $ball);
                     $votingSession->flush();
@@ -55,7 +55,7 @@ class DefaultController extends Controller
                     return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));
                 }
             } else {
-                return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));                
+                return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));
             }
         }
 
@@ -207,7 +207,7 @@ class DefaultController extends Controller
         $session->set('vote', null);
         return $this->render('PROCERGSVPRCoreBundle:Default:end.html.twig');
     }
-    
+
     public function endOfferAction(Request $request)
     {
         $r = $request->get('code');
@@ -344,9 +344,10 @@ class DefaultController extends Controller
 
     public function registerAction(Request $request)
     {
+
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $request->getSession();
-        
+
         // get the error if any (works with forward and redirect -- see below)
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
@@ -356,12 +357,12 @@ class DefaultController extends Controller
         } else {
             $error = '';
         }
-        
+
         if ($error) {
             $session->getFlashBag()->add('danger', $this->get('translator')->trans($error->getMessage()));
         }
-        
-        
+
+
         $userManager = $this->container->get('fos_user.user_manager');
         $formFactory = $this->container->get('fos_user.registration.form.factory');
 
