@@ -2,106 +2,106 @@
  * Register/Login section
  */
 
-#how-to-vote {
-    color: #D2750E;
-    display: inline-block;
-    margin: 20px;
-    position: relative;
+ #how-to-vote {
+  color: #D2750E;
+  display: inline-block;
+  margin: 20px;
+  position: relative;
 }
 
 #how-to-vote:before {
-    background: url('../../images/icon-set.png') -12px -6px no-repeat;
-    content: "";
-    display: block;
-    height: 21px;
-    left: -30px;
-    position: absolute;
-    top: 2px;
-    width: 20px;
+  background: url('../../images/icon-set.png') -12px -6px no-repeat;
+  content: "";
+  display: block;
+  height: 21px;
+  left: -30px;
+  position: absolute;
+  top: 2px;
+  width: 20px;
 }
 
 .register-box {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .register-box .col-md-5,
 .info-box .col-md-5 {
-    margin: 0;
-    padding: 20px;
+  margin: 0;
+  padding: 20px;
 }
 
 .register-box .col-md-5,
 .info-box .col-ballot {
-    border-bottom: solid 1px #CCC;
+  border-bottom: solid 1px #CCC;
 }
 
 .register-box .title {
-    color: #D2750E;
-    cursor: pointer;
-    margin: 0;
-    padding-left: 50px;
-    position: relative;
-    text-align: left;
+  color: #D2750E;
+  cursor: pointer;
+  margin: 0;
+  padding-left: 50px;
+  position: relative;
+  text-align: left;
 }
 
 .register-box .spacer {
-    border: none;
-    border-right: solid 2px #D2750E;
-    height: 300px;
-    margin-bottom: 50px;
-    width: 1px;
+  border: none;
+  border-right: solid 2px #D2750E;
+  height: 300px;
+  margin-bottom: 50px;
+  width: 1px;
 }
 
 .register-form-container {
-    max-height: 0;
-    overflow: hidden;
-    position: relative;
-    -webkit-transition: 1s ease-in-out;
-    -moz-transition: 1s ease-in-out;
-    -o-transition: 1s ease-in-out;
-    transition: 1s ease-in-out;
+  max-height: 0;
+  overflow: hidden;
+  position: relative;
+  -webkit-transition: 1s ease-in-out;
+  -moz-transition: 1s ease-in-out;
+  -o-transition: 1s ease-in-out;
+  transition: 1s ease-in-out;
 }
 
 .register-form-container.animate {
-    max-height: 1000px;
+  max-height: 1000px;
 }
 
 .register-form {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .register-form .tre-search-link {
-    display: none;
-    font-size: 12px;
-    margin: 5px 0;
-    line-height: 15px;
-    padding: 4px 9px;
+  display: none;
+  font-size: 12px;
+  margin: 5px 0;
+  line-height: 15px;
+  padding: 4px 9px;
 }
 
 .register-form .btn-success {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .register-box #about-lc-link {
-    margin: 20px 0;
+  margin: 20px 0;
 }
 
 .info-box {
-    font-size: 24px;
-    margin-bottom: 50px;
+  font-size: 24px;
+  margin-bottom: 50px;
 }
 
 .link-check {
-    display: block;
-    color: #007136;
-    font-size: 20px;
-    padding-left: 50px;
-    position: relative;
-    text-align: left;
+  display: block;
+  color: #007136;
+  font-size: 20px;
+  padding-left: 50px;
+  position: relative;
+  text-align: left;
 }
 
 .link-check .text {
-    position: relative;
+  position: relative;
 }
 
 /* ==========================================================================
@@ -144,60 +144,60 @@
 /*
  * Small devices
  */
-@media (max-width: 767px)  {
+ @media (max-width: 767px)  {
 
-    #how-to-vote {
-        font-size: 20px;
-    }
+  #how-to-vote {
+    font-size: 20px;
+  }
 
-    .register-box .title .text {
-        display: inline-block;
-        font-size: 20px;
-        position: relative;
-    }
+  .register-box .title .text {
+    display: inline-block;
+    font-size: 20px;
+    position: relative;
+  }
 
-    .register-box .title .text:before {
-        background-image: url('../../images/icon-set.png');
-        content: "";
-        display: block;
-        left: -45px;
-        position: absolute;
-    }
+  .register-box .title .text:before {
+    background-image: url('../../images/icon-set.png');
+    content: "";
+    display: block;
+    left: -45px;
+    position: absolute;
+  }
 
-    .register-label .text:before {
-        background-position:  -7px -50px;
-        height: 38px;
-        top: -10px;
-        width: 29px;
-    }
+  .register-label .text:before {
+    background-position:  -7px -50px;
+    height: 38px;
+    top: -10px;
+    width: 29px;
+  }
 
-    .login-label .text:before {
-        background-position:  -7px -126px;
-        height: 25px;
-        top: 0;
-        width: 30px;
-    }
+  .login-label .text:before {
+    background-position:  -7px -126px;
+    height: 25px;
+    top: 0;
+    width: 30px;
+  }
 
-    .link-check .text:before {
-        background-image: url('../../images/icon-set.png');
-        content: "";
-        display: block;
-        position: absolute;
-    }
+  .link-check .text:before {
+    background-image: url('../../images/icon-set.png');
+    content: "";
+    display: block;
+    position: absolute;
+  }
 
-    .ballot-check .text:before {
-        background-position: -7px -193px;
-        height: 35px;
-        left: -43px;
-        width: 26px;
-    }
+  .ballot-check .text:before {
+    background-position: -7px -193px;
+    height: 35px;
+    left: -43px;
+    width: 26px;
+  }
 
-    .place-check .text:before {
-        background-position: 0 -259px;
-        height: 35px;
-        left: -50px;
-        width: 38px;
-    }
+  .place-check .text:before {
+    background-position: 0 -259px;
+    height: 35px;
+    left: -50px;
+    width: 38px;
+  }
 
 }
 
@@ -205,10 +205,10 @@
 /*
  * Medium devices
  */
-@media (min-width: 768px) and (max-width: 991px) {
-    .info-box .col-ballot {
-        margin-bottom: 100px;
-    }
+ @media (min-width: 768px) and (max-width: 991px) {
+  .info-box .col-ballot {
+    margin-bottom: 100px;
+  }
 
   .temp .col-ballot {
     margin-bottom: 20px;
@@ -219,85 +219,87 @@
 /*
  * Large devices
  */
-@media (min-width: 768px) {
+ @media (min-width: 768px) {
 
-    #how-to-vote {
-        color: #007136;
-    }
+  #how-to-vote {
+    color: #007136;
+  }
 
-    #how-to-vote:before {
-        background: url('../../images/icon-set-desktop.png') -19px -153px no-repeat;
-        height: 41px;
-        left: -60px;
+  #how-to-vote:before {
+    background: url('../../images/icon-set-desktop.png') -19px -153px no-repeat;
+    height: 41px;
+    left: -60px;
     margin-top: -20px;
     top: 50%;
-        width: 39px;
-    }
+    width: 39px;
+  }
 
-    .register-box {
-        margin-bottom: 30px;
-        margin-top: 30px;
-    }
 
-    .register-form-container {
-        max-height: none;
-        overflow: visible;
-    }
+  .register-box {
+    margin-bottom: 30px;
+    margin-top: 70px;
+  }
 
-    .register-box .col-md-5, .info-box .col-ballot {
-        border-bottom: none;
-    }
 
-    .register-box .title {
-        cursor: default;
-        margin-bottom: 30px;
-        padding-left: 0;
-        text-align: center;
-    }
+  .register-form-container {
+    max-height: none;
+    overflow: visible;
+  }
 
-    .register-form {
-        margin-top: 0;
-    }
+  .register-box .col-md-5, .info-box .col-ballot {
+    border-bottom: none;
+  }
 
-    .info-box {
-        margin-bottom: 100px;
-    }
+  .register-box .title {
+    cursor: default;
+    margin-bottom: 30px;
+    padding-left: 0;
+    text-align: center;
+  }
 
-    .info-box .col-md-5 {
-        padding: 0;
-    }
+  .register-form {
+    margin-top: 0;
+  }
+
+  .info-box {
+    margin-bottom: 100px;
+  }
+
+  .info-box .col-md-5 {
+    padding: 0;
+  }
 
 
   .info-box .col-md-12 {
     padding: 20px;
   }
 
-    .link-check {
-        padding-left: 0;
-        text-align: center;
-    }
+  .link-check {
+    padding-left: 0;
+    text-align: center;
+  }
 
-    .link-check .text:before {
-        background-image: url('../../images/icon-set-desktop.png');
-        content: "";
-        display: block;
-        position: absolute;
-    }
+  .link-check .text:before {
+    background-image: url('../../images/icon-set-desktop.png');
+    content: "";
+    display: block;
+    position: absolute;
+  }
 
-    .ballot-check .text:before {
-        background-position: -12px -76px;
-        height: 72px;
-        left: -70px;
-        top: -15px;
-        width: 54px;
-    }
+  .ballot-check .text:before {
+    background-position: -12px -76px;
+    height: 72px;
+    left: -70px;
+    top: -15px;
+    width: 54px;
+  }
 
-    .place-check .text:before {
-        background-position: 0 -1px;
-        height: 72px;
-        left: -92px;
-        top: -25px;
-        width: 77px;
+  .place-check .text:before {
+    background-position: 0 -1px;
+    height: 72px;
+    left: -92px;
+    top: -25px;
+    width: 77px;
   }
 
 
@@ -326,18 +328,18 @@
 
   .temp.temp-text {
     margin: 20px 0 60px;
-    }
+  }
 
 }
 
 /*
  * Hide input spinners
  */
-input[type='number'],
-input[type='tel']{
-    -moz-appearance: textfield;
+ input[type='number'],
+ input[type='tel']{
+  -moz-appearance: textfield;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }

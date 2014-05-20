@@ -2,9 +2,11 @@
 
 {% block header %}
 <header class="text-center">
-  {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
+  <a href="{{ path('procergsvpr_core_homepage') }}">
+    {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
     <img src="{{ asset_url }}" alt="{%trans%}Priorities Voting{%endtrans%}" class="img-responsive">
-  {% endimage %}
+    {% endimage %}
+  </a>
 </header>
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
