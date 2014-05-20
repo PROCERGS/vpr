@@ -16,9 +16,7 @@ class CategoryType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('sorting','number',array(
-                'attr'=>array('pattern'=>'[0-9]*')
-            ))
+            ->add('sorting','integer')
         ;
     }
 

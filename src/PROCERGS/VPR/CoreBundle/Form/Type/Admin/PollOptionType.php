@@ -25,9 +25,7 @@ class PollOptionType extends AbstractType
                 'divisor' => 100,
                 'required' => false
             ))
-            ->add('categorySorting','number',array(
-                'attr'=>array('pattern'=>'[0-9]*')
-            ))
+            ->add('categorySorting','integer')
             ->add('corede', 'entity', array(
                 'class' => 'PROCERGSVPRCoreBundle:Corede',
                 'query_builder' => function(EntityRepository $er) {

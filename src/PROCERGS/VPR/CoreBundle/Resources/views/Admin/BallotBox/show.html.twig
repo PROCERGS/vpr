@@ -117,8 +117,9 @@
     </form>
 
     <div class="form-group form-actions">
-        <div class="col-lg-10 col-lg-offset-2">            
-            <a href="{{ path('admin_ballotbox_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">{{ 'admin.edit'|trans }}</a>
+        <div class="col-lg-10 col-lg-offset-2">
+            <a class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_new') }}" role="button"><span class="glyphicon glyphicon-file"></span> {%trans%}admin.add{%endtrans%}</a>
+            <a href="{{ path('admin_ballotbox_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary group-action">{{ 'admin.edit'|trans }}</a>
 
             {{ form_start(delete_form) }}
             {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}

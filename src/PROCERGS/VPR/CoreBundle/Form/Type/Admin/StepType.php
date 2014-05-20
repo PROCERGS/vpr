@@ -16,12 +16,8 @@ class StepType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('sorting','number',array(
-                'attr'=>array('pattern'=>'[0-9]*')
-            ))
-            ->add('maxSelection','number',array(
-                'attr'=>array('pattern'=>'[0-9]*')
-            ))
+            ->add('sorting','integer')
+            ->add('maxSelection','integer')
             ->add('poll', 'entity', array(
                 'class' => 'PROCERGSVPRCoreBundle:Poll',
                 'property' => 'name',

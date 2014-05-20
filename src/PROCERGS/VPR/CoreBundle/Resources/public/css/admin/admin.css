@@ -27,7 +27,7 @@
     padding: 11px 0;
     min-height:52px;
 }
-.form-actions div a:first-child, .form-actions div button:first-child {
+.form-actions div a:first-child, .form-actions div button:first-child, .form-actions a.group-action {
     float: left;
     margin-right: 10px;
 }

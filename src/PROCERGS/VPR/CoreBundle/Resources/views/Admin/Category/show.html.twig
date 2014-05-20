@@ -41,7 +41,8 @@
             
     <div class="form-group form-actions">
         <div class="col-lg-10 col-lg-offset-2">
-            <a href="{{ path('admin_category_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary">{% trans%}admin.edit{% endtrans %}</a>
+            <a class="btn btn-default btn-sm" href="{{ path('admin_category_new') }}" role="button"><span class="glyphicon glyphicon-file"></span> {%trans%}admin.add{%endtrans%}</a>
+            <a href="{{ path('admin_category_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary group-action">{% trans%}admin.edit{% endtrans %}</a>
 
             {{ form_start(delete_form) }}
             {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
