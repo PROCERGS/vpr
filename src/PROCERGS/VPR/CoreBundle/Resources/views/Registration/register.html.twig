@@ -4,20 +4,34 @@
 {% trans_default_domain 'messages' %}
 
 <div class="row">
-            {% for type, messages in app.session.flashbag.all() %}
-                {% for message in messages %}
+  {% for type, messages in app.session.flashbag.all() %}
+    {% for message in messages %}
     <div class="col-md-12">
-        <div class="text-center alert alert-{{ type }}">
-                        {{ message }}
-        </div>
+      <div class="text-center alert alert-{{ type }}">
+        {{ message }}
+      </div>
     </div>
-                {% endfor %}
-            {% endfor %}
+    {% endfor %}
+  {% endfor %}
 </div>
 
 <div class="row">
     <div class="col-md-12 text-center">
         <h2 id="how-to-vote">{% trans %}How do I vote?{% endtrans %}</h2>
+        <div id="how-to-vote-text">
+          <ul>
+            <li>Utilizando o título de eleitor</li>
+            <li>Utilizando o título de eleitor</li>
+            <li>Utilizando o título de eleitor</li>
+            <li>Utilizando o título de eleitor</li>
+          </ul>
+          <h5>Utilizando o titulo de eleito</h5>
+          <p class="text-left">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          </p>
+        </div>
     </div>
 </div>
 

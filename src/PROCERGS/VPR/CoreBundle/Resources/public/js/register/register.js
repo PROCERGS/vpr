@@ -1,6 +1,15 @@
 /*global $:false */
 $(function() {
     "use strict";
+
+    /*
+     * Show 'how to vote' text
+     */
+    $("#how-to-vote").on("click", function() {
+      $("#how-to-vote-text").slideToggle();
+    });
+
+
     /*
      * Mobile behavior to register form
      */
