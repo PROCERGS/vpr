@@ -146,7 +146,8 @@
   }
 
   .ballot-nav .btn-group {
-    float: right;
+    float: left;
+    margin-left: -10px;
     margin-top: 5px;
     position: static;
   }
@@ -155,7 +156,7 @@
     background: none;
     color: #f0731f;
     font-weight: bold;
-    margin-right: -15px;
+    padding-left: 0;
   }
 
   .btn-group.open #btn-categories,
@@ -185,12 +186,16 @@
     height: 0;
     margin-left: -4px;
     position: absolute;
-    right: 48px;
+    left: 55px;
     top: -8px;
     width: 0;
   }
 
   @media (min-width: 768px) {
+
+    .ballot-nav .btn-group {
+      margin-left: 0;
+    }
 
     #dropdown-categories {
       width: auto;
@@ -287,9 +292,14 @@
 
   .ballot .step-category .title {
     color: #FFF;
+    cursor: default;
     display: inline-block;
     line-height: normal;
     padding-top: 5px;
+  }
+
+  .ballot .step-category .title:hover {
+    text-decoration: none;
   }
 
 /* ==========================================================================

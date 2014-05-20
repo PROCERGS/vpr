@@ -7,11 +7,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <span class="pull-left">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</span>
+                {# <span class="pull-left">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</span> #}
 
                 <div class="btn-group">
                     <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" id="dropdown-categories">
+                    <ul class="dropdown-menu" role="menu" id="dropdown-categories">
             {% for category,id in categoriesId %}
                         <li role="presentation">
                             <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}" class="scrollTo">
@@ -51,6 +51,7 @@
 <div class="row">
     <div class="col-md-12">
         <h2 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h2>
+        <p class="alert alert-info">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
         <div class="alert alert-danger confirm-message" style="display:none">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</div>
 
         <div class="inner-content">
@@ -82,7 +83,7 @@
                                     - {{ 'Valor: R$'|trans }} {{ option.cost|number_format(2, ',', '.') }}
                                     {% endif %}
                                     </label>
-                                    {% if option.description %}<span class="desc-toggle"></span>{% endif %}
+                                    {% if option.description %}<span class="desc-toggle" title="{{ 'Description' | trans }}"></span>{% endif %}
                                 </div>
                                 {% if option.description %}<div class="desc">{{ option.description }}</div>{% endif %}
                             </dd>
