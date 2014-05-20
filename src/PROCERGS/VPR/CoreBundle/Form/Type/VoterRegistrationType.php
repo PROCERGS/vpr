@@ -3,11 +3,11 @@
 namespace PROCERGS\VPR\CoreBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class VoterRegistrationType extends NumberType
+class VoterRegistrationType extends TextType
 {
 
     public function getParent()
@@ -31,7 +31,6 @@ class VoterRegistrationType extends NumberType
         $resolver->setDefaults(array(
             'max_length' => 12,
             'attr' => array(
-                'type' => 'number',
                 'pattern' => '[0-9]*'
             )
         ));
