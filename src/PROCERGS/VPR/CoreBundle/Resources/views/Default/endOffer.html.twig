@@ -2,20 +2,18 @@
 
 {% block body %}
 <div class="row">
-    <div class="col-md-12">
-        <h3>{{ 'Thank you for voting'|trans }}</h3>
-        <div class="alert alert-success">{% trans %}Thank you for your collaboration on this process, your participation was very important!{% endtrans %}</div>
-    </div>
+  <div class="col-md-12">
+    <h3>{{ 'Thank you for voting'|trans }}</h3>
+    <div class="alert alert-success">{% trans %}Thank you for your collaboration on this process, your participation was very important!{% endtrans %}</div>
+  </div>
 
-    <div class="col-md-12">
-        <div class="jumbotron">
-            <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!{% endtrans %}</p>
-            <p><a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a></p>
-            <p>{% trans %}Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul's services.{% endtrans %}</p>
-            <p><a id="btn-popup-lc" class="btn btn-primary link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'Register Here'|trans }}</a></p>
-            <p>{% trans %}World Bank wants to know your opinion! Click below to answer the Survey.{% endtrans %}</p>
-            <p><a id="btn-popup-sm" class="btn btn-primary link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a></p>
-        </div>
-    </div>
+  <div class="col-md-12">
+    <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!{% endtrans %}</p>
+    <p><a id="btn-popup-nfg" class="btn btn-success btn-lg link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a></p>
+    <p>{% trans %}Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul's services.{% endtrans %}</p>
+    <p><a id="btn-popup-lc" class="btn btn-success btn-lg link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'Register Here'|trans }}</a></p>
+    <p>{% trans %}World Bank wants to know your opinion! Click below to answer the Survey.{% endtrans %}</p>
+    <p><a id="btn-popup-sm" class="btn btn-success btn-lg link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a></p>
+  </div>
 </div>
 {% endblock %}
