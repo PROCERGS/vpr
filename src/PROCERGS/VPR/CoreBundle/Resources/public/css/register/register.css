@@ -60,6 +60,15 @@
   text-align: left;
 }
 
+.register-box .title .link {
+  cursor: pointer;
+  color: #D2750E;
+}
+
+.register-box .title .link:hover {
+  text-decoration: none;
+}
+
 .register-box .spacer {
   border: none;
   border-right: solid 2px #D2750E;
@@ -165,52 +174,60 @@
     font-size: 20px;
   }
 
-  .register-box .title .text {
-    display: inline-block;
+  .register-box .title {
+    color: #007136;
     font-size: 20px;
-    position: relative;
+    font-weight: normal;
   }
 
-  .register-box .title .text:before {
+  .register-box .title .link {
+    color: #007136;
+  }
+
+  .register-box .title:before {
     background-image: url('../../images/icon-set.png');
     content: "";
     display: block;
-    left: -45px;
+    left: 0;
     position: absolute;
+    top: 50%;
   }
 
-  .register-label .text:before {
+  .register-box .register-label:before {
     background-position:  -7px -50px;
     height: 38px;
-    top: -10px;
+    margin-top: -19px;
     width: 29px;
   }
 
-  .login-label .text:before {
+  .register-box .login-label:before {
     background-position:  -7px -126px;
     height: 25px;
-    top: 0;
+    margin-top: -12px;
     width: 30px;
   }
 
-  .link-check .text:before {
+  .info-box .link-check:before {
     background-image: url('../../images/icon-set.png');
     content: "";
     display: block;
+    left: 0;
+    top: 50%;
     position: absolute;
   }
 
-  .ballot-check .text:before {
+  .info-box .ballot-check:before {
     background-position: -7px -193px;
     height: 35px;
-    left: -43px;
+    margin-top: -19px;
     width: 26px;
   }
 
-  .place-check .text:before {
+  .info-box .place-check:before {
     background-position: 0 -259px;
     height: 35px;
-    left: -50px;
+    left: -6px;
+    margin-top: -19px;
     width: 38px;
   }
 
