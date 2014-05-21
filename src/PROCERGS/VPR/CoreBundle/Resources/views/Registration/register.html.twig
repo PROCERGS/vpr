@@ -37,12 +37,7 @@
 
 <div class="row register-box">
     <div class="col-md-5">
-        <h3 class="title register-label clearfix">
-            {# span.text inside a h3? This makes absolutely NO SENSE. Somebody fix this! #}
-            <span class="text">
-                {% trans %}Vote with your Voter Registration{% endtrans %}
-            </span>
-        </h3>
+        <h3 class="title register-label clearfix">{% trans %}Vote with your Voter Registration{% endtrans %}</h3>
 
         <div class="register-form-container">
             {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
@@ -73,11 +68,8 @@
     </div>
     <div class="col-md-2 hidden-xs hidden-sm"><hr class="spacer"></div>
     <div class="col-md-5">
-        <h3 class="title login-label clearfix">
-            {# span.text inside a h3? This makes absolutely NO SENSE. Somebody fix this! #}
-            <span class="text">{% trans %}Vote with your Citizen Login{% endtrans %}</span>
-        </h3>
         {% for owner in hwi_oauth_resource_owners() %}
+        <h3 class="title login-label clearfix"><a href="{{ hwi_oauth_login_url(owner) }}" class="link">{% trans %}Vote with your Citizen Login{% endtrans %}</a></h3>
         <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">
             {% trans %}Vote with your Citizen Login{% endtrans %}
         </a>
@@ -85,7 +77,7 @@
         <div class="text-right hidden-xs" id="about-lc-link">
             <a href="" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
         </div>
-        <div class="alert alert-success" id="about-lc">
+        <div class="alert alert-success hidden-xs" id="about-lc">
             <p>Texto sobre o login cidadão</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
@@ -98,15 +90,11 @@
 
 <div class="row info-box">
     <div class="col-md-5 col-ballot text-center">
-        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix">
-            <span class="text">{% trans %}Check the ballot for your region{% endtrans %}</span>
-        </a>
+        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix">{% trans %}Check the ballot for your region{% endtrans %}</a>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5 text-center">
-        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix">
-            <span class="text">{% trans %}Check the polling places{% endtrans %}</span>
-        </a>
+        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix">{% trans %}Check the polling places{% endtrans %}</a>
     </div>
 </div>
 {% endblock %}
