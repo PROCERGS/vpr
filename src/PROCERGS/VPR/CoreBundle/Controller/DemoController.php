@@ -3,11 +3,13 @@
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\Serializer\SerializationContext;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
+use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
 
 class DemoController extends Controller
 {
@@ -96,35 +98,59 @@ class DemoController extends Controller
         $privateKeyFile = $this->container->getParameter('privateKeyFile');
         $privatePollKey = openssl_pkey_get_private($privateKeyFile);
 
-        $openVote = $serializer->deserialize($serializedVote, 'PROCERGS\VPR\CoreBundle\Entity\Vote', 'json');
+        $openVote = $serializer->deserialize($serializedVote,
+                'PROCERGS\VPR\CoreBundle\Entity\Vote', 'json');
         $openVote->openVote($privatePollKey);
 
-        $openOptions = $serializer->deserialize($openVote->getPlainOptions(), 'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\PollOption>', 'json');
+        $openOptions = $serializer->deserialize($openVote->getPlainOptions(),
+                'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\PollOption>',
+                'json');
 
         return compact('poll', 'options', 'serializedOptions', 'signature',
                 'serializedVote', 'vote', 'openVote', 'openOptions');
     }
 
     /**
-     * @Route("/long-polling")
+     * @Route("/long-polling", defaults={"_format" = "json"})
      * @Template()
      */
     public function longPollingAction()
     {
-        $user = $this->getUser();
-        $accessToken = $user->getLoginCidadaoAccessToken();
+        $accessToken = $this->getUser()->getLoginCidadaoAccessToken();
         $url = $this->container->getParameter('login_cidadao_base_url');
-        $url .= "/api/v1/person/voter-registration?access_token=$accessToken";
-        do {
-            $response = file_get_contents($url);
-            $person = json_decode($response);
-            $voterRegistration = $person->voter_registration;
-            if (strlen($voterRegistration) > 0) {
-                die($voterRegistration);
-            } else {
-                sleep(1);
+        $url .= "/api/v1/wait/person/voter-registration?access_token=$accessToken";
+
+        $person = $this->runTimeLimited(function() use ($url) {
+            try {
+                $response = @file_get_contents($url);
+                $receivedPerson = json_decode($response);
+                return ($response !== false && $receivedPerson) ? $receivedPerson : false;
+            } catch (\Exception $e) {
+                return false;
             }
-        } while (true);
+        });
+
+        $response = new JsonResponse();
+        return $response->setData(json_decode($person));
+    }
+
+    private function runTimeLimited($callback, $waitTime = 1)
+    {
+        $limit = ini_get('max_execution_time') - 2;
+        $startTime = time();
+        while ($limit > 0) {
+            $result = call_user_func($callback);
+            $delta = time() - $startTime;
+
+            if ($result !== false) {
+                return $result;
+            } else {
+                $limit -= $delta;
+                $startTime = time();
+                sleep($waitTime);
+            }
+        }
+        throw new RequestTimeoutException();
     }
 
 }
