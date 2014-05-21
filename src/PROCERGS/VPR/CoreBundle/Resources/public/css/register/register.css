@@ -315,22 +315,21 @@
     background-image: url('../../images/icon-set-desktop.png');
     content: "";
     display: block;
+    height: 72px;
+    margin-top: -36px;
     position: absolute;
+    top: 50%;
   }
 
   .ballot-check .text:before {
     background-position: -12px -76px;
-    height: 72px;
     left: -70px;
-    top: -15px;
     width: 54px;
   }
 
   .place-check .text:before {
     background-position: 0 -1px;
-    height: 72px;
     left: -92px;
-    top: -25px;
     width: 77px;
   }
 
