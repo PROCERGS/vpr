@@ -105,4 +105,26 @@ class DemoController extends Controller
                 'serializedVote', 'vote', 'openVote', 'openOptions');
     }
 
+    /**
+     * @Route("/long-polling")
+     * @Template()
+     */
+    public function longPollingAction()
+    {
+        $user = $this->getUser();
+        $accessToken = $user->getLoginCidadaoAccessToken();
+        $url = $this->container->getParameter('login_cidadao_base_url');
+        $url .= "/api/v1/person/voter-registration?access_token=$accessToken";
+        do {
+            $response = file_get_contents($url);
+            $person = json_decode($response);
+            $voterRegistration = $person->voter_registration;
+            if (strlen($voterRegistration) > 0) {
+                die($voterRegistration);
+            } else {
+                sleep(1);
+            }
+        } while (true);
+    }
+
 }
