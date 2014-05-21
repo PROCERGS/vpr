@@ -90,11 +90,11 @@
 
 <div class="row info-box">
     <div class="col-md-5 col-ballot text-center">
-        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix">{% trans %}Check the ballot for your region{% endtrans %}</a>
+        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix"><span class="text">{% trans %}Check the ballot for your region{% endtrans %}</span></a>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-5 text-center">
-        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix">{% trans %}Check the polling places{% endtrans %}</a>
+        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix"><span class="text">{% trans %}Check the polling places{% endtrans %}</span></a>
     </div>
 </div>
 {% endblock %}
