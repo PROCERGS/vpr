@@ -156,4 +156,5 @@ PROCERGS: PROCERGS
 'Terms of Use': 'Termos de Uso'
 '{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '__{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'
 Description: Descrição
+posvote.validate.click: 'Validar'
 end.offer.lc.register.click: 'Acesse sua conta do login cidadão aqui!'
