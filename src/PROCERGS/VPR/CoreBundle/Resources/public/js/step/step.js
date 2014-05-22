@@ -18,6 +18,10 @@ $(function() {
 
     $("#btn-vote").on("click", function() {
         $("#btn-vote").button("loading");
+
+        $("#max-selection").fadeOut();
+        $(".confirm-message").fadeIn();
+
         $("html, body").animate({
             scrollTop: $(".main-title").offset().top
         }, 900);
@@ -39,7 +43,6 @@ $(function() {
     });
 
     function confirmation() {
-        $(".confirm-message").fadeIn();
         $(".confirmation-buttons").show();
 
         $(".ballot input").not(":checked").closest(".option").addClass("hidden");
@@ -58,6 +61,7 @@ $(function() {
     }
 
     $("#btn-rectify").on("click", function() {
+        $("#max-selection").fadeIn();
         $(".ballot").slideUp(500, function() {
             $("#vote-empty").addClass("hidden");
             $(".ballot .option, .step-category").removeClass("hidden");
