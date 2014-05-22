@@ -92,6 +92,17 @@
     $(document).ready(function() {
         $.getScript('{{login_cidadao_navbar_url}}', function() {
             citizenLogin.navbar.init();
+{% if app.user is null %}
+            if (citizenLogin.loggedIn === true) {
+                var authUrl = '{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}';
+                document.location = authUrl;
+            }
+{% else %}
+            if (citizenLogin.loggedIn !== true) {
+                var logoutUrl = '{{ path('fos_user_security_logout') }}';
+                document.location = logoutUrl;
+            }
+{% endif %}
         });
     });
 </script>
