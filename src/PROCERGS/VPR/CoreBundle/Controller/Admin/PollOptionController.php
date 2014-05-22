@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\PollOption;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionType;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
 
 /**
  * PollOption controller.
@@ -31,37 +32,7 @@ class PollOptionController extends Controller
         $session = $this->getRequest()->getSession();
         
         $poll_filters = $session->get('poll_filters');
-
-        $polls = $em->createQueryBuilder()
-            ->select('p')
-            ->from('PROCERGSVPRCoreBundle:Poll', 'p')
-            ->orderBy('p.openingTime','DESC')
-            ->getQuery()
-            ->getResult();
-        
-        $coredes = $em->createQueryBuilder()
-            ->select('c')
-            ->from('PROCERGSVPRCoreBundle:Corede', 'c')
-            ->orderBy('c.name','ASC')
-            ->getQuery()
-            ->getResult();
-
-        $form = $this->createFormBuilder()
-            ->add('poll', 'entity', array(
-                'class' => 'PROCERGSVPRCoreBundle:Poll',
-                'choices' => $polls,
-                'empty_value' => 'Selecione',
-                'property' => 'name',
-                'required' => true
-            ))
-            ->add('corede', 'entity', array(
-                'class' => 'PROCERGSVPRCoreBundle:Corede',
-                'choices' => $coredes,
-                'empty_value' => 'Selecione',
-                'property' => 'name',
-                'required' => true
-            ))
-            ->getForm();
+        $form = $this->createForm(new PollOptionFilterType());
 
         $entities = array();
         if ($request->isMethod('POST') || $poll_filters) {
