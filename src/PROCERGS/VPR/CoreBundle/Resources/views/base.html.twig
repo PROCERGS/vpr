@@ -90,7 +90,7 @@
 <![endif]-->
 <script>
     $(document).ready(function() {
-        $.getScript('{{login_cidadao_navbar_url}}', function() {
+        $.getScript('{{ login_cidadao_navbar_url }}?app_id={{ login_cidadao_app_id }}', function() {
             citizenLogin.navbar.init();
 {% if app.user is null %}
             if (citizenLogin.loggedIn === true) {
