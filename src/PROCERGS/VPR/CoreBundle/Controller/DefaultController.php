@@ -35,11 +35,7 @@ class DefaultController extends Controller
         } catch (VotingTimeoutException $e) {
             return $this->redirect($this->generateUrl('procergsvpr_core_voting_timeout'));
         } catch (VoterRegistrationAlreadyVotedException $e) {
-            if ($badges = $person->getBadges() && $badges['nfg_access_lvl']) {
-                return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
-            } else {
-                return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
-            }
+            return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
         } catch (VoterAlreadyVotedException $e) {
             return $this->redirect($this->generateUrl('fos_user_security_logout'));
         }

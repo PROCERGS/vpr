@@ -53,7 +53,7 @@ class TREVoter
     protected $city;
 
     
-    public function __construct($id)
+    public function __construct(&$id = null)
     {
         $this->setId($id);
     }
