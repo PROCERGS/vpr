@@ -143,8 +143,7 @@ admin.select_a_poll: 'Selecione uma Votação'
 admin.clear_filters: 'Limpar filtros'
 admin.add_poll_option: 'Adicionar opção'
 lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
-lc.first_name: Nome
-lc.surname: Sobrenome
+lc.full_name: Nome Completo
 'Polling places in your city.': '__Polling places in your city.'
 end.offer.lc.register.click: __end.offer.lc.register.click
 Categories: Categorias
@@ -157,3 +156,4 @@ PROCERGS: PROCERGS
 'Terms of Use': 'Termos de Uso'
 '{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '__{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'
 Description: Descrição
+end.offer.lc.register.click: 'Acesse sua conta do login cidadão aqui!'

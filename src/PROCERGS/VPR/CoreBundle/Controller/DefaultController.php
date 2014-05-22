@@ -16,6 +16,8 @@ use PROCERGS\VPR\CoreBundle\Exception\VotingTimeoutException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterAlreadyVotedException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationAlreadyVotedException;
 use Symfony\Component\Security\Core\SecurityContext;
+use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
+use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
 
 class DefaultController extends Controller
 {
@@ -33,7 +35,11 @@ class DefaultController extends Controller
         } catch (VotingTimeoutException $e) {
             return $this->redirect($this->generateUrl('procergsvpr_core_voting_timeout'));
         } catch (VoterRegistrationAlreadyVotedException $e) {
-            return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
+            if ($badges = $person->getBadges() && $badges['nfg_access_lvl']) {
+                return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
+            } else {
+                return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
+            }
         } catch (VoterAlreadyVotedException $e) {
             return $this->redirect($this->generateUrl('fos_user_security_logout'));
         }
@@ -160,8 +166,7 @@ class DefaultController extends Controller
         $formBuilder = $this->createFormBuilder();
         $formBuilder->add('trevoter', 'voter_registration',
                 array(
-            'required' => true,
-            'max_length' => 12
+            'required' => true
         ));
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
@@ -172,26 +177,20 @@ class DefaultController extends Controller
             if (!$vote || $vote->getLastStep()) {
                 return $this->indexAction();
             }
-            $voter = $this->get('security.context')->getToken()->getUser();
-
-            $em = $this->getDoctrine()->getManager();
-            $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
-            $voter1 = $treRepo->findOneBy(array(
-                'id' => $form->get('trevoter')->getData()
-            ));
-            if ($voter1) {
-                if ($this->_testName($voter1->getName(), $voter->getFirstName())) {
-                    $vote = $em->merge($vote);
-                    $vote->setVoterRegistration($form->get('trevoter')->getData());
-                    $em->persist($vote);
-                    $em->flush();
-                    $session->set('vote', $vote);
-                    return $this->indexAction();
-                } else {
-                    $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.mismatch')));
-                }
-            } else {
-                $form->addError(new FormError($this->get('translator')->trans('register.voter_registration.notfound')));
+            $user = $this->getUser();
+            $dispatcher = $this->container->get('event_dispatcher');
+            $event = new PersonEvent($user, $form->get('trevoter')->getData());
+            try {
+                $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
+                $em = $this->getDoctrine()->getManager();
+                $vote = $em->merge($vote);
+                $vote->setVoterRegistration($form->get('trevoter')->getData());
+                $em->persist($vote);
+                $em->flush();
+                $session->set('vote', $vote);
+                return $this->indexAction();
+            } catch (TREVoterException $e) {
+                $form->addError(new FormError($this->get('translator')->trans($e->getMessage())));
             }
         }
         return $this->render('PROCERGSVPRCoreBundle:Default:reinforceDoc.html.twig',

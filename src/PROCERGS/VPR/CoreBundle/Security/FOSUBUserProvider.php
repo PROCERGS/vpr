@@ -6,14 +6,22 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseClass;
 use Symfony\Component\Security\Core\User\UserInterface;
 use PROCERGS\VPR\CoreBundle\Exception\LcException;
 use Doctrine\ORM\EntityManager;
+use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
+use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
 
 class FOSUBUserProvider extends BaseClass
 {
     protected $em;
+    protected $dispatcher;
 
     public function setEntityManager(EntityManager $var)
     {
         $this->em = $var;
+    }
+    
+    public function setDispatcher($var)
+    {
+        $this->dispatcher = $var;
     }
 
     /**
@@ -68,16 +76,13 @@ class FOSUBUserProvider extends BaseClass
             $user = $this->userManager->createUser();
         }
         $userData = $response->getResponse();
-        $email = $response->getEmail();
-        if (!isset($userData['first_name'])) {
-            throw new LcException('lc.missing.required.field', 'lc.first_name');
+        if (!isset($userData['full_name']) || !strlen(trim($userData['full_name']))) {
+            throw new LcException('lc.missing.required.field', 'lc.full_name');
         }
-        if (!isset($userData['surname'])) {
-            throw new LcException('lc.missing.required.field', 'lc.surname');
+        if (!isset($userData['badges'])) {
+            throw new LcException('lc.missing.required.field', 'lc.badges');
         }
-        $firstName = trim($userData['first_name']);
-        $surname = trim($userData['surname']);
-
+        
         $service = $response->getResourceOwner()->getName();
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
@@ -89,10 +94,10 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_username($response->getNickname());
 
         $user->setUsername($username);
-        $user->setFirstName($firstName . ' '. $surname);
-        $user->setEmail($email);
+        $user->setFirstName($userData['full_name']);
         $user->setPassword('');
         $user->setEnabled(true);
+        $user->setBadges($userData['badges']);
         if (array_key_exists('city', $userData) && is_numeric($userData['city']['id'])) {
             $cityRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:City');
             $city = $cityRepo->findOneBy(array('ibgeCode' => $userData['city']['id']));
@@ -100,6 +105,9 @@ class FOSUBUserProvider extends BaseClass
                 $user->setCity($city);
             }
         }
+        $event = new PersonEvent($user, $userData['voter_registration']);
+        $this->dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);        
+        
         $this->userManager->updateUser($user);
 
         // if user exists - go with the HWIOAuth way

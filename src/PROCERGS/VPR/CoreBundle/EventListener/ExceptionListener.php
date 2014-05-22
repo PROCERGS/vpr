@@ -9,8 +9,9 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
 
-class LcExceptionListener
+class ExceptionListener
 {
 
     protected $router;
@@ -41,10 +42,21 @@ class LcExceptionListener
     {
         $exception = $event->getException();
         if ($exception instanceof LcException) {
-            $this->session->getFlashBag()->add('danger', $this->translator->trans($exception->getMessage(), array(
-                '%field%' => $this->translator->trans($exception->getPlaceHolder())
-            )));
+            if ($exception->getPlaceHolder()) {
+                $this->session->getFlashBag()->add('danger', $this->translator->trans($exception->getMessage(), array(
+                    '%field%' => $this->translator->trans($exception->getPlaceHolder())
+                )));
+            } else {
+                $this->session->getFlashBag()->add('danger', $this->translator->trans($exception->getMessage()));
+            }
             $url = $this->router->generate('procergsvpr_core_homepage');
+            $event->setResponse(new RedirectResponse($url));
+        } elseif ($exception instanceof TREVoterException) {
+            $this->session->getFlashBag()->add('danger', $this->translator->trans($exception->getMessage()));
+            $url = $event->getRequest()->headers->get('referer');
+            if (!$url) {
+                $url = $this->router->generate('procergsvpr_core_homepage');
+            }
             $event->setResponse(new RedirectResponse($url));
         }
     }

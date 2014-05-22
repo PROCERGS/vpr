@@ -32,24 +32,33 @@ class LoggedInUserListener
             // don't do anything if it's not the master request
             return;
         }
-        if (is_null($this->context->getToken())) {
+        $user = $this->context->getToken();
+        if (null === ($token = $this->context->getToken()) || null === ($user = $token->getUser()) || !$this->context->isGranted('IS_AUTHENTICATED_FULLY')) {
             return;
         }
-        if (!is_null($this->session->get('city_id'))) {
-            // City already chosen
-            return;
-        }
-
         $_route = $event->getRequest()->attributes->get('_route');
-        if ($this->context->isGranted('IS_AUTHENTICATED_FULLY') && $_route !== 'vpr_city_selection') {
-            $person = $this->context->getToken()->getUser();
-            $treEntry = $person->getTreVoter();
-            if (!($treEntry instanceof TREVoter)) {
-                // Always sends users to select/confirm their voting city.
-                // This avoids taking for granted that the user's city is correct
-                $url = $this->router->generate('vpr_city_selection');
-                $event->setResponse(new RedirectResponse($url));
+        if ($_route == 'fos_user_security_login') {
+            $key = '_security.main.target_path'; #where "main" is your firewall name
+            //check if the referer session key has been set
+            if ($this->session->has($key)) {
+                //set the url based on the link they were trying to access before being authenticated
+                $url = $this->session->get($key);
+        
+                //remove the session key
+                $this->session->remove($key);
+            } else {
+                $url = $this->router->generate('procergsvpr_core_homepage');
             }
+            $event->setResponse(new RedirectResponse($url));
+        }
+        $t1 = ($_route == 'vpr_city_selection');
+        $t2 = (null === $user->getTreVoter() && null === $user->getCity());
+        if ($t2 && !$t1) {
+            $url = $this->router->generate('vpr_city_selection');
+            $event->setResponse(new RedirectResponse($url));
+        } elseif (!$t2 && $t1) {
+            $url = $this->router->generate('procergsvpr_core_homepage');
+            $event->setResponse(new RedirectResponse($url));
         }
     }
 
