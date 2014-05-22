@@ -30,12 +30,7 @@ class PollOptionController extends Controller
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         
-        if($request->get('clear_filter')){
-            $session->clear();
-            return $this->redirect($this->generateUrl('admin_poll_option'));
-        }
-        
-        $filterOptions = $session->get('filterOptions');
+        $poll_filters = $session->get('poll_filters');
 
         $polls = $em->createQueryBuilder()
             ->select('p')
@@ -69,13 +64,13 @@ class PollOptionController extends Controller
             ->getForm();
 
         $entities = array();
-        if ($request->isMethod('POST') || $filterOptions) {
-            if(!$request->isMethod('POST') && $filterOptions){
-                $form->bind($filterOptions);
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
                 
             }else{
                 $form->bind($request);
-                $session->set('filterOptions', $request);
+                $session->set('poll_filters', $request);
             }
             $selected = $form->getData();
 
@@ -397,5 +392,17 @@ class PollOptionController extends Controller
         $response->setData($data);
 
         return $response;        
-    }    
+    }
+
+    /**
+     * Clear Filters
+     * @Method("GET")
+     * @Route("/filters/clear", name="admin_poll_option_clear_filters")
+     */
+    public function clearFiltersAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('poll_filters');
+        return $this->redirect($this->generateUrl('admin_poll_option'));
+    }
 }

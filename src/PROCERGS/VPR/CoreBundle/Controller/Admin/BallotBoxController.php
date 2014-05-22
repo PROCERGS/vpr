@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxType;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
 
 /**
  * BallotBox controller.
@@ -21,36 +22,64 @@ class BallotBoxController extends Controller
     /**
      * Lists all BallotBox entities.
      *
-     * @Route("/", name="admin_ballotbox")
-     * @Method("GET")
+     * @Route("/index", name="admin_ballotbox")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        
-        $query = $em->createQueryBuilder()
+        $session = $this->getRequest()->getSession();
+        $paginator  = $this->get('knp_paginator');
+        $form = $this->createForm(new BallotBoxFilterType());
+
+        if($request->isMethod('POST')){
+            $form->handleRequest($request);
+            $session->set('ballotBox_filters',$request);
+        }else{
+            $request = $session->get('ballotBox_filters');
+            if($request)
+                $form->handleRequest($request);
+        }
+
+        $filters = $form->getData();
+
+        $queryBuilder = $em->createQueryBuilder();
+        $queryBuilder
             ->select('b')
             ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
-            ->innerJoin('b.city','c')
+            ->where('1=1')
+            ->leftJoin('b.city','c')
             ->innerJoin('b.poll','p')
             ->orderBy('p.openingTime','DESC')
             ->addOrderBy('c.name','ASC')
-            ->addOrderBy('b.address','ASC')
-            ->getQuery();
+            ->addOrderBy('b.address','ASC');
 
-        $paginator  = $this->get('knp_paginator');
+        if(isset($filters['poll'])){
+            $queryBuilder->andWhere('b.poll = :poll');
+            $queryBuilder->setParameter('poll', $filters['poll']);
+        }
+
+        if(isset($filters['city'])){
+            $queryBuilder->andWhere('b.city = :city');
+            $queryBuilder->setParameter('city', $filters['city']);
+        }
+
+        if(!is_null($filters['is_online'])){
+            $queryBuilder->andWhere('b.isOnline = :online');
+            $queryBuilder->setParameter('online', $filters['is_online']);
+        }
+
+        $query = $queryBuilder->getQuery();
         
-        $entities = $paginator->paginate(
-            $query,
-            $this->get('request')->query->get('page', 1),
-            20
-        );
+        $page = $this->get('request')->query->get('page',1);
+        $entities = $paginator->paginate($query, $page, 20);
 
         return array(
             'entities' => $entities,
+            'form' => $form->createView()
         );
     }
+
     /**
      * Creates a new BallotBox entity.
      *
@@ -269,4 +298,16 @@ class BallotBoxController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Clear Filters
+     * @Method("GET")
+     * @Route("/filters/clear", name="admin_ballotbox_clear_filters")
+     */
+    public function clearFiltersAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('ballotBox_filters');
+        return $this->redirect($this->generateUrl('admin_ballotbox'));
+    }    
 }

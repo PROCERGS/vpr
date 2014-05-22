@@ -5,7 +5,6 @@
                 <th width="20%">{{ 'admin.poll'|trans }}</th>
                 <th width="15%">{{ 'admin.city'|trans }}</th>
                 <th width="30%">{{ 'admin.address'|trans }}</th>
-                <th width="5%">{{ 'admin.total_invalid_vote'|trans }}</th>
                 <th width="5%">{{ 'admin.is_online'|trans }}?</th>
                 <th width="8%">{{ 'admin.actions'|trans }}</th>
             </tr>
@@ -17,7 +16,6 @@
                         <td>{% if (entity.poll) %}{{ entity.poll.name }}{% endif %}</td>
                         <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
                         <td>{{ entity.address }}</td>
-                        <td class="text-center">{{ entity.totalInvalidVotes }}</td>
                         <td class="text-center">{% if entity.isOnline %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
                         <td class="text-center">
                             <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
@@ -26,7 +24,7 @@
                     </tr>
                 {% endfor %}
             {% else %}
-                    <tr><td colspan="9" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
+                    <tr><td colspan="5" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
             {% endif %}
         </tbody>
     </table>
