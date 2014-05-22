@@ -3,13 +3,13 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <h3>{{ 'end.change.offer.title'|trans }}</h3>
-        <div class="alert alert-danger">{{ 'end.change.offer.message'|trans }}</div>
+        <h1>{% trans %}Duplicate Vote Detected{% endtrans %}</h1>
+        <div class="alert alert-danger">{% trans %}It was detected that a vote were already cast by you.{% endtrans %}</div>
     </div>
 
     <div class="col-md-12 general-content">
-        <p>{{ 'end.change.nfe.register.offer'|trans }}</p>
-        <p><a class="btn btn-success" role="button" href="{{ path('procergsvpr_core_end_change') }}" onclick="go()">{{ 'end.offer.lc.register.click'|trans }}</a></p>
+        <p>{% trans %}If you believe that's a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.{% endtrans %}</p>
+        <p><a class="btn btn-success" role="button" href="{{ path('procergsvpr_core_end_change') }}" onclick="go()">{{ 'Enter Meu RS'|trans }}</a></p>
         <p><a id="btn-skip" class="btn btn-success" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></p>
     </div>
 </div>
@@ -18,8 +18,9 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-function go() {
-  window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
-}
+    function go() {
+        alert("FIX THIS! The popup size is hardcoded!");
+        window.open('{{ link_lc }}', '', "width=1024, height=600, scrollbars=yes");
+    }
 </script>
 {% endblock %}

@@ -2,10 +2,6 @@ vpr:
     resource: "@PROCERGSVPRCoreBundle/Controller/"
     type: annotation
 
-procergsvpr_core_homepage:
-    pattern:  /
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:index }
-
 vpr_person:
     prefix:   /person
     resource: "@PROCERGSVPRCoreBundle/Controller/PersonController.php"
@@ -46,47 +42,3 @@ vpr_admin_poll_option:
     resource: "@PROCERGSVPRCoreBundle/Controller/Admin/PollOptionController.php"
     type:     annotation
     prefix:   /admin/poll_option
-
-procergsvpr_core_municipio:
-    pattern:  /municipio
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:municipio }
-
-procergsvpr_core_end:
-    pattern:  /end
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:end }
-
-procergsvpr_core_voter_registration_voted:
-    pattern:  /end/change/offer
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChangeOffer }
-
-procergsvpr_core_end_change:
-    pattern:  /end/change
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChange }
-
-procergsvpr_core_end_change_puny:
-    pattern:  /end/change/puny
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endChangePuny }
-
-procergsvpr_core_voting_timeout:
-    pattern:  /end/timeover
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endTimeOver }
-
-procergsvpr_core_reforcar_voto:
-    pattern:  /reinforce
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforce }
-
-procergsvpr_core_nfgFraca:
-    pattern:  /reinforce/puny
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforcePuny }
-
-procergsvpr_core_ask_voter_registration:
-    pattern:  /reinforce/doc
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceDoc }
-
-procergsvpr_core_ask_nfg:
-    pattern:  /reinforce/offer
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:reinforceOffer }
-
-procergsvpr_core_end_offer:
-    pattern:  /end/offer
-    defaults: { _controller: PROCERGSVPRCoreBundle:Default:endOffer }

@@ -5,12 +5,17 @@ parameters:
     kernel.listener.logged_in_user_listener.class: PROCERGS\VPR\CoreBundle\EventListener\LoggedInUserListener
     procergs.nfgws.class: PROCERGS\VPR\CoreBundle\Helper\NfgWsHelper
     form.type.voter_registration.class: PROCERGS\VPR\CoreBundle\Form\Type\VoterRegistrationType
+    form.type.city.class: PROCERGS\VPR\CoreBundle\Form\Type\CityType
 
 services:
     form.type.voter_registration:
         class: %form.type.voter_registration.class%
         tags:
             - { name: form.type, alias: voter_registration }
+    form.type.city:
+        class: %form.type.city.class%
+        tags:
+            - { name: form.type, alias: city }
 
     user_provider:
         class: "%user_provider.class%"
@@ -56,11 +61,11 @@ services:
       class: PROCERGS\VPR\CoreBundle\Security\AuthenticationHandler
       calls:
             - [setRouter, ["@router"]]
-            
+
     vpr.person.listener:
         class: PROCERGS\VPR\CoreBundle\EventListener\PersonListener
         tags:
             - { name: kernel.event_subscriber }
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
-            
+

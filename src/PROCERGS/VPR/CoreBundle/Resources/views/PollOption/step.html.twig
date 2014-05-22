@@ -50,7 +50,7 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <h2 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h2>
+        <h1 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h1>
         <p class="alert alert-info" id="max-selection">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
         <div class="alert alert-danger confirm-message" style="display:none">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</div>
 

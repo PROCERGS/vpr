@@ -3,19 +3,19 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <h3>{{ title }}</h3>
-        <div class="alert {{ class }}">{{ rMsg1 }}</div>
+        <h1>{% block step_up_title %}{% endblock %}</h1>
+        <div class="alert {% block step_up_alert_class %}{% endblock %}">{% block step_up_alert_message %}{% endblock %}</div>
     </div>
 
     <div class="col-md-12">
         <div class="jumbotron">
-            <p>{{ rMsg2 }}</p>
+            <p>{% block step_up_jumbo_message %}{% endblock %}</p>
             <p>
-                <a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=600,height=450" href="{{ nfgRegisterUrl }}">
+                <a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=600,height=450" href="{% block step_up_nfg_url %}{{ nfgRegisterUrl? }}{% endblock %}{{ nfgRegisterUrl }}">
                     {% trans %}Access Nota Fiscal Gaúcha{% endtras %}
                 </a>
             </p>
-            <p><a id="btn-continue" class="btn btn-primary" role="button" href="{{ continueUrl }}">{{ 'Continue'|trans }}</a></p>
+            <p><a id="btn-continue" class="btn btn-primary" role="button" href="{% block step_up_continue_url %}{% endblock %}{{ continueUrl }}">{{ 'Continue'|trans }}</a></p>
             <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'Skip Step' | trans }}</a></p>
         </div>
     </div>

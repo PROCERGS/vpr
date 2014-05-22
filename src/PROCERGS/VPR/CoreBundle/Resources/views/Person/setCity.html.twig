@@ -11,9 +11,9 @@
                 <p>{% trans %}You need to type the city where you vote so that we can show you the relevant options for you.{% endtrans %}</p>
                 <p>{% trans %}Please be aware that informing the wrong city will cause your vote to be discarted.{% endtrans %}</p>
                 <div class="form-group">
-                        {{ form_label(form.city.name, 'City' | trans) }}
-                        {{ form_widget(form.city.name, { 'attr': { 'class': 'form-control city' } } ) }}
-                        {{ form_errors(form.city.name) }}
+                        {{ form_label(form.city, 'City' | trans) }}
+                        {{ form_widget(form.city, { 'attr': { 'class': 'form-control city' } } ) }}
+                        {{ form_errors(form.city) }}
                 </div>
             </div>
             <div class="col-md-6 col-xs-12">
