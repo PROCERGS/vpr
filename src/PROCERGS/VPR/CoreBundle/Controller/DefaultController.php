@@ -371,12 +371,12 @@ class DefaultController extends Controller
      * @param type $ballotBox
      * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
      */
-    private function _createVote($em, $session, $voter, $ballotBox)
+    private function _createVote($em, $session, Person $voter, $ballotBox)
     {
         $vote = new Vote();
         $vote->setAuthType($voter->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
-        $vote->setCorede($voter->getCity()->getCorede());
+        $vote->setCorede($voter->getCityOrTreCity()->getCorede());
         if ($voter->getTreVoter()) {
             $vote->setVoterRegistration($voter->getTreVoter()->getId());
         }

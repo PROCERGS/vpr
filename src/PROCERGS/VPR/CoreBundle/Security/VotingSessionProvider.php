@@ -128,7 +128,7 @@ class VotingSessionProvider
         $vote = new Vote();
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ball);
-        $vote->setCorede($person->getCity()->getCorede());
+        $vote->setCorede($person->getCityOrTreCity()->getCorede());
         $vote->setSmId(uniqid(mt_rand(), true));
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());

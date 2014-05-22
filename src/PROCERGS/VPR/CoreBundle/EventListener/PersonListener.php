@@ -27,7 +27,7 @@ class PersonListener implements EventSubscriberInterface
 
     public function onVoterRegistraionEdit(PersonEvent $event)
     {
-        if (null == $event->getVoterRegistration() || !strlen($event->getVoterRegistration())) {
+        if (is_null($event->getVoterRegistration()) || !strlen($event->getVoterRegistration())) {
             return false;
         }
         $user = $event->getPerson();
@@ -36,15 +36,14 @@ class PersonListener implements EventSubscriberInterface
             'id' => $event->getVoterRegistration()
         ));
         if ($voter) {
-            $n1 = mb_strtolower(substr($user->getFirstName(), 0, strpos($user->getFirstName(), ' ')));
-            $n2 = mb_strtolower(substr($voter->getName(), 0, strpos($voter->getName(), ' ')));
-            if ($n1 != $n2) {
+            $userFirstName = mb_strtolower(substr($user->getFirstName(), 0, strpos($user->getFirstName(), ' ')));
+            $treFirstName = mb_strtolower(substr($voter->getName(), 0, strpos($voter->getName(), ' ')));
+            if ($userFirstName !== $treFirstName) {
                 throw new VoterRegistrationMismatchException();
             }
         } else {
             throw new VoterRegistrationNotFoundException();
         }
         $user->setTreVoter($voter);
-        $user->setCity($voter->getCity());
     }
 }
