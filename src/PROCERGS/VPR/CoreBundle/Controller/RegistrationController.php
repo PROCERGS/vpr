@@ -149,8 +149,7 @@ class RegistrationController extends Controller
         }
 
         $user->setUsername(uniqid(mt_rand(), true))
-                ->setTreVoter($treVoter)
-                ->setCity($treVoter->getCity());
+                ->setTreVoter($treVoter);
         $userManager->updateUser($user);
 
         $response = $this->redirect($this->generateUrl('procergsvpr_core_homepage'));

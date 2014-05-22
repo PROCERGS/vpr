@@ -99,13 +99,13 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      * @Groups({"vote"})
      */
     protected $treVoter;
-    
+
     /**
      * @ORM\Column(name="mobile", type="string", nullable=true)
      */
     protected $mobile;
 
-    
+
     /**
      * @ORM\Column(name="badges",type="array", nullable=true)
      */
@@ -250,6 +250,16 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         }
     }
 
+    public function getCityOrTreCity()
+    {
+        $city = $this->getCity();
+        $treVoter = $this->getTreVoter();
+        if (is_null($city) && $treVoter instanceof TREVoter) {
+            $city = $treVoter->getCity();
+        }
+        return $city;
+    }
+
     public function getCity()
     {
         return $this->city;
@@ -273,30 +283,30 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
         return $this;
     }
-    
+
     public function getMobile()
     {
         return $this->mobile;
     }
-    
+
     public function setMobile($mobile)
     {
         $mobile = preg_replace('/[^0-9]/', '', $mobile);
         $this->mobile = $mobile;
     }
-    
+
     public function getBadges()
     {
         return $this->badges;
     }
-    
+
     public function setBadges($var)
     {
         $this->badges = $var;
-    
+
         return $this;
     }
-    
-    
+
+
 
 }
