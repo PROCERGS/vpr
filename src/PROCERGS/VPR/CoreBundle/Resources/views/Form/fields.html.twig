@@ -25,7 +25,7 @@
     {% if attribute(attr, 'class') is defined %}
         {% set attr = attr|merge({'class': attr['class'] ~ ' voter-registration-input'}) %}
     {%else%}
-        {% set attr = attr|merge({'class': 'voter-registration-input'}) %}
+        {% set attr = attr|merge({'class': 'form-control voter-registration-input'}) %}
     {% endif %}
     {{ block('form_widget_simple') }}
     <a href="{{ tre_search_link }}" class="label label-primary pull-left tre-search-link" target="_blank" tabindex="-1">
