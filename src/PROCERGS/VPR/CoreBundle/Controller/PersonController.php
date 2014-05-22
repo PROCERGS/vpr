@@ -33,7 +33,7 @@ class PersonController extends Controller
             $data['voterRegistration'] = $person->getTreVoter()->getId();
         }
         if ($person->getCity() !== null) {
-            $data['city']['name'] = $person->getCity()->getName();
+            $data['city'] = $person->getCity()->getName();
         }
         $form = $this->createForm(new CitySelectionType());
         $form->setData($data);
@@ -45,18 +45,18 @@ class PersonController extends Controller
                 $data = $form->getData();
 
                 $dispatcher = $this->container->get('event_dispatcher');
-                
+
                 $event = new PersonEvent($person, $data['voterRegistration']);
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
-                
-                $cityName = trim($data['city']['name']);
+
+                $cityName = trim($data['city']);
                 if (strlen($cityName) > 0) {
                     $typedCity = $cityRepo->findOneBy(array('name' => $cityName));
                     if (!($typedCity instanceof City)) {
                         $message = $translator->trans('form.city-selection.city-not-found',
                                 array(), 'validators');
                         $formError = new FormError($message);
-                        $form->get('city')->get('name')->addError($formError);
+                        $form->get('city')->addError($formError);
                         throw new FormException($formError);
                     } elseif (isset($city) && $city instanceof City) {
                         // user is trying to use a different city!

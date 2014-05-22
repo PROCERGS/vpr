@@ -23,6 +23,7 @@ class DefaultController extends Controller
 {
 
     /**
+     * @Route("/", name="procergsvpr_core_homepage")
      * @Template()
      */
     public function indexAction()
@@ -45,19 +46,22 @@ class DefaultController extends Controller
             if (!$vote->getVoterRegistration()) {
                 return $this->redirect($this->generateUrl('procergsvpr_core_ask_voter_registration'));
             }
-            if (! $vote->getNfgCpf()) {
+            if (!$vote->getNfgCpf()) {
                 try {
                     $ball = $vote->getBallotBox();
                     $votingSession->checkExistingVotes($person, $ball);
                     $votingSession->flush();
                     return $this->indexAction();
                 } catch (VoterRegistrationAlreadyVotedException $e) {
-                    return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));
+                    return $this->redirect($this->generateUrl('fos_user_security_logout',
+                                            array('code' => $vote->getSmId())));
                 } catch (VoterAlreadyVotedException $e) {
-                    return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));
+                    return $this->redirect($this->generateUrl('fos_user_security_logout',
+                                            array('code' => $vote->getSmId())));
                 }
             } else {
-                return $this->redirect($this->generateUrl('fos_user_security_logout', array('code' => $vote->getSmId())));
+                return $this->redirect($this->generateUrl('fos_user_security_logout',
+                                        array('code' => $vote->getSmId())));
             }
         }
 
@@ -68,15 +72,22 @@ class DefaultController extends Controller
         )));
     }
 
+    /**
+     * @Route("/reinforce/offer", name="procergsvpr_core_ask_nfg")
+     * @Template()
+     */
     public function reinforceOfferAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
-        return $this->render('PROCERGSVPRCoreBundle:Default:reinforceOffer.html.twig',
-                        array(
-                    'nfgRegisterUrl' => $nfgRegisterUrl
-        ));
+        return array(
+            'nfgRegisterUrl' => $nfgRegisterUrl
+        );
     }
 
+    /**
+     * @Route("/reinforce", name="vpr_core_reinforce_vote")
+     * @Template()
+     */
     public function reinforceAction(Request $request)
     {
         $formBuilder = $this->createFormBuilder();
@@ -124,7 +135,7 @@ class DefaultController extends Controller
                             $session->set('vote', $vote);
                             return $this->indexAction();
                         } else {
-                            return $this->redirect($this->generateUrl('procergsvpr_core_nfgFraca'));
+                            return $this->redirect($this->generateUrl('vpr_core_nfg_low_trust'));
                         }
                         return $this->indexAction();
                     case 2:
@@ -141,13 +152,16 @@ class DefaultController extends Controller
                 $form->addError(new FormError($this->get('translator')->trans('posvote.reinforce.nfg.query.problem')));
             }
         }
-        return $this->render('PROCERGSVPRCoreBundle:Default:reinforce.html.twig',
-                        array(
-                    'form' => $form->createView(),
-                    'messages' => $messages
-        ));
+        return array(
+            'form' => $form->createView(),
+            'messages' => $messages
+        );
     }
 
+    /**
+     * @Route("/reinforce/puny", name="vpr_core_nfg_low_trust")
+     * @Template()
+     */
     public function reinforcePunyAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
@@ -157,6 +171,10 @@ class DefaultController extends Controller
         ));
     }
 
+    /**
+     * @Route("/reinforce/doc", name="procergsvpr_core_ask_voter_registration")
+     * @Template()
+     */
     public function reinforceDocAction(Request $request)
     {
         $formBuilder = $this->createFormBuilder();
@@ -177,7 +195,8 @@ class DefaultController extends Controller
             $dispatcher = $this->container->get('event_dispatcher');
             $event = new PersonEvent($user, $form->get('trevoter')->getData());
             try {
-                $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
+                $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
+                        $event);
                 $em = $this->getDoctrine()->getManager();
                 $vote = $em->merge($vote);
                 $vote->setVoterRegistration($form->get('trevoter')->getData());
@@ -196,6 +215,10 @@ class DefaultController extends Controller
         ));
     }
 
+    /**
+     * @Route("/end", name="procergsvpr_core_end")
+     * @Template()
+     */
     public function endAction()
     {
         $session = $this->getRequest()->getSession();
@@ -203,6 +226,10 @@ class DefaultController extends Controller
         return $this->render('PROCERGSVPRCoreBundle:Default:end.html.twig');
     }
 
+    /**
+     * @Route("/end/offer", name="procergsvpr_core_end_offer")
+     * @Template()
+     */
     public function endOfferAction(Request $request)
     {
         $r = $request->get('code');
@@ -211,10 +238,15 @@ class DefaultController extends Controller
         }
         $url['link_nfg'] = $this->container->getParameter('nfg_register_url');
         $url['link_lc'] = $this->container->getParameter('lc_register_url');
-        $url['link_sm'] = $this->container->getParameter('sm_register_url').$r;
-        return $this->render('PROCERGSVPRCoreBundle:Default:endOffer.html.twig', $url);
+        $url['link_sm'] = $this->container->getParameter('sm_register_url') . $r;
+        return $this->render('PROCERGSVPRCoreBundle:Default:endOffer.html.twig',
+                        $url);
     }
 
+    /**
+     * @Route("/timeout", name="procergsvpr_core_voting_timeout")
+     * @Template()
+     */
     public function endTimeOverAction($poll = null)
     {
         $poll = $this->getDoctrine()->getManager()->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
@@ -225,6 +257,10 @@ class DefaultController extends Controller
         ));
     }
 
+    /**
+     * @Route("/end/change/puny", name="procergsvpr_core_end_change_puny")
+     * @Template()
+     */
     public function endChangePunyAction()
     {
         $nfgRegisterUrl = $this->container->getParameter('nfg_register_url');
@@ -234,12 +270,21 @@ class DefaultController extends Controller
         ));
     }
 
+    /**
+     * @Route("/end/change/offer", name="procergsvpr_core_voter_registration_voted")
+     * @Template()
+     */
     public function endChangeOfferAction()
     {
         $url['link_lc'] = $this->container->getParameter('lc_register_url');
-        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig', $url);
+        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig',
+                        $url);
     }
 
+    /**
+     * @Route("/end/change", name="procergsvpr_core_end_change")
+     * @Template()
+     */
     public function endChangeAction(Request $request)
     {
         $session = $this->getRequest()->getSession();
@@ -320,17 +365,6 @@ class DefaultController extends Controller
                     'form' => $form->createView(),
                     'messages' => $messages
         ));
-    }
-
-    /**
-     * @Template()
-     */
-    public function municipioAction()
-    {
-        $voter = $this->get('security.context')->getToken()->getUser();
-        return array(
-            'voter' => $voter
-        );
     }
 
     /**

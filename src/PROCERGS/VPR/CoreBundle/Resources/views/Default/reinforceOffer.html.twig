@@ -1,14 +1,20 @@
-{% block body %}
-{% if nfgRegisterUrl is not defined %}
-{%  set nfgRegisterUrl = '' %}
-{% endif %}
+{% extends 'PROCERGSVPRCoreBundle::base.reinforce.message.html.twig' %}
 
-{% include "PROCERGSVPRCoreBundle::base.reinforce.message.html.twig" with {
-    'title' : 'posvote.congratulation.title'|trans ,
-    'rMsg1' : 'posvote.congratulation.message'|trans,
-    'rMsg2' : 'posvote.nfe.register.offer'|trans,
-    'class' : 'alert-success',
-    'nfgRegisterUrl' : nfgRegisterUrl,
-    'continueUrl' : path('procergsvpr_core_reforcar_voto')
-} %}
+{% block step_up_title %}
+    {{ 'Beef up your Vote!' | trans }}
+{% endblock %}
+
+{% block step_up_alert_class %}
+    alert-success
+{% endblock %}
+{% block step_up_alert_message %}
+    {% trans %}Thank you very much for voting. You can still step up your vote to improve it's security.{% endtrans %}
+{% endblock %}
+
+{% block step_up_jumbo_message %}
+    {% trans %}To make your vote even more secure, you'll need an account on Nota Fiscal Gaúcha.{% endtrans %}
+{% endblock %}
+
+{% block step_up_continue_url %}
+    {{ path('vpr_core_reinforce_vote') }}
 {% endblock %}

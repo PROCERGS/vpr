@@ -1,14 +1,21 @@
-{% block body %}
-{% if nfgRegisterUrl is not defined %}
-{% set nfgRegisterUrl = '' %}
-{% endif %}
+{% extends 'PROCERGSVPRCoreBundle::base.reinforce.message.html.twig' %}
 
-{% include "PROCERGSVPRCoreBundle::base.reinforce.message.html.twig" with {
-'rTitle' : 'posvote.reinforce.nfg.puny.title'|trans , 
-'rMsg1' : 'posvote.reinforce.nfg.puny.message'|trans,
-'rMsg2' : 'posvote.reinforce.nfg.puny.offer'|trans,
-'rClass' : 'alert-danger',
-'nfgRegisterUrl' : nfgRegisterUrl,
-'continueUrl' : path('procergsvpr_core_reforcar_voto')
-} %}
+{% block step_up_title %}
+    {% trans %}Your profile on Nota Fiscal Gaúcha is not complete enough{% endtrans %}
+{% endblock %}
+
+{% block step_up_alert_class %}
+    alert-danger
+{% endblock %}
+{% block step_up_alert_message %}
+    {% trans %}We detected that your profile on Nota Fiscal Gaúcha contains only basic information. To continue voting you need to step up your registration on Nota Fiscal Gaúcha.{% endtrans %}
+{% endblock %}
+
+{% block step_up_jumbo_message %}
+    {% trans %}Please access your account on Nota Fiscal Gaúcha and complete your information there. When you're done click Continue below.{% endtrans %}
+    {{ 'posvote.reinforce.nfg.puny.offer' | trans }}
+{% endblock %}
+
+{% block step_up_continue_url %}
+    {{ path('vpr_core_reinforce_vote') }}
 {% endblock %}

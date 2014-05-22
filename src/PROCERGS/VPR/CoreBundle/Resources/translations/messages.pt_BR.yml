@@ -35,9 +35,9 @@ end.change.nfg.user.wrongdata: 'Algum dos dados informados não conferem com os 
 end.change.nfg.user.notfound: 'Cadastro não encontrado na Nota Fiscal Gaúcha'
 end.change.nfg.return.problem: 'Houve um retorno inesperado do sistema Nota Fiscal Gaúcha'
 end.change.nfg.query.problem: 'Há algum problema com a conexão com o sistema Nota Fiscal Gaúcha'
-end.change.offer.title: 'Já há um voto com os dados cadastrais informados.'
-end.change.offer.message: 'Caso acredite que outra pessoa tenha utilizado os seus dados para votar, você pode ainda votar caso tenha cadastro no Login Cidadão associada a sua conta da Nota Fiscal Gaucha'
-end.change.nfe.register.offer: 'Para continuar com o processo de voto é necessário ter um cadastro no Login Cidadão associada a sua conta na Nota Fiscal Gaucha'
+'Duplicate Vote Detected': 'Já há um voto com os dados cadastrais informados.'
+'It was detected that a vote were already cast by you.': 'Caso acredite que outra pessoa tenha utilizado os seus dados para votar, você pode ainda votar caso tenha cadastro no Login Cidadão associada a sua conta da Nota Fiscal Gaucha'
+'If you believe that''s a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.': 'Se você acredita que isso é um engano, você ainda pode votar utilizando seu login cidadão do Meu RS que esteja vinculado a uma conta da Nota Fiscal Gaúcha para sobrescrever esse voto.'
 'Validation with Nota Fiscal Gaúcha': 'Validação com a Nota Fiscal Gaúcha'
 'To continue the votingp rocess, fill in the information below to vote with Nota Fiscal Gaúcha': 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da Nota Fiscal Gaúcha'
 end.change.nfg.puny.title: 'Cadastro muito básico com a Nota Fiscal Gaúcha'
@@ -45,21 +45,19 @@ end.change.nfg.puny.message: 'Foi detectado que seu cadastro na Nota Fiscal Gaú
 end.change.nfg.puny.offer: 'Vá agora na Nota Fiscal Gaúcha complemente seu dados e continue com o processo de votação'
 default.continue.click: Continuar
 'Access Nota Fiscal Gaúcha': 'Acesse a Nota Fiscal Gaúcha'
-posvote.congratulation.title: 'Reforce seu voto'
-posvote.congratulation.message: 'Muito obrigado por ter votado, você ainda pode reforçar mais ainda a autenticidade do seu voto com a Nota Fiscal Gaúcha'
-posvote.nfe.register.offer: 'Para continuar com o processo de reforço do voto é necessário ter um cadastro com a Nota Fiscal Gaúcha'
-posvote.reinforce.nfg.title: 'Validação com a Nota Fiscal Gaúcha'
-posvote.reinforce.nfg.message: 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da Nota Fiscal Gaúcha'
-posvote.continue.click: Continuar
-posvote.reinforce.nfg.puny.title: 'Cadastro muito básico com a Nota Fiscal Gaúcha'
-posvote.reinforce.nfg.puny.message: 'Foi detectado que seu cadastro na Nota Fiscal Gaúcha contém apenas o dados básicos de cadastro. Para continuar com o processo de votação é necessário ter um cadastro na Nota Fiscal Gaúcha com mais dados válidos'
-posvote.reinforce.nfg.puny.offer: 'Vá agora na Nota Fiscal Gaúcha complemente seu dados e continue com o processo de votação'
+'Beef up your Vote!': 'Reforce seu voto'
+'Thank you very much for voting. You can still step up your vote to improve it''s security.': 'Muito obrigado por ter votado, você ainda pode reforçar mais ainda a autenticidade do seu voto com a Nota Fiscal Gaúcha'
+'To make your vote even more secure, you''ll need an account on Nota Fiscal Gaúcha.': 'Para continuar com o processo de reforço do voto é necessário ter um cadastro com a Nota Fiscal Gaúcha'
+'Validation with Nota Fiscal Gaúcha': 'Validação com a Nota Fiscal Gaúcha'
+'To continue with the voting fill the information missing below for it to be validated against Nota Fiscal Gaúcha''s database.': 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da Nota Fiscal Gaúcha'
+'Your profile on Nota Fiscal Gaúcha is not complete enough': 'Cadastro muito básico com a Nota Fiscal Gaúcha'
+'We detected that your profile on Nota Fiscal Gaúcha contains only basic information. To continue voting you need to step up your registration on Nota Fiscal Gaúcha.': 'Foi detectado que seu cadastro na Nota Fiscal Gaúcha contém apenas o dados básicos de cadastro. Para continuar com o processo de votação é necessário ter um cadastro na Nota Fiscal Gaúcha com mais dados válidos'
+'Please access your account on Nota Fiscal Gaúcha and complete your information there. When you''re done click Continue below.': 'Vá agora na Nota Fiscal Gaúcha complemente seu dados e continue com o processo de votação'
 'Don''t know your Voter Registration?': 'Não lembra seu título?'
 'Click here to check it out': 'Consulte aqui'
 'Ballot Search': 'Consulta de cédula'
-form.city.select: 'Informe sua cidade:'
-form.search: Pesquisar
-step.limit.selection: 'Você somente pode selecionar '
+'Type your city': 'Digite sua cidade:'
+Search: Pesquisar
 'Cast Vote': Votar
 Confirm: Confirmar
 form.cancel: Cancelar
@@ -145,7 +143,6 @@ admin.add_poll_option: 'Adicionar opção'
 lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
 lc.full_name: Nome Completo
 'Polling places in your city.': '__Polling places in your city.'
-end.offer.lc.register.click: __end.offer.lc.register.click
 Categories: Categorias
 'Priorities Voting': 'Votação de Prioridades'
 PPC: CPP
@@ -157,4 +154,4 @@ PROCERGS: PROCERGS
 '{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '__{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'
 Description: Descrição
 posvote.validate.click: 'Validar'
-end.offer.lc.register.click: 'Acesse sua conta do login cidadão aqui!'
+'Enter Meu RS': 'Acessar o Meu RS'
