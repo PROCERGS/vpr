@@ -12,6 +12,7 @@ use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use JMS\Serializer\SerializationContext;
 use PROCERGS\VPR\CoreBundle\Entity\City;
 use PROCERGS\VPR\CoreBundle\Exception\FormException;
+use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
 
 class PersonController extends Controller
 {
@@ -43,21 +44,11 @@ class PersonController extends Controller
             if ($form->isValid()) {
                 $data = $form->getData();
 
-                if (array_key_exists('voterRegistration', $data) && strlen(trim($data['voterRegistration'])) > 0) {
-                    $voterRegistration = trim($data['voterRegistration']);
-                    $treRepo = $em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
-                    $voter = $treRepo->findOneBy(array('id' => $voterRegistration));
-                    if (!($voter instanceof TREVoter)) {
-                        $message = $translator->trans('form.city-selection.voter-not-found',
-                                array(), 'validators');
-                        $formError = new FormError($message);
-                        $form->get('voterRegistration')->addError($formError);
-                        throw new FormException($formError);
-                    }
-                    $person->setTreVoter($voter);
-                    $city = $voter->getCity();
-                }
-
+                $dispatcher = $this->container->get('event_dispatcher');
+                
+                $event = new PersonEvent($person, $data['voterRegistration']);
+                $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
+                
                 $cityName = trim($data['city']['name']);
                 if (strlen($cityName) > 0) {
                     $typedCity = $cityRepo->findOneBy(array('name' => $cityName));
@@ -83,6 +74,8 @@ class PersonController extends Controller
                 $url = $this->generateUrl('procergsvpr_core_homepage');
                 return $this->redirect($url);
             }
+        } catch (TREVoterException $e) {
+            $form->get('voterRegistration')->addError(new FormError($translator->trans($e->getMessage())));
         } catch (FormException $e) {
 
         }

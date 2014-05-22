@@ -130,7 +130,7 @@ class RegistrationController extends Controller
             $this->authenticate($user, $response);
             return $response;
         } else {
-            throw new VoterRegistrationMismatchException('register.voter_registration.mismatch');
+            throw new VoterRegistrationMismatchException();
         }
     }
 
@@ -141,11 +141,11 @@ class RegistrationController extends Controller
         $treVoter = $treRepo->findOneBy(array('id' => $voterRegistration));
 
         if (!($treVoter instanceof TREVoter)) {
-            throw new VoterRegistrationNotFoundException('register.voter_registration.notfound');
+            throw new VoterRegistrationNotFoundException();
         }
 
         if (!$this->checkNamesEqual($treVoter->getName(), $user->getFirstName())) {
-            throw new VoterRegistrationMismatchException('register.voter_registration.mismatch');
+            throw new VoterRegistrationMismatchException();
         }
 
         $user->setUsername(uniqid(mt_rand(), true))

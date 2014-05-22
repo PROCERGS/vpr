@@ -17,6 +17,7 @@ services:
         arguments: [ "@fos_user.user_manager", { loginCidadao: loginCidadaoId } ]
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setDispatcher, ["@event_dispatcher"]]
 
     vpr_voting_session_provider:
         class: %vpr_voting_session_provider.class%
@@ -42,8 +43,8 @@ services:
             - [setUsuario, [%soe_username%]]
             - [setSenha, [%soe_password%]]
 
-    kernel.listener.lc_exception_listener:
-        class: PROCERGS\VPR\CoreBundle\EventListener\LcExceptionListener
+    kernel.listener.exception_listener:
+        class: PROCERGS\VPR\CoreBundle\EventListener\ExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
         calls:
@@ -55,3 +56,11 @@ services:
       class: PROCERGS\VPR\CoreBundle\Security\AuthenticationHandler
       calls:
             - [setRouter, ["@router"]]
+            
+    vpr.person.listener:
+        class: PROCERGS\VPR\CoreBundle\EventListener\PersonListener
+        tags:
+            - { name: kernel.event_subscriber }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            

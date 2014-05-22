@@ -52,6 +52,12 @@ class TREVoter
      */
     protected $city;
 
+    
+    public function __construct($id)
+    {
+        $this->setId($id);
+    }
+    
     /**
      * Set name
      *

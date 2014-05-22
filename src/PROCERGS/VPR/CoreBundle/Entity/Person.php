@@ -105,6 +105,11 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      */
     protected $mobile;
 
+    
+    /**
+     * @ORM\Column(name="badges",type="array", nullable=true)
+     */
+    protected $badges;
     /**
      * Get id
      *
@@ -279,6 +284,19 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         $mobile = preg_replace('/[^0-9]/', '', $mobile);
         $this->mobile = $mobile;
     }
+    
+    public function getBadges()
+    {
+        return $this->badges;
+    }
+    
+    public function setBadges($var)
+    {
+        $this->badges = $var;
+    
+        return $this;
+    }
+    
     
 
 }

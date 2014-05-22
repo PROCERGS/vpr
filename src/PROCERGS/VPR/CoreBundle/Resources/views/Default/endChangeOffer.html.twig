@@ -10,9 +10,18 @@
     <div class="col-md-12">
         <div class="jumbotron">
             <p>{{ 'end.change.nfe.register.offer'|trans }}</p>
-            <p><a class="btn btn-primary link-popup" role="button" data-specs="width=400,height=750" href="{{ link_lc }}">{{ 'end.offer.lc.register.click'|trans }}</a></p>
-            <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end') }}">{{ 'default.skip.click' | trans }}</a></p>
+            <p><a class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end_change') }}" onclick="go()">{{ 'end.offer.lc.register.click'|trans }}</a></p>
+            <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></p>
         </div>
     </div>    
 </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+function go() {
+	window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
+}
+</script>
 {% endblock %}
