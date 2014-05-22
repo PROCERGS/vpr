@@ -7,13 +7,11 @@
         <div class="alert alert-danger">{{ 'end.change.offer.message'|trans }}</div>
     </div>
 
-    <div class="col-md-12">
-        <div class="jumbotron">
-            <p>{{ 'end.change.nfe.register.offer'|trans }}</p>
-            <p><a class="btn btn-primary" role="button" href="{{ path('procergsvpr_core_end_change') }}" onclick="go()">{{ 'end.offer.lc.register.click'|trans }}</a></p>
-            <p><a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></p>
-        </div>
-    </div>    
+    <div class="col-md-12 general-content">
+        <p>{{ 'end.change.nfe.register.offer'|trans }}</p>
+        <p><a class="btn btn-success" role="button" href="{{ path('procergsvpr_core_end_change') }}" onclick="go()">{{ 'end.offer.lc.register.click'|trans }}</a></p>
+        <p><a id="btn-skip" class="btn btn-success" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></p>
+    </div>
 </div>
 {% endblock %}
 
@@ -21,7 +19,7 @@
 {{ parent() }}
 <script>
 function go() {
-	window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
+  window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
 }
 </script>
 {% endblock %}

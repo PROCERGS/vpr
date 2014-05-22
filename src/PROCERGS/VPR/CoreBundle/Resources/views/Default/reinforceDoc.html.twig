@@ -11,10 +11,12 @@
         <div class="form-group">
                 {{ form_label(form.trevoter, 'Voter Registration'| trans) }}
                 {{ form_errors(form.trevoter) }}
-                {{ form_widget(form.trevoter) }}
+                <div class="form-group clearfix">
+                  {{ form_widget(form.trevoter) }}
+                </div>
         </div>
         <p>
-            <a id="btn-continue" class="btn btn-primary" role="button" >{{ 'posvote.continue.click'|trans }}</a>
+            <a id="btn-continue" class="btn btn-primary" role="button" >{{ 'posvote.validate.click'|trans }}</a>
         </p>
         <p>
             <a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a>
