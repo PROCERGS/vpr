@@ -70,7 +70,7 @@ class BallotBoxController extends Controller
         }
 
         $query = $queryBuilder->getQuery();
-        
+
         $page = $this->get('request')->query->get('page',1);
         $entities = $paginator->paginate($query, $page, 20);
 

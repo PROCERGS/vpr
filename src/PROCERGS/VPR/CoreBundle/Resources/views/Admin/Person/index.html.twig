@@ -27,7 +27,7 @@
             <tbody>
                 {% for entity in entities %}
                     <tr>
-                        <td><a title="{{ 'admin.show'|trans }}" href="{{ path('admin_person_show', { 'id': entity.id }) }}">{{ entity.username }}</a></td>
+                        <td><a title="{{ 'admin.show'|trans }}" href="{{ path('admin_person_show', { 'id': entity.id }) }}">{% if(entity.treVoter.id is defined) %}{{ entity.treVoter.id }}{% endif %}</a></td>
                         <td>{{ entity.firstName }}</td>
                         <td>{{ entity.email }}</td>
                         <td>{% if(entity.enabled) %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
