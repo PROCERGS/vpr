@@ -11,11 +11,9 @@ use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
-use PROCERGS\VPR\CoreBundle\Entity\PollOption;
 use PROCERGS\VPR\CoreBundle\Exception\VotingTimeoutException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterAlreadyVotedException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationAlreadyVotedException;
-use Symfony\Component\Security\Core\SecurityContext;
 use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
 use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
 
@@ -247,14 +245,15 @@ class DefaultController extends Controller
      * @Route("/timeout", name="procergsvpr_core_voting_timeout")
      * @Template()
      */
-    public function endTimeOverAction($poll = null)
+    public function pollTimeoutAction()
     {
-        $poll = $this->getDoctrine()->getManager()->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
-        return $this->render('PROCERGSVPRCoreBundle:Default:endTimeOver.html.twig',
-                        array(
-                    'name' => $poll->getName(),
-                    'closingTime' => $poll->getClosingTime()
-        ));
+        $poll = $this->getDoctrine()->getManager()
+                ->getRepository('PROCERGSVPRCoreBundle:Poll')
+                ->findActivePoll();
+        return array(
+            'name' => $poll->getName(),
+            'closingTime' => $poll->getClosingTime()
+        );
     }
 
     /**

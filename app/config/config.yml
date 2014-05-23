@@ -29,6 +29,7 @@ twig:
     globals:
         login_cidadao_navbar_url: %login_cidadao_navbar_url%
         login_cidadao_app_id: %login_cidadao_id%
+        login_cidadao_logout_url: %login_cidadao_base_url%%login_cidadao_logout_path%
         tre_search_link: %tre_search_link%
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"

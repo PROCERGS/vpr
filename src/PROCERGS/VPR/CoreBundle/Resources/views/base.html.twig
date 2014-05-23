@@ -89,21 +89,20 @@
     </script>
 <![endif]-->
 <script>
-    $(document).ready(function() {
+    var loadNavbar = function() {
+        $("#external").remove();
         $.getScript('{{ login_cidadao_navbar_url }}?app_id={{ login_cidadao_app_id }}', function() {
             citizenLogin.navbar.init();
 {% if app.user is null %}
-            if (citizenLogin.loggedIn === true) {
+            if (citizenLogin.loggedIn === true && $("#logout-iframe").length === 0) {
                 var authUrl = '{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}';
                 document.location = authUrl;
             }
-{% else %}
-            if (citizenLogin.loggedIn !== true) {
-                var logoutUrl = '{{ path('fos_user_security_logout') }}';
-                document.location = logoutUrl;
-            }
 {% endif %}
         });
+    };
+    $(document).ready(function() {
+        loadNavbar();
     });
 </script>
 {% endblock %}
