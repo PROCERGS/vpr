@@ -1,0 +1,83 @@
+R$: R$
+'Polling Places': 'Polling Places'
+'Type a city to see it''s presential polling places.': 'Type a city to see it''s presential polling places.'
+Search: Search
+'Polling places in your city.': 'Polling places in your city.'
+'Thank you for your participation': 'Thank you for your participation'
+'Thank you for your collaboration in this process, your participation was very important!': 'Thank you for your collaboration in this process, your participation was very important!'
+'Validation with Nota Fiscal Gaúcha': 'Validation with Nota Fiscal Gaúcha'
+'To continue the votingp rocess, fill in the information below to vote with Nota Fiscal Gaúcha': 'To continue the votingp rocess, fill in the information below to vote with Nota Fiscal Gaúcha'
+'Voter Registration': 'Voter Registration'
+CPF: CPF
+Birthdate: Birthdate
+Continue: Continue
+'Skip Step': 'Skip Step'
+'Duplicate Vote Detected': 'Duplicate Vote Detected'
+'It was detected that a vote were already cast by you.': 'It was detected that a vote were already cast by you.'
+'If you believe that''s a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.': 'If you believe that''s a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.'
+'Enter Meu RS': 'Enter Meu RS'
+end.change.nfg.puny.title: __end.change.nfg.puny.title
+end.change.nfg.puny.message: __end.change.nfg.puny.message
+end.change.nfg.puny.offer: __end.change.nfg.puny.offer
+'Thank you for voting': 'Thank you for voting'
+'Thank you for your collaboration on this process, your participation was very important!': 'Thank you for your collaboration on this process, your participation was very important!'
+'Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!': 'Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!'
+'Access Nota Fiscal Gaúcha': 'Access Nota Fiscal Gaúcha'
+'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.'
+'Register Here': 'Register Here'
+'World Bank wants to know your opinion! Click below to answer the Survey.': 'World Bank wants to know your opinion! Click below to answer the Survey.'
+'Answer Survey': 'Answer Survey'
+default.closing_time.poll.name: __default.closing_time.poll.name
+'Voting time is up!': 'Voting time is up!'
+'The poll %poll% has ended at %closingTime%': 'The poll %poll% has ended at %closingTime%'
+'To continue with the voting fill the information missing below for it to be validated against Nota Fiscal Gaúcha''s database.': 'To continue with the voting fill the information missing below for it to be validated against Nota Fiscal Gaúcha''s database.'
+'Reinforce your Vote': 'Reinforce your Vote'
+'Thank you for casting your vote. If you vote on Rio Grande do Sul you can still reinforce your vote using your Voter Registration.': 'Thank you for casting your vote. If you vote on Rio Grande do Sul you can still reinforce your vote using your Voter Registration.'
+'To continue the voting process fill the information below to validate your vote.': 'To continue the voting process fill the information below to validate your vote.'
+posvote.validate.click: __posvote.validate.click
+'Beef up your Vote!': 'Beef up your Vote!'
+'Thank you very much for voting. You can still step up your vote to improve it''s security.': 'Thank you very much for voting. You can still step up your vote to improve it''s security.'
+'To make your vote even more secure, you''ll need an account on Nota Fiscal Gaúcha.': 'To make your vote even more secure, you''ll need an account on Nota Fiscal Gaúcha.'
+'Your profile on Nota Fiscal Gaúcha is not complete enough': 'Your profile on Nota Fiscal Gaúcha is not complete enough'
+'We detected that your profile on Nota Fiscal Gaúcha contains only basic information. To continue voting you need to step up your registration on Nota Fiscal Gaúcha.': 'We detected that your profile on Nota Fiscal Gaúcha contains only basic information. To continue voting you need to step up your registration on Nota Fiscal Gaúcha.'
+'Please access your account on Nota Fiscal Gaúcha and complete your information there. When you''re done click Continue below.': 'Please access your account on Nota Fiscal Gaúcha and complete your information there. When you''re done click Continue below.'
+'How do I vote?': 'How do I vote?'
+'Check the ballot for your region': 'Check the ballot for your region'
+'Check the polling places': 'Check the polling places'
+'Don''t know your Voter Registration?': 'Don''t know your Voter Registration?'
+'Click here to check it out': 'Click here to check it out'
+'What''s your voting city?': 'What''s your voting city?'
+'You need to type the city where you vote so that we can show you the relevant options for you.': 'You need to type the city where you vote so that we can show you the relevant options for you.'
+'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Please be aware that informing the wrong city will cause your vote to be discarted.'
+City: City
+'Alternatively you can type your voter registration, without the need to type your city.': 'Alternatively you can type your voter registration, without the need to type your city.'
+form.trevoter.invalid: __form.trevoter.invalid
+Categories: Categories
+Warning!: Warning!
+'{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options'
+Ok: Ok
+'Ballot for %name%': 'Ballot for %name%'
+'Choose up to <span class=''itens-count''>%max%</span> items': 'Choose up to <span class=''itens-count''>%max%</span> items'
+'Please review your choices and click confirm to proceed or rectify to correct them.': 'Please review your choices and click confirm to proceed or rectify to correct them.'
+Loading: Loading
+'Cost: R$': 'Cost: R$'
+Description: Description
+Confirm: Confirm
+Rectify: Rectify
+'Cast Vote': 'Cast Vote'
+'Ballot Search': 'Ballot Search'
+'Vote with your Voter Registration': 'Vote with your Voter Registration'
+'First name': 'First name'
+Email: Email
+'Mobile Phone': 'Mobile Phone'
+'Required fields': 'Required fields'
+'Begin Voting': 'Begin Voting'
+'Vote with your Citizen Login': 'Vote with your Citizen Login'
+'What is Citizen Login?': 'What is Citizen Login?'
+'Priorities Voting': 'Priorities Voting'
+PPC: PPC
+COREDES: COREDES
+ONU: UN
+'Rio Grande do Sul': 'Rio Grande do Sul'
+PROCERGS: PROCERGS
+'Terms of Use': 'Terms of Use'
