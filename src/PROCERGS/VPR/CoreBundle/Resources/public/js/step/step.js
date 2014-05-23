@@ -24,7 +24,7 @@ $(function() {
         $("#info-msg").addClass("confirm").find("p").toggleClass("hidden");
 
         $("html, body").animate({
-            scrollTop: $(".main-title").offset().top
+            scrollTop: $(".step-title").offset().top
         }, 900);
         $(".ballot").slideUp(1100, confirmation);
     });

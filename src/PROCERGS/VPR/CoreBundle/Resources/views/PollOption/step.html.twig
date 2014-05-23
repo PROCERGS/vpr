@@ -7,21 +7,28 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                {# <span class="pull-left">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</span> #}
-
                 <div class="btn-group">
                     <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu" id="dropdown-categories">
-            {% for category,id in categoriesId %}
+                    {% for category,id in categoriesId %}
                         <li role="presentation">
                             <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}" class="scrollTo">
                                 <span class="ctg-{{id}}"><i class="icon"></i>{{category}}</span>
                             </a>
                         </li>
-            {% endfor %}
+                    {% endfor %}
                     </ul>
                 </div>
             </div>
+            {# <div class="col-md-9 check-count">
+                <p class="pull-left">Você pode votar em até x opções</p>
+                <ul class="pull-left ac-custom ac-checkmark">
+                  <li><input type="checkbox"/></li>
+                  <li><input type="checkbox"/></li>
+                  <li><input type="checkbox"/></li>
+                  <li><input type="checkbox"/></li>
+                </ul>
+            </div> #}
         </div>
     </div>
 </div>
@@ -50,11 +57,12 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <h1 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h1>
-        <p class="alert alert-info" id="max-selection">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
-        <div class="alert alert-danger confirm-message" style="display:none">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</div>
 
-        <div class="inner-content">
+        {# <h1 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h1>
+        <p class="alert alert-info" id="max-selection">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
+        <div class="alert alert-danger confirm-message" style="display:none">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</div> #}
+
+
         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
             {{ form_errors(form) }}
 
@@ -66,7 +74,19 @@
             <div class="ballot">
                 <dl class="steps">
                 {% for currStep,categories in options %}
-                    <dt class="step-title">{{ currStep }}</dt>
+                    <dt class="step-title">
+                      <p>{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</p>
+                      <p>{{ currStep }}</p>
+                      <div class="alert alert-info affix-top" id="info-msg" data-spy="affix" data-offset-top="300">
+                        <div class="center-block">
+                          <p>
+                            {% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}
+                            <span>- Você já selecionou <span class="count">0</span></span>
+                          </p>
+                          <p class="hidden">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</p>
+                        </div>
+                      </div>
+                    </dt>
                     <dd>
                         <dl>
                         {% for category,pollOptions in categories %}
@@ -108,7 +128,7 @@
             </div>
 
       {{ form_end(form) }}
-        </div>
+
     </div>
 </div>
 
