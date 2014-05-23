@@ -20,10 +20,9 @@ class PollOptionFilterType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('p')
                         ->orderBy('p.openingTime', 'DESC');
-                },                
+                },
                 'property' => 'name',
-                'empty_value' => 'Selecione',
-                'required' => false
+                'required' => true
             ))
             ->add('corede', 'entity', array(
                 'class' => 'PROCERGSVPRCoreBundle:Corede',
@@ -33,7 +32,7 @@ class PollOptionFilterType extends AbstractType
                 },
                 'empty_value' => 'Selecione',
                 'property' => 'name',
-                'required' => false
+                'required' => true
             ))
         ;
     }

@@ -47,7 +47,7 @@ class PollOptionController extends Controller
 
             $corede = $selected['corede'];
             $poll = $selected['poll'];
-            $steps = $poll->getSteps();
+            $steps = isset($poll) ? $poll->getSteps() : array();
 
             $pollOptionRepos = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
             foreach($steps as $step){

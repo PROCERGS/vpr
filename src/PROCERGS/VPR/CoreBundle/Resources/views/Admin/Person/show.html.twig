@@ -27,7 +27,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.username'|trans }}</label>
             <div class="col-sm-9">
-                <p class="form-control-static">{{ entity.username }}</p>
+                <p class="form-control-static">{% if(entity.treVoter.id is defined) %}{{ entity.treVoter.id }}{% endif %}</p>
             </div>
         </div>
 
