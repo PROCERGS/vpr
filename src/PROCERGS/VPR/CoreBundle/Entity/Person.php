@@ -307,6 +307,48 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this;
     }
 
+    public static function checkNamesEqual($name1, $name2)
+    {
+        $name1 = explode(' ', $name1);
+        $name2 = explode(' ', $name2);
+        $firstName1 = self::filter(reset($name1));
+        $firstName2 = self::filter(reset($name2));
 
+        return (mb_strtolower(trim($firstName1)) === mb_strtolower(trim($firstName2)));
+    }
 
+    private static function filter($value)
+    {
+        $map = array(
+            'á' => 'a',
+            'à' => 'a',
+            'ã' => 'a',
+            'â' => 'a',
+            'é' => 'e',
+            'ê' => 'e',
+            'í' => 'i',
+            'ó' => 'o',
+            'ô' => 'o',
+            'õ' => 'o',
+            'ú' => 'u',
+            'ü' => 'u',
+            'ç' => 'c',
+            'Á' => 'A',
+            'À' => 'A',
+            'Ã' => 'A',
+            'Â' => 'A',
+            'É' => 'E',
+            'Ê' => 'E',
+            'Í' => 'I',
+            'Ó' => 'O',
+            'Ô' => 'O',
+            'Õ' => 'O',
+            'Ú' => 'U',
+            'Ü' => 'U',
+            'Ç' => 'C',
+            '-' => ''
+        );
+
+        return strtr($value, $map);
+    }
 }

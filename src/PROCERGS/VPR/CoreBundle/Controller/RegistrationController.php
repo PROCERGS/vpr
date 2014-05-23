@@ -110,22 +110,13 @@ class RegistrationController extends Controller
         }
     }
 
-    private function checkNamesEqual($name1, $name2)
-    {
-        $name1 = explode(' ', $name1);
-        $name2 = explode(' ', $name2);
-        $firstName1 = reset($name1);
-        $firstName2 = reset($name2);
-        return (mb_strtolower(trim($firstName1)) === mb_strtolower(trim($firstName2)));
-    }
-
     private function handleUserFromVoterRegistration($user, $firstName)
     {
         if (!($user instanceof UserInterface)) {
             return;
         }
 
-        if ($this->checkNamesEqual($firstName, $user->getFirstName())) {
+        if (Person::checkNamesEqual($firstName, $user->getFirstName())) {
             $response = $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
             $this->authenticate($user, $response);
             return $response;
@@ -144,7 +135,7 @@ class RegistrationController extends Controller
             throw new VoterRegistrationNotFoundException();
         }
 
-        if (!$this->checkNamesEqual($treVoter->getName(), $user->getFirstName())) {
+        if (!Person::checkNamesEqual($treVoter->getName(), $user->getFirstName())) {
             throw new VoterRegistrationMismatchException();
         }
 
@@ -156,5 +147,4 @@ class RegistrationController extends Controller
         $this->authenticate($user, $response);
         return $response;
     }
-
 }

@@ -4,6 +4,7 @@ namespace PROCERGS\VPR\CoreBundle\EventListener;
 use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Doctrine\ORM\EntityManager;
+use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationMismatchException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationNotFoundException;
@@ -36,9 +37,7 @@ class PersonListener implements EventSubscriberInterface
             'id' => $event->getVoterRegistration()
         ));
         if ($voter) {
-            $userFirstName = mb_strtolower(substr($user->getFirstName(), 0, strpos($user->getFirstName(), ' ')));
-            $treFirstName = mb_strtolower(substr($voter->getName(), 0, strpos($voter->getName(), ' ')));
-            if ($userFirstName !== $treFirstName) {
+            if (!Person::checkNamesEqual($user->getFirstName(), $voter->getName())) {
                 throw new VoterRegistrationMismatchException();
             }
         } else {
