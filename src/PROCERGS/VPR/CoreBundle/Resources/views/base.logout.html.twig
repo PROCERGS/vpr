@@ -1,0 +1,11 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block javascripts %}
+{{ parent() }}
+<iframe id="logout-iframe" src="{{ login_cidadao_logout_url }}" width="1" height="1" style="display: none">
+<script>
+    $("#logout-iframe").on('load', function() {
+        loadNavbar();
+    });
+</script>
+{% endblock %}
