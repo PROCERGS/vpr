@@ -224,10 +224,6 @@ ul {
   width: 38px;
 }
 
-.inner-content {
-  margin-top: 30px;
-}
-
 /*
  * Large devices
  */
@@ -248,7 +244,6 @@ ul {
   .main-title .icon {
     height: 72px;
     text-align: right;
-    width: 100px;
   }
 
   .main-title .icon:before {
@@ -264,10 +259,6 @@ ul {
   .place-search-title .icon:before {
     background-position: 0 -1px;
     width: 77px;
-  }
-
-  .inner-content {
-    padding: 0 120px;
   }
 
   .twitter-typeahead {
@@ -294,14 +285,7 @@ ul {
 
   .main-title .icon {
     text-align: left;
-    width: auto;
   }
-
-  .inner-content {
-    padding: 0;
-  }
-
-
 
 }
 
