@@ -24,6 +24,7 @@ class PollOptionController extends Controller
         $form->handleRequest($request);
 
         $options = array();
+        $categoriesId = array();
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -43,6 +44,7 @@ class PollOptionController extends Controller
 
                 foreach ($pollOptions as $option) {
                     $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
+                    $categoriesId[$option->getCategory()->getName()] = $option->getCategory()->getId();
                 }
             }
         }
@@ -56,7 +58,7 @@ class PollOptionController extends Controller
             'autocomplete'
         )));
 
-        return compact('form', 'options', 'cities');
+        return compact('form', 'options', 'cities', 'categoriesId');
     }
 
     /**
