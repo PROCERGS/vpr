@@ -51,25 +51,35 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-var userEnd = {'full_name':null, 'email':null, 'nfg_access_lvl': null, 'voter_registration': null};
-userEnd.full_name = {{ app.user.getFirstName is not null }};
-userEnd.email = {{ app.user.badges.email }};
-userEnd.nfg_access_lvl = '{{ app.user.badges.nfg_access_lvl }}';
-userEnd.voter_registration = {{ app.user.badges.voter_registration }};
+var userModel = {'full_name':null, 'email':null, 'nfg_access_lvl': null, 'voter_registration': null};
+userModel.full_name = {{ app.user.getFirstName is not null ? 'true' : 'false' }};
+userModel.email = {{ app.user.badges.email ? 'true' : 'false' }};
+userModel.nfg_access_lvl = {{ app.user.badges.nfg_access_lvl >= 2  ? 'true' : 'false' }};
+userModel.voter_registration = {{ app.user.badges.voter_registration ? 'true' : 'false' }};
 
-function go() {
-	$("#lc-listener").modal("show");	
-}
-function uptModal() {
-}
-function lcPoll() {
+var userAction = {self:this};
+userAction.user = userModel;
+userAction.ready = null;
+userAction.poll = function() {
 	$.ajax({
         url: '{{ path('procergsvpr_core_end_lc_query') }}',
         type: 'GET',
         dataType: 'json',
-        //data: {},
         successs: function (data, textStatus, jqXHR) {
-            
+        	self.user = data;
+        	self.refreshModel();
+        	self.ready = true;        	
+        	for (x in self.user) {
+            	if (!self.user[x]) {
+            		self.ready = false;
+                	break;
+            	}
+            }
+            if (!self.ready) {
+            	self.poll();
+            } else {
+                alert('aee');
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.status == 408) {
@@ -80,11 +90,20 @@ function lcPoll() {
         }
     });
 }
+userAction.refreshModel = function() {
+	for (x in this.user) {
+		$('#req_'+x).prop('checked', this.user[x] ? true : false);
+	}
+}
 
+function go() {
+	userAction.refreshModel();
+	$("#lc-listener").modal("show");	
+}
 $(function(){
 	$("#lc-listener").on('shown.bs.modal', function (e) {
 	    window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
-	    lcPoll();	    
+	    userAction.poll();	    
     });
 
 })

@@ -21,6 +21,7 @@ use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Assetic\Exception\Exception;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 
 class DefaultController extends Controller
 {
@@ -199,7 +200,7 @@ class DefaultController extends Controller
                 curl_close($ch);
                 switch ($info['http_code']) {
                 	case 200;
-                    	$receivedPerson = json_decode($response);
+                    	$receivedPerson = json_decode($response, true);
                     	return ($response !== false && $receivedPerson) ? $receivedPerson : false;
                 	break;
                 	case 408:
@@ -213,9 +214,12 @@ class DefaultController extends Controller
         } catch(\Exception $e) {
             $received = $e->getMessage() ? json_decode($e->getMessage()) : null;
             return new JsonResponse(($received !== false && $received) ? $received : null, $e->getCode());
-        }        
-        $response = new JsonResponse();
-        return $response->setData($person);
+        }
+        $return['full_name'] = strlen($person['full_name']) > 0;
+        $return['email'] = $person['badges']['email'];
+        $return['nfg_access_lvl'] = $person['badges']['nfg_access_lvl'] > 0;
+        $return['voter_registration'] = $person['badges']['voter_registration'];
+        return new JsonResponse($return);
     }
     
     private function runTimeLimited($callback, $waitTime = 1)
