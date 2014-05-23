@@ -10,10 +10,6 @@
   margin: 10px 0;
 }
 
-.inner-content {
-  margin-top: 0;
-}
-
 /* ==========================================================================
    ballot custom checkbox
    ========================================================================== */
@@ -630,4 +626,10 @@
     text-align: center;
     top: 0;
     width: 100%;
+  }
+
+  .ballot-search label,
+  .ac-custom input[type="checkbox"],
+  .ac-custom label::before {
+    cursor: default;
   }

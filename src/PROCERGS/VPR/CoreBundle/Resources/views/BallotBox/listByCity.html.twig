@@ -13,7 +13,7 @@
 
 <div class="row">
   <div class="col-md-12">
-    <div class="inner-content">
+
       <p>{% trans %}Type a city to see it's presential polling places.{% endtrans %}</p>
       {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
       <div class="form-group">
@@ -26,7 +26,7 @@
       <div class="form-group">
         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search' | trans}) }}
       </div>
-    </div>
+
     {{ form_end(form) }}
   </div>
 </div>
@@ -34,7 +34,7 @@
 <div class="row">
   <div class="col-md-12">
     {% if boxes %}
-    <div class="inner-content">
+
       <h3 class="subtitle">{% trans %}Polling places in your city.{% endtrans %}</h3>
       <table class="table table-striped">
         <thead>
@@ -52,7 +52,7 @@
           {% endfor %}
         </tbody>
       </table>
-    </div>
+
     {% endif %}
   </div>
 </div>
