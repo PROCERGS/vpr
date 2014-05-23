@@ -1,3 +1,133 @@
+.main-content {
+  margin-bottom: 50px;
+  margin-top: 50px;
+}
+
+.main-content .btn,
+.sub-content .btn {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.main-content .btn .glyphicon,
+.sub-content .btn .glyphicon {
+  font-size: 25px;
+  left: 10px;
+  margin-top: -12px;
+  position: absolute;
+  top: 50%;
+}
+
+.btn-about {
+  background-color: #1674ab;
+}
+
+.btn-how {
+  background-color: #ff713d;
+}
+
+.btn-vote {
+  background-color: #00a14e;
+}
+
+.sub-content {
+  margin-bottom: 50px;
+}
+
+@media (min-width: 768px) {
+  .main-content .content {
+    padding: 10px 20px;
+  }
+}
+
+.main-content .lc-link {
+  display: block;
+  font-size: 18px;
+  margin: 0 auto 30px;
+  max-width: 300px;
+}
+
+.lc-link span {
+  background-image: url("https://meu.rs.gov.br/bundles/procergslogincidadaocore/images/meu_logo.png");
+  background-position: 0 -92px;
+  display: inline-block;
+  height: 42px;
+  font-size: 18px;
+  line-height: 42px;
+  margin-left: 10px;
+  padding: 0;
+  vertical-align: middle;
+  width: 42px;
+  text-indent: -9999px;
+}
+
+.register-form-container .spacer {
+  clear: both;
+  margin: 25px 0;
+  position: relative;
+}
+
+.register-form-container .spacer hr {
+  border-color: #039935;
+  margin: 0 20px;
+}
+
+.register-form-container .spacer span {
+  background-color: #FFF;
+  display: inline-block;
+  font-size: 25px;
+  left: 50%;
+  margin-left: -25px;
+  text-align: center;
+  top: -20px;
+  position: absolute;
+  width: 50px;
+}
+
+.register-form-container .buttons {
+  clear: both;
+  margin-top: 20px;
+}
+
+.register-form-container .buttons .glyphicon {
+  display: inline-block;
+  font-size: 30px;
+  margin: 10px 75px;
+}
+
+
+.register-form-container .btn-success {
+  height: 54px;
+  margin-right: 10px;
+  margin-top: 0!important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * Register/Login section
  */
@@ -80,10 +210,10 @@
   max-height: 0;
   overflow: hidden;
   position: relative;
-  -webkit-transition: 1s ease-in-out;
-  -moz-transition: 1s ease-in-out;
-  -o-transition: 1s ease-in-out;
-  transition: 1s ease-in-out;
+  -webkit-transition: 1s ease;
+  -moz-transition: 1s ease;
+  -o-transition: 1s ease;
+  transition: 1s ease;
 }
 
 .register-form-container.animate {
