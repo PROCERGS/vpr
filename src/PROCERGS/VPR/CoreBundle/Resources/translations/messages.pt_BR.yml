@@ -48,7 +48,6 @@ default.continue.click: Continuar
 'Beef up your Vote!': 'Reforce seu voto'
 'Thank you very much for voting. You can still step up your vote to improve it''s security.': 'Muito obrigado por ter votado, você ainda pode reforçar mais ainda a autenticidade do seu voto com a Nota Fiscal Gaúcha'
 'To make your vote even more secure, you''ll need an account on Nota Fiscal Gaúcha.': 'Para continuar com o processo de reforço do voto é necessário ter um cadastro com a Nota Fiscal Gaúcha'
-'Validation with Nota Fiscal Gaúcha': 'Validação com a Nota Fiscal Gaúcha'
 'To continue with the voting fill the information missing below for it to be validated against Nota Fiscal Gaúcha''s database.': 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da Nota Fiscal Gaúcha'
 'Your profile on Nota Fiscal Gaúcha is not complete enough': 'Cadastro muito básico com a Nota Fiscal Gaúcha'
 'We detected that your profile on Nota Fiscal Gaúcha contains only basic information. To continue voting you need to step up your registration on Nota Fiscal Gaúcha.': 'Foi detectado que seu cadastro na Nota Fiscal Gaúcha contém apenas o dados básicos de cadastro. Para continuar com o processo de votação é necessário ter um cadastro na Nota Fiscal Gaúcha com mais dados válidos'
@@ -141,8 +140,8 @@ admin.select_a_poll: 'Selecione uma Votação'
 admin.clear_filters: 'Limpar filtros'
 admin.add_poll_option: 'Adicionar opção'
 lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
-lc.full_name: Nome Completo
-'Polling places in your city.': '__Polling places in your city.'
+lc.full_name: 'Nome Completo'
+'Polling places in your city.': 'Locais de votação na sua cidade'
 Categories: Categorias
 'Priorities Voting': 'Votação de Prioridades'
 PPC: CPP
@@ -151,7 +150,10 @@ ONU: UNO
 'Rio Grande do Sul': 'Rio Grande do Sul'
 PROCERGS: PROCERGS
 'Terms of Use': 'Termos de Uso'
-'{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '__{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'
+'{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'
 Description: Descrição
-posvote.validate.click: 'Validar'
+posvote.validate.click: Validar
 'Enter Meu RS': 'Acessar o Meu RS'
+R$: R$
+Loading: Carregando
+'Cost: R$': 'Valor: R$'
