@@ -19,8 +19,9 @@ $(function() {
     $("#btn-vote").on("click", function() {
         $("#btn-vote").button("loading");
 
-        $("#max-selection").fadeOut();
-        $(".confirm-message").fadeIn();
+        // $("#max-selection").fadeOut();
+        // $(".confirm-message").fadeIn();
+        $("#info-msg").addClass("confirm").find("p").toggleClass("hidden");
 
         $("html, body").animate({
             scrollTop: $(".main-title").offset().top
@@ -61,7 +62,8 @@ $(function() {
     }
 
     $("#btn-rectify").on("click", function() {
-        $("#max-selection").fadeIn();
+        $("#info-msg").removeClass("confirm").find("p").toggleClass("hidden");
+
         $(".ballot").slideUp(500, function() {
             $("#vote-empty").addClass("hidden");
             $(".ballot .option, .step-category").removeClass("hidden");

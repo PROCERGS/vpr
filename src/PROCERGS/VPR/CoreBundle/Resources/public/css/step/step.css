@@ -15,9 +15,87 @@
 }
 
 /* ==========================================================================
+   ballot custom checkbox
+   ========================================================================== */
+   .ac-custom .option {
+    margin-bottom: 5px;
+  }
+
+  .ac-custom .option .content {
+    padding: 10px 30px 10px 50px;
+    position: relative;
+  }
+
+  .ac-custom label {
+    display: block;
+    line-height: normal;
+    font-size: 17px;
+    font-weight: normal;
+    vertical-align: top;
+    cursor: pointer;
+    -webkit-transition: color 0.3s;
+    transition: color 0.3s;
+  }
+
+  .ac-custom input[type="checkbox"],
+  .ac-custom label::before {
+    width: 30px;
+    height: 30px;
+    left: 5px;
+    position: absolute;
+    top: 50%;
+    margin-top: -17px;
+    cursor: pointer;
+  }
+
+  .ac-custom input[type="checkbox"]{
+    opacity: 0;
+    -webkit-appearance: none;
+    display: block;
+    vertical-align: middle;
+    z-index: 100;
+  }
+
+  .ac-custom label::before {
+    content: '';
+    border: 2px solid #036e35;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+  }
+
+  .ac-custom input[type="checkbox"]:checked + label {
+    color: #007034;
+  }
+
+  .ac-custom input[type="checkbox"]:checked + label::before {
+    opacity: 0.8;
+  }
+
+/* ==========================================================================
+   General SVG and path styles
+   ========================================================================== */
+   .ac-custom svg {
+    position: absolute;
+    width: 20px;
+    height: 30px;
+    left: 10px;
+    pointer-events: none;
+    margin-top: -16px;
+    top: 50%;
+  }
+
+  .ac-custom svg path {
+    stroke: #f59453;
+    stroke-width: 13px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+
+/* ==========================================================================
    category icons background
    ========================================================================== */
-  .ctg-1 .icon {
+   .ctg-1 .icon {
     background-position: 0 -9px;
   }
   .ctg-1 .icon .img {
@@ -134,9 +212,7 @@
    ========================================================================== */
    .ballot-nav {
     background-color: #ffcf9e;
-    height: 42px;
-    line-height: 42px;
-    padding: 0 10px;
+    padding: 5px 10px 0;
     vertical-align: middle;
   }
 
@@ -148,7 +224,6 @@
   .ballot-nav .btn-group {
     float: left;
     margin-left: -10px;
-    margin-top: 5px;
     position: static;
   }
 
@@ -190,6 +265,37 @@
     top: -8px;
     width: 0;
   }
+
+  /*.check-count li {
+    float: left;
+    margin-left: 10px;
+    position: relative;
+  }
+
+  .check-count input[type="checkbox"] {
+    cursor: default;
+    left: 0;
+    margin-top: -2px;
+    position: relative;
+  }
+
+  .check-count li::before {
+    border: 2px solid #036e35;
+    content: '';
+    cursor: pointer;
+    display: block;
+    height: 30px;
+    margin-top: -15px;
+    transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
+    top: 50%;
+    position: absolute;
+    width: 30px;
+  }
+
+  .check-count svg {
+    left: 5px;
+  }*/
 
   @media (min-width: 768px) {
 
@@ -392,7 +498,7 @@
     background-color: #F1E0D0;
   }
 
-  .ballot .option.ctg-6 {
+  .ballot .option .ctg-6 {
     background-color: #DDEFF6;
   }
 
@@ -475,92 +581,6 @@
     position: absolute;
   }
 
-/* ==========================================================================
-   ballot custom checkbox
-   ========================================================================== */
-   .ac-custom .option {
-    margin-bottom: 5px;
-  }
-
-  .ac-custom .option .content {
-    padding: 10px 30px 10px 50px;
-    position: relative;
-  }
-
-  .ac-custom label {
-    display: block;
-    line-height: normal;
-    font-size: 17px;
-    font-weight: normal;
-    vertical-align: top;
-    cursor: pointer;
-    -webkit-transition: color 0.3s;
-    transition: color 0.3s;
-  }
-
-  .ac-custom input[type="checkbox"],
-  .ac-custom input[type="radio"],
-  .ac-custom label::before {
-    width: 30px;
-    height: 30px;
-    left: 5px;
-    position: absolute;
-    top: 50%;
-    margin-top: -17px;
-    cursor: pointer;
-  }
-
-  .ac-custom input[type="checkbox"],
-  .ac-custom input[type="radio"] {
-    opacity: 0;
-    -webkit-appearance: none;
-    display: block;
-    vertical-align: middle;
-    z-index: 100;
-  }
-
-  .ac-custom label::before {
-    content: '';
-    border: 2px solid #036e35;
-    -webkit-transition: opacity 0.3s;
-    transition: opacity 0.3s;
-  }
-
-  .ac-radio label::before {
-    border-radius: 50%;
-  }
-
-  .ac-custom input[type="checkbox"]:checked + label,
-  .ac-custom input[type="radio"]:checked + label {
-    color: #007034;
-  }
-
-  .ac-custom input[type="checkbox"]:checked + label::before,
-  .ac-custom input[type="radio"]:checked + label::before {
-    opacity: 0.8;
-  }
-
-/* ==========================================================================
-   General SVG and path styles
-   ========================================================================== */
-   .ac-custom svg {
-    position: absolute;
-    width: 20px;
-    height: 30px;
-    left: 10px;
-    pointer-events: none;
-    margin-top: -16px;
-    top: 50%;
-  }
-
-  .ac-custom svg path {
-    stroke: #f59453;
-    stroke-width: 13px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    fill: none;
-  }
-
   #button-bar .btn {
     display: block;
     margin: 10px auto;
@@ -578,4 +598,36 @@
     .ballot .step-title {
       font-size: 25px;
     }
+  }
+
+
+  #info-msg {
+    -webkit-transition: background-color 100ms linear;
+    -moz-transition: background-color 100ms linear;
+    -o-transition: background-color 100ms linear;
+    -ms-transition: background-color 100ms linear;
+    transition: background-color 100ms linear;
+    font-size: 18px;
+    margin-top: 10px;
+    z-index: 9999;
+  }
+
+  #info-msg.confirm {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #a94442;
+  }
+
+  #info-msg .count {
+    font-size: 25px;
+  }
+
+
+
+  #info-msg.affix {
+    left: 0;
+    margin-top: 0;
+    text-align: center;
+    top: 0;
+    width: 100%;
   }
