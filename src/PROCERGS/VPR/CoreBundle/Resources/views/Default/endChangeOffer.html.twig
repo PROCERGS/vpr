@@ -9,18 +9,86 @@
 
     <div class="col-md-12 general-content">
         <p>{% trans %}If you believe that's a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.{% endtrans %}</p>
-        <p><a class="btn btn-success" role="button" href="{{ path('procergsvpr_core_end_change') }}" onclick="go()">{{ 'Enter Meu RS'|trans }}</a></p>
+        {% if app.user.getLoginCidadaoId %}
+            <p><a class="btn btn-success" role="button" href="javascript:void(0);" onclick="go()">{{ 'Enter Meu RS'|trans }}</a></p>
+        {% else %}
+	        {% for owner in hwi_oauth_resource_owners() %}
+	        <p><a class="btn btn-success" role="button" href="{{ hwi_oauth_login_url(owner) }}">{{ 'Enter Meu RS'|trans }}</a></p>
+	        {% endfor %}
+        {% endif %}
+        
         <p><a id="btn-skip" class="btn btn-success" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></p>
     </div>
+    
+    <div class="modal fade" id="lc-listener" tabindex="-1" role="dialog" aria-labelledby="lc-listener" aria-hidden="true">
+	    <div class="modal-dialog modal-sm">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	                <h4 class="modal-title" >{{ 'Aguardando atendimento dos requisitos'|trans }}</h4>
+	            </div>
+	            <div class="modal-body">
+	            <ul>
+                    <li><input type="checkbox" id="req_full_name" name="options[]" value="full_name" onclick="return false;"/><label for="req_2">login cidadao com nome cadastrado</label></li>
+		            <li><input type="checkbox" id="req_email" name="options[]" value="email" onclick="return false;"/><label for="req_2">login cidadao com e-mail confirmado </label></li>
+		            <li><input type="checkbox" id="req_nfg_access_lvl" name="options[]" value="nfg_access_lvl" onclick="return false;"/><label for="req_3">login cidadao com NFG vinculada</label></li>
+		            <li><input type="checkbox" id="req_voter_registration" name="options[]" value="voter_registration" onclick="return false;"/><label for="req_4">login cidadao com titulo de eleitor validado pela NFG</label></li>
+	            </ul>
+	            </div>
+	            <div class="modal-footer">
+	                        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
+	            <img src="{{ asset_url }}" alt="{%trans%}Loading{%endtrans%}" class="loader" width="43" height="11">
+	            {% endimage %}
+	                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'Skip Step'|trans }}</button>
+	            </div>
+	        </div>
+	    </div>
+    </div>    
+    
 </div>
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
 <script>
-    function go() {
-        alert("FIX THIS! The popup size is hardcoded!");
-        window.open('{{ link_lc }}', '', "width=1024, height=600, scrollbars=yes");
-    }
+var userEnd = {'full_name':null, 'email':null, 'nfg_access_lvl': null, 'voter_registration': null};
+userEnd.full_name = {{ app.user.getFirstName is not null }};
+userEnd.email = {{ app.user.badges.email }};
+userEnd.nfg_access_lvl = '{{ app.user.badges.nfg_access_lvl }}';
+userEnd.voter_registration = {{ app.user.badges.voter_registration }};
+
+function go() {
+	$("#lc-listener").modal("show");	
+}
+function uptModal() {
+}
+function lcPoll() {
+	$.ajax({
+        url: '{{ path('procergsvpr_core_end_lc_query') }}',
+        type: 'GET',
+        dataType: 'json',
+        //data: {},
+        successs: function (data, textStatus, jqXHR) {
+            
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            if (jqXHR.status == 408) {
+            	lcPoll();
+            } else {
+                alert('Ocorreu o erro '+jqXHR.status+' , por favor entre em contato com o administador do sistema!');
+            }
+        }
+    });
+}
+
+$(function(){
+	$("#lc-listener").on('shown.bs.modal', function (e) {
+	    window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
+	    lcPoll();	    
+    });
+
+})
+
+
 </script>
 {% endblock %}
