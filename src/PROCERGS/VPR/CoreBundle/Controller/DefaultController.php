@@ -184,7 +184,7 @@ class DefaultController extends Controller
         $accessToken = $user->getLoginCidadaoAccessToken();
         $url = $this->container->getParameter('login_cidadao_base_url');
         $now = new \DateTime();
-        $url .= "/api/v1/person/wait/update?". http_build_query(array('access_token' => $accessToken, 'updated_at' => $now->format('Y-m-d h:i:s')));
+        $url .= "/api/v1/person/wait/update?". http_build_query(array('access_token' => $accessToken, 'updated_at' => $now->format('Y-m-d H:i:s')));
         try {
             $person = $this->runTimeLimited(function() use ($url) {
                 $ch = curl_init();
@@ -217,7 +217,7 @@ class DefaultController extends Controller
         }
         $return['full_name'] = strlen($person['full_name']) > 0;
         $return['email'] = $person['badges']['email'];
-        $return['nfg_access_lvl'] = $person['badges']['nfg_access_lvl'] > 0;
+        $return['nfg_access_lvl'] = $person['badges']['nfg_access_lvl'] >= 2;
         $return['voter_registration'] = $person['badges']['voter_registration'];
         return new JsonResponse($return);
     }

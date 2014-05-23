@@ -57,18 +57,20 @@ userModel.email = {{ app.user.badges.email ? 'true' : 'false' }};
 userModel.nfg_access_lvl = {{ app.user.badges.nfg_access_lvl >= 2  ? 'true' : 'false' }};
 userModel.voter_registration = {{ app.user.badges.voter_registration ? 'true' : 'false' }};
 
-var userAction = {self:this};
+var userAction = {};
 userAction.user = userModel;
 userAction.ready = null;
 userAction.poll = function() {
+	var self = this;
 	$.ajax({
         url: '{{ path('procergsvpr_core_end_lc_query') }}',
         type: 'GET',
         dataType: 'json',
-        successs: function (data, textStatus, jqXHR) {
+        success: function (data, textStatus, jqXHR) {
         	self.user = data;
         	self.refreshModel();
-        	self.ready = true;        	
+        	self.ready = true;
+        	
         	for (x in self.user) {
             	if (!self.user[x]) {
             		self.ready = false;
@@ -83,8 +85,11 @@ userAction.poll = function() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             if (jqXHR.status == 408) {
-            	lcPoll();
+            	self.poll();
             } else {
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
                 alert('Ocorreu o erro '+jqXHR.status+' , por favor entre em contato com o administador do sistema!');
             }
         }
