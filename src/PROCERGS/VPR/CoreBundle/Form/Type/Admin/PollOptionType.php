@@ -20,9 +20,9 @@ class PollOptionType extends AbstractType
             ->add('description')
             ->add('scope')
             ->add('cost','money',array(
+                'precision' => 2,
                 'grouping' => true,
                 'currency' => false,
-                'divisor' => 100,
                 'required' => false
             ))
             ->add('categorySorting','integer')
