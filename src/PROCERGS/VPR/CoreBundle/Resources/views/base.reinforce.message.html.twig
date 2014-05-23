@@ -11,8 +11,8 @@
         <div class="jumbotron">
             <p>{% block step_up_jumbo_message %}{% endblock %}</p>
             <p>
-                <a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=600,height=450" href="{% block step_up_nfg_url %}{{ nfgRegisterUrl? }}{% endblock %}{{ nfgRegisterUrl }}">
-                    {% trans %}Access Nota Fiscal Gaúcha{% endtras %}
+                <a id="btn-popup-nfg" class="btn btn-primary link-popup" role="button" data-specs="width=600,height=450" href="{% block step_up_nfg_url %}{{ nfgRegisterUrl | default('') }}{% endblock %}{{ nfgRegisterUrl }}">
+                    {% trans %}Access Nota Fiscal Gaúcha{% endtrans %}
                 </a>
             </p>
             <p><a id="btn-continue" class="btn btn-primary" role="button" href="{% block step_up_continue_url %}{% endblock %}{{ continueUrl }}">{{ 'Continue'|trans }}</a></p>

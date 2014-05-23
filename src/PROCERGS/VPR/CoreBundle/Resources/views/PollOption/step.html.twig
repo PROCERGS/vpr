@@ -80,7 +80,7 @@
                                     <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
                                     <label for="option_{{ option.id }}">{{ option.getCategorySorting}} - {{ option.title |trans }}
                                     {% if option.cost is not null and option.cost > 0 %}
-                                    - {{ 'Valor: R$'|trans }} {{ option.cost|number_format(2, ',', '.') }}
+                                    - {{ 'Cost: R$'|trans }} {{ option.cost|number_format(2, ',', '.') }}
                                     {% endif %}
                                     </label>
                                     {% if option.description %}<span class="desc-toggle" title="{{ 'Description' | trans }}"></span>{% endif %}
