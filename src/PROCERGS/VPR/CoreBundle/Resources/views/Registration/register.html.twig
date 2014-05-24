@@ -6,124 +6,124 @@
 <div class="row">
   {% for type, messages in app.session.flashbag.all() %}
   {% for message in messages %}
-  <div class="col-md-12">
-    <div class="text-center alert alert-{{ type }}">
+    <div class="col-md-12">
+        <div class="text-center alert alert-{{ type }}">
       {{ message }}
+        </div>
     </div>
-  </div>
   {% endfor %}
   {% endfor %}
 </div>
 
 <div class="row main-content">
-  <div class="col-sm-4">
-    <a href="#about" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-about">
-      <span class="glyphicon glyphicon-question-sign"></span>
-      <span class="text">O que é</span>
-    </a>
-  </div>
+    <div class="col-sm-4">
+        <a href="#about" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-about">
+            <span class="glyphicon glyphicon-question-sign"></span>
+            <span class="text">O que é</span>
+        </a>
+    </div>
 
-  <div class="col-sm-4">
-    <a href="#howto" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-howto">
-      <span class="glyphicon glyphicon-info-sign"></span>
-      <span class="text">Como votar?</span>
-    </a>
-  </div>
+    <div class="col-sm-4">
+        <a href="#howto" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-howto">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            <span class="text">Como votar?</span>
+        </a>
+    </div>
 
-  <div class="col-sm-4">
-    <a href="#vote" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-vote">
-      <span class="glyphicon glyphicon-check"></span>
-      <span class="text">Vote agora!</span>
-    </a>
-  </div>
+    <div class="col-sm-4">
+        <a href="#vote" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-vote">
+            <span class="glyphicon glyphicon-check"></span>
+            <span class="text">Vote agora!</span>
+        </a>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12">
-    <div class="tab-content">
-      <button type="button" class="close tab-close" aria-hidden="true">
-        <span class="glyphicon glyphicon-chevron-up"></span>
-      </button>
-      <div class="tab-pane active" id="about">
-        <h1>O que é o VPR</h1><br>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          </div>
-          <div class="tab-pane" id="howto">
-            <h1>Como votar no vpr</h1><br>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-              </div>
-              <div class="tab-pane" id="vote">
+    <div class="col-md-12">
+        <div class="tab-content">
+            <button type="button" class="close tab-close" aria-hidden="true">
+                <span class="glyphicon glyphicon-chevron-up"></span>
+            </button>
+            <div class="tab-pane active" id="about">
+                <h1>O que é o VPR</h1><br>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+            <div class="tab-pane" id="howto">
+                <h1>Como votar no vpr</h1><br>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+            <div class="tab-pane" id="vote">
                 <div class="register-form-container content">
-                  <a href="http://des.vpr.rs.gov.br/app_dev.php/connect/loginCidadao" class="btn btn-primary lc-link" role="button">
-                    Vote com seu Login Cidadão<span></span>
-                  </a>
-                  <div class="spacer"><hr><span>ou</span></div>
+                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
+                        Vote com seu Login Cidadão<span></span>
+                    </a>
+                    <div class="spacer"><hr><span>ou</span></div>
 
                   {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
                   {{ form_errors(form) }}
-                  <div class="form-group has-feedback clearfix">
+                    <div class="form-group has-feedback clearfix">
                     {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
-                  </div>
-                  <div class="form-group has-feedback">
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
+                    </div>
+                    <div class="form-group has-feedback">
                     {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
-                    <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
-                  </div>
-                  <div class="form-group has-feedback">
+                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                        <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
+                    </div>
+                    <div class="form-group has-feedback">
                     {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
-                  </div>
-                  <div class="form-group has-feedback">
+                        <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
+                    </div>
+                    <div class="form-group has-feedback">
                     {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                    <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
-                  </div>
-                  <span>* {{ 'Required fields'|trans }}</span>
+                        <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
+                    </div>
+                    <span>* {{ 'Required fields'|trans }}</span>
 
-                  <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
+                    <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
                   {{ form_end(form) }}
 
                 </div>
-              </div>
             </div>
-          </div>
         </div>
+    </div>
+</div>
 
-        <div class="row sub-content">
-          <div class="col-sm-6">
-            <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block">
-              <span class="glyphicon glyphicon-globe"></span> Onde votar?
-            </a>
-          </div>
-          <div class="col-sm-6">
-            <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block">
-              <span class="glyphicon glyphicon glyphicon-list-alt"></span> Ver cédula
-            </a>
-          </div>
-        </div>
+<div class="row sub-content">
+    <div class="col-sm-6">
+        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block">
+            <span class="glyphicon glyphicon-globe"></span> Onde votar?
+        </a>
+    </div>
+    <div class="col-sm-6">
+        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block">
+            <span class="glyphicon glyphicon glyphicon-list-alt"></span> Ver cédula
+        </a>
+    </div>
+</div>
 
 
   {% endblock %}
@@ -131,20 +131,20 @@
   {% block stylesheets %}
   {{ parent() }}
   {% stylesheets 'bundles/procergsvprcore/css/register/register.css' filter='cssrewrite' %}
-  <link rel="stylesheet" href="{{ asset_url }}" />
+<link rel="stylesheet" href="{{ asset_url }}" />
   {% endstylesheets %}
   {% endblock %}
 
   {% block javascripts %}
   {{ parent() }}
 
-  <script type="text/javascript">
+<script type="text/javascript">
     var usernameId = "#{{ form.username.vars.id }}";
     $(usernameId).mask('000000000000');
-  </script>
+</script>
 
   {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/register/register.js' %}
-  <script type="text/javascript" src="{{ asset_url }}"></script>
+<script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 
   {% endblock %}
