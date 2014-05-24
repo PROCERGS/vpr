@@ -31,3 +31,8 @@ parameters:
     nfg_ws_rand: false
     lc_register_url: 'https://meu.rs.gov.br/'
     sm_register_url: 'https://pt.surveymonkey.com/s/SRQJJQ2?sm_id='
+
+    memcached_host: 127.0.0.1
+    memcached_port: 11211
+    session_prefix: lc_sess_
+    session_lifetime: 86400
