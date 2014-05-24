@@ -5,209 +5,146 @@
 
 <div class="row">
   {% for type, messages in app.session.flashbag.all() %}
-    {% for message in messages %}
-    <div class="col-md-12">
-      <div class="text-center alert alert-{{ type }}">
-        {{ message }}
-      </div>
+  {% for message in messages %}
+  <div class="col-md-12">
+    <div class="text-center alert alert-{{ type }}">
+      {{ message }}
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
   {% endfor %}
 </div>
 
 <div class="row main-content">
-  <div class="col-sm-6">
-    <button type="button" class="btn btn-primary btn-lg btn-block btn-about">
-      <span class="glyphicon glyphicon-question-sign"></span>O que é?
-    </button>
-
-    <div class="content hidden-xs">
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
-      <p><img src="http://placehold.it/100x200" width="100%" height="100"></p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
-    </div>
-  </div>
-
-  <div class="col-sm-6">
-    <button type="button" class="btn btn-primary btn-lg btn-block btn-vote register-label">
-      <span class="glyphicon glyphicon-check"></span>Vote agora!
-    </button>
-
-    {# <h3 class="title register-label clearfix">{% trans %}Vote with your Voter Registration{% endtrans %}</h3> #}
-
-    <div class="register-form-container content">
-        {% for owner in hwi_oauth_resource_owners() %}
-        <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-primary lc-link" role="button">
-            {% trans %}Vote with your Citizen Login{% endtrans %}<span></span>
-        </a>
-        {% endfor %}
-        <div class="spacer"><hr><span>ou</span></div>
-
-        {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
-            {{ form_errors(form) }}
-            <div class="form-group has-feedback clearfix">
-                    {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
-            </div>
-            <div class="form-group has-feedback">
-                    {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
-                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
-            </div>
-            <div class="form-group has-feedback">
-                    {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
-            </div>
-            <div class="form-group has-feedback">
-                    {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
-            </div>
-            <span>* {{ 'Required fields'|trans }}</span>
-
-            <div class="buttons">
-              <button type="submit" class="btn btn-success btn-lg btn-block pull-left">{{ 'Begin Voting' | trans }}</button>
-            </div>
-
-        {{ form_end(form) }}
-
-        {# {% for owner in hwi_oauth_resource_owners() %}
-        <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">
-            {% trans %}Vote with your Citizen Login{% endtrans %}
-        </a>
-        {% endfor %} #}
-    </div>
-  </div>
-</div>
-
-<div class="row sub-content">
   <div class="col-sm-4">
-    <a href="" role="button" class="btn btn-primary btn-lg btn-block btn-how">
-      <span class="glyphicon glyphicon-wrench"></span> Como votar?
+    <a href="#about" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-about">
+      <span class="glyphicon glyphicon-question-sign"></span>
+      <span class="text">O que é</span>
     </a>
   </div>
+
   <div class="col-sm-4">
-    <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block">
-      <span class="glyphicon glyphicon-globe"></span> Onde votar?
+    <a href="#howto" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-howto">
+      <span class="glyphicon glyphicon-info-sign"></span>
+      <span class="text">Como votar?</span>
     </a>
   </div>
+
   <div class="col-sm-4">
-    <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block">
-      <span class="glyphicon glyphicon glyphicon-list-alt"></span> Ver cédula
+    <a href="#vote" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-vote">
+      <span class="glyphicon glyphicon-check"></span>
+      <span class="text">Vote agora!</span>
     </a>
   </div>
 </div>
 
-{# <div class="row">
-    <div class="col-md-12 text-center">
-        <h2 id="how-to-vote">{% trans %}How do I vote?{% endtrans %}</h2>
-        <div id="how-to-vote-text">
-          <ul>
-            <li>Utilizando o título de eleitor</li>
-            <li>Utilizando o título de eleitor</li>
-            <li>Utilizando o título de eleitor</li>
-            <li>Utilizando o título de eleitor</li>
-          </ul>
-          <h5>Utilizando o titulo de eleito</h5>
-          <p class="text-left">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+<div class="row">
+  <div class="col-md-12">
+    <div class="tab-content">
+      <button type="button" class="close tab-close" aria-hidden="true">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+      </button>
+      <div class="tab-pane active" id="about">
+        <h1>O que é o VPR</h1><br>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
             quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          </p>
-        </div>
-    </div>
-</div>
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+          <div class="tab-pane" id="howto">
+            <h1>Como votar no vpr</h1><br>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+              quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+              consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+              cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+              proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              </div>
+              <div class="tab-pane" id="vote">
+                <div class="register-form-container content">
+                  <a href="http://des.vpr.rs.gov.br/app_dev.php/connect/loginCidadao" class="btn btn-primary lc-link" role="button">
+                    Vote com seu Login Cidadão<span></span>
+                  </a>
+                  <div class="spacer"><hr><span>ou</span></div>
 
-<div class="row register-box">
-    <div class="col-md-5">
-        <h3 class="title register-label clearfix">{% trans %}Vote with your Voter Registration{% endtrans %}</h3>
-
-        <div class="register-form-container">
-            {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
-                {{ form_errors(form) }}
-                <div class="form-group has-feedback clearfix">
-                        {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
+                  {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
+                  {{ form_errors(form) }}
+                  <div class="form-group has-feedback clearfix">
+                    {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
-                </div>
-                <div class="form-group has-feedback">
-                        {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
+                  </div>
+                  <div class="form-group has-feedback">
+                    {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
                     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
-                </div>
-                <div class="form-group has-feedback">
-                        {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                  </div>
+                  <div class="form-group has-feedback">
+                    {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
-                </div>
-                <div class="form-group has-feedback">
-                        {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                  </div>
+                  <div class="form-group has-feedback">
+                    {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                     <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
+                  </div>
+                  <span>* {{ 'Required fields'|trans }}</span>
+
+                  <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
+                  {{ form_end(form) }}
+
                 </div>
-                <span>* {{ 'Required fields'|trans }}</span>
-
-                <button type="submit" class="btn btn-success btn-lg btn-block">{{ 'Begin Voting' | trans }}</button>
-            {{ form_end(form) }}
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-    <div class="col-md-2 hidden-xs hidden-sm"><hr class="spacer"></div>
-    <div class="col-md-5">
-        {% for owner in hwi_oauth_resource_owners() %}
-        <h3 class="title login-label clearfix"><a href="{{ hwi_oauth_login_url(owner) }}" class="link">{% trans %}Vote with your Citizen Login{% endtrans %}</a></h3>
-        <a href="{{ hwi_oauth_login_url(owner) }}" class="btn btn-success btn-lg btn-block hidden-xs" role="button">
-            {% trans %}Vote with your Citizen Login{% endtrans %}
-        </a>
-        {% endfor %}
-        <div class="text-right hidden-xs" id="about-lc-link">
-            <a href="" role="button">{% trans %}What is Citizen Login?{% endtrans %}</a>
-        </div>
-        <div class="alert alert-success hidden-xs" id="about-lc">
-            <p>Texto sobre o login cidadão</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
-            <p style="margin-bottom: 10px;"><a href="">Saiba mais</a></p>
-            <img src="https://www.facebook.com/images/fb_icon_325x325.png" height="50">
-            <img src="http://wp.streetwise.co/wp-content/uploads/2012/06/Larry.png" height="50">
-        </div>
-    </div>
-</div>
 
-<div class="row info-box">
-    <div class="col-md-5 col-ballot text-center">
-        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="link-check ballot-check clearfix"><span class="text">{% trans %}Check the ballot for your region{% endtrans %}</span></a>
-    </div>
-    <div class="col-md-2"></div>
-    <div class="col-md-5 text-center">
-        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="link-check place-check clearfix"><span class="text">{% trans %}Check the polling places{% endtrans %}</span></a>
-    </div>
-</div> #}
-{% endblock %}
+        <div class="row sub-content">
+          <div class="col-sm-6">
+            <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block">
+              <span class="glyphicon glyphicon-globe"></span> Onde votar?
+            </a>
+          </div>
+          <div class="col-sm-6">
+            <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block">
+              <span class="glyphicon glyphicon glyphicon-list-alt"></span> Ver cédula
+            </a>
+          </div>
+        </div>
 
-{% block stylesheets %}
+
+  {% endblock %}
+
+  {% block stylesheets %}
   {{ parent() }}
   {% stylesheets 'bundles/procergsvprcore/css/register/register.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
+  <link rel="stylesheet" href="{{ asset_url }}" />
   {% endstylesheets %}
-{% endblock %}
+  {% endblock %}
 
-{% block javascripts %}
-{{ parent() }}
+  {% block javascripts %}
+  {{ parent() }}
 
-<script type="text/javascript">
+  <script type="text/javascript">
     var usernameId = "#{{ form.username.vars.id }}";
     $(usernameId).mask('000000000000');
-</script>
+  </script>
 
   {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/register/register.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
+  <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 
-{% endblock %}
+  {% endblock %}

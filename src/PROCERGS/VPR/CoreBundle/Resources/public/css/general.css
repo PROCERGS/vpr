@@ -16,8 +16,8 @@ body {
 }
 
 body > .container {
-  padding: 20px 15px 20px;
-}
+   padding: 0.2em 0.5em 0.2em;
+  }
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
@@ -35,25 +35,36 @@ header {
   background-image: url(../images/header.jpg);
   background-size: cover;
   background-repeat: no-repeat;
-  height: 140px;
-  line-height: 140px;
+  height: 70px;
+  line-height: 1em;
   vertical-align: middle;
+}
+header.text-center > a {
+    font-size: 18px;
+    line-height: 120%;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 1px 1px 2px #666;
+}
+header.text-center > a:hover {
+  text-decoration: none;
+  color: #fff;
 }
 
 header .img-responsive {
   display: inline-block;
 }
 
-#social-bar {
-  background-color: #2c8f48;
-  padding: 5px 0;
-}
 
 footer {
-  background-color: #2c8f48;
-  background: #1e5799; /* Old browsers */
-  background: linear-gradient(to bottom, #2c8f48, #006b32); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c8f48', endColorstr='#006b32',GradientType=0 ); /* IE6-9 */
+
+  background-image: -webkit-linear-gradient(top,#222 0,#3C3C3C 100%);
+  background-image: linear-gradient(to bottom,#222 0,#3C3C3C 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff222222', endColorstr='#ff3c3c3c', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  background-color: #222;
+
   bottom: 0;
   padding: 20px 0 0;
   position: absolute;
@@ -127,8 +138,9 @@ ul {
 
 .form-control {
   /*background-color: #a5d6b3;*/
-  /*border: none;*/
+  border: #f6f6f6;
   color: #007034;
+
 }
 
 .form-control:-moz-placeholder {
@@ -228,6 +240,10 @@ ul {
   background-position: 0 -259px;
   width: 38px;
 }
+/* share bar */
+.twitter-share-button {
+    width: 90px !important;
+}
 
 /*
  * Large devices
@@ -237,10 +253,13 @@ ul {
   body {
     margin-bottom: 194px!important;
   }
-
+body > .container {
+   padding: 20px 15px 20px;
+  }
   .form-inline .form-group {
     margin-right: 10px;
   }
+
 
   .main-title {
     line-height: 72px;
@@ -277,7 +296,24 @@ ul {
   .general-content p {
     margin-bottom: 20px;
   }
-
+  header {
+  background-image: url(../images/header.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 140px;
+  vertical-align: middle;
+}
+header.text-center > a {
+    font-size: 2.2em;
+    line-height: 120%;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 1px 1px 2px #666;
+}
+#social-bar {
+  background-color: #f6f6f6;
+  padding: 0.5em 0;
+}
 }
 
 /*
@@ -291,7 +327,10 @@ ul {
   .main-title .icon {
     text-align: left;
   }
-
+#social-bar {
+  background-color: #2c8f48;
+  padding: 5px 0;
+}
 }
 
 

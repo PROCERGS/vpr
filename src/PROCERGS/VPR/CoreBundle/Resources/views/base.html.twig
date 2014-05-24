@@ -2,12 +2,47 @@
 
 {% block header %}
 <header class="text-center">
-  <a href="{{ path('procergsvpr_core_homepage') }}">
-    {% image '@PROCERGSVPRCoreBundle/Resources/public/images/header-text.png' %}
-    <img src="{{ asset_url }}" alt="{%trans%}Priorities Voting{%endtrans%}" class="img-responsive">
-    {% endimage %}
+  <a href="{{ path('procergsvpr_core_homepage') }}" title="Votação de Prioridades">
+        {# {%trans%}Priorities Voting{%endtrans%} #}
+        Votação de Prioridades<br />
+        ORÇAMENTO 2015<br />
+        02 a 04 de junho
   </a>
 </header>
+<div id="social-bar" class="hidden-xs hidden-sm">
+  <div class="container">
+    <div class="row">
+    <div class="col-sm-12 text-center">
+        <div class="pull-left"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
+                <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+        </div>
+        <div class="pull-left"><div id="fb-root"></div>
+                <script>(function(d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) return;
+                  js = d.createElement(s); js.id = id;
+                  js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&appId=424387027695369&version=v2.0";
+                  fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));</script>
+                <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
+        </div>
+        <div class="pull-left social-gplus"><!-- Posicione esta tag onde você deseja que o botão +1 apareça. -->
+                <div class="g-plusone" data-annotation="none"></div>
+
+                <!-- Posicione esta tag depois da última tag do botão +1. -->
+                <script type="text/javascript">
+                  window.___gcfg = {lang: 'pt-BR'};
+
+                  (function() {
+                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                    po.src = 'https://apis.google.com/js/platform.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                  })();
+                </script>
+              </div></div>
+    </div>
+  </div>
+</div>
 
 {% for flashMessage in app.session.flashbag.get('notice') %}
 <div class="alert alert-info">
@@ -28,42 +63,7 @@
 {% endblock %}
 
 {% block footer %}
-{# <div id="social-bar">
-  <div class="container">
-    <div class="row">
-    <div class="col-sm-4 text-center">
-        <a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
-        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-      </div>
-      <div class="col-sm-4 text-center">
-        <div id="fb-root"></div>
-        <script>(function(d, s, id) {
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) return;
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/pt_BR/sdk.js#xfbml=1&appId=424387027695369&version=v2.0";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));</script>
-        <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
-      </div>
-      <div class="col-sm-4 text-center">
-        <!-- Posicione esta tag onde você deseja que o botão +1 apareça. -->
-        <div class="g-plusone" data-annotation="none"></div>
 
-        <!-- Posicione esta tag depois da última tag do botão +1. -->
-        <script type="text/javascript">
-          window.___gcfg = {lang: 'pt-BR'};
-
-          (function() {
-            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-            po.src = 'https://apis.google.com/js/platform.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-          })();
-        </script>
-      </div>
-    </div>
-  </div>
-</div> #}
 
 <footer>
   <div class="container">

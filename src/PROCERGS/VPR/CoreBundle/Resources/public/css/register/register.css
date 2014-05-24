@@ -1,5 +1,9 @@
 .main-content {
-  margin-bottom: 50px;
+  margin-bottom: 0.4em;
+  margin-top: 0.4em;
+}
+
+.sub-content {
   margin-top: 50px;
 }
 
@@ -16,33 +20,96 @@
   margin-top: -12px;
   position: absolute;
   top: 50%;
+  text-rendering:optimizeLegibility;
 }
 
-.btn-about {
-  background-color: #1674ab;
+.btn-about,
+ #about.active {
+  background-color: #1575Ad;
+}
+.btn-about:hover
+  {
+  background-color: #005E96;
 }
 
-.btn-how {
-  background-color: #ff713d;
+.btn-howto,
+#howto.active {
+  background-color: #ff723d;
+}
+.btn-howto:hover{
+  background-color: #FF5E1F;
 }
 
 .btn-vote {
-  background-color: #00a14e;
+  background-color: #80A34F;
+}
+.btn-vote:hover {
+  background-color: #008A43;
+}
+
+#vote {
+  background-color: #F9F9F9;
+  color: #000;
+}
+
+.tab-pane {
+  color: #FFF;
+  padding: 1px 30px 20px;
 }
 
 .sub-content {
   margin-bottom: 50px;
 }
 
+.tab-content {
+  position: relative;
+}
+
+.tab-close {
+  text-shadow: 0px 0px 0px #000;
+  color: #FFF;
+  display: none;
+  font-size: 30px;
+  opacity: 1;
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  z-index: 999;
+}
+
 @media (min-width: 768px) {
   .main-content .content {
     padding: 10px 20px;
   }
+
+  .main-content .btn {
+    font-size: 30px;
+    height: 200px;
+    position: relative;
+  }
+
+  .main-content .btn .text {
+    bottom: 30px;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+  }
+
+  .main-content .btn .glyphicon {
+    font-size: 64px;
+    left: 0;
+    top: 50px;
+    text-align: center;
+    width: 100%;
+  }
+
 }
 
 .main-content .lc-link {
   display: block;
   font-size: 18px;
+  height: auto;
   margin: 0 auto 30px;
   max-width: 300px;
 }
@@ -73,7 +140,7 @@
 }
 
 .register-form-container .spacer span {
-  background-color: #FFF;
+  background-color: #F9F9F9;
   display: inline-block;
   font-size: 25px;
   left: 50%;
@@ -98,7 +165,6 @@
 
 .register-form-container .btn-success {
   height: 54px;
-  margin-right: 10px;
   margin-top: 0!important;
 }
 
@@ -207,13 +273,14 @@
 }
 
 .register-form-container {
-  max-height: 0;
-  overflow: hidden;
+  /*max-height: 0;
+  overflow: hidden;*/
+  padding: 10px 0;
   position: relative;
-  -webkit-transition: 1s ease;
+  /*-webkit-transition: 1s ease;
   -moz-transition: 1s ease;
   -o-transition: 1s ease;
-  transition: 1s ease;
+  transition: 1s ease;*/
 }
 
 .register-form-container.animate {
@@ -233,7 +300,9 @@
 }
 
 .register-form .btn-success {
-  margin-top: 10px;
+  clear: both;
+  display: block;
+  margin: 10px auto;
 }
 
 .register-box #about-lc-link {
@@ -503,4 +572,14 @@
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+/*
+ * Large devices
+ */
+ @media (min-width: 768px) {
+.main-content {
+  margin-bottom: 20px;
+  margin-top: 50px;
+}
+
 }

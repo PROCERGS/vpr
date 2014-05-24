@@ -2,6 +2,25 @@
 $(function() {
     "use strict";
 
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      // $("footer").css("visibility", "hidden");
+      $(".tab-close").show();
+
+      $("html, body").animate({
+            scrollTop: $(".tab-content").offset().top
+        }, 900);
+    });
+
+    $(".tab-close").on("click", function() {
+      var self = $(this);
+      $("html, body").animate({
+            scrollTop: 0
+        }, 900, function() {
+          self.hide();
+        });
+    });
+
+
     /*
      * Show 'how to vote' text
      */
@@ -13,23 +32,23 @@ $(function() {
     /*
      * Mobile behavior to register form
      */
-    var formContainer = $(".register-form-container");
+    // var formContainer = $(".register-form-container");
 
-    $(".register-label").on("click", function() {
-        if ($(window).width() <= 768) {
-            formContainer.toggleClass("animate");
-            $(".register-tooltip").tooltip("hide");
-        }
-    });
+    // $(".register-label").on("click", function() {
+    //     if ($(window).width() <= 768) {
+    //         formContainer.toggleClass("animate");
+    //         $(".register-tooltip").tooltip("hide");
+    //     }
+    // });
 
-    $(window).resize(function() {
-        if ($(window).width() > 768 && formContainer.is(":hidden")) {
-            formContainer.show();
-        }
+    // $(window).resize(function() {
+    //     if ($(window).width() > 768 && formContainer.is(":hidden")) {
+    //         formContainer.show();
+    //     }
 
-        $(".register-tooltip").tooltip("hide");
+    //     $(".register-tooltip").tooltip("hide");
 
-    });
+    // });
 
 
     /*
