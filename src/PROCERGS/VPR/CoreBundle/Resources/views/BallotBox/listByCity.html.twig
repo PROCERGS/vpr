@@ -3,16 +3,16 @@
 {% block body %}
 
 <div class="row">
-  <div class="col-md-12 text-left">
-    <h2 class="main-title place-search-title">
-      <span class="icon"></span>
+  <div class="col-md-12 text-center">
+    <h2 class="main-title search-title">
+      <span class="glyphicon glyphicon-globe"></span>
       <span>{{ 'Polling Places' | trans }}</span>
     </h2>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-12 text-center">
 
       <p>{% trans %}Type a city to see it's presential polling places.{% endtrans %}</p>
       {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
