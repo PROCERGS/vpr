@@ -247,15 +247,16 @@ ul {
 .twitter-share-button {
     width: 90px !important;
 }
-div.pull-right.inicial {
+
+.home-icon {
 background-color: #f9f9f9;
-    padding: 4px;
+    padding: 8px;
     border-radius: 100px;
-    margin: -5px 0 0 0;
-    height: 2em;
-    width: 2em;
+    position: relative;
+    top: -4px;
+
 }
-div.pull-right.inicial:hover {
+.home-icon:hover {
     background-color: #e9e9e9;
 }
 
