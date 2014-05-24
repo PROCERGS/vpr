@@ -484,6 +484,7 @@ input::-webkit-inner-spin-button {
 
 .search-title {
   color: #007136!important;
+  margin-top: 0!important;
 }
 
 .search-title .glyphicon {
