@@ -165,7 +165,6 @@
 
 .register-form-container .btn-success {
   height: 54px;
-  margin-top: 0!important;
 }
 
 
@@ -302,7 +301,7 @@
 .register-form .btn-success {
   clear: both;
   display: block;
-  margin: 10px auto;
+  margin: 20px auto 0;
 }
 
 .register-box #about-lc-link {
