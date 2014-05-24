@@ -102,7 +102,10 @@ ul {
 }
 
 .form-inline {
-  margin: 20px 0;
+  margin: 20px auto;
+  padding: 10px 50px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
 }
 
 .form-inline .form-group {
@@ -244,6 +247,17 @@ ul {
 .twitter-share-button {
     width: 90px !important;
 }
+div.pull-right.inicial {
+background-color: #f9f9f9;
+    padding: 4px;
+    border-radius: 100px;
+    margin: -5px 0 0 0;
+    height: 2em;
+    width: 2em;
+}
+div.pull-right.inicial:hover {
+    background-color: #e9e9e9;
+}
 
 /*
  * Large devices
@@ -312,7 +326,7 @@ header.text-center > a {
 }
 #social-bar {
   background-color: #f6f6f6;
-  padding: 0.5em 0;
+  padding: 0.5em 0 0 0;
 }
 }
 
@@ -466,4 +480,13 @@ input::-webkit-inner-spin-button {
    ========================================================================== */
 .link-popup {
   margin: 0 0 30px;
+}
+
+.search-title {
+  color: #007136!important;
+}
+
+.search-title .glyphicon {
+  position: relative;
+  top: 4px;
 }
