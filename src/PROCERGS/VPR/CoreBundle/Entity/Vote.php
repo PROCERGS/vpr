@@ -8,7 +8,11 @@ use JMS\Serializer\Annotation\Groups;
 /**
  * Vote
  *
- * @ORM\Table(name="vote")
+ * @ORM\Table(name="vote", indexes={
+ *      @ORM\index(name="idx_voter_registration", columns={"voter_registration"}),
+ *      @ORM\index(name="idx_login_cidadao_id", columns={"login_cidadao_id"}),
+ *      @ORM\index(name="idx_nfg_cpf", columns={"nfg_cpf"})
+ * })
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\VoteRepository")
  * @ORM\HasLifecycleCallbacks
  */
@@ -110,7 +114,7 @@ class Vote
     protected $lastStep;
 
     protected $pollOption = array();
-    
+
     /**
      * @var string
      *
@@ -454,16 +458,16 @@ class Vote
         $this->signature = $this->ballotBox->sign($this->plainOptions);
         $this->encryptVote();
     }
-    
+
     public function setSmId($var)
     {
         $this->smId = $var;
         return $this;
     }
-    
+
     public function getSmId()
     {
         return $this->smId;
-    }    
+    }
 
 }
