@@ -85,137 +85,92 @@
 /* ==========================================================================
    Large devices
    ========================================================================== */
-   @media (min-width: 768px) {
-
-    .main-content .btn-tab {
-      font-size: 30px;
-      height: 200px;
-      padding-top: 130px;
-      position: relative;
-    }
-
-    .main-content .btn .glyphicon {
-      font-size: 64px;
-      left: 0;
-      top: 50px;
-      text-align: center;
-      width: 100%;
-    }
-
-  }
-
-  .main-content .lc-link {
-    display: block;
-    font-size: 18px;
-    height: auto;
-    margin: 0 auto 30px;
-    max-width: 300px;
-  }
-
-  .lc-link span {
-    background-image: url("https://meu.rs.gov.br/bundles/procergslogincidadaocore/images/meu_logo.png");
-    background-position: 0 -92px;
-    display: inline-block;
-    height: 42px;
-    font-size: 18px;
-    line-height: 42px;
-    margin-left: 10px;
-    padding: 0;
-    vertical-align: middle;
-    width: 42px;
-    text-indent: -9999px;
-  }
-
-  .register-form-container {
-    padding-top: 10px;
-  }
-
-  .register-form-container .spacer {
-    clear: both;
-    margin: 25px 0;
-    position: relative;
-  }
-
-  .register-form-container .spacer hr {
-    border-color: #039935;
-  }
-
-  .register-form-container .spacer span {
-    background-color: #F9F9F9;
-    display: inline-block;
-    font-size: 25px;
-    left: 50%;
-    margin-left: -25px;
-    text-align: center;
-    top: -20px;
-    position: absolute;
-    width: 50px;
-  }
-
-  .register-form-container .buttons {
-    clear: both;
-    margin-top: 20px;
-  }
-
-  .register-form-container .buttons .glyphicon {
-    display: inline-block;
-    font-size: 30px;
-    margin: 10px 75px;
-  }
-
-  .register-form-container .btn-success {
-    clear: both;
-    display: block;
-    height: 54px;
-    margin: 20px auto;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- * Hide input spinners
- */
- input[type='number'],
- input[type='tel']{
-  -moz-appearance: textfield;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
-/*
- * Large devices
- */
  @media (min-width: 768px) {
+
   .main-content {
     margin-bottom: 20px;
     margin-top: 50px;
   }
 
+  .main-content .btn-tab {
+    font-size: 30px;
+    height: 200px;
+    padding-top: 130px;
+    position: relative;
+  }
+
+  .main-content .btn .glyphicon {
+    font-size: 64px;
+    left: 0;
+    top: 50px;
+    text-align: center;
+    width: 100%;
+  }
+
+}
+
+.main-content .lc-link {
+  display: block;
+  font-size: 18px;
+  height: auto;
+  margin: 0 auto 30px;
+  max-width: 300px;
+}
+
+.lc-link span {
+  background-image: url("https://meu.rs.gov.br/bundles/procergslogincidadaocore/images/meu_logo.png");
+  background-position: 0 -92px;
+  display: inline-block;
+  height: 42px;
+  font-size: 18px;
+  line-height: 42px;
+  margin-left: 10px;
+  padding: 0;
+  vertical-align: middle;
+  width: 42px;
+  text-indent: -9999px;
+}
+
+.register-form-container {
+  padding-top: 10px;
+}
+
+.register-form-container .spacer {
+  clear: both;
+  margin: 25px 0;
+  position: relative;
+}
+
+.register-form-container .spacer hr {
+  border-color: #039935;
+}
+
+.register-form-container .spacer span {
+  background-color: #F9F9F9;
+  display: inline-block;
+  font-size: 25px;
+  left: 50%;
+  margin-left: -25px;
+  text-align: center;
+  top: -20px;
+  position: absolute;
+  width: 50px;
+}
+
+.register-form-container .buttons {
+  clear: both;
+  margin-top: 20px;
+}
+
+.register-form-container .buttons .glyphicon {
+  display: inline-block;
+  font-size: 30px;
+  margin: 10px 75px;
+}
+
+.register-form-container .btn-success {
+  clear: both;
+  display: block;
+  height: 54px;
+  margin: 20px auto;
 }
