@@ -80,6 +80,13 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     protected $loginCidadaoUsername;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="login_cidadao_refresh_token", type="string", length=255, nullable=true)
+     */
+    protected $loginCidadaoRefreshToken;    
+    
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -104,12 +111,19 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      * @ORM\Column(name="mobile", type="string", nullable=true)
      */
     protected $mobile;
-
-
+    
     /**
      * @ORM\Column(name="badges",type="array", nullable=true)
      */
     protected $badges;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="login_cidadao_updated_at", type="datetime", nullable=true)
+     */
+    protected $loginCidadaoUpdatedAt;
+    
     /**
      * Get id
      *
@@ -351,4 +365,28 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
         return strtr($value, $map);
     }
+    
+    public function setLoginCidadaoUpdatedAt($var)
+    {
+        $this->loginCidadaoUpdatedAt = $var;
+        return $this;
+    }
+    
+    public function getLoginCidadaoUpdatedAt()
+    {
+        return $this->loginCidadaoUpdatedAt;
+    }
+    
+    public function setLoginCidadaoRefreshToken($var)
+    {
+        $this->loginCidadaoRefreshToken = $var;
+        return $this;
+    }
+    
+    public function getLoginCidadaoRefreshToken()
+    {
+        return $this->loginCidadaoRefreshToken;
+    }
+    
+    
 }

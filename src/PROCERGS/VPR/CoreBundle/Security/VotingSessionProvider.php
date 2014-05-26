@@ -107,11 +107,10 @@ class VotingSessionProvider
         if ($this->hasVotingSession()) {
             return $this->getVote();
         }
-        $vote = $this->createVotingSession($person);
-        $this->em->detach($vote);
-        $this->session->set('vote', $vote);
-
-        return $vote;
+        if (!$this->checkExistingVotes($person, $ball)) {
+            return;
+        }
+        return $this->save($this->createVotingSession($person));
     }
 
     public function getNextStep()
@@ -119,12 +118,8 @@ class VotingSessionProvider
         return $this->getVote()->getLastStep();
     }
 
-    private function createVotingSession(Person $person)
+    public function createVotingSession(Person $person)
     {
-        if (!$this->checkExistingVotes($person, $ball)) {
-            return;
-        }
-
         $vote = new Vote();
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ball);
@@ -138,6 +133,13 @@ class VotingSessionProvider
         }
         $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
+        return $vote;
+    }
+    
+    public function save($vote)
+    {
+        $this->em->detach($vote);
+        $this->session->set('vote', $vote);
         return $vote;
     }
 

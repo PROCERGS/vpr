@@ -87,17 +87,22 @@ class FOSUBUserProvider extends BaseClass
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
         $setter_token = $setter . 'AccessToken';
+        $setter_refresh = $setter . 'RefreshToken';
         $setter_username = $setter . 'Username';
 
         $user->$setter_id($serviceId);
         $user->$setter_token($response->getAccessToken());
         $user->$setter_username($response->getNickname());
+        $user->$setter_refresh($response->getRefreshToken());
 
         $user->setUsername($username);
         $user->setFirstName($userData['full_name']);
         $user->setPassword('');
         $user->setEnabled(true);
         $user->setBadges($userData['badges']);
+        if ($dt = date_create($userData['updated_at'])) {
+            $user->setLoginCidadaoUpdatedAt($dt);
+        }
         if (array_key_exists('city', $userData) && is_numeric($userData['city']['id'])) {
             $cityRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:City');
             $city = $cityRepo->findOneBy(array('ibgeCode' => $userData['city']['id']));

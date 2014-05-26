@@ -31,6 +31,7 @@ class PersonListener implements EventSubscriberInterface
         if (is_null($event->getVoterRegistration()) || !strlen($event->getVoterRegistration())) {
             return false;
         }
+        $event->setVoterRegistration(str_pad($event->getVoterRegistration(), 12, '0', STR_PAD_LEFT));
         $user = $event->getPerson();
         $treRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
         $voter = $treRepo->findOneBy(array(
