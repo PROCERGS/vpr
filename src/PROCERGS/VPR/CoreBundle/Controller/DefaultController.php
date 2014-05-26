@@ -98,7 +98,8 @@ class DefaultController extends Controller
             }
             $user = $this->getUser();
             $dispatcher = $this->container->get('event_dispatcher');
-            $event = new PersonEvent($user, $form->get('trevoter')->getData());
+            $treVoterTmp = $form->get('trevoter')->getData();
+            $event = new PersonEvent($user, $treVoterTmp);
             try {
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
                         $event);
