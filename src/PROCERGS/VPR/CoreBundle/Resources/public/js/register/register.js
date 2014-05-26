@@ -2,8 +2,12 @@
 $(function() {
     "use strict";
 
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-      // $("footer").css("visibility", "hidden");
+    var btnTabs = $(".btn-tab");
+
+    btnTabs.on("shown.bs.tab", function () {
+      btnTabs.removeClass("active");
+      $(this).addClass("active");
+
       $(".tab-close").show();
 
       $("html, body").animate({

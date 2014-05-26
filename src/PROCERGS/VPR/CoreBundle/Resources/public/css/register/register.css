@@ -24,41 +24,32 @@
 }
 
 .btn-about,
- #about.active {
+.tab-about {
   background-color: #1575Ad;
 }
-.btn-about:hover
-  {
+
+.btn-about:hover,
+.btn-about.active {
   background-color: #005E96;
 }
 
 .btn-howto,
-#howto.active {
+.tab-howto {
   background-color: #ff723d;
 }
-.btn-howto:hover{
+
+.btn-howto:hover,
+.btn-howto.active {
   background-color: #FF5E1F;
 }
 
 .btn-vote {
   background-color: #80A34F;
 }
-.btn-vote:hover {
+
+.btn-vote:hover,
+.btn-vote.active {
   background-color: #008A43;
-}
-
-#vote {
-  background-color: #F9F9F9;
-  color: #000;
-}
-
-.tab-pane {
-  color: #FFF;
-  padding: 1px 30px 20px;
-}
-
-.sub-content {
-  margin-bottom: 50px;
 }
 
 .tab-content {
@@ -77,489 +68,135 @@
   z-index: 999;
 }
 
-@media (min-width: 768px) {
-  .main-content .content {
-    padding: 10px 20px;
-  }
-
-  .main-content .btn {
-    font-size: 30px;
-    height: 200px;
-    position: relative;
-  }
-
-  .main-content .btn .text {
-    bottom: 30px;
-    left: 0;
-    position: absolute;
-    text-align: center;
-    width: 100%;
-  }
-
-  .main-content .btn .glyphicon {
-    font-size: 64px;
-    left: 0;
-    top: 50px;
-    text-align: center;
-    width: 100%;
-  }
-
+.tab-pane {
+  color: #FFF;
+  padding: 1px 30px 20px;
 }
 
-.main-content .lc-link {
-  display: block;
-  font-size: 18px;
-  height: auto;
-  margin: 0 auto 30px;
-  max-width: 300px;
-}
-
-.lc-link span {
-  background-image: url("https://meu.rs.gov.br/bundles/procergslogincidadaocore/images/meu_logo.png");
-  background-position: 0 -92px;
-  display: inline-block;
-  height: 42px;
-  font-size: 18px;
-  line-height: 42px;
-  margin-left: 10px;
-  padding: 0;
-  vertical-align: middle;
-  width: 42px;
-  text-indent: -9999px;
-}
-
-.register-form-container .spacer {
-  clear: both;
-  margin: 25px 0;
-  position: relative;
-}
-
-.register-form-container .spacer hr {
-  border-color: #039935;
-  margin: 0 20px;
-}
-
-.register-form-container .spacer span {
+.tab-vote {
   background-color: #F9F9F9;
-  display: inline-block;
-  font-size: 25px;
-  left: 50%;
-  margin-left: -25px;
-  text-align: center;
-  top: -20px;
-  position: absolute;
-  width: 50px;
+  color: #000;
 }
 
-.register-form-container .buttons {
-  clear: both;
-  margin-top: 20px;
-}
-
-.register-form-container .buttons .glyphicon {
-  display: inline-block;
-  font-size: 30px;
-  margin: 10px 75px;
-}
-
-
-.register-form-container .btn-success {
-  height: 54px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- * Register/Login section
- */
-
- #how-to-vote {
-  color: #D2750E;
-  cursor: pointer;
-  display: inline-block;
-  margin: 20px;
-  position: relative;
-}
-
-#how-to-vote:before {
-  background: url('../../images/icon-set.png') -12px -6px no-repeat;
-  content: "";
-  display: block;
-  height: 21px;
-  left: -30px;
-  position: absolute;
-  top: 2px;
-  width: 20px;
-}
-
-#how-to-vote-text {
-  display: none;
-  margin-bottom: 20px;
-}
-
-#how-to-vote-text h5 {
-  font-weight: bold;
-  margin: 20px 0 10px;
-  text-align: left;
-}
-
-#how-to-vote-text p {
-  font-size: 14px;
-}
-
-.register-box {
-  margin-bottom: 0;
-}
-
-.register-box .col-md-5,
-.info-box .col-md-5 {
-  margin: 0;
-  padding: 20px;
-}
-
-.register-box .col-md-5,
-.info-box .col-ballot {
-  border-bottom: solid 1px #CCC;
-}
-
-.register-box .title {
-  color: #D2750E;
-  cursor: pointer;
-  margin: 0;
-  padding-left: 50px;
-  position: relative;
-  text-align: left;
-}
-
-.register-box .title .link {
-  cursor: pointer;
-  color: #D2750E;
-}
-
-.register-box .title .link:hover {
-  text-decoration: none;
-}
-
-.register-box .spacer {
-  border: none;
-  border-right: solid 2px #D2750E;
-  height: 400px;
-  width: 1px;
-}
-
-.register-form-container {
-  /*max-height: 0;
-  overflow: hidden;*/
-  padding: 10px 0;
-  position: relative;
-  /*-webkit-transition: 1s ease;
-  -moz-transition: 1s ease;
-  -o-transition: 1s ease;
-  transition: 1s ease;*/
-}
-
-.register-form-container.animate {
-  max-height: 1000px;
-}
-
-.register-form {
-  margin-top: 20px;
-}
-
-.register-form .tre-search-link {
-  display: none;
-  font-size: 12px;
-  margin: 5px 0;
-  line-height: 15px;
-  padding: 4px 9px;
-}
-
-.register-form .btn-success {
-  clear: both;
-  display: block;
-  margin: 20px auto 0;
-}
-
-.register-box #about-lc-link {
-  margin: 20px 0;
-}
-
-.info-box {
-  font-size: 24px;
+.sub-content {
   margin-bottom: 50px;
 }
 
-.link-check {
-  display: block;
-  color: #007136;
-  font-size: 20px;
-  padding-left: 50px;
-  position: relative;
-  text-align: left;
-}
-
-.link-check .text {
-  position: relative;
-}
-
 /* ==========================================================================
-   styles for temp index
+   Large devices
    ========================================================================== */
-   .temp #how-to-vote {
-    color: #D2750E;
-    font-size: 20px;
+   @media (min-width: 768px) {
+
+    .main-content .btn-tab {
+      font-size: 30px;
+      height: 200px;
+      padding-top: 130px;
+      position: relative;
+    }
+
+    .main-content .btn .glyphicon {
+      font-size: 64px;
+      left: 0;
+      top: 50px;
+      text-align: center;
+      width: 100%;
+    }
+
   }
 
-  .temp.temp-text {
-    margin-bottom: 50px;
-  }
-
-  .temp .title {
-    color: #D2750E;
-    font-size: 45px;
-    margin: 25px 0;
-  }
-
-  .temp .col-ballot {
-    border-bottom: none;
-    margin-bottom: 20px;
-  }
-
-  .temp .link-check {
-    text-align: center;
-  }
-
-  .temp.info-box {
-    margin-bottom: 20px;
-  }
-
-  .info-box .col-md-12 {
-    padding: 20px;
-  }
-
-
-
-/*
- * Small devices
- */
- @media (max-width: 767px)  {
-
-  #how-to-vote {
-    font-size: 20px;
-  }
-
-  .register-box .title {
-    color: #007136;
-    font-size: 20px;
-    font-weight: normal;
-  }
-
-  .register-box .title .link {
-    color: #007136;
-  }
-
-  .register-box .title:before {
-    background-image: url('../../images/icon-set.png');
-    content: "";
+  .main-content .lc-link {
     display: block;
-    left: 0;
-    position: absolute;
-    top: 50%;
+    font-size: 18px;
+    height: auto;
+    margin: 0 auto 30px;
+    max-width: 300px;
   }
 
-  .register-box .register-label:before {
-    background-position:  -7px -50px;
-    height: 38px;
-    margin-top: -19px;
-    width: 29px;
+  .lc-link span {
+    background-image: url("https://meu.rs.gov.br/bundles/procergslogincidadaocore/images/meu_logo.png");
+    background-position: 0 -92px;
+    display: inline-block;
+    height: 42px;
+    font-size: 18px;
+    line-height: 42px;
+    margin-left: 10px;
+    padding: 0;
+    vertical-align: middle;
+    width: 42px;
+    text-indent: -9999px;
   }
-
-  .register-box .login-label:before {
-    background-position:  -7px -126px;
-    height: 25px;
-    margin-top: -12px;
-    width: 30px;
-  }
-
-  .info-box .link-check:before {
-    background-image: url('../../images/icon-set.png');
-    content: "";
-    display: block;
-    left: 0;
-    top: 50%;
-    position: absolute;
-  }
-
-  .info-box .ballot-check:before {
-    background-position: -7px -193px;
-    height: 35px;
-    margin-top: -19px;
-    width: 26px;
-  }
-
-  .info-box .place-check:before {
-    background-position: 0 -259px;
-    height: 35px;
-    left: -6px;
-    margin-top: -19px;
-    width: 38px;
-  }
-
-}
-
-
-/*
- * Medium devices
- */
- @media (min-width: 768px) and (max-width: 991px) {
-  .info-box .col-ballot {
-    margin-bottom: 100px;
-  }
-
-  .temp .col-ballot {
-    margin-bottom: 20px;
-  }
-}
-
-
-/*
- * Large devices
- */
- @media (min-width: 768px) {
-
-  #how-to-vote {
-    color: #007136;
-  }
-
-  #how-to-vote:before {
-    background: url('../../images/icon-set-desktop.png') -19px -153px no-repeat;
-    height: 41px;
-    left: -60px;
-    margin-top: -20px;
-    top: 50%;
-    width: 39px;
-  }
-
-
-  .register-box {
-    margin-bottom: 70px;
-    margin-top: 30px;
-  }
-
 
   .register-form-container {
-    max-height: none;
-    overflow: visible;
+    padding-top: 10px;
   }
 
-  .register-box .col-md-5, .info-box .col-ballot {
-    border-bottom: none;
+  .register-form-container .spacer {
+    clear: both;
+    margin: 25px 0;
+    position: relative;
   }
 
-  .register-box .title {
-    cursor: default;
-    margin-bottom: 30px;
-    padding-left: 0;
+  .register-form-container .spacer hr {
+    border-color: #039935;
+  }
+
+  .register-form-container .spacer span {
+    background-color: #F9F9F9;
+    display: inline-block;
+    font-size: 25px;
+    left: 50%;
+    margin-left: -25px;
     text-align: center;
-  }
-
-  .register-form {
-    margin-top: 0;
-  }
-
-  .info-box {
-    margin-bottom: 100px;
-  }
-
-  .info-box .col-md-5 {
-    padding: 0;
-  }
-
-
-  .info-box .col-md-12 {
-    padding: 20px;
-  }
-
-  .link-check {
-    padding-left: 0;
-    text-align: center;
-  }
-
-  .link-check .text:before {
-    background-image: url('../../images/icon-set-desktop.png');
-    content: "";
-    display: block;
-    height: 72px;
-    margin-top: -36px;
+    top: -20px;
     position: absolute;
-    top: 50%;
+    width: 50px;
   }
 
-  .ballot-check .text:before {
-    background-position: -12px -76px;
-    left: -70px;
-    width: 54px;
+  .register-form-container .buttons {
+    clear: both;
+    margin-top: 20px;
   }
 
-  .place-check .text:before {
-    background-position: 0 -1px;
-    left: -92px;
-    width: 77px;
+  .register-form-container .buttons .glyphicon {
+    display: inline-block;
+    font-size: 30px;
+    margin: 10px 75px;
   }
 
-
-  .temp .link-check .text:before {
-    background-image: url('../../images/icon-set.png');
-    content: "";
+  .register-form-container .btn-success {
+    clear: both;
     display: block;
-    margin-top: -17px;
-    position: absolute;
-    top: 50%;
+    height: 54px;
+    margin: 20px auto;
   }
 
-  .temp .ballot-check .text:before {
-    background-position: -7px -193px;
-    height: 35px;
-    left: -43px;
-    width: 26px;
-  }
 
-  .temp .place-check .text:before {
-    background-position: 0 -259px;
-    height: 35px;
-    left: -50px;
-    width: 38px;
-  }
 
-  .temp.temp-text {
-    margin: 20px 0 60px;
-  }
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
  * Hide input spinners
@@ -576,9 +213,9 @@ input::-webkit-inner-spin-button {
  * Large devices
  */
  @media (min-width: 768px) {
-.main-content {
-  margin-bottom: 20px;
-  margin-top: 50px;
-}
+  .main-content {
+    margin-bottom: 20px;
+    margin-top: 50px;
+  }
 
 }
