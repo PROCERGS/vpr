@@ -110,7 +110,7 @@ class VotingSessionProvider
         if (!$this->checkExistingVotes($person, $ball)) {
             return;
         }
-        return $this->save($this->createVotingSession($person));
+        return $this->save($this->createVotingSession($person, $ball));
     }
 
     public function getNextStep()
@@ -118,11 +118,17 @@ class VotingSessionProvider
         return $this->getVote()->getLastStep();
     }
 
-    public function createVotingSession(Person $person)
+    public function createVotingSession(Person $person, $ballotBox = null)
     {
+        if (null === $ballotBox) {
+            $ballotBox = $this->getOnlineBallotBox();
+            if (!$ballotBox) {
+                throw new VotingTimeoutException();
+            }
+        }
         $vote = new Vote();
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
-        $vote->setBallotBox($ball);
+        $vote->setBallotBox($ballotBox);
         $vote->setCorede($person->getCityOrTreCity()->getCorede());
         $vote->setSmId(uniqid(mt_rand(), true));
         if ($person->getTreVoter() instanceof TREVoter) {

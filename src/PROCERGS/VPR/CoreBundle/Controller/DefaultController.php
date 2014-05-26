@@ -218,7 +218,7 @@ class DefaultController extends Controller
         $user = $this->getUser();
         $accessToken = $user->getLoginCidadaoAccessToken();
         $url = $this->container->getParameter('login_cidadao_base_url');
-        $url .= "/api/v1/person/wait/update?". http_build_query(array('access_token' => $accessToken, 'updated_at' => $user->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s')));
+        $url .= "/api/v1/wait/person/update?". http_build_query(array('access_token' => $accessToken, 'updated_at' => $user->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s')));
         try {
             $person = $this->runTimeLimited(function() use ($url) {
                 $ch = curl_init();
@@ -256,20 +256,17 @@ class DefaultController extends Controller
         $return['updated_at'] = $person['updated_at'];
         $return['code'] = ($return['item']['full_name'] && $return['item']['email'] && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration']) ? 0 : 1;
         $return['msg'] = '';
+        $userManager = $this->container->get('fos_user.user_manager');
         if (!$return['code']) {
             $dispatcher = $this->container->get('event_dispatcher');
-            $userManager = $this->container->get('fos_user.user_manager');
             try {
                 $user->setUsername($person['username']);
                 $user->setFirstName($person['full_name']);
                 $user->setBadges($person['badges']);
                 $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
-                $user->setNfgCpf(1);
                 
                 $event = new PersonEvent($user, $person['voter_registration']);
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
-                
-                $userManager->updateUser($user);
                 
                 $votingSession = $this->get('vpr_voting_session_provider');                
                 $vote = $votingSession->save($votingSession->createVotingSession($user)->setNfgCpf(1));
@@ -278,6 +275,8 @@ class DefaultController extends Controller
                 $return['msg'] = $this->get('translator')->trans($e->getMessage());
             }
         }
+        $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
+        $userManager->updateUser($user);
         return new JsonResponse($return);
     }
     
