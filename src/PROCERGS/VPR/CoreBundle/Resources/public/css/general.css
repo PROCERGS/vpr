@@ -212,7 +212,7 @@ ul {
 .main-title {
   color: #007136;
   line-height: 35px;
-  margin-top: 0;
+  margin-top: 10px;
   position: relative;
   vertical-align: middle;
 }
@@ -480,14 +480,12 @@ input::-webkit-inner-spin-button {
   padding: 4px 9px;
 }
 
-/* end offer */
 .link-popup {
   margin: 0 0 30px;
 }
 
 .search-title {
   color: #007136!important;
-  margin-top: 0!important;
 }
 
 .search-title .glyphicon {

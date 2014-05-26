@@ -23,6 +23,11 @@
   text-rendering:optimizeLegibility;
 }
 
+.btn-tab:hover,
+.btn-tab.active {
+  box-shadow: 0px 0px 6px 0px #000;
+}
+
 .btn-about,
 .tab-about {
   background-color: #1575Ad;
@@ -74,7 +79,7 @@
 }
 
 .tab-vote {
-  background-color: #F9F9F9;
+  background-color: rgba(222, 233, 205, 0.52);
   color: #000;
 }
 
@@ -124,7 +129,7 @@
   height: 42px;
   font-size: 18px;
   line-height: 42px;
-  margin-left: 10px;
+  margin-right: 10px;
   padding: 0;
   vertical-align: middle;
   width: 42px;

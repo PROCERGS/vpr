@@ -1,36 +1,36 @@
 /*global $:false */
 $(function() {
-    "use strict";
+  "use strict";
 
-    var btnTabs = $(".btn-tab");
+  var btnTabs = $(".btn-tab");
+  var tabClose = $(".main-content .tab-close");
+  var tabContentTop = $(".tab-content").offset().top;
 
-    btnTabs.on("shown.bs.tab", function () {
-      btnTabs.removeClass("active");
-      $(this).addClass("active");
+  btnTabs.on("shown.bs.tab", function () {
+    btnTabs.removeClass("active");
+    $(this).addClass("active");
 
-      $(".tab-close").show();
+    tabClose.show();
 
-      $("html, body").animate({
-            scrollTop: $(".tab-content").offset().top
-        }, 900);
+    $("html, body").animate({
+      scrollTop: tabContentTop
+    }, 900);
+  });
+
+  tabClose.on("click", function() {
+    var self = $(this);
+    $("html, body").animate({
+      scrollTop: 0
+    }, 900, function() {
+      self.hide();
     });
-
-    $(".tab-close").on("click", function() {
-      var self = $(this);
-      $("html, body").animate({
-            scrollTop: 0
-        }, 900, function() {
-          self.hide();
-        });
-    });
+  });
 
 
-    /*
-     * Show 'how to vote' text
-     */
-    $("#how-to-vote").on("click", function() {
-      $("#how-to-vote-text").slideToggle();
-    });
+  // Show 'how to vote' text
+  $("#how-to-vote").on("click", function() {
+    $("#how-to-vote-text").slideToggle();
+  });
 
 
     /*
@@ -55,12 +55,11 @@ $(function() {
     // });
 
 
-    /*
-     * Show alert about LC
-     */
-    $("#about-lc-link a").on("click", function(e) {
-        e.preventDefault();
-        $("#about-lc").toggleClass("hidden");
-    });
+
+  // Show alert about LC
+  $("#about-lc-link a").on("click", function(e) {
+    e.preventDefault();
+    $("#about-lc").toggleClass("hidden");
+  });
 
 });

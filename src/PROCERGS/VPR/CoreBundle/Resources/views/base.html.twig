@@ -13,6 +13,9 @@
   <div class="container">
     <div class="row">
     <div class="col-sm-12 text-center">
+        {# ==========================================================================
+           TODO: FIX SOCIAL PLUGINS URL
+           ========================================================================== #}
         <div class="pull-left"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="en">Tweet</a>
                 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
         </div>
@@ -26,22 +29,21 @@
                 }(document, 'script', 'facebook-jssdk'));</script>
                 <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-action="like" data-show-faces="false" data-share="true"></div>
         </div>
-        <div class="pull-left social-gplus"><!-- Posicione esta tag onde você deseja que o botão +1 apareça. -->
-                <div class="g-plusone" data-annotation="none"></div>
+        <div class="pull-left social-gplus">
+            <div class="g-plusone" data-annotation="none"></div>
 
-                <!-- Posicione esta tag depois da última tag do botão +1. -->
-                <script type="text/javascript">
-                  window.___gcfg = {lang: 'pt-BR'};
+            <script type="text/javascript">
+              window.___gcfg = {lang: 'pt-BR'};
 
-                  (function() {
-                    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-                    po.src = 'https://apis.google.com/js/platform.js';
-                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-                  })();
-                </script>
-              </div>
-<a href="{{ path('procergsvpr_core_homepage') }}" class="glyphicon glyphicon-home pull-right home-icon" title="voltar para a página inicial"></a>
-              </div>
+              (function() {
+                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                po.src = 'https://apis.google.com/js/platform.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+              })();
+            </script>
+          </div>
+            <a href="{{ path('procergsvpr_core_homepage') }}" class="glyphicon glyphicon-home pull-right home-icon" title="{% trans %}Back to home page{% endtrans %}"></a>
+          </div>
     </div>
   </div>
 
