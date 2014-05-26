@@ -17,6 +17,8 @@ body {
 
 body > .container {
   /*padding: 0.2em 0.5em 0.2em;*/
+  padding-bottom: 2.0em;
+  padding-top: 2.0em;
 }
 
 h1, h2, h3, h4, h5, h6 {

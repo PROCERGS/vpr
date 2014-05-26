@@ -208,6 +208,7 @@
    ========================================================================== */
    .ballot-nav {
     background-color: #ffcf9e;
+    margin-bottom: 20px;
     padding: 5px 10px 0;
     vertical-align: middle;
   }
@@ -576,14 +577,11 @@
     position: absolute;
   }
 
-  #button-bar .btn {
+  #btn-vote {
     display: block;
     margin: 10px auto;
-    width: 300px;
-  }
-
-  #btn-vote {
     margin-top: 40px;
+    min-width: 200px;
   }
 
 /* ==========================================================================
@@ -592,6 +590,10 @@
    @media (min-width: 768px) {
     .ballot .step-title {
       font-size: 25px;
+    }
+
+    #button-bar .btn {
+      width: 300px;
     }
   }
 
@@ -628,7 +630,7 @@
   }
 
   .ballot-search label,
-  .ac-custom input[type="checkbox"],
-  .ac-custom label::before {
+  .ballot-search input[type="checkbox"],
+  .ballot-search label::before {
     cursor: default;
   }
