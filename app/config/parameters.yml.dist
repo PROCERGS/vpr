@@ -34,5 +34,5 @@ parameters:
 
     memcached_host: 127.0.0.1
     memcached_port: 11211
-    session_prefix: vpr_sess_
+    session_prefix: lc_sess_
     session_lifetime: 86400
