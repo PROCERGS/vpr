@@ -36,3 +36,5 @@ parameters:
     memcached_port: 11211
     session_prefix: vpr_sess_
     session_lifetime: 86400
+
+    http_proxy: ~

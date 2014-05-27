@@ -120,6 +120,10 @@ class DemoController extends Controller
         $url = $this->container->getParameter('login_cidadao_base_url');
         $url .= "/api/v1/wait/person/voter-registration?access_token=$accessToken";
 
+        $client = $this->get('buzz.client');
+        $response = $client->get($url);
+        print_r($response);
+
         $person = $this->runTimeLimited(function() use ($url) {
             try {
                 $response = @file_get_contents($url);
