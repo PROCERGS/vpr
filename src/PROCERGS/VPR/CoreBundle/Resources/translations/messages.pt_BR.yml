@@ -162,5 +162,5 @@ Loading: Carregando
 'Vote now!': 'Vote agora!'
 'Where to vote?': 'Onde votar?'
 'Check ballot': 'Ver cédula'
-'Type a city to check the ballot for your region.': 'Digite o municipio desejado para consultar a sua respectiva cédula de votação.'
-form.city.select: 'Municipio'
+'Type a city to check the ballot for your region.': 'Digite a cidade desejada para consultar a sua respectiva cédula de votação.'
+form.city.select: 'Digite a cidade'
