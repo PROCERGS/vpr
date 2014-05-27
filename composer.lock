@@ -777,16 +777,16 @@
         {
             "name": "guilhermednt/buzz-proxied-curl-bundle",
             "version": "dev-master",
-            "target-dir": "Donato/BuzzProxiedCurlBundle",
+            "target-dir": "Donato/Http/Proxied/BuzzBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guilhermednt/buzz-proxied-curl-bundle.git",
-                "reference": "e6ebe1ed190fa45cbded8bf3ab1b913985da64d4"
+                "reference": "a64b619f336800f890b1230b914611f636512ece"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guilhermednt/buzz-proxied-curl-bundle/zipball/e6ebe1ed190fa45cbded8bf3ab1b913985da64d4",
-                "reference": "e6ebe1ed190fa45cbded8bf3ab1b913985da64d4",
+                "url": "https://api.github.com/repos/guilhermednt/buzz-proxied-curl-bundle/zipball/a64b619f336800f890b1230b914611f636512ece",
+                "reference": "a64b619f336800f890b1230b914611f636512ece",
                 "shasum": ""
             },
             "require": {
@@ -795,7 +795,7 @@
             "type": "symfony-bundle",
             "autoload": {
                 "psr-0": {
-                    "Donato\\BuzzProxiedCurlBundle": ""
+                    "Donato\\Http\\Proxied\\BuzzBundle": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -808,7 +808,7 @@
                     "email": "packagist@cadastro.dona.to"
                 }
             ],
-            "description": "Symfony DonatoBuzzProxiedCurlBundle",
+            "description": "Symfony DonatoHttpProxiedBuzzBundle",
             "homepage": "http://github.com/guilhermednt/buzz-proxied-curl-bundle",
             "keywords": [
                 "buzz",
@@ -816,7 +816,7 @@
                 "http",
                 "proxy"
             ],
-            "time": "2014-05-26 20:19:46"
+            "time": "2014-05-27 13:53:26"
         },
         {
             "name": "guilhermednt/hwi-oauth-proxy-bundle",
