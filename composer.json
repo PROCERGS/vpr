@@ -25,6 +25,7 @@
         "jms/serializer-bundle" : "*",
         "knplabs/knp-paginator-bundle": "~2.4",
         "sensio/buzz-bundle": "dev-master",
+        "friendsofsymfony/rest-bundle": "1.3.*",
         "guilhermednt/buzz-proxied-curl-bundle": "dev-master"
     },
     "scripts": {

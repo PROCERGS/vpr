@@ -25,6 +25,7 @@ framework:
 
 # Twig Configuration
 twig:
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
     globals:
         login_cidadao_navbar_url: %login_cidadao_navbar_url%
         login_cidadao_app_id: %login_cidadao_id%
@@ -128,3 +129,13 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig
+
+fos_rest:
+    view:
+        force_redirects:
+            html: true
+        formats:
+            json: true
+            xml: true
+        templating_formats:
+            html: true

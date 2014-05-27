@@ -24,7 +24,8 @@ class AppKernel extends Kernel
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new PROCERGS\VPR\CountingBundle\PROCERGSVPRCountingBundle(),
             new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
-            new Donato\BuzzProxiedCurlBundle\DonatoBuzzProxiedCurlBundle(),
+            new Donato\Http\Proxied\BuzzBundle\DonatoHttpProxiedBuzzBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
