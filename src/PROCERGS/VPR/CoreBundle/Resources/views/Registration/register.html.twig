@@ -17,10 +17,10 @@
 
 <div class="row main-content">
     <div class="col-sm-4">
-        <a href="#about" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-about active">
-            <span class="glyphicon glyphicon-question-sign"></span>
-            {% trans %}What is it?{% endtrans %}
-        </a>
+      <a href="#about" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-about">
+        <span class="glyphicon glyphicon-question-sign"></span>
+        {% trans %}What is it?{% endtrans %}
+      </a>
     </div>
 
     <div class="col-sm-4">
@@ -31,11 +31,12 @@
     </div>
 
     <div class="col-sm-4">
-        <a href="#vote" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-vote">
-            <span class="glyphicon glyphicon-check"></span>
-            {% trans %}Vote now!{% endtrans %}
-        </a>
+      <a href="#vote" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-vote active">
+        <span class="glyphicon glyphicon-check"></span>
+        {% trans %}Vote now!{% endtrans %}
+      </a>
     </div>
+
 
     <div class="col-sm-12">
         <div class="tab-content">
@@ -83,6 +84,7 @@
                 </p>
             </div>
 
+
             <div class="tab-pane tab-vote active" id="vote">
                 <div class="row register-form-container">
                     <div class="col-sm-12 col-md-6 col-md-offset-3">
@@ -90,6 +92,7 @@
                             <span></span>Vote com seu Login Cidadão
                         </a>
                         <div class="spacer"><hr><span>ou</span></div>
+
 
                         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
                             {{ form_errors(form) }}
