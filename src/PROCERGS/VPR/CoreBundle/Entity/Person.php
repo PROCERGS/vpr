@@ -84,8 +84,8 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      *
      * @ORM\Column(name="login_cidadao_refresh_token", type="string", length=255, nullable=true)
      */
-    protected $loginCidadaoRefreshToken;    
-    
+    protected $loginCidadaoRefreshToken;
+
     /**
      * @var \DateTime
      *
@@ -111,19 +111,19 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      * @ORM\Column(name="mobile", type="string", nullable=true)
      */
     protected $mobile;
-    
+
     /**
      * @ORM\Column(name="badges",type="array", nullable=true)
      */
     protected $badges;
-    
+
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="login_cidadao_updated_at", type="datetime", nullable=true)
      */
     protected $loginCidadaoUpdatedAt;
-    
+
     /**
      * Get id
      *
@@ -365,39 +365,44 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
         return strtr($value, $map);
     }
-    
+
     public function setLoginCidadaoUpdatedAt($var)
     {
         $this->loginCidadaoUpdatedAt = $var;
         return $this;
     }
-    
+
     public function getLoginCidadaoUpdatedAt()
     {
         return $this->loginCidadaoUpdatedAt;
     }
-    
+
     public function setLoginCidadaoRefreshToken($var)
     {
         $this->loginCidadaoRefreshToken = $var;
         return $this;
     }
-    
+
     public function getLoginCidadaoRefreshToken()
     {
         return $this->loginCidadaoRefreshToken;
     }
-    
+
     public function getCheckList()
     {
+        $badges = $this->getBadges();
         $return['item']['full_name'] = strlen($this->getFirstName()) > 0;
-        $return['item']['email'] = $this->badges['email'];
-        $return['item']['nfg_access_lvl'] = $this->badges['nfg_access_lvl'] >= 2;
-        $return['item']['voter_registration'] = $this->badges['voter_registration'];
-        $return['updated_at'] = $this->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s');
+        $return['item']['email'] = $badges['email'];
+        $return['item']['nfg_access_lvl'] = $badges['nfg_access_lvl'] >= 2;
+        $return['item']['voter_registration'] = $badges['voter_registration'];
+        if (!is_null($this->getLoginCidadaoUpdatedAt())) {
+            $return['updated_at'] = $this->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s');
+        } else {
+            $return['updated_at'] = null;
+        }
         $return['code'] = ($return['item']['full_name'] && $return['item']['email'] && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration']) ? 0 : 1;
         $return['msg'] = null;
         return $return;
     }
-    
+
 }

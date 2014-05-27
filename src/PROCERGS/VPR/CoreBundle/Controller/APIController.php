@@ -26,11 +26,12 @@ class APIController extends FOSRestController
         $url .= "/api/v1/wait/person/update?$parameters";
 
         $browser = $this->get('buzz.browser');
+        $callback = $this->getWaitPersonCallback($browser, $url);
+        $person = $this->runTimeLimited($callback);
 
-        $person = $this->runTimeLimited($this->getWaitPersonCallback($browser,
-                        $url));
-        $person = $this->objectToArray($person);
-        $view = $this->view()->setData($person);
+        $personArray = $this->objectToArray($person);
+        $view = $this->view()->setData($personArray);
+        
         return $this->handleView($view);
     }
 
