@@ -4,10 +4,8 @@ namespace PROCERGS\VPR\CoreBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Controller\FOSRestController;
-use JMS\Serializer\SerializationContext;
 use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpFoundation\Request;
 
 class APIController extends FOSRestController
 {
