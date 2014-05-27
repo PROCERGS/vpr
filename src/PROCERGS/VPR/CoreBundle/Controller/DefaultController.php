@@ -48,33 +48,29 @@ class DefaultController extends Controller
 
         $stepId = $votingSession->getNextStep();
         if (!$stepId) {
-            if (!$vote->getVoterRegistration()) {
+            if (!$vote->getVoterRegistration()) { // Vote doesn't have a voter registration
                 return $this->redirect($this->generateUrl('procergsvpr_core_ask_voter_registration'));
             }
-            if (!$vote->getNfgCpf()) {
-                try {
-                    $ball = $vote->getBallotBox();
-                    $votingSession->checkExistingVotes($person, $ball);
-                    $votingSession->flush();
-                    return $this->indexAction();
-                } catch (VoterRegistrationAlreadyVotedException $e) {
-                    return $this->redirect($this->generateUrl('fos_user_security_logout',
-                                            array('code' => $vote->getSmId())));
-                } catch (VoterAlreadyVotedException $e) {
-                    return $this->redirect($this->generateUrl('fos_user_security_logout',
-                                            array('code' => $vote->getSmId())));
+            try {
+                if ($vote->getNfgCpf()) { // Vote has NFG validation
+                    throw new VotedException();
                 }
-            } else {
-                return $this->redirect($this->generateUrl('fos_user_security_logout',
-                                        array('code' => $vote->getSmId())));
+                $votingSession->checkExistingVotes($person);
+                $votingSession->flush();
+                return $this->indexAction();
+            } catch (VotedException $e) {
+                $url = $this->generateUrl('fos_user_security_logout',
+                        array('code' => $vote->getSmId()));
+                return $this->redirect($url);
             }
         }
 
-        return $this->redirect($this->generateUrl('procergsvpr_step',
-                                array(
-                            'stepid' => $vote->getLastStep()->getId(),
-                            'coredeid' => $vote->getCorede()->getid()
-        )));
+        $urlParams = array(
+            'stepid' => $vote->getLastStep()->getId(),
+            'coredeid' => $vote->getCorede()->getid()
+        );
+        $url = $this->generateUrl('procergsvpr_step', $urlParams);
+        return $this->redirect($url);
     }
 
     /**
@@ -85,9 +81,7 @@ class DefaultController extends Controller
     {
         $formBuilder = $this->createFormBuilder();
         $formBuilder->add('trevoter', 'voter_registration',
-                array(
-            'required' => true
-        ));
+                array('required' => true));
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         $messages = '';
@@ -99,23 +93,23 @@ class DefaultController extends Controller
             }
             $user = $this->getUser();
             $dispatcher = $this->container->get('event_dispatcher');
-            $votingSession = $this->container->get('vpr_voting_session_provider');
             $treVoterTmp = $form->get('trevoter')->getData();
             $event = new PersonEvent($user, $treVoterTmp);
             try {
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
                         $event);
                 $em = $this->getDoctrine()->getManager();
-                
+
                 /* just think
-                $ball = $vote->getBallotBox();
-                $votingSession->checkExistingVotes($user, $ball, $vote);
-                
-                if ($vote->getCorede()->getId() != $user->getTreVoter()->getCity()->getCorede()->getId()) {
-                    return $this->redirect($this->generateUrl('procergsvpr_core_reinforce_doc_choise')); 
-                }
-                */
-                
+                  $votingSession = $this->container->get('vpr_voting_session_provider');
+                  $ball = $vote->getBallotBox();
+                  $votingSession->checkExistingVotes($user, $ball, $vote);
+
+                  if ($vote->getCorede()->getId() != $user->getTreVoter()->getCity()->getCorede()->getId()) {
+                  return $this->redirect($this->generateUrl('procergsvpr_core_reinforce_doc_choise'));
+                  }
+                 */
+
                 $vote = $em->merge($vote);
                 $vote->setVoterRegistration($form->get('trevoter')->getData());
                 $em->persist($vote);
@@ -130,13 +124,12 @@ class DefaultController extends Controller
                 return $this->redirect($this->generateUrl('fos_user_security_logout'));
             }
         }
-        return $this->render('PROCERGSVPRCoreBundle:Default:reinforceDoc.html.twig',
-                        array(
-                    'form' => $form->createView(),
-                    'messages' => $messages
-        ));
+        return array(
+            'form' => $form->createView(),
+            'messages' => $messages
+        );
     }
-    
+
     /**
      * @Route("/end", name="procergsvpr_core_end")
      * @Template()
@@ -161,8 +154,7 @@ class DefaultController extends Controller
         $url['link_nfg'] = $this->container->getParameter('nfg_register_url');
         $url['link_lc'] = $this->container->getParameter('lc_register_url');
         $url['link_sm'] = $this->container->getParameter('sm_register_url') . $r;
-        return $this->render('PROCERGSVPRCoreBundle:Default:endOffer.html.twig',
-                        $url);
+        return $url;
     }
 
     /**
@@ -189,10 +181,9 @@ class DefaultController extends Controller
         $param['link_lc'] = $this->container->getParameter('lc_register_url');
         $user = $this->getUser();
         $param['checklist'] = $user->getCheckList();
-        return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig',
-                        $param);
+        return $param;
     }
-    
+
     /**
      * @Route("/lc/poll", defaults={"_format" = "json"}, name="__procergsvpr_core_end_lc_query")
      * @Template()
@@ -202,7 +193,7 @@ class DefaultController extends Controller
         $user = $this->getUser();
         $accessToken = $user->getLoginCidadaoAccessToken();
         $url = $this->container->getParameter('login_cidadao_base_url');
-        $url .= "/api/v1/wait/person/update?". http_build_query(array('access_token' => $accessToken, 'updated_at' => $user->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s')));
+        $url .= "/api/v1/wait/person/update?" . http_build_query(array('access_token' => $accessToken, 'updated_at' => $user->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s')));
         try {
             $person = $this->runTimeLimited(function() use ($url) {
                 $ch = curl_init();
@@ -217,55 +208,57 @@ class DefaultController extends Controller
                 $info = curl_getinfo($ch);
                 curl_close($ch);
                 switch ($info['http_code']) {
-                	case 200:
-                    	$receivedPerson = json_decode($response, true);
-                    	return ($response !== false && $receivedPerson) ? $receivedPerson : false;
-                	break;
-                	case 408:
-                	    return false;
-                	    break;
-                	default:
-                	    throw new \Exception($response, $info['http_code']);
-                	    break;
+                    case 200:
+                        $receivedPerson = json_decode($response, true);
+                        return ($response !== false && $receivedPerson) ? $receivedPerson : false;
+                        break;
+                    case 408:
+                        return false;
+                        break;
+                    default:
+                        throw new \Exception($response, $info['http_code']);
+                        break;
                 }
             });
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $received = $e->getMessage() ? json_decode($e->getMessage()) : null;
-            return new JsonResponse(($received !== false && $received) ? $received : null, $e->getCode());
+            return new JsonResponse(($received !== false && $received) ? $received : null,
+                    $e->getCode());
         }
         $userManager = $this->container->get('fos_user.user_manager');
-            $dispatcher = $this->container->get('event_dispatcher');
-        
-                $user->setFirstName($person['full_name']);
-                $user->setBadges($person['badges']);
-                $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
-                
+        $dispatcher = $this->container->get('event_dispatcher');
+
+        $user->setFirstName($person['full_name']);
+        $user->setBadges($person['badges']);
+        $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
+
         $return = $user->getCheckList();
         try {
-            if (!$return['code']) {    
+            if (!$return['code']) {
                 $event = new PersonEvent($user, $person['voter_registration']);
-                $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
-                
+                $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
+                        $event);
+
                 $userManager->updateUser($user, false);
-                $votingSession = $this->get('vpr_voting_session_provider');                
+                $votingSession = $this->get('vpr_voting_session_provider');
                 $vote = $votingSession->save($votingSession->createVotingSession($user));
             }
-            } catch (TREVoterException $e) {
-                $return['code'] = 2;
-                $return['msg'] = $this->get('translator')->trans($e->getMessage());
-            }
+        } catch (TREVoterException $e) {
+            $return['code'] = 2;
+            $return['msg'] = $this->get('translator')->trans($e->getMessage());
+        }
         $userManager->updateUser($user);
         return new JsonResponse($return);
     }
-    
+
     private function runTimeLimited($callback, $waitTime = 1)
-    {        
+    {
         $limit = ini_get('max_execution_time') ? ini_get('max_execution_time') - 2 : 60;
         $startTime = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
             $delta = time() - $startTime;
-    
+
             if ($result !== false) {
                 return $result;
             } else {
@@ -277,7 +270,8 @@ class DefaultController extends Controller
                 sleep($waitTime);
             }
         }
-        throw new \Exception(json_encode(array('error' => 'Request Timeout')), '408');
-    }    
+        throw new \Exception(json_encode(array('error' => 'Request Timeout')),
+        '408');
+    }
 
 }

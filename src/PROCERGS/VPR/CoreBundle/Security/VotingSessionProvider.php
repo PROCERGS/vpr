@@ -68,15 +68,9 @@ class VotingSessionProvider
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
     }
 
-    public function checkExistingVotes(Person $person, &$ballotBox = null, $actualVote = null)
+    public function checkExistingVotes(Person $person,
+                                       Vote $actualVote /* why is this called ACTUAL vote? Is there a FAKE vote? */ = null)
     {
-        if (null === $ballotBox) {
-            $ballotBox = $this->getOnlineBallotBox();
-            if (!$ballotBox) {
-                throw new VotingTimeoutException();
-            }
-        }
-        $filter['ballotBox'] = $ballotBox;
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
         if ($person->getTreVoter() instanceof TREVoter) {
             $filter['voterRegistration'] = $person->getTreVoter()->getId();
@@ -85,12 +79,12 @@ class VotingSessionProvider
         } else {
             throw new AccessDeniedHttpException('Invalid voter');
         }
-        if ($actualVote) {
-            $filter['vote'] = $actualVote;
-        }
-        $votes = $voteRepo->findByEspecial($filter);
+        $votes = $voteRepo->findBy($filter);
         if (!empty($votes)) {
             foreach ($votes as $vote) {
+                if ($actualVote instanceof Vote && $vote->getId() === $actualVote->getId()) {
+                    continue;
+                }
                 if ($vote->getNfgCpf()) {
                     throw new VoterAlreadyVotedException();
                 }
@@ -147,7 +141,7 @@ class VotingSessionProvider
         $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
         return $vote;
     }
-    
+
     public function save($vote)
     {
         $this->em->detach($vote);
@@ -160,4 +154,5 @@ class VotingSessionProvider
         $this->session->set('vote', null);
         $this->session->remove('vote');
     }
+
 }
