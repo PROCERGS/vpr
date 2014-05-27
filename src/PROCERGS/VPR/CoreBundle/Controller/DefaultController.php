@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Assetic\Exception\Exception;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
+use PROCERGS\VPR\CoreBundle\Exception\VotedException;
 
 class DefaultController extends Controller
 {
@@ -98,12 +99,23 @@ class DefaultController extends Controller
             }
             $user = $this->getUser();
             $dispatcher = $this->container->get('event_dispatcher');
+            $votingSession = $this->container->get('vpr_voting_session_provider');
             $treVoterTmp = $form->get('trevoter')->getData();
             $event = new PersonEvent($user, $treVoterTmp);
             try {
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
                         $event);
                 $em = $this->getDoctrine()->getManager();
+                
+                /* just think
+                $ball = $vote->getBallotBox();
+                $votingSession->checkExistingVotes($user, $ball, $vote);
+                
+                if ($vote->getCorede()->getId() != $user->getTreVoter()->getCity()->getCorede()->getId()) {
+                    return $this->redirect($this->generateUrl('procergsvpr_core_reinforce_doc_choise')); 
+                }
+                */
+                
                 $vote = $em->merge($vote);
                 $vote->setVoterRegistration($form->get('trevoter')->getData());
                 $em->persist($vote);
@@ -112,6 +124,10 @@ class DefaultController extends Controller
                 return $this->indexAction();
             } catch (TREVoterException $e) {
                 $form->addError(new FormError($this->get('translator')->trans($e->getMessage())));
+            } catch (VoterRegistrationAlreadyVotedException $e) {
+                return $this->redirect($this->generateUrl('procergsvpr_core_voter_registration_voted'));
+            } catch (VoterAlreadyVotedException $e) {
+                return $this->redirect($this->generateUrl('fos_user_security_logout'));
             }
         }
         return $this->render('PROCERGSVPRCoreBundle:Default:reinforceDoc.html.twig',
@@ -120,7 +136,7 @@ class DefaultController extends Controller
                     'messages' => $messages
         ));
     }
-
+    
     /**
      * @Route("/end", name="procergsvpr_core_end")
      * @Template()
@@ -224,7 +240,7 @@ class DefaultController extends Controller
                 $user->setBadges($person['badges']);
                 $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
                 
-        $return = $this->getCheckList();
+        $return = $user->getCheckList();
         try {
             if (!$return['code']) {    
                 $event = new PersonEvent($user, $person['voter_registration']);

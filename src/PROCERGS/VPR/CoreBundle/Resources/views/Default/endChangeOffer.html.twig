@@ -53,15 +53,16 @@
 
 <script>
 var userModel = {{ checklist|json_encode|raw }}; 
+var onSuccess = '{{ path('procergsvpr_core_homepage') }}';
 
 var userAction = {};
 userAction.user = userModel;
 
-userAction.ready = null;
+userAction.conn = null;
 userAction.poll = function() {
 	var self = this;
-	$.ajax({
-        url: '{{ path('procergsvpr_core_end_lc_query') }}',
+	self.conn = $.ajax({
+        url: '{{ path('__procergsvpr_core_end_lc_query') }}',
         type: 'GET',
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
@@ -75,10 +76,12 @@ userAction.poll = function() {
                 console.log('Ocorreu o erro '+jqXHR.status+' , por favor entre em contato com o administador do sistema!');
         },
         complete: function (jqXHR, textStatus) {
-        	if (jqXHR.status == 408) {
+            if (textStatus == 'abort') {
+                
+            } else if (jqXHR.status == 408) {
             	self.poll();
         	} else if (self.user.code == 0) {
-            	alert('')
+        		window.location.href = onSuccess;
             } else if (self.user.code == 1) {
             	self.poll();
             } else if (self.user.code == 2) {
@@ -103,6 +106,11 @@ $(function(){
 	    window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
 	    userAction.poll();	    
     });
+	$("#lc-listener").on('hidden.bs.modal', function (e) {
+	    userAction.conn.abort();	    
+    });
+    
+	
 
 })
 

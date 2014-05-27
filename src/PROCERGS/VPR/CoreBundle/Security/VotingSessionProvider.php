@@ -68,7 +68,7 @@ class VotingSessionProvider
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
     }
 
-    public function checkExistingVotes(Person $person, &$ballotBox = null)
+    public function checkExistingVotes(Person $person, &$ballotBox = null, $actualVote = null)
     {
         if (null === $ballotBox) {
             $ballotBox = $this->getOnlineBallotBox();
@@ -85,8 +85,10 @@ class VotingSessionProvider
         } else {
             throw new AccessDeniedHttpException('Invalid voter');
         }
-
-        $votes = $voteRepo->findBy($filter);
+        if ($actualVote) {
+            $filter['vote'] = $actualVote;
+        }
+        $votes = $voteRepo->findByEspecial($filter);
         if (!empty($votes)) {
             foreach ($votes as $vote) {
                 if ($vote->getNfgCpf()) {

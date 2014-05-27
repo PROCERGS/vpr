@@ -98,6 +98,7 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_refresh($response->getRefreshToken());
 
         $user->setUsername($username);
+        $user->setFirstName(null);
         if (isset($userData['full_name']) && strlen(trim($userData['full_name']))) {
             $user->setFirstName(trim($userData['full_name']));
         }
@@ -107,6 +108,7 @@ class FOSUBUserProvider extends BaseClass
         if ($dt = date_create($userData['updated_at'])) {
             $user->setLoginCidadaoUpdatedAt($dt);
         }
+        $user->setTreVoter(null);
         $user->setCity(null);
         if (array_key_exists('city', $userData) && is_numeric($userData['city']['id'])) {
             $cityRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:City');
