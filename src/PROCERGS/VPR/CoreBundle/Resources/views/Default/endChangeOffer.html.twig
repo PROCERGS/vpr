@@ -33,6 +33,7 @@
 		            <li><input type="checkbox" id="req_email" name="options[]" value="email" onclick="return false;"/><label for="req_2">login cidadao com e-mail confirmado </label></li>
 		            <li><input type="checkbox" id="req_nfg_access_lvl" name="options[]" value="nfg_access_lvl" onclick="return false;"/><label for="req_3">login cidadao com NFG vinculada</label></li>
 		            <li><input type="checkbox" id="req_voter_registration" name="options[]" value="voter_registration" onclick="return false;"/><label for="req_4">login cidadao com titulo de eleitor validado pela NFG</label></li>
+		            <li><input type="checkbox" id="req_tre_valid" name="options[]" value="tre_valid" onclick="return false;"/><label for="req_5">O nome e o titulo devem ser válidos pelos Tre</label></li>
 	            </ul>
 	            </div>
 	            <div class="modal-footer">
@@ -84,9 +85,8 @@ userAction.poll = function() {
         		window.location.href = onSuccess;
             } else if (self.user.code == 1) {
             	self.poll();
-            } else if (self.user.code == 2) {
-                alert(self.user.msg);
-                self.poll();
+            } else if (self.user.code == 2) {            	
+                setTimeout(self.poll(), 5000);
             }
         }
     });
