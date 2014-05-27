@@ -137,6 +137,10 @@ class VotingSessionProvider
         if ($person->getLoginCidadaoId()) {
             $vote->setLoginCidadaoId($person->getLoginCidadaoId());
         }
+        $badges = $person->getBadges();
+        if (strlen($person->getFirstName()) && $badges['email'] && $badges['nfg_access_lvl'] >= 2 && $badges['voter_registration']) {
+            $vote->setNfgCpf(1);
+        }
         $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
         return $vote;

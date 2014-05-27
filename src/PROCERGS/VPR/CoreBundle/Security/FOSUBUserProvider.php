@@ -76,9 +76,11 @@ class FOSUBUserProvider extends BaseClass
             $user = $this->userManager->createUser();
         }
         $userData = $response->getResponse();
+        /* loop do lc
         if (!isset($userData['full_name']) || !strlen(trim($userData['full_name']))) {
             throw new LcException('lc.missing.required.field', 'lc.full_name');
         }
+        */
         if (!isset($userData['badges'])) {
             throw new LcException('lc.missing.required.field', 'lc.badges');
         }
@@ -96,13 +98,16 @@ class FOSUBUserProvider extends BaseClass
         $user->$setter_refresh($response->getRefreshToken());
 
         $user->setUsername($username);
-        $user->setFirstName($userData['full_name']);
+        if (isset($userData['full_name']) && strlen(trim($userData['full_name']))) {
+            $user->setFirstName(trim($userData['full_name']));
+        }
         $user->setPassword('');
         $user->setEnabled(true);
         $user->setBadges($userData['badges']);
         if ($dt = date_create($userData['updated_at'])) {
             $user->setLoginCidadaoUpdatedAt($dt);
         }
+        $user->setCity(null);
         if (array_key_exists('city', $userData) && is_numeric($userData['city']['id'])) {
             $cityRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:City');
             $city = $cityRepo->findOneBy(array('ibgeCode' => $userData['city']['id']));

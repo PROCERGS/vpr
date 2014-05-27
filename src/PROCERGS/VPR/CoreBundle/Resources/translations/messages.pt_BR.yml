@@ -1,4 +1,4 @@
-'First name': 'Primeiro Nome'
+'First name': 'Nome'
 Email: Email
 'Mobile Phone': Celular
 'Begin Voting': 'Iniciar Votação'
@@ -162,3 +162,5 @@ Loading: Carregando
 'Vote now!': 'Vote agora!'
 'Where to vote?': 'Onde votar?'
 'Check ballot': 'Ver cédula'
+'Type a city to check the ballot for your region.': 'Digite o municipio desejado para consultar a sua respectiva cédula de votação.'
+form.city.select: 'Municipio'

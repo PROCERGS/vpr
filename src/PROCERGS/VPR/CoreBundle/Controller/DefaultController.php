@@ -81,10 +81,15 @@ class DefaultController extends Controller
      * @Template()
      */
     public function reinforceDocAction(Request $request)
-    {
+    {        
+        $user = $this->getUser();
         $formBuilder = $this->createFormBuilder();
-        $formBuilder->add('trevoter', 'voter_registration',
-                array(
+        if (!$user->getFirstName()) {
+            $formBuilder->add('firstname', 'text', array(
+                'required' => true
+            ));
+        }        
+        $formBuilder->add('trevoter', 'voter_registration', array(
             'required' => true
         ));
         $form = $formBuilder->getForm();
@@ -96,9 +101,11 @@ class DefaultController extends Controller
             if (!$vote || $vote->getLastStep()) {
                 return $this->indexAction();
             }
-            $user = $this->getUser();
             $dispatcher = $this->container->get('event_dispatcher');
             $treVoterTmp = $form->get('trevoter')->getData();
+            if (!$user->getFirstName()) {
+                $user->setFirstName($form->get('firstname')->getData());
+            }
             $event = new PersonEvent($user, $treVoterTmp);
             try {
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
@@ -171,40 +178,8 @@ class DefaultController extends Controller
     public function endChangeOfferAction()
     {
         $param['link_lc'] = $this->container->getParameter('lc_register_url');
-        $user = $this->getUser();
-        $return['item']['full_name'] = strlen($user->getFirstName()) > 0;
-        $badges = $user->getBadges();
-        $return['item']['email'] = $badges['email'];
-        $return['item']['nfg_access_lvl'] = $badges['nfg_access_lvl'] >= 2;
-        $return['item']['voter_registration'] = $badges['voter_registration'];
-        $return['updated_at'] = $user->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s');        
-        
-        $return['code'] = ($return['item']['full_name'] && $return['item']['email'] && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration']) ? 0 : 1;
-        $return['msg'] = '';
-        if (!$return['code']) {
-            $dispatcher = $this->container->get('event_dispatcher');
-            $userManager = $this->container->get('fos_user.user_manager');
-            try {
-                $user->setUsername($person['username']);
-                $user->setFirstName($person['full_name']);
-                $user->setBadges($person['badges']);
-                $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
-                $user->setNfgCpf(1);
-        
-                $event = new PersonEvent($user, $person['voter_registration']);
-                $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
-        
-                $userManager->updateUser($user);
-        
-                $votingSession = $this->get('vpr_voting_session_provider');
-                $vote = $votingSession->save($votingSession->createVotingSession($user)->setNfgCpf(1));
-                return $this->indexAction();
-            } catch (TREVoterException $e) {
-                $return['code'] = 2;
-                $return['msg'] = $this->get('translator')->trans($e->getMessage());
-            }
-        }
-        $param['checklist'] = ($return);
+        $user = $this->getUser();      
+        $param['checklist'] = $user->getCheckList();
         return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig',
                         $param);
     }
@@ -249,33 +224,27 @@ class DefaultController extends Controller
             $received = $e->getMessage() ? json_decode($e->getMessage()) : null;
             return new JsonResponse(($received !== false && $received) ? $received : null, $e->getCode());
         }
-        $return['item']['full_name'] = strlen($person['full_name']) > 0;
-        $return['item']['email'] = $person['badges']['email'];
-        $return['item']['nfg_access_lvl'] = $person['badges']['nfg_access_lvl'] >= 2;
-        $return['item']['voter_registration'] = $person['badges']['voter_registration'];
-        $return['updated_at'] = $person['updated_at'];
-        $return['code'] = ($return['item']['full_name'] && $return['item']['email'] && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration']) ? 0 : 1;
-        $return['msg'] = '';
         $userManager = $this->container->get('fos_user.user_manager');
-        if (!$return['code']) {
-            $dispatcher = $this->container->get('event_dispatcher');
-            try {
-                $user->setUsername($person['username']);
-                $user->setFirstName($person['full_name']);
-                $user->setBadges($person['badges']);
-                $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
-                
+        $dispatcher = $this->container->get('event_dispatcher');
+        
+        $user->setFirstName($person['full_name']);
+        $user->setBadges($person['badges']);
+        $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
+        
+        $return = $this->getCheckList();
+        try {
+            if (!$return['code']) {    
                 $event = new PersonEvent($user, $person['voter_registration']);
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
-                
-                $votingSession = $this->get('vpr_voting_session_provider');                
-                $vote = $votingSession->save($votingSession->createVotingSession($user)->setNfgCpf(1));
-            } catch (TREVoterException $e) {
-                $return['code'] = 2;
-                $return['msg'] = $this->get('translator')->trans($e->getMessage());
+            
+                $userManager->updateUser($user, false);
+                $votingSession = $this->get('vpr_voting_session_provider');
+                $vote = $votingSession->save($votingSession->createVotingSession($user));
             }
+        } catch (TREVoterException $e) {
+            $return['code'] = 2;
+            $return['msg'] = $this->get('translator')->trans($e->getMessage());
         }
-        $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
         $userManager->updateUser($user);
         return new JsonResponse($return);
     }

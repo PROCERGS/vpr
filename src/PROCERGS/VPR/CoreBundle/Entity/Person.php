@@ -279,7 +279,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this->city;
     }
 
-    public function setCity(City $city)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
 
@@ -291,7 +291,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this->treVoter;
     }
 
-    public function setTreVoter(TREVoter $var)
+    public function setTreVoter(TREVoter $var = null)
     {
         $this->treVoter = $var;
 
@@ -388,5 +388,16 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this->loginCidadaoRefreshToken;
     }
     
+    public function getCheckList()
+    {
+        $return['item']['full_name'] = strlen($this->getFirstName()) > 0;
+        $return['item']['email'] = $this->badges['email'];
+        $return['item']['nfg_access_lvl'] = $this->badges['nfg_access_lvl'] >= 2;
+        $return['item']['voter_registration'] = $this->badges['voter_registration'];
+        $return['updated_at'] = $this->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s');
+        $return['code'] = ($return['item']['full_name'] && $return['item']['email'] && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration']) ? 0 : 1;
+        $return['msg'] = null;
+        return $return;
+    }
     
 }
