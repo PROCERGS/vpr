@@ -23,29 +23,35 @@
   text-rendering:optimizeLegibility;
 }
 
+.btn-tab
+ {
+  border: transparent solid 2px;
+}
 .btn-tab:hover,
 .btn-tab.active {
-  box-shadow: 0px 0px 6px 0px #000;
-}
+  box-shadow: 1px 1px 1px 1px #f9f9f9;
+  }
 
-.btn-about,
-.tab-about {
+.btn-about {
   background-color: #1575Ad;
 }
 
 .btn-about:hover,
-.btn-about.active {
+.btn-about.active,
+.tab-about {
   background-color: #005E96;
+  border: #2F79AA solid 2px;
 }
 
-.btn-howto,
-.tab-howto {
-  background-color: #ff723d;
+.btn-howto {
+  background-color: #e67e22;
 }
 
 .btn-howto:hover,
-.btn-howto.active {
+.btn-howto.active,
+.tab-howto {
   background-color: #FF5E1F;
+  border: #d35400 solid 2px;
 }
 
 .btn-vote {
@@ -55,6 +61,7 @@
 .btn-vote:hover,
 .btn-vote.active {
   background-color: #008A43;
+ border: #006B2D solid 2px;
 }
 
 .tab-content {
@@ -79,6 +86,7 @@
 }
 
 .tab-vote {
+  background-color: #dee9ce;
   background-color: rgba(222, 233, 205, 0.52);
   color: #000;
 }
@@ -151,7 +159,7 @@
 }
 
 .register-form-container .spacer span {
-  background-color: #F9F9F9;
+  background-color: #dee9ce;
   display: inline-block;
   font-size: 25px;
   left: 50%;

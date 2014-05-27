@@ -13,6 +13,8 @@ $(function() {
             event.preventDefault();
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
+        } else {
+          $(this).parent(".content").addClass("checked");
         }
     });
 
