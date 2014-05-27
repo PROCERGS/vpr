@@ -15,6 +15,11 @@ class DemoController extends Controller
 {
 
     /**
+     * @var \Buzz\Browser
+     */
+    private $browser;
+
+    /**
      * @Route("/ballotbox/create")
      * @Template()
      */
@@ -118,17 +123,18 @@ class DemoController extends Controller
     {
         $accessToken = $this->getUser()->getLoginCidadaoAccessToken();
         $url = $this->container->getParameter('login_cidadao_base_url');
-        $url .= "/api/v1/wait/person/voter-registration?access_token=$accessToken";
+        $url .= "/api/v1/wait/person/update?access_token=$accessToken";
 
-        $client = $this->get('buzz.client');
-        $response = $client->get($url);
-        print_r($response);
+        $browser = $this->getBrowser();
 
-        $person = $this->runTimeLimited(function() use ($url) {
+        $person = $this->runTimeLimited(function() use ($url, $browser) {
             try {
-                $response = @file_get_contents($url);
-                $receivedPerson = json_decode($response);
-                return ($response !== false && $receivedPerson) ? $receivedPerson : false;
+                $response = $browser->get($url);
+                if ($response->getStatusCode() === 200) {
+                    $receivedPerson = json_decode($response->getContent());
+                    return ($response !== false && $receivedPerson) ? $receivedPerson : false;
+                }
+                return false;
             } catch (\Exception $e) {
                 return false;
             }
@@ -140,7 +146,8 @@ class DemoController extends Controller
 
     private function runTimeLimited($callback, $waitTime = 1)
     {
-        $limit = ini_get('max_execution_time') - 2;
+        $maxExecutionTime = 5; //ini_get('max_execution_time');
+        $limit = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
         $startTime = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
@@ -148,13 +155,26 @@ class DemoController extends Controller
 
             if ($result !== false) {
                 return $result;
-            } else {
-                $limit -= $delta;
-                $startTime = time();
-                sleep($waitTime);
             }
+
+            $limit -= $delta;
+            if ($limit <= 0) {
+                break;
+            }
+            $startTime = time();
+            sleep($waitTime);
         }
-        throw new RequestTimeoutException();
+        throw new RequestTimeoutException("Request Timeout");
+    }
+
+    /**
+     *
+     * @return \Buzz\Browser
+     */
+    private function getBrowser()
+    {
+        $this->browser = $this->get('buzz.browser');
+        return $this->browser;
     }
 
 }
