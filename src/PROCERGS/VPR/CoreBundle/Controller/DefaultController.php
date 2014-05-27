@@ -81,15 +81,10 @@ class DefaultController extends Controller
      * @Template()
      */
     public function reinforceDocAction(Request $request)
-    {        
-        $user = $this->getUser();
+    {
         $formBuilder = $this->createFormBuilder();
-        if (!$user->getFirstName()) {
-            $formBuilder->add('firstname', 'text', array(
-                'required' => true
-            ));
-        }        
-        $formBuilder->add('trevoter', 'voter_registration', array(
+        $formBuilder->add('trevoter', 'voter_registration',
+                array(
             'required' => true
         ));
         $form = $formBuilder->getForm();
@@ -101,11 +96,9 @@ class DefaultController extends Controller
             if (!$vote || $vote->getLastStep()) {
                 return $this->indexAction();
             }
+            $user = $this->getUser();
             $dispatcher = $this->container->get('event_dispatcher');
             $treVoterTmp = $form->get('trevoter')->getData();
-            if (!$user->getFirstName()) {
-                $user->setFirstName($form->get('firstname')->getData());
-            }
             $event = new PersonEvent($user, $treVoterTmp);
             try {
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
@@ -178,14 +171,14 @@ class DefaultController extends Controller
     public function endChangeOfferAction()
     {
         $param['link_lc'] = $this->container->getParameter('lc_register_url');
-        $user = $this->getUser();      
+        $user = $this->getUser();
         $param['checklist'] = $user->getCheckList();
         return $this->render('PROCERGSVPRCoreBundle:Default:endChangeOffer.html.twig',
                         $param);
     }
     
     /**
-     * @Route("/lc/poll", defaults={"_format" = "json"}, name="procergsvpr_core_end_lc_query")
+     * @Route("/lc/poll", defaults={"_format" = "json"}, name="__procergsvpr_core_end_lc_query")
      * @Template()
      */
     public function longPollingAction()
@@ -208,7 +201,7 @@ class DefaultController extends Controller
                 $info = curl_getinfo($ch);
                 curl_close($ch);
                 switch ($info['http_code']) {
-                	case 200;
+                	case 200:
                     	$receivedPerson = json_decode($response, true);
                     	return ($response !== false && $receivedPerson) ? $receivedPerson : false;
                 	break;
@@ -225,26 +218,26 @@ class DefaultController extends Controller
             return new JsonResponse(($received !== false && $received) ? $received : null, $e->getCode());
         }
         $userManager = $this->container->get('fos_user.user_manager');
-        $dispatcher = $this->container->get('event_dispatcher');
+            $dispatcher = $this->container->get('event_dispatcher');
         
-        $user->setFirstName($person['full_name']);
-        $user->setBadges($person['badges']);
-        $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
-        
+                $user->setFirstName($person['full_name']);
+                $user->setBadges($person['badges']);
+                $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
+                
         $return = $this->getCheckList();
         try {
             if (!$return['code']) {    
                 $event = new PersonEvent($user, $person['voter_registration']);
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
-            
+                
                 $userManager->updateUser($user, false);
-                $votingSession = $this->get('vpr_voting_session_provider');
+                $votingSession = $this->get('vpr_voting_session_provider');                
                 $vote = $votingSession->save($votingSession->createVotingSession($user));
             }
-        } catch (TREVoterException $e) {
-            $return['code'] = 2;
-            $return['msg'] = $this->get('translator')->trans($e->getMessage());
-        }
+            } catch (TREVoterException $e) {
+                $return['code'] = 2;
+                $return['msg'] = $this->get('translator')->trans($e->getMessage());
+            }
         $userManager->updateUser($user);
         return new JsonResponse($return);
     }
