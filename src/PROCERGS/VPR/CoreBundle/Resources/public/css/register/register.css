@@ -82,7 +82,7 @@
 
 .tab-pane {
   color: #FFF;
-  padding: 1px 30px 20px;
+  padding: 1px 10px 20px;
 }
 
 .tab-vote {
@@ -120,6 +120,10 @@
     width: 100%;
   }
 
+  .tab-pane {
+    padding: 1px 30px 20px;
+  }
+
 }
 
 .main-content .lc-link {
@@ -150,7 +154,6 @@
 
 .register-form-container .spacer {
   clear: both;
-  margin: 25px 0;
   position: relative;
 }
 
