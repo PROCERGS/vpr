@@ -103,10 +103,10 @@ class VotingSessionProvider
         if ($this->hasVotingSession()) {
             return $this->getVote();
         }
-        if (!$this->checkExistingVotes($person, $ball)) {
+        if (!$this->checkExistingVotes($person)) {
             return;
         }
-        return $this->save($this->createVotingSession($person, $ball));
+        return $this->save($this->createVotingSession($person));
     }
 
     public function getNextStep()

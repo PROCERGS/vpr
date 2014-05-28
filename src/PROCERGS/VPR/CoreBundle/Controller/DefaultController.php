@@ -102,8 +102,8 @@ class DefaultController extends Controller
 
                 /* just think
                   $votingSession = $this->container->get('vpr_voting_session_provider');
-                  $ball = $vote->getBallotBox();
-                  $votingSession->checkExistingVotes($user, $ball, $vote);
+                  $ballot = $vote->getBallotBox();
+                  $votingSession->checkExistingVotes($user, $ballot, $vote);
 
                   if ($vote->getCorede()->getId() != $user->getTreVoter()->getCity()->getCorede()->getId()) {
                   return $this->redirect($this->generateUrl('procergsvpr_core_reinforce_doc_choise'));
