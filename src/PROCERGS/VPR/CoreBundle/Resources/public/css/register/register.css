@@ -162,7 +162,7 @@
 }
 
 .register-form-container .spacer span {
-  background-color: #dee9ce;
+  background-color: rgba(222, 233, 205, 0.52);
   display: inline-block;
   font-size: 25px;
   left: 50%;

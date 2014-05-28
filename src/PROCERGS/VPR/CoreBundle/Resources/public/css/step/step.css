@@ -23,7 +23,7 @@
 
   .ac-custom .option .checked {
     opacity: 0.5opacity: 0.8;
-background-color: #e9e9e9 !important;
+    background-color: #e9e9e9 !important;
   }
 
 
@@ -212,9 +212,9 @@ background-color: #e9e9e9 !important;
    ballot nav + categories dropdown menu
    ========================================================================== */
    .ballot-nav {
-    background-color: #ffcf9e;
+    background-color: #f6f6f6;
     margin-bottom: 20px;
-    padding: 5px 10px 0;
+    padding: 0 10px;
     vertical-align: middle;
   }
 
@@ -230,17 +230,10 @@ background-color: #e9e9e9 !important;
   }
 
   #btn-categories {
-    background: none;
-    color: #f0731f;
-    font-weight: bold;
-    padding-left: 0;
   }
 
   .btn-group.open #btn-categories,
   .btn-group #btn-categories:active {
-    box-shadow: none;
-    color: #007136;
-    -webkit-box-shadow: none;
   }
 
   #btn-categories .caret {
@@ -249,8 +242,10 @@ background-color: #e9e9e9 !important;
 
   #dropdown-categories {
     border-radius: 0;
+    left: 5px;
     margin: 0;
     padding: 0;
+    top: 32px;
     width: 100%;
   }
 
@@ -296,50 +291,51 @@ background-color: #e9e9e9 !important;
 
   .check-count svg {
     left: 5px;
-  }*/
+    }*/
 
-  @media (min-width: 768px) {
+    @media (min-width: 768px) {
 
-    .ballot-nav .btn-group {
-      margin-left: 0;
+      .ballot-nav .btn-group {
+        margin-left: 0;
+      }
+
+      #dropdown-categories {
+        left: 15px;
+        width: auto;
+      }
     }
 
-    #dropdown-categories {
-      width: auto;
+    #dropdown-categories li {
+      border-bottom: solid 1px #CCC;
     }
-  }
 
-  #dropdown-categories li {
-    border-bottom: solid 1px #CCC;
-  }
+    #dropdown-categories li a {
+      display: block;
+      line-height: 40px;
+      padding: 5px 0 0;
+      white-space: normal;
+      width: 100%;
+    }
 
-  #dropdown-categories li a {
-    display: block;
-    line-height: 40px;
-    padding: 5px 0 0;
-    white-space: normal;
-    width: 100%;
-  }
+    #dropdown-categories li a span {
+      display: inline-block;
+      line-height: normal;
+      padding-left: 60px;
+      padding-right: 20px;
+      position: relative;
+    }
 
-  #dropdown-categories li a span {
-    display: inline-block;
-    line-height: normal;
-    padding-left: 60px;
-    padding-right: 20px;
-    position: relative;
-  }
-
-  #dropdown-categories li a span .icon {
-    background-image: url(../../images/cat-icons.svg);
-    content: "";
-    display: block;
-    height: 40px;
-    margin-top: -20px;
-    left: 0;
-    position: absolute;
-    top: 50%;
-    width: 60px;
-  }
+    #dropdown-categories li a span .icon {
+      background-image: url(../../images/cat-icons.svg);
+      content: "";
+      display: block;
+      height: 40px;
+      margin-top: -20px;
+      left: 0;
+      position: absolute;
+      top: 50%;
+      width: 60px;
+    }
 
 /* ==========================================================================
    ballot
@@ -609,8 +605,9 @@ background-color: #e9e9e9 !important;
     -o-transition: background-color 100ms linear;
     -ms-transition: background-color 100ms linear;
     transition: background-color 100ms linear;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 10px;
+    padding: 5px 15px;
     z-index: 9999;
   }
 
@@ -627,6 +624,7 @@ background-color: #e9e9e9 !important;
 
 
   #info-msg.affix {
+    border-bottom: solid 1px #CCC;
     left: 0;
     margin-top: 0;
     text-align: center;
@@ -638,4 +636,8 @@ background-color: #e9e9e9 !important;
   .ballot-search input[type="checkbox"],
   .ballot-search label::before {
     cursor: default;
+  }
+
+  #confirmation-modal label:before {
+    display: none;
   }

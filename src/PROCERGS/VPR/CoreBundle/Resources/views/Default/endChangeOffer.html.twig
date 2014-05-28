@@ -25,20 +25,20 @@
           <div class="modal-content">
               <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                  <h4 class="modal-title" >{{ 'Aguardando atendimento dos requisitos'|trans }}</h4>
-                  <p>Acesse <a href="{{ link_lc }}" target="_blank">aqui o Meu RS</a></p>
+                  <h4 class="modal-title" >{{ 'Aguardando preenchimento dos dados pendentes'|trans }}</h4>
               </div>
               <div class="modal-body">
               <ul class="lc-req">
-                <li id="req_full_name"><span class="glyphicon"></span>login cidadao com nome cadastrado</li>
-                <li id="req_email"><span class="glyphicon"></span>login cidadao com e-mail confirmado</li>
-                <li id="req_nfg_access_lvl"><span class="glyphicon"></span>login cidadao com NFG vinculada</li>
-                <li id="req_voter_registration"><span class="glyphicon"></span>login cidadao com titulo de eleitor validado pela NFG</li>
-                <li id="req_tre_valid"><span class="glyphicon"></span>O nome e o titulo devem ser válidos pelos Tre</li>
+                <li id="req_full_name"><span class="glyphicon"></span>Nome completo</li>
+                <li id="req_email"><span class="glyphicon"></span>E-mail confirmado</li>
+                <li id="req_nfg_access_lvl"><span class="glyphicon"></span>NFG vinculada</li>
+                <li id="req_voter_registration"><span class="glyphicon"></span>Título de eleitor validado pela NFG</li>
+                <li id="req_tre_valid"><span class="glyphicon"></span>Nome e o título devem ser válidos pelos TRE</li>
               </ul>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'Skip Step'|trans }}</button>
+                  <a class="btn">{{ 'Skip Step'|trans }}</a>
+                  <a class="btn btn-primary" href="{{ link_lc }}" target="_blank">Acesse aqui o Meu RS</a></p>
               </div>
           </div>
       </div>
@@ -87,11 +87,12 @@ userAction.poll = function() {
 }
 userAction.refreshModel = function() {
   for (x in this.user.item) {
-      //$('#req_'+x).prop('checked', this.user.item[x] ? true : false);
       if (this.user.item[x])
-        $('#req_' + x + ' .glyphicon').addClass("glyphicon-ok");
-      else
+        $('#req_' + x).addClass("hidden");
+      else {
+        $('#req_' + x).removeClass("hidden");
         $('#req_' + x + ' .glyphicon').addClass("glyphicon-remove");
+      }
   }
 
   if (this.user.code == 2)

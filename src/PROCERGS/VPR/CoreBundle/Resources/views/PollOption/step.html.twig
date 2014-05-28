@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
+                    <button type="button" id="btn-categories" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu" id="dropdown-categories">
                     {% for category,id in categoriesId %}
                         <li role="presentation">
@@ -75,16 +75,11 @@
                 <dl class="steps">
                 {% for currStep,categories in options %}
                     <dt class="step-title">
-                      <p>{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</p>
-                      <p>{{ currStep }}</p>
-                      <div class="alert alert-info affix-top" id="info-msg" data-spy="affix" data-offset-top="300">
-                        <div class="center-block">
-                          <p>
-                            {% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}
-                            <span>- Você já selecionou <span class="count">0</span></span>
-                          </p>
+                      <p>{{ currStep }} - {{ corede.name }}</p>
+                      <div class="alert alert-info affix-top text-center" id="info-msg" data-spy="affix" data-offset-top="300">
+                          <p>{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
+                          <p>Você já selecionou <span class="vote-count" data-val="0">0</span></p>
                           <p class="hidden">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</p>
-                        </div>
                       </div>
                     </dt>
                     <dd>
@@ -126,6 +121,22 @@
             <div id="button-bar">
                 <button id="btn-vote" type="button" class="btn btn-success btn-lg js-toggle" data-loading-text="Aguarde...">{{ 'Cast Vote' | trans }}</button>
             </div>
+
+            <div class="modal fade" id="confirmation-modal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Confirme ou corrija seu voto</h4>
+                  </div>
+                  <div class="modal-body" id="confirmation-content"></div>
+                  <div class="modal-footer">
+                    <a id="btn-rectify" role="button" class="btn btn-lg" data-dismiss="modal">{{ 'Rectify' | trans }}</a>
+                    <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
       {{ form_end(form) }}
 

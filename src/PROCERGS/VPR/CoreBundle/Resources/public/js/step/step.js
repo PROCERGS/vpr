@@ -14,21 +14,26 @@ $(function() {
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
         } else {
-          $(this).parent(".content").addClass("checked");
+          $(this).parent(".content").toggleClass("checked");
+
+          var count = $(".vote-count").data("val");
+          if($(this).parent(".content").hasClass("checked")) {
+            count++;
+          } else {
+            count--;
+          }
+          $(".vote-count").data("val", count).text(count);
         }
     });
 
+
+
     $("#btn-vote").on("click", function() {
-        $("#btn-vote").button("loading");
+      var selection = $(".ballot input:checked").siblings("label").clone();
+      $("#confirmation-content").html(selection);
 
-        // $("#max-selection").fadeOut();
-        // $(".confirm-message").fadeIn();
-        $("#info-msg").addClass("confirm").find("p").toggleClass("hidden");
-
-        $("html, body").animate({
-            scrollTop: $(".step-title").offset().top
-        }, 900);
-        $(".ballot").slideUp(1100, confirmation);
+      $("#confirmation-modal").modal("show");
+      $("#info-msg").hide();
     });
 
     $("#dropdown-categories .scrollTo").on("click", function(event) {
@@ -45,36 +50,6 @@ $(function() {
         }, 500);
     });
 
-    function confirmation() {
-        $(".confirmation-buttons").show();
-
-        $(".ballot input").not(":checked").closest(".option").addClass("hidden");
-        $("input:checked").each(function(i) {
-            $(this).closest(".option").prevAll(".step-category").first().addClass("checked");
-        });
-        $(".step-category").not(".checked").addClass("hidden");
-
-        if (!$(".ballot input:checked").length) {
-            $("#vote-empty").removeClass("hidden");
-        }
-
-        $(".ballot").slideDown(500, function() {
-            $("#btn-vote").hide();
-        });
-    }
-
-    $("#btn-rectify").on("click", function() {
-        $("#info-msg").removeClass("confirm").find("p").toggleClass("hidden");
-
-        $(".ballot").slideUp(500, function() {
-            $("#vote-empty").addClass("hidden");
-            $(".ballot .option, .step-category").removeClass("hidden");
-            $(".step-category").removeClass("checked");
-            $("#btn-vote").button("reset").show();
-            $(".ballot").slideDown(500);
-        });
-        $(".confirm-message, .confirmation-buttons").slideUp();
-    });
 
     $(".ballot .desc-toggle").on("click", function() {
         $(this).closest(".option").children(".desc").slideToggle();
