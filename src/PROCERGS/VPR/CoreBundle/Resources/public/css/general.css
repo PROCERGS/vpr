@@ -504,3 +504,13 @@ input::-webkit-inner-spin-button {
 #lc-listener .lc-req .glyphicon {
   margin-right: 10px;
 }
+
+.end-offer .thumbnail {
+  border: none;
+}
+
+.end-offer .caption {
+  margin: 0 auto;
+  max-width: 300px;
+  padding: 0;
+}

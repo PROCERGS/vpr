@@ -1,7 +1,7 @@
 {% extends 'PROCERGSVPRCoreBundle::base.logout.html.twig' %}
 
 {% block body %}
-<div class="row">
+<div class="row end-offer">
     <div class="col-md-12">
         <h3>{{ 'Thank you for voting'|trans }}</h3>
         <div class="alert alert-success">{% trans %}Thank you for helping Rio Grande do Sul to grow. Your participation is very important{% endtrans %}</div>
@@ -12,7 +12,7 @@
         <img src="http://placehold.it/300x200" alt="...">
         <div class="caption">
           <h3>NFG</h3>
-          <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!{% endtrans %}</p>
+          <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe and compete for prizes of up to R$ 1 million!{% endtrans %}</p>
           <p>
             <a id="btn-popup-nfg" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a>
           </p>
@@ -35,8 +35,8 @@
       <div class="thumbnail">
         <img src="http://placehold.it/300x200" alt="...">
         <div class="caption">
-          <h3>Banco mundial</h3>
-          <p>{% trans %}World Bank wants to know your opinion! Click below to answer the Survey.{% endtrans %}</p>
+          <h3>{% trans %}Banco Mundial research{% endtrans %}</h3>
+          <p>{% trans %}Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
           <p><a id="btn-popup-sm" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a></p>
         </div>
       </div>

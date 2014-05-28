@@ -69,9 +69,9 @@ Rectify: Corrigir
 'Choose up to <span class=''itens-count''>%max%</span> items': 'Escolha até <span class=''itens-count''>%max%</span> itens'
 'Thank you for voting': 'Obrigado por ter votado'
 'Thank you for your collaboration on this process, your participation was very important!': 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
-'Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!': 'Você ja tem cadastro na Nota Fiscal Gaucha? Não?! Inscreva-se agora e concorra a premios!'
-'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Você ja tem cadastro no Login Cidadão? Cadastre-se agora e obtenha conteudo personalizado para o serviços do Rio Grande do Sul!'
-'World Bank wants to know your opinion! Click below to answer the Survey.': 'O Banco Mundial quer escutar sua opinião! Responda agora o questionario abaixo!'
+'Are you participating on Nota Fiscal Gaúcha? Subscribe and compete for prizes of up to R$ 1 million!': 'Você já tem cadastro na Nota Fiscal Gaúcha? Inscreva-se e concorra a prêmios de até R$ 1 milhão!'
+'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Já se cadastrou no Login Cidadão? Acesse todos os serviços do Rio Grande do Sul com uma única conta personalizada.'
+'Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!': 'Responda à pesquisa do Banco Mundial sobre a Votação de Prioridades e ajude a fortalecer a participação no RS!'
 'Register Here': 'Cadastre-se aqui'
 'Answer Survey': 'Responder Pesquisa'
 Warning!: Atenção!
@@ -166,3 +166,4 @@ Loading: Carregando
 form.city.select: 'Digite a cidade'
 'Thank you for helping Rio Grande do Sul to grow. Your participation is very important': 'Muito obrigado por ajudar o Rio Grande do Sul a crescer. Sua participação é muito importante'
 'Confirm your Voter Registration': 'Confirme seu título'
+'Banco Mundial research': 'Pesquisa do Banco Mundial'
