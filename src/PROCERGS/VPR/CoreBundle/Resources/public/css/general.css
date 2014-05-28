@@ -418,7 +418,9 @@ ul {
 }
 
 .tt-dropdown-menu {
-  background-color: #A5D6B3;
+  /*background-color: #A5D6B3;*/
+  background-color: #FFF;
+  border: solid 1px #CCC;
   text-align: left;
   width: 100%;
 }
@@ -432,7 +434,7 @@ ul {
 .tt-suggestion.tt-cursor {
   color: #FFF;
   cursor: pointer;
-  background-color: #007136;
+  background-color: #00a14e;
 }
 
 .tt-suggestion p {
