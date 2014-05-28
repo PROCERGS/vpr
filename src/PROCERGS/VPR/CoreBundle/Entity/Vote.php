@@ -377,7 +377,7 @@ class Vote
         $crypted = null;
         $ballotBox = $this->getBallotBox();
         if (!$ballotBox) {
-        	return false;
+          return false;
         }
         $poll = $ballotBox->getPoll();
         $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
@@ -434,6 +434,9 @@ class Vote
         if (!$this->pollOption) {
             $this->pollOption = $var;
         } else {
+            if (!$var) {
+              $var = array();
+            }
             $this->pollOption = array_merge($this->pollOption, $var);
         }
         return $this;
