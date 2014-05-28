@@ -18,7 +18,6 @@ body {
 body > .container {
   /*padding: 0.2em 0.5em 0.2em;*/
   padding-bottom: 2.0em;
-  padding-top: 2.0em;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -275,6 +274,7 @@ ul {
 
   body > .container {
     /*padding: 20px 15px 20px;*/
+    padding-top: 2.0em;
   }
 
   .form-inline .form-group {
@@ -494,4 +494,12 @@ input::-webkit-inner-spin-button {
 .search-title .glyphicon {
   position: relative;
   top: 4px;
+}
+
+#lc-listener .lc-req li {
+  margin-bottom: 10px;
+}
+
+#lc-listener .lc-req .glyphicon {
+  margin-right: 10px;
 }

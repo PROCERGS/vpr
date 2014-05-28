@@ -10,42 +10,40 @@
     <div class="col-md-12 general-content">
         <p>{% trans %}If you believe that's a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.{% endtrans %}</p>
         {% if app.user.getLoginCidadaoId %}
-            <p><a class="btn btn-success" role="button" href="javascript:void(0);" onclick="go()">{{ 'Enter Meu RS'|trans }}</a></p>
+            <p><button class="btn btn-success" onclick="go()">{{ 'Enter Meu RS'|trans }}</button></p>
         {% else %}
-	        {% for owner in hwi_oauth_resource_owners() %}
-	        <p><a class="btn btn-success" role="button" href="{{ hwi_oauth_login_url(owner) }}">{{ 'Enter Meu RS'|trans }}</a></p>
-	        {% endfor %}
+          {% for owner in hwi_oauth_resource_owners() %}
+          <p><a class="btn btn-success" role="button" href="{{ hwi_oauth_login_url(owner) }}">{{ 'Enter Meu RS'|trans }}</a></p>
+          {% endfor %}
         {% endif %}
-        
+
         <p><a id="btn-skip" class="btn btn-success" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></p>
     </div>
-    
+
     <div class="modal fade" id="lc-listener" tabindex="-1" role="dialog" aria-labelledby="lc-listener" aria-hidden="true">
-	    <div class="modal-dialog modal-sm">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	                <h4 class="modal-title" >{{ 'Aguardando atendimento dos requisitos'|trans }}</h4>
-	            </div>
-	            <div class="modal-body">
-	            <ul>
-                    <li><input type="checkbox" id="req_full_name" name="options[]" value="full_name" onclick="return false;"/><label for="req_2">login cidadao com nome cadastrado</label></li>
-		            <li><input type="checkbox" id="req_email" name="options[]" value="email" onclick="return false;"/><label for="req_2">login cidadao com e-mail confirmado </label></li>
-		            <li><input type="checkbox" id="req_nfg_access_lvl" name="options[]" value="nfg_access_lvl" onclick="return false;"/><label for="req_3">login cidadao com NFG vinculada</label></li>
-		            <li><input type="checkbox" id="req_voter_registration" name="options[]" value="voter_registration" onclick="return false;"/><label for="req_4">login cidadao com titulo de eleitor validado pela NFG</label></li>
-		            <li><input type="checkbox" id="req_tre_valid" name="options[]" value="tre_valid" onclick="return false;"/><label for="req_5">O nome e o titulo devem ser válidos pelos Tre</label></li>
-	            </ul>
-	            </div>
-	            <div class="modal-footer">
-	                        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
-	            <img src="{{ asset_url }}" alt="{%trans%}Loading{%endtrans%}" class="loader" width="43" height="11">
-	            {% endimage %}
-	                <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'Skip Step'|trans }}</button>
-	            </div>
-	        </div>
-	    </div>
-    </div>    
-    
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h4 class="modal-title" >{{ 'Aguardando atendimento dos requisitos'|trans }}</h4>
+                  <p>Acesse <a href="{{ link_lc }}" target="_blank">aqui o Meu RS</a></p>
+              </div>
+              <div class="modal-body">
+              <ul class="lc-req">
+                <li id="req_full_name"><span class="glyphicon"></span>login cidadao com nome cadastrado</li>
+                <li id="req_email"><span class="glyphicon"></span>login cidadao com e-mail confirmado</li>
+                <li id="req_nfg_access_lvl"><span class="glyphicon"></span>login cidadao com NFG vinculada</li>
+                <li id="req_voter_registration"><span class="glyphicon"></span>login cidadao com titulo de eleitor validado pela NFG</li>
+                <li id="req_tre_valid"><span class="glyphicon"></span>O nome e o titulo devem ser válidos pelos Tre</li>
+              </ul>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'Skip Step'|trans }}</button>
+              </div>
+          </div>
+      </div>
+    </div>
+
 </div>
 {% endblock %}
 
@@ -53,7 +51,7 @@
 {{ parent() }}
 
 <script>
-var userModel = {{ checklist|json_encode|raw }}; 
+var userModel = {{ checklist|json_encode|raw }};
 var onSuccess = '{{ path('procergsvpr_core_homepage') }}';
 
 var userAction = {};
@@ -61,56 +59,60 @@ userAction.user = userModel;
 
 userAction.conn = null;
 userAction.poll = function() {
-	var self = this;
-	self.conn = $.ajax({
+  var self = this;
+  self.conn = $.ajax({
         url: '{{ path('__procergsvpr_core_end_lc_query') }}',
         type: 'GET',
         dataType: 'json',
         success: function (data, textStatus, jqXHR) {
-        	self.user = data;
-        	self.refreshModel();
+          self.user = data;
+          self.refreshModel();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
-                console.log('Ocorreu o erro '+jqXHR.status+' , por favor entre em contato com o administador do sistema!');
         },
         complete: function (jqXHR, textStatus) {
             if (textStatus == 'abort') {
-                
+
             } else if (jqXHR.status == 408) {
-            	self.poll();
-        	} else if (self.user.code == 0) {
-        		window.location.href = onSuccess;
+              self.poll();
+          } else if (self.user.code == 0) {
+            window.location.href = onSuccess;
             } else if (self.user.code == 1) {
-            	self.poll();
-            } else if (self.user.code == 2) {            	
+              self.poll();
+            } else if (self.user.code == 2) {
                 setTimeout(self.poll(), 5000);
             }
         }
     });
 }
 userAction.refreshModel = function() {
-	for (x in this.user.item) {
-	    $('#req_'+x).prop('checked', this.user.item[x] ? true : false);
-	}
+  for (x in this.user.item) {
+      //$('#req_'+x).prop('checked', this.user.item[x] ? true : false);
+      if (this.user.item[x])
+        $('#req_' + x + ' .glyphicon').addClass("glyphicon-ok");
+      else
+        $('#req_' + x + ' .glyphicon').addClass("glyphicon-remove");
+  }
+
+  if (this.user.code == 2)
+    $('#req_tre_valid .glyphicon').addClass("glyphicon-ok");
+  else
+    $('#req_tre_valid .glyphicon').addClass("glyphicon-remove");
 }
 
 function go() {
-	userAction.refreshModel();
-	$("#lc-listener").modal("show");	
+  userAction.refreshModel();
+  $("#lc-listener").modal("show");
 }
 $(function(){
-	$("#lc-listener").on('shown.bs.modal', function (e) {
-	    window.open('{{ link_lc }}', '',"width=1024, height=600, scrollbars=yes");
-	    userAction.poll();	    
+  $("#lc-listener").on('shown.bs.modal', function (e) {
+      userAction.poll();
     });
-	$("#lc-listener").on('hidden.bs.modal', function (e) {
-	    userAction.conn.abort();	    
+  $("#lc-listener").on('hidden.bs.modal', function (e) {
+      userAction.conn.abort();
     });
-    
-	
+
+
 
 })
 
