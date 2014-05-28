@@ -9,35 +9,45 @@
 
     <div class="col-md-4">
       <div class="thumbnail">
-        <img src="http://placehold.it/300x200" alt="...">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-NFG.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}NFG{%endtrans%}" class="img-responsive">
+        {% endimage %}
         <div class="caption">
           <h3>NFG</h3>
-          <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe and compete for prizes of up to R$ 1 million!{% endtrans %}</p>
-          <p>
-            <a id="btn-popup-nfg" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a>
-          </p>
+          <div class="text">
+            <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe and compete for prizes of up to R$ 1 million!{% endtrans %}</p>
+          </div>
+          <a id="btn-popup-nfg" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a>
         </div>
       </div>
     </div>
 
     <div class="col-md-4">
       <div class="thumbnail">
-        <img src="http://placehold.it/300x200" alt="...">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-meuRS.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}MEU-RS{%endtrans%}" class="img-responsive">
+        {% endimage %}
         <div class="caption">
           <h3>Login cidadão</h3>
-          <p>{% trans %}Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul's services.{% endtrans %}</p>
-          <p><a id="btn-popup-lc" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'Register Here'|trans }}</a></p>
+          <div class="text">
+            <p>{% trans %}Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul's services.{% endtrans %}</p>
+          </div>
+          <a id="btn-popup-lc" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'Register Here'|trans }}</a>
         </div>
       </div>
     </div>
 
     <div class="col-md-4">
       <div class="thumbnail">
-        <img src="http://placehold.it/300x200" alt="...">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-bancoMundial.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}Banco Mundial{%endtrans%}" class="img-responsive">
+        {% endimage %}
         <div class="caption">
           <h3>{% trans %}Banco Mundial research{% endtrans %}</h3>
-          <p>{% trans %}Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
-          <p><a id="btn-popup-sm" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a></p>
+          <div class="text">
+            <p>{% trans %}Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
+          </div>
+          <a id="btn-popup-sm" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a>
         </div>
       </div>
     </div>

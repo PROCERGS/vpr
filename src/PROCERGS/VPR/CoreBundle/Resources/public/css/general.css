@@ -514,3 +514,7 @@ input::-webkit-inner-spin-button {
   max-width: 300px;
   padding: 0;
 }
+
+.end-offer .caption .text {
+  min-height: 100px;
+}
