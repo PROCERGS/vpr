@@ -30,7 +30,10 @@ $(function() {
 
     $("#btn-vote").on("click", function() {
       var selection = $(".ballot input:checked").siblings("label").clone();
-      $("#confirmation-content").html(selection);
+      if (selection.length > 0 )
+        $("#confirmation-content").html(selection);
+      else
+        $("#confirmation-content").html("Nenhuma opção selecionada");
 
       $("#confirmation-modal").modal("show");
       $("#info-msg").hide();
