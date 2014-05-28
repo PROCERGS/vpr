@@ -5,6 +5,7 @@ namespace PROCERGS\VPR\CoreBundle\Form\Type\Admin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class BallotBoxType extends AbstractType
 {
@@ -41,12 +42,20 @@ class BallotBoxType extends AbstractType
             ))
             ->add('poll', 'entity', array(
                 'class' => 'PROCERGSVPRCoreBundle:Poll',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                        ->orderBy('p.openingTime', 'DESC');
+                },                
                 'property' => 'name',
                 'empty_value' => '',
                 'required' => true
             ))
             ->add('city', 'entity', array(
                 'class' => 'PROCERGSVPRCoreBundle:City',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name', 'ASC');
+                },
                 'property' => 'name',
                 'required' => false
             ))
