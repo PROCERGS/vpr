@@ -12,6 +12,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
+use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 
 class VotingSessionProvider
 {
@@ -68,9 +69,20 @@ class VotingSessionProvider
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
     }
 
-    public function checkExistingVotes(Person $person,
-                                       Vote $actualVote /* why is this called ACTUAL vote? Is there a FAKE vote? */ = null)
+    /**
+     * Checks if a given person has already cast a vote in the specified BallotBox.
+     * @param \PROCERGS\VPR\CoreBundle\Entity\Person $person
+     * @param \PROCERGS\VPR\CoreBundle\Entity\BallotBox $ballotBox
+     * @param \PROCERGS\VPR\CoreBundle\Entity\Vote $conflictingVote (optional) the conflicting/current vote
+     * @return boolean
+     * @throws AccessDeniedHttpException
+     * @throws VoterAlreadyVotedException
+     * @throws VoterRegistrationAlreadyVotedException
+     */
+    public function checkExistingVotes(Person $person, BallotBox $ballotBox,
+                                       Vote $conflictingVote = null)
     {
+        $filter = compact('ballotbox');
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
         if ($person->getTreVoter() instanceof TREVoter) {
             $filter['voterRegistration'] = $person->getTreVoter()->getId();
@@ -82,7 +94,7 @@ class VotingSessionProvider
         $votes = $voteRepo->findBy($filter);
         if (!empty($votes)) {
             foreach ($votes as $vote) {
-                if ($actualVote instanceof Vote && $vote->getId() === $actualVote->getId()) {
+                if ($conflictingVote instanceof Vote && $vote->getId() === $conflictingVote->getId()) {
                     continue;
                 }
                 if ($vote->getNfgCpf()) {
@@ -103,7 +115,7 @@ class VotingSessionProvider
         if ($this->hasVotingSession()) {
             return $this->getVote();
         }
-        if (!$this->checkExistingVotes($person)) {
+        if (!$this->checkExistingVotes($person, $this->getOnlineBallotBox())) {
             return;
         }
         return $this->save($this->createVotingSession($person));

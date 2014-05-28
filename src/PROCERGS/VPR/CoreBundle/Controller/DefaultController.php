@@ -55,7 +55,7 @@ class DefaultController extends Controller
                 if ($vote->getNfgCpf()) { // Vote has NFG validation
                     throw new VotedException();
                 }
-                $votingSession->checkExistingVotes($person);
+                $votingSession->checkExistingVotes($person, $vote->getBallotBox());
                 $votingSession->flush();
                 return $this->indexAction();
             } catch (VotedException $e) {
@@ -102,8 +102,8 @@ class DefaultController extends Controller
 
                 /* just think
                   $votingSession = $this->container->get('vpr_voting_session_provider');
-                  $ballot = $vote->getBallotBox();
-                  $votingSession->checkExistingVotes($user, $ballot, $vote);
+                  $ballotBox = $vote->getBallotBox();
+                  $votingSession->checkExistingVotes($user, $ballotBox, $vote);
 
                   if ($vote->getCorede()->getId() != $user->getTreVoter()->getCity()->getCorede()->getId()) {
                   return $this->redirect($this->generateUrl('procergsvpr_core_reinforce_doc_choise'));
