@@ -1,3 +1,5 @@
+/*global $:false */
+'use strict';
 function somenteNumeros(e) {
     if (window.event) {
         // for IE, e.keyCode or window.event.keyCode can be used
@@ -85,10 +87,10 @@ $(document).ready(function() {
      */
     $('form').on('focus', 'input[type=number]', function(e) {
         $(this).on('mousewheel.disableScroll', function(e) {
-            e.preventDefault()
-        })
-    })
+            e.preventDefault();
+        });
+    });
     $('form').on('blur', 'input[type=number]', function(e) {
-        $(this).off('mousewheel.disableScroll')
-    })
+        $(this).off('mousewheel.disableScroll');
+    });
 });

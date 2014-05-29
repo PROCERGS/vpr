@@ -33,29 +33,6 @@ $(function() {
   });
 
 
-    /*
-     * Mobile behavior to register form
-     */
-    // var formContainer = $(".register-form-container");
-
-    // $(".register-label").on("click", function() {
-    //     if ($(window).width() <= 768) {
-    //         formContainer.toggleClass("animate");
-    //         $(".register-tooltip").tooltip("hide");
-    //     }
-    // });
-
-    // $(window).resize(function() {
-    //     if ($(window).width() > 768 && formContainer.is(":hidden")) {
-    //         formContainer.show();
-    //     }
-
-    //     $(".register-tooltip").tooltip("hide");
-
-    // });
-
-
-
   // Show alert about LC
   $("#about-lc-link a").on("click", function(e) {
     e.preventDefault();

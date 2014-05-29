@@ -91,14 +91,14 @@
                             <div class="form-group has-feedback">
                                 {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
+                                <p class="text-left accept_registration">
+                                    {{ form_widget(form.loginCidadaoAcceptRegistration) }}
+                                    {{ form_label(form.loginCidadaoAcceptRegistration, 'Accepts create an account in Citizen Login service?' | trans) }}
+                                </p>
                             </div>
                             <div class="form-group has-feedback">
                                 {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
-                                <h5 class="text-left accept_registration">
-                                    {{ form_widget(form.loginCidadaoAcceptRegistration) }}
-                                    {{ form_label(form.loginCidadaoAcceptRegistration, 'Accepts create an account in Citizen Login service?' | trans) }}
-                                </h5>
                             </div>
 
                             <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>

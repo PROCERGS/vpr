@@ -489,10 +489,10 @@ input::-webkit-inner-spin-button {
 
 /* Voter Registration Reminder */
 .tre-search-link {
-    font-size: 12px;
-    margin: 5px 0;
-    line-height: 15px;
-    padding: 4px 9px;
+  font-size: 12px;
+  margin: 5px 0;
+  line-height: 15px;
+  padding: 4px 9px;
 }
 
 .link-popup {
