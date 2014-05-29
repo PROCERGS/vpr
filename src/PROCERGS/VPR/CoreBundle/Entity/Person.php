@@ -125,6 +125,12 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     protected $loginCidadaoUpdatedAt;
 
     /**
+     * @var boolean
+     * @ORM\Column(name="login_cidadao_accept_registration", type="boolean", nullable=true)
+     */
+    protected $loginCidadaoAcceptRegistration;
+
+    /**
      * Get id
      *
      * @return integer
@@ -388,6 +394,17 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this->loginCidadaoRefreshToken;
     }
 
+    public function setLoginCidadaoAcceptRegistration($loginCidadaoAcceptRegistration)
+    {
+        $this->loginCidadaoAcceptRegistration = $loginCidadaoAcceptRegistration;
+        return $this;
+    }
+
+    public function getLoginCidadaoAcceptRegistration()
+    {
+        return $this->loginCidadaoAcceptRegistration;
+    }    
+    
     public function getCheckList()
     {
         $badges = $this->getBadges();
