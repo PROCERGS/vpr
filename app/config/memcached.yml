@@ -16,6 +16,7 @@ doctrine:
             type:   memcache
             host:   %memcached_host%
             port:   %memcached_port%
+            prefix: %session_prefix%
 
 services:
     session.memcached:
