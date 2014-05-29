@@ -14,7 +14,7 @@ class RegistrationFormType extends BaseType
         $builder->add('username', 'voter_registration',array('required' => true))
                 ->add('firstname', 'text', array('required' => true))
                 ->add('email', 'email', array('required' => false))
-                ->add('mobile', 'number', array(
+                ->add('mobile', null, array(
                     'required' => false,
                     'attr' => array(
                         'type' => 'tel',
