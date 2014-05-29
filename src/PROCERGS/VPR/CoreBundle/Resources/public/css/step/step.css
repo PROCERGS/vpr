@@ -30,12 +30,14 @@
   .ac-custom label {
     display: block;
     line-height: normal;
-    font-size: 17px;
-    font-weight: normal;
+    font-size: 16px;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
     vertical-align: top;
     cursor: pointer;
     -webkit-transition: color 0.3s;
     transition: color 0.3s;
+
   }
 
   .ac-custom input[type="checkbox"],
@@ -71,7 +73,12 @@
   .ac-custom input[type="checkbox"]:checked + label::before {
     opacity: 0.8;
   }
-
+#confirmation-content label {
+    border-bottom: dashed 1px #039935;
+    padding: 0.4em 0;
+    margin: auto;
+    font-weight: 300;
+}
 /* ==========================================================================
    General SVG and path styles
    ========================================================================== */
@@ -619,6 +626,10 @@
 
   #info-msg .count {
     font-size: 25px;
+  }
+
+  #info-msg.complete {
+    background-color: rgba(255, 204, 0, 1);
   }
 
 

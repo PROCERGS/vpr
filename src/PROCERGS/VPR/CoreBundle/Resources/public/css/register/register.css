@@ -35,7 +35,8 @@
 .btn-about {
   background-color: #1575Ad;
 }
-
+.btn-cedula {   background-color: #259177; }
+.btn-cedula:hover, .btn-cedula.active {   background-color: #12725D; }
 .btn-about:hover,
 .btn-about.active,
 .tab-about {
@@ -84,7 +85,9 @@
   color: #FFF;
   padding: 1px 10px 20px;
 }
-
+#about a {
+color: #FF0;
+}
 .tab-vote {
   background-color: #dee9ce;
   background-color: rgba(222, 233, 205, 0.52);
@@ -128,10 +131,14 @@
 
 .main-content .lc-link {
   display: block;
-  font-size: 18px;
-  height: auto;
+  font-size: 15px;
+  height: 55px;
+  line-height: 55px;
   margin: 0 auto 30px;
   max-width: 300px;
+  padding: 0 6px 0 51px;
+  text-align: center;
+  white-space: normal;
 }
 
 .lc-link span {
@@ -140,9 +147,12 @@
   display: inline-block;
   height: 42px;
   font-size: 18px;
+  left: 10px;
   line-height: 42px;
   margin-right: 10px;
   padding: 0;
+  position: absolute;
+  top: 7px;
   vertical-align: middle;
   width: 42px;
   text-indent: -9999px;

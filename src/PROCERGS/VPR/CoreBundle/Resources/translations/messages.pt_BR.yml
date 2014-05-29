@@ -10,10 +10,10 @@ Previous: Anterior
 Next: Próximo
 admin_users: Usuários
 'What''s your voting city?': 'Qual seu domicílio eleitoral?'
-'You need to type the city where you vote so that we can show you the relevant options for you.': 'Você precisa digitar a cidade onde você vota para que possamos lhe mostrar as opções relevantes para sua região.'
-'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Por favor, note que ao informar a cidade errada seu voto não poderá ser contado para o programa de participação popular.'
+'You need to type the city where you vote so that we can show you the relevant options for you.': 'Informe o nome da cidade onde você vota para ver as opções da sua região.'
+'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Assim o voto será registrado no Sistema de Participação Popular.'
 City: Cidade
-'Alternatively you can type your voter registration, without the need to type your city.': 'Alternativamente, você pode digitar seu título de eleitor para não precisar digitar a cidade. Essa informação será solicitada ao fim da votação.'
+'Alternatively you can type your voter registration, without the need to type your city.': 'Você também pode informar apenas seu título de eleitor (não precisa informar a cidade).'
 'Voter Registration': 'Título de Eleitor'
 Continue: Continuar
 'Type a city to see it''s presential polling places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
@@ -26,7 +26,7 @@ default.closing_time.poll.name: votação
 'Check the polling places': 'Confira os locais de votação'
 register.voter_registration.mismatch: 'Algum dos dados informados não conferem com os dados cadastrados no TRE-RS'
 register.voter_registration.notfound: 'Cadastro não encontrado no TRE-RS'
-'Thank you for your participation': 'Obrigado pela sua participação'
+'Thank you for your participation': 'Obrigado pela sua participação!'
 'Thank you for your collaboration in this process, your participation was very important!': 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
 CPF: CPF
 Birthdate: 'Data de Nascimento'
@@ -157,13 +157,14 @@ posvote.validate.click: Validar
 R$: R$
 Loading: Carregando
 'Cost: R$': 'Valor: R$'
-'Back to home': 'Voltar para a pagina principal'
+'Back to home': 'Voltar para a página principal'
 'What is it?': 'O que é?'
 'Vote now!': 'Vote agora!'
 'Where to vote?': 'Onde votar?'
 'Check ballot': 'Ver cédula'
 'Type a city to check the ballot for your region.': 'Digite a cidade desejada para consultar a sua respectiva cédula de votação.'
 form.city.select: 'Digite a cidade'
-'Thank you for helping Rio Grande do Sul to grow. Your participation is very important': 'Muito obrigado por ajudar o Rio Grande do Sul a crescer. Sua participação é muito importante'
+'Thank you for helping Rio Grande do Sul to grow. Your participation is very important!': 'Muito obrigado por ajudar o Rio Grande do Sul a crescer. Sua participação é muito importante!'
 'Confirm your Voter Registration': 'Confirme seu título'
 'Banco Mundial research': 'Pesquisa do Banco Mundial'
+'Change': 'Alterar'

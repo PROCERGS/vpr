@@ -47,11 +47,11 @@
             <div class="tab-pane tab-about" id="about">
                 <h1>{% trans %}What is it?{% endtrans %}</h1>
                 <p>
-                    A Votação de Prioridades é a etapa final da elaboração colaborativa do Oçamento Anual do Rio Grande do Sul. Com seu voto, os cidadãos gaúchos ajudam a decidir o destino de R$ 192 milhões  vinculados à execução orçamentária de 2015 do Governo do Estado. É um dos maiores processos de participação direta do globo, premiado pela ONU em 2013 e referência para Orçamentos Participativos em todo o mundo.
+                    A Votação de Prioridades é a etapa final da elaboração colaborativa do Orçamento Anual do Rio Grande do Sul. Com seu voto, os cidadãos gaúchos ajudam a decidir o destino de R$ 192 milhões  vinculados à execução orçamentária de 2015 do Governo do Estado. É um dos maiores processos de participação direta do globo, premiado pela ONU em 2013 e referência para Orçamentos Participativos em todo o mundo.
                 </p>
                 <p>
                     A sua cédula de votação inclui as prioridades definidas em Audiências Públicas nas 28 regiões do estado e em Assembleias Municipais de 427 municípios gaúchos. O resultado final indicará quais obras e serviços serão pioritários para o próximo período. Para conhecer melhor o Ciclo Orçamentário, acesse o <a href="http://www.portaldaparticipacao.rs.gov.br/wp-content/uploads/2013/01/Caderno-de-Diretrizes.pdf
-">Caderno de Diretrizes da Participação Popular e Cidadã</a>.
+" target="_blank" title="Caderno de Diretrizes da Participação Popular e Cidadã">Caderno de Diretrizes da Participação Popular e Cidadã</a>.
                 </p>
             </div>
 
@@ -72,7 +72,8 @@
                         <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
                             <span></span>Vote com seu Login Cidadão
                         </a>
-                        <div class="spacer"><hr><span>ou</span></div>
+                        <div class="spacer"><hr></div>
+                        <h4 class="text-center" >Ou informe os dados abaixo</h4>
 
 
                         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
@@ -108,12 +109,12 @@
 
 <div class="row sub-content">
     <div class="col-sm-6">
-        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block">
+        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block btn-cedula">
             <span class="glyphicon glyphicon-globe"></span>{% trans %}Where to vote?{% endtrans %}
         </a>
     </div>
     <div class="col-sm-6">
-        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block">
+        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block btn-cedula">
             <span class="glyphicon glyphicon glyphicon-list-alt"></span>{% trans %}Check ballot{% endtrans %}
         </a>
     </div>

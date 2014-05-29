@@ -23,6 +23,12 @@ $(function() {
             count--;
           }
           $(".vote-count").data("val", count).text(count);
+
+          if (sel.length == maxItems) {
+            $("#info-msg").addClass("complete");
+          } else {
+            $("#info-msg").removeClass("complete");
+          }
         }
     });
 

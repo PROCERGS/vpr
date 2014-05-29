@@ -68,9 +68,12 @@
                     <dt class="step-title">
                       <p>{{ currStep }} - {{ corede.name }}</p>
                       <div class="alert alert-info affix-top text-center" id="info-msg" data-spy="affix" data-offset-top="300">
-                          <p>{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
-                          <p>Você já selecionou <span class="vote-count" data-val="0">0</span></p>
-                          <p class="hidden">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</p>
+                          {# <p>{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p> #}
+                          {# <p>Você já selecionou <span class="vote-count" data-val="0">0</span></p> #}
+
+
+                          <p>{% trans with {'%max%': step.getMaxSelection} %}You have already chose <span class='itens-count'>0</span> up to %max% items{% endtrans %}</p>
+
                       </div>
                     </dt>
                     <dd>
@@ -118,11 +121,11 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Confirme ou corrija seu voto</h4>
+                    <h4 class="modal-title">Altere ou confirme seu voto</h4>
                   </div>
                   <div class="modal-body" id="confirmation-content"></div>
                   <div class="modal-footer">
-                    <a id="btn-rectify" role="button" class="btn btn-lg" data-dismiss="modal">{{ 'Rectify' | trans }}</a>
+                    <a id="btn-rectify" role="button" class="btn btn-lg" data-dismiss="modal">{{ 'Change' | trans }}</a>
                     <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
                   </div>
                 </div><!-- /.modal-content -->
