@@ -5,18 +5,18 @@ Email: Email
 'How do I vote?': 'Como votar?'
 'Vote with your Voter Registration': 'Vote com seu Título de eleitor'
 'Vote with your Citizen Login': 'Vote com seu Login Cidadão'
-form.city-selection.tried-different-city: 'Embora você tenha digitado uma cidade diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'
+form.city-selection.tried-different-city: 'Embora você tenha digitado um município diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'
 Previous: Anterior
 Next: Próximo
 admin_users: Usuários
 'What''s your voting city?': 'Qual seu domicílio eleitoral?'
-'You need to type the city where you vote so that we can show you the relevant options for you.': 'Informe o nome da cidade onde você vota para ver as opções da sua região.'
+'You need to type the city where you vote so that we can show you the relevant options for you.': 'Informe o nome do município onde você vota para ver as opções da sua região.'
 'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Assim o voto será registrado no Sistema de Participação Popular.'
-City: Cidade
-'Alternatively you can type your voter registration, without the need to type your city.': 'Você também pode informar apenas seu título de eleitor (não precisa informar a cidade).'
+City: Município
+'Alternatively you can type your voter registration, without the need to type your city.': 'Você também pode informar apenas seu título de eleitor (não precisa informar o município).'
 'Voter Registration': 'Título de Eleitor'
 Continue: Continuar
-'Type a city to see it''s presential polling places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
+'Type a city to see it''s presential polling places.': 'Digite o nome do município onde deseja listar os locais de votação presencial.'
 'Voting time is up!': 'Horário de Votação Encerrado'
 default.closing_time.poll.name: votação
 'The poll %poll% has ended at %closingTime%': 'A %poll% foi encerrada em %closingTime%'
@@ -56,7 +56,7 @@ default.continue.click: Continuar
 'Don''t know your Voter Registration?': 'Não lembra seu título?'
 'Click here to check it out': 'Consulte aqui'
 'Ballot Search': 'Consulta de cédula'
-'Type your city': 'Digite sua cidade:'
+'Type your city': 'Digite seu município:'
 Search: Pesquisar
 'Cast Vote': Votar
 Confirm: Confirmar
@@ -99,7 +99,7 @@ admin.name: Nome
 admin.title: Título
 admin.sorting: Ordem
 admin.actions: Ações
-admin.city: Cidade
+admin.city: Município
 admin.corede: Corede
 admin.opening_time: 'Data abertura'
 admin.closing_time: 'Data fechamento'
@@ -142,7 +142,7 @@ admin.clear_filters: 'Limpar filtros'
 admin.add_poll_option: 'Adicionar opção'
 lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
 lc.full_name: 'Nome Completo'
-'Polling places in your city.': 'Locais de votação na sua cidade'
+'Polling places in your city.': 'Locais de votação no seu município'
 Categories: Categorias
 'Priorities Voting': 'Votação de Prioridades'
 PPC: CPP
@@ -163,8 +163,8 @@ Loading: Carregando
 'Vote now!': 'Vote agora!'
 'Where to vote?': 'Onde votar?'
 'Check ballot': 'Ver cédula'
-'Type a city to check the ballot for your region.': 'Digite a cidade desejada para consultar a sua respectiva cédula de votação.'
-form.city.select: 'Digite a cidade'
+'Type a city to check the ballot for your region.': 'Digite o município desejada para consultar a sua respectiva cédula de votação.'
+form.city.select: 'Digite o município'
 'Thank you for helping Rio Grande do Sul to grow. Your participation is very important!': 'Muito obrigado por ajudar o Rio Grande do Sul a crescer. Sua participação é muito importante!'
 'Confirm your Voter Registration': 'Confirme seu título'
 'Banco Mundial research': 'Pesquisa do Banco Mundial'
