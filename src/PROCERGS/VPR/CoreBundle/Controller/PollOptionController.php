@@ -46,6 +46,8 @@ class PollOptionController extends Controller
                     $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
                     $categoriesId[$option->getCategory()->getName()] = $option->getCategory()->getId();
                 }
+
+                $corede = $city->getCorede();
             }
         }
 
@@ -58,7 +60,7 @@ class PollOptionController extends Controller
             'autocomplete'
         )));
 
-        return compact('form', 'options', 'cities', 'categoriesId');
+        return compact('form', 'options', 'cities', 'categoriesId', 'corede');
     }
 
     /**

@@ -102,10 +102,11 @@ ul {
 }
 
 .form-inline {
-    margin: 20px auto;
-    padding: 10px 50px;
+    background-color: #dee9ce;
     background-color: rgba(222, 233, 205, 0.52);
     border-radius: 4px;
+    margin: 20px auto;
+    padding: 10px 50px;
 }
 
 .form-inline .form-group {
@@ -424,8 +425,9 @@ p.bg-success {
 }
 
 .tt-hint {
-    color: #999;
+    color: #FFF!important;
     font-size: 14px;
+    line-height: 20px;
 }
 
 .tt-dropdown-menu {
