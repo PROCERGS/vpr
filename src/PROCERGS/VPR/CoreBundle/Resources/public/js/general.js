@@ -91,17 +91,4 @@ $(document).ready(function() {
     $('form').on('blur', 'input[type=number]', function(e) {
         $(this).off('mousewheel.disableScroll')
     })
-
-
-    /*
-     * Add tooltip for Voter Registration input
-     */
-    $(".voter-registration-input").on({
-        focusin: function() {
-            $(".tre-search-link").fadeIn().css("display", "block");
-        },
-        focusout: function() {
-            $(".tre-search-link").fadeOut();
-        }
-    });
 });
