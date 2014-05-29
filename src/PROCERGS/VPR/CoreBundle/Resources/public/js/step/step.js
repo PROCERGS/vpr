@@ -57,7 +57,7 @@ $(function() {
         var id = $(this).attr("href").replace("#", "");
         var selector = "a[name=" + id + "]";
         $("html, body").animate({
-            scrollTop: $(selector).offset().top
+            scrollTop: $(selector).offset().top - 100
         }, 500);
     });
 
