@@ -84,6 +84,7 @@ swiftmailer:
 
 hwi_oauth:
     connect:
+        confirmation: false
         account_connector: user_provider
     fosub:
         username_iterations: 30

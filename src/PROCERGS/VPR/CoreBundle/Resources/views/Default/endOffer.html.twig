@@ -1,6 +1,23 @@
 {% extends 'PROCERGSVPRCoreBundle::base.logout.html.twig' %}
 
 {% block body %}
+<div class="modal fade" id="bancoMundialModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">{% trans %}Banco Mundial research{% endtrans %}</h4>
+      </div>
+      <div class="modal-body">
+        <p>{% trans %}Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
+      </div>
+      <div class="modal-footer">
+        <a id="btn-popup-sm" data-dismiss="modal" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="row end-offer">
     <div class="col-md-12">
         <h3>{{ 'Thank you for voting'|trans }}</h3>
@@ -51,11 +68,20 @@
       </div>
     </div>
 
-
-
     <div class="col-sm-12 text-center">
       <a class="btn btn-success btn-lg" role="button" href="{{ path('procergsvpr_core_homepage') }}">{{ 'Back to home' | trans }}</a>
     </div>
 
 </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script type="text/javascript">
+$(function() {
+  $('#bancoMundialModal').modal('show');
+});
+</script>
+
 {% endblock %}
