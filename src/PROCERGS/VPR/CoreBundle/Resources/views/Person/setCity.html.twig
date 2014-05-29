@@ -30,12 +30,21 @@
             <div class="col-md-6 col-xs-12 form-inline-6col">
                 <p>{% trans %}Alternatively you can type your voter registration, without the need to type your city.{% endtrans %}</p>
                 <div class="form-group">
-                        <span class="glyphicon glyphicon-credit-card"></span> {{ form_label(form.voterRegistration, 'Voter Registration' | trans) }}
-                        {{ form_widget(form.voterRegistration, { 'attr': { 'class': 'form-control' } } ) }}
-                        {{ form_errors(form.voterRegistration) }}
+                    <span class="glyphicon glyphicon-credit-card"></span> {{ form_label(form.voterRegistration, 'Voter Registration' | trans) }}
+                    {{ form_widget(form.voterRegistration, { 'attr': { 'class': 'form-control' } } ) }}
+                    {{ form_errors(form.voterRegistration) }}
                 </div>
+                {% if form.firstname is defined %}
+                    <div class="form-group">
+                        {{ form_label(form.firstname, 'First name'| trans) }}
+                        {{ form_errors(form.firstname) }}
+                        <div class="form-group clearfix">
+                          {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
-
+                
             <div class="col-xs-12 text-center">
                     {{ form_widget(form.submit, { 'attr': { 'class': 'btn btn-lg btn-primary' }, 'label': 'Continue' | trans}) }}
             </div>

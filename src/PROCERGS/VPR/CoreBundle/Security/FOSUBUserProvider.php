@@ -106,8 +106,8 @@ class FOSUBUserProvider extends BaseClass
 
         $user->setUsername($username);
         $user->setFirstName(null);
-        if (isset($userData['name']) && strlen(trim($userData['name']))) {
-            $user->setFirstName(trim($userData['name']));
+        if (isset($userData['first_name']) && strlen(trim($userData['first_name']))) {
+            $user->setFirstName(trim($userData['first_name']));
         }
         $user->setPassword('');
         $user->setEnabled(true);

@@ -37,18 +37,32 @@ class PersonController extends Controller
             $data['city'] = $person->getCity()->getName();
         }
         $form = $this->createForm(new CitySelectionType());
-        $form->setData($data);
+        
+        if (!$person->getFirstName()) {
+            $form->add('firstname', 'text', array(
+                'required' => false
+            ));
+        }
 
+        $form->setData($data);
         $form->handleRequest($request);
 
         try {
             if ($form->isValid()) {
                 $data = $form->getData();
 
+                if(isset($data['firstname']) && strlen($data['firstname'])){
+                    $person->setFirstName($data['firstname']);
+                }
+                
                 $dispatcher = $this->container->get('event_dispatcher');
 
                 $event = new PersonEvent($person, $data['voterRegistration']);
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
+
+                if($person->getTreVoter()){
+                    $city = $person->getTreVoter()->getCity();
+                }
 
                 $cityName = trim($data['city']);
                 if (strlen($cityName) > 0) {
@@ -67,8 +81,12 @@ class PersonController extends Controller
                         $city = $typedCity;
                     }
                 }
-                $person->setCity($city);
-                $this->get('session')->set('city_id', $city->getId());
+
+                if(isset($city)){
+                    $person->setCity($city);
+                }
+                
+                //$this->get('session')->set('city_id', $city->getId());
                 $userManager = $this->get('fos_user.user_manager');
                 $userManager->updateUser($person);
 
