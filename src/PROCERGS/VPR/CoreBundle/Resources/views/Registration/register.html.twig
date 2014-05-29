@@ -96,7 +96,7 @@
                                 {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
                                 <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
                                 <h5 class="text-left accept_registration">
-                                    {{ form_widget(form.loginCidadaoAcceptRegistration, {'attr' : {'checked' : 'checked'}} ) }}
+                                    {{ form_widget(form.loginCidadaoAcceptRegistration) }}
                                     {{ form_label(form.loginCidadaoAcceptRegistration, 'Accepts create an account in Citizen Login service?' | trans) }}
                                 </h5>
                             </div>
