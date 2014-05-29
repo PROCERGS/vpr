@@ -2,6 +2,18 @@
 
 {% block body %}
 <div class="row">
+  {% for type, messages in app.session.flashbag.all() %}
+  {% for message in messages %}
+    <div class="col-md-12">
+        <div class="text-center alert alert-{{ type }}">
+      {{ message }}
+        </div>
+    </div>
+  {% endfor %}
+  {% endfor %}
+</div>
+
+<div class="row">
     <div class="col-xs-12">
         <h1>{% trans %}What's your voting city?{% endtrans %}</h1>
 

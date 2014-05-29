@@ -13,6 +13,7 @@ use JMS\Serializer\SerializationContext;
 use PROCERGS\VPR\CoreBundle\Entity\City;
 use PROCERGS\VPR\CoreBundle\Exception\FormException;
 use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
+use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
 
 class PersonController extends Controller
 {
