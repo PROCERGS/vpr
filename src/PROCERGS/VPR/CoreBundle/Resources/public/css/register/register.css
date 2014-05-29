@@ -200,3 +200,8 @@ color: #FF0;
   height: 54px;
   margin: 20px auto;
 }
+
+.register-form-container .accept_registration{
+    font-size: 12px;
+    font-weight: normal;
+}
