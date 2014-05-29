@@ -23,6 +23,8 @@ services:
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setDispatcher, ["@event_dispatcher"]]
+            - [setSession, ["@session"]]
+            - [setTranslator, ["@translator"]]
 
     vpr_voting_session_provider:
         class: %vpr_voting_session_provider.class%

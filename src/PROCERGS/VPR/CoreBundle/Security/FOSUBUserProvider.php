@@ -1,4 +1,5 @@
 <?php
+
 namespace PROCERGS\VPR\CoreBundle\Security;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
@@ -8,11 +9,17 @@ use PROCERGS\VPR\CoreBundle\Exception\LcException;
 use Doctrine\ORM\EntityManager;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\TranslatorInterface;
+use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationNotFoundException;
 
 class FOSUBUserProvider extends BaseClass
 {
+
     protected $em;
     protected $dispatcher;
+    protected $session;
+    protected $translator;
 
     public function setEntityManager(EntityManager $var)
     {
@@ -77,10 +84,10 @@ class FOSUBUserProvider extends BaseClass
         }
         $userData = $response->getResponse();
         /* loop do lc
-        if (!isset($userData['full_name']) || !strlen(trim($userData['full_name']))) {
-            throw new LcException('lc.missing.required.field', 'lc.full_name');
-        }
-        */
+          if (!isset($userData['full_name']) || !strlen(trim($userData['full_name']))) {
+          throw new LcException('lc.missing.required.field', 'lc.full_name');
+          }
+         */
         if (!isset($userData['badges'])) {
             throw new LcException('lc.missing.required.field', 'lc.badges');
         }
@@ -119,7 +126,13 @@ class FOSUBUserProvider extends BaseClass
             }
         }
         $event = new PersonEvent($user, $userData['voter_registration']);
-        $this->dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
+        try {
+            $this->dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
+                    $event);
+        } catch (VoterRegistrationNotFoundException $e) {
+            $message = $this->translator->trans('vote.voter_registration.outsider');
+            $this->session->getFlashBag()->add('info', $message);
+        }
 
         $this->userManager->updateUser($user);
 
@@ -134,4 +147,15 @@ class FOSUBUserProvider extends BaseClass
 
         return $user;
     }
+
+    public function setSession(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
+    public function setTranslator(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
 }
