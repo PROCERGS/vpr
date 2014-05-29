@@ -91,12 +91,12 @@ class DefaultController extends Controller
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         $messages = '';
+        $session = $request->getSession();
+        $vote = $session->get('vote');
+        if (!$vote || $vote->getLastStep()) {
+            return $this->indexAction();
+        }
         if ($form->isValid()) {
-            $session = $request->getSession();
-            $vote = $session->get('vote');
-            if (!$vote || $vote->getLastStep()) {
-                return $this->indexAction();
-            }
             $dispatcher = $this->container->get('event_dispatcher');
             $treVoterTmp = $form->get('trevoter')->getData();
             if (!$user->getFirstName()) {
@@ -134,7 +134,7 @@ class DefaultController extends Controller
         }
         return array(
             'form' => $form->createView(),
-            'messages' => $messages
+            'vote' => $vote
         );
     }
 
