@@ -1,6 +1,11 @@
-/*global $:false, maxItems:false, resetCheckbox */
+/*global $:false, maxItems:false, resetCheckbox, voteEmptyMessage */
 $(function() {
     "use strict";
+
+    var infoMessage = $("#info-msg");
+    var confirmationModal = $("#confirmation-modal");
+    var confirmationContent = $("#confirmation-content");
+    var itensCount = $("#info-msg .itens-count");
 
     $(".ballot input").on("click", function(event) {
         var sel = $(".ballot input:checked");
@@ -10,40 +15,36 @@ $(function() {
                     event.returnValue = false; //ie
                 };
             }
-            event.preventDefault();            
+            event.preventDefault();
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
         } else {
           $(this).parent(".content").toggleClass("checked");
 
-          var count = $(".vote-count").data("val");
-          if($(this).parent(".content").hasClass("checked")) {
-            count++;
-          } else {
-            count--;
-          }
-          $(".vote-count").data("val", count).text(count);
-          $("#info-msg .itens-count").text(sel.length);
+          itensCount.text(sel.length);
 
           if (sel.length == maxItems) {
-            $("#info-msg").addClass("complete");
+            infoMessage.addClass("complete");
           } else {
-            $("#info-msg").removeClass("complete");
+            infoMessage.removeClass("complete");
           }
         }
     });
 
-
+    confirmationModal.on("hidden.bs.modal", function () {
+      infoMessage.show();
+    });
 
     $("#btn-vote").on("click", function() {
-      var selection = $(".ballot input:checked").siblings("label").clone();
-      if (selection.length > 0 )
-        $("#confirmation-content").html(selection);
-      else
-        $("#confirmation-content").html("Nenhuma opção selecionada");
+      var selection = $(".ballot input:checked").siblings("label").clone().attr("for", "");
 
-      $("#confirmation-modal").modal("show");
-      $("#info-msg").hide();
+      if (selection.length > 0 )
+        confirmationContent.html(selection);
+      else
+        confirmationContent.html(voteEmptyMessage);
+
+      confirmationModal.modal("show");
+      infoMessage.hide();
     });
 
     $("#dropdown-categories .scrollTo").on("click", function(event) {
@@ -59,7 +60,6 @@ $(function() {
             scrollTop: $(selector).offset().top
         }, 500);
     });
-
 
     $(".ballot .desc-toggle").on("click", function() {
         $(this).closest(".option").children(".desc").slideToggle();

@@ -49,11 +49,6 @@
 <div class="row">
     <div class="col-md-12">
 
-        {# <h1 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h1>
-        <p class="alert alert-info" id="max-selection">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
-        <div class="alert alert-danger confirm-message" style="display:none">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</div> #}
-
-
         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
             {{ form_errors(form) }}
 
@@ -68,12 +63,7 @@
                     <dt class="step-title">
                       <p>{{ currStep }} - {{ corede.name }}</p>
                       <div class="alert alert-info affix-top text-center" id="info-msg" data-spy="affix" data-offset-top="300">
-                          {# <p>{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p> #}
-                          {# <p>Você já selecionou <span class="vote-count" data-val="0">0</span></p> #}
-
-
                           <p>{% trans with {'%max%': step.getMaxSelection} %}You have already chose <span class='itens-count'>0</span> up to %max% items{% endtrans %}</p>
-
                       </div>
                     </dt>
                     <dd>
@@ -128,9 +118,9 @@
                     <a id="btn-rectify" role="button" class="btn btn-lg" data-dismiss="modal">{{ 'Change' | trans }}</a>
                     <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
                   </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                </div>
+              </div>
+            </div>
 
       {{ form_end(form) }}
 
@@ -155,7 +145,8 @@
 {% block javascripts %}
 {{ parent() }}
     <script>
-        var maxItems = {{ step.getMaxSelection }}
+        var maxItems = {{ step.getMaxSelection }};
+        var voteEmptyMessage = "{% trans %}vote.empty.message{% endtrans %}";
     </script>
 
     {% javascripts 'bundles/procergsvprcore/js/step/svgcheckbx.js'
