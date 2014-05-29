@@ -79,7 +79,13 @@ class DefaultController extends Controller
      */
     public function reinforceDocAction(Request $request)
     {
+        $user = $this->getUser();
         $formBuilder = $this->createFormBuilder();
+        if (!$user->getFirstName()) {
+            $formBuilder->add('firstname', 'text', array(
+                'required' => true
+            ));
+        }
         $formBuilder->add('trevoter', 'voter_registration',
                 array('required' => true));
         $form = $formBuilder->getForm();
@@ -91,9 +97,11 @@ class DefaultController extends Controller
             if (!$vote || $vote->getLastStep()) {
                 return $this->indexAction();
             }
-            $user = $this->getUser();
             $dispatcher = $this->container->get('event_dispatcher');
             $treVoterTmp = $form->get('trevoter')->getData();
+            if (!$user->getFirstName()) {
+                $user->setFirstName($form->get('firstname')->getData());
+            }
             $event = new PersonEvent($user, $treVoterTmp);
             try {
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,

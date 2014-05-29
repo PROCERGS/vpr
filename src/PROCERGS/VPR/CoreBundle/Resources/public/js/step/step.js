@@ -10,7 +10,7 @@ $(function() {
                     event.returnValue = false; //ie
                 };
             }
-            event.preventDefault();
+            event.preventDefault();            
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
         } else {
@@ -23,6 +23,7 @@ $(function() {
             count--;
           }
           $(".vote-count").data("val", count).text(count);
+          $("#info-msg .itens-count").text(sel.length);
 
           if (sel.length == maxItems) {
             $("#info-msg").addClass("complete");
