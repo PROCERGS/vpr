@@ -18,7 +18,7 @@ class FOSUBUserProvider extends BaseClass
     {
         $this->em = $var;
     }
-    
+
     public function setDispatcher($var)
     {
         $this->dispatcher = $var;
@@ -84,7 +84,7 @@ class FOSUBUserProvider extends BaseClass
         if (!isset($userData['badges'])) {
             throw new LcException('lc.missing.required.field', 'lc.badges');
         }
-        
+
         $service = $response->getResourceOwner()->getName();
         $setter = 'set' . ucfirst($service);
         $setter_id = $setter . 'Id';
@@ -99,14 +99,15 @@ class FOSUBUserProvider extends BaseClass
 
         $user->setUsername($username);
         $user->setFirstName(null);
-        if (isset($userData['full_name']) && strlen(trim($userData['full_name']))) {
-            $user->setFirstName(trim($userData['full_name']));
+        if (isset($userData['name']) && strlen(trim($userData['name']))) {
+            $user->setFirstName(trim($userData['name']));
         }
         $user->setPassword('');
         $user->setEnabled(true);
         $user->setBadges($userData['badges']);
-        if ($dt = date_create($userData['updated_at'])) {
-            $user->setLoginCidadaoUpdatedAt($dt);
+        $updateDate = new \DateTime($userData['updated_at']);
+        if ($updateDate instanceof \DateTime) {
+            $user->setLoginCidadaoUpdatedAt($updateDate);
         }
         $user->setTreVoter(null);
         $user->setCity(null);
@@ -118,8 +119,8 @@ class FOSUBUserProvider extends BaseClass
             }
         }
         $event = new PersonEvent($user, $userData['voter_registration']);
-        $this->dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);        
-        
+        $this->dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT, $event);
+
         $this->userManager->updateUser($user);
 
         // if user exists - go with the HWIOAuth way

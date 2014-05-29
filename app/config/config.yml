@@ -99,7 +99,7 @@ hwi_oauth:
             access_token_url:     %login_cidadao_base_url%/oauth/v2/token
             authorization_url:    %login_cidadao_base_url%/oauth/v2/auth
             infos_url:            %login_cidadao_base_url%/api/v1/person
-            scope:                "id username full_name name cpf birthdate email city picture public_profile voter_registration badges"
+            scope:                "public_profile id username name cpf email city picture voter_registration badges"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
