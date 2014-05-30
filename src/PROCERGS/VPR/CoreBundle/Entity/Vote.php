@@ -10,9 +10,9 @@ use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
  * Vote
  *
  * @ORM\Table(name="vote", indexes={
- *      @ORM\index(name="idx_voter_registration", columns={"voter_registration"}),
- *      @ORM\index(name="idx_login_cidadao_id", columns={"login_cidadao_id"}),
- *      @ORM\index(name="idx_nfg_cpf", columns={"nfg_cpf"})
+ *      @ORM\Index(name="idx_voter_registration", columns={"voter_registration"}),
+ *      @ORM\Index(name="idx_login_cidadao_id", columns={"login_cidadao_id"}),
+ *      @ORM\Index(name="idx_nfg_cpf", columns={"nfg_cpf"})
  * })
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\VoteRepository")
  * @ORM\HasLifecycleCallbacks

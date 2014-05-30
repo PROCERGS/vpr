@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * StatsOptionVote
  *
  * @ORM\Table(name="stats_option_vote", indexes={
- *      @ORM\index(name="idx_poll_option_id", columns={"poll_option_id"})
+ *      @ORM\Index(name="idx_poll_option_id", columns={"poll_option_id"})
  * })
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\StatsOptionVoteRepository")
  */
@@ -22,14 +22,14 @@ class StatsOptionVote
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @var integer
      *
      * @ORM\Column(name="poll_option_id", type="integer")
      */
     protected $pollOptionId;
-    
+
     /**
      * @var integer
      *
@@ -141,7 +141,7 @@ class StatsOptionVote
 
         return $this;
     }
-    
+
     /**
      * Get hasVoterRegistration
      *
@@ -163,8 +163,8 @@ class StatsOptionVote
         $this->hasVoterRegistration = $hasVoterRegistration;
 
         return $this;
-    }    
-    
+    }
+
     /**
      * Get hasVoterRegistration
      *
@@ -209,5 +209,5 @@ class StatsOptionVote
     {
         return $this->createdAt;
     }
- 
+
 }
