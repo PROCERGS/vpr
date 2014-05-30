@@ -142,7 +142,7 @@ admin.saving: Salvando...
 admin.select_a_poll: 'Selecione uma Votação'
 admin.clear_filters: 'Limpar filtros'
 admin.add_poll_option: 'Adicionar opção'
-lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
+lc.missing.required.field: 'Os seguintes campos do Login Cidadão devem ser preenxidos: %field%'
 lc.full_name: 'Nome Completo'
 'Polling places in your city.': 'Locais de votação no seu município'
 Categories: Categorias
@@ -156,7 +156,7 @@ PROCERGS: PROCERGS
 '{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'
 Description: Descrição
 posvote.validate.click: Validar
-'Enter Meu RS': 'Acessar o Meu RS'
+'Enter Meu RS': 'Acessar o Login Cidadão'
 R$: R$
 Loading: Carregando
 'Cost: R$': 'Valor: R$'
@@ -181,3 +181,6 @@ vote.empty.message: 'Nenhuma opção selecionada'
 'Exit voting': 'Sair da votação'
 'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!' : 'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!'
 'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.': 'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.'
+'Quit': 'Sair'
+'Complete your data below to continue this poll': 'Complete seus dados abaixo no login cidadão para poder continuar no processo de votação.'
+'You can still vote, back to home page and use a Citizen Login.': 'Você ainda pode votar, volte para página principal e utilize o login cidadao!'

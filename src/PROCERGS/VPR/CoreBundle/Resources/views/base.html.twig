@@ -154,8 +154,10 @@
 <![endif]-->
 <script>
     var loadNavbar = function() {
-        $("#external").remove();
         $.getScript('{{ login_cidadao_navbar_url }}?app_id={{ login_cidadao_app_id }}', function() {
+        	while ($("#external").length) {
+        		$("#external").remove();
+        	}
             citizenLogin.navbar.init();
         });
     };

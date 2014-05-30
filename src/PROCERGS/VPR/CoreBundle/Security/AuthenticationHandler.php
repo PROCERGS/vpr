@@ -20,6 +20,9 @@ class AuthenticationHandler implements LogoutSuccessHandlerInterface
     public function onLogoutSuccess(Request $request)
     {
         //procergsvpr_core_end_offer
+        if ($request->get('home')) {
+            return new RedirectResponse($this->router->generate('procergsvpr_core_homepage'));
+        }
         $r = $request->get('code');
         if ($r) {
             $url = $this->router->generate('procergsvpr_core_end_offer', array('code' => $r));    

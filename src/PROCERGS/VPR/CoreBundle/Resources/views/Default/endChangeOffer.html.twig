@@ -8,17 +8,15 @@
     </div>
 
     <div class="col-md-12">
-        <p>{% trans %}You can still vote with your Citizen Login linked to Nota Fiscal Gaucha.{% endtrans %}</p>
         {% if app.user.getLoginCidadaoId %}
-            <p class="text-center"><span><a id="btn-skip" class="btn" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></span><button class="btn btn-success" onclick="go()">{{ 'Enter Meu RS'|trans }}</button></p>
+            <p>{% trans %}You can still vote with your Citizen Login linked to Nota Fiscal Gaucha.{% endtrans %}</p>
+            <br/>        
+            <p class="text-center"><span><a id="btn-skip" class="btn" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Quit' | trans }}</a></span><button class="btn btn-success" onclick="go()">{{ 'Enter Meu RS'|trans }}</button></p>
         {% else %}
-          {% for owner in hwi_oauth_resource_owners() %}
-            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
-                <span></span>Vote com Login Cidadão
-            </a>
-          {% endfor %}
+            <p>{% trans %}You can still vote, back to home page and use a Citizen Login.{% endtrans %}</p>
+            <br/>
+            <p class="text-center"><span><a id="btn-skip" class="btn btn-success" role="button" href="{{ path('fos_user_security_logout', {'home': 1}) }}">{{ 'Back to home' | trans }}</a></span></p>
         {% endif %}
-
     </div>
 
     <div class="modal fade" id="lc-listener" tabindex="-1" role="dialog" aria-labelledby="lc-listener" aria-hidden="true">
@@ -29,6 +27,7 @@
                   <h4 class="modal-title" >{{ 'Aguardando preenchimento dos dados pendentes'|trans }}</h4>
               </div>
               <div class="modal-body">
+              <p>{{ 'Complete your data below to continue this poll'|trans }}</p>
               <ul class="lc-req">
                 <li id="req_full_name"><span class="glyphicon"></span>Nome completo</li>
                 <li id="req_email"><span class="glyphicon"></span>E-mail confirmado</li>
@@ -38,8 +37,8 @@
               </ul>
               </div>
               <div class="modal-footer">
-                  <a class="btn">{{ 'Skip Step'|trans }}</a>
-                  <a class="btn btn-primary" href="{{ link_lc }}" target="_blank">Acesse aqui o Meu RS</a></p>
+                  <a class="btn" href="{{ path('fos_user_security_logout') }}" >{{ 'Quit' | trans }}</a>
+                  <a class="btn btn-primary" href="{{ link_lc }}" target="_blank">{{ 'Enter Meu RS'|trans }}</a></p>
 
               </div>
           </div>
