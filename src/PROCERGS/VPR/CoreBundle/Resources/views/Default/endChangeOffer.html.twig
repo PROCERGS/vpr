@@ -13,13 +13,9 @@
             <p class="text-center"><span><a id="btn-skip" class="btn" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></span><button class="btn btn-success" onclick="go()">{{ 'Enter Meu RS'|trans }}</button></p>
         {% else %}
           {% for owner in hwi_oauth_resource_owners() %}
-          {# <p><a class="btn btn-success" role="button" href="{{ hwi_oauth_login_url(owner) }}">{{ 'Enter Meu RS'|trans }}</a></p> #}
-
-                        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
-                            <span></span>Vote com Login Cidadão
-                        </a>
-
-
+            <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
+                <span></span>Vote com Login Cidadão
+            </a>
           {% endfor %}
         {% endif %}
 

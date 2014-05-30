@@ -28,6 +28,10 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0;
 }
 
+a {
+  cursor: pointer;
+}
+
 #lc-navbar {
     margin-bottom: 0!important;
 }
@@ -262,7 +266,8 @@ ul {
     width: 90px !important;
 }
 
-.home-icon {
+.home-icon,
+.logout-icon {
     background-color: #f9f9f9;
     padding: 8px;
     border-radius: 100px;
@@ -270,7 +275,9 @@ ul {
     top: -4px;
 
 }
-.home-icon:hover {
+
+.home-icon:hover,
+.logout-icon:hover {
     background-color: #e9e9e9;
 }
 
