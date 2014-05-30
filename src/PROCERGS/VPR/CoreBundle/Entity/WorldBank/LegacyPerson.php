@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LegacyPerson
  *
- * @ORM\Table(name="wb_legacy_person")
+ * @ORM\Table(name="wb_legacy_person", indexes={
+ *      @ORM\Index(name="idx_voter_registration", columns={"voter_registration"})
+ * })
  * @ORM\Entity
  */
 class LegacyPerson

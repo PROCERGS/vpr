@@ -7,7 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GabineteDigitalPerson
  *
- * @ORM\Table(name="wb_gabinete_digital_person")
+ * @ORM\Table(name="wb_gabinete_digital_person", indexes={
+ *      @ORM\Index(name="idx_email", columns={"email"})
+ * })
  * @ORM\Entity
  */
 class GabineteDigitalPerson
