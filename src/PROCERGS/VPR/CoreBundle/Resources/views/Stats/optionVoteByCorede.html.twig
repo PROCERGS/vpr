@@ -26,7 +26,7 @@
                     {% if (step) %}
                         <div class="col-md-1 text-right"><strong>Votos</strong></div><div class="col-md-11"><strong>Demandas</strong></div>
                         {% for option in step %}
-                              <div class="col-md-1 text-right">{{ '%.0f'|format(option['percent']) }}%</div>
+                              <div class="col-md-1 text-right">{{ '%.0f'|format(option['value']) }}</div>
                               <div class="col-md-11">{{option['number']}} - {{ option['title'] }}</div>
                         {% endfor %}
                     {% else %}

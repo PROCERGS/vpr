@@ -31,7 +31,8 @@ class StatsController extends Controller
 
             $steps = $poll->getSteps();
             foreach($steps as $step){
-                $results[$step->getName()] = $statsRepos->findOptionVoteByCorede2($corede->getId(),$step->getId());
+                //$results[$step->getName()] = $statsRepos->findPercentOptionVoteByCorede($corede->getId(),$step->getId());
+                $results[$step->getName()] = $statsRepos->findOptionVoteByCorede($corede->getId(),$step->getId());
             }
         }
 
