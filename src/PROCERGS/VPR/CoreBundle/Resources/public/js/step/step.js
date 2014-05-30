@@ -7,8 +7,8 @@ $(function() {
     var confirmationContent = $("#confirmation-content");
     var itensCount = $("#info-msg .itens-count");
 
-    $(".ballot input").on("click", function(event) {
-        var sel = $(".ballot input:checked");
+    $("#ballot-main input[type='checkbox']").on("click", function(event) {
+        var sel = $("#ballot-main input:checked");
         if (sel.length > maxItems) {
             if (!event.preventDefault) {
                 event.preventDefault = function() {
@@ -36,7 +36,12 @@ $(function() {
     });
 
     $("#btn-vote").on("click", function() {
-      var selection = $(".ballot input:checked").siblings("label").clone().attr("for", "");
+      //var selection = $(".ballot input:checked").siblings("label").clone().attr("for", "");
+      var selection = $("#ballot-main input:checked").closest(".option").clone();
+      selection.each(function() {
+        $(this).find("label").attr("for", "");
+        $(this).find(".content").removeClass("checked");
+      });
 
       if (selection.length > 0 )
         confirmationContent.html(selection);
@@ -61,7 +66,7 @@ $(function() {
         }, 500);
     });
 
-    $(".ballot .desc-toggle").on("click", function() {
+    $("#ballot-main .desc-toggle").on("click", function() {
         $(this).closest(".option").children(".desc").slideToggle();
         $(this).toggleClass("less");
     });

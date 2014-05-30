@@ -8,16 +8,21 @@
     </div>
 
     <div class="col-md-12">
-        <p class="bg-success">{% trans %}If you believe that's a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.{% endtrans %}</p>
+        <p>{% trans %}You can still vote with your Citizen Login linked to Nota Fiscal Gaucha.{% endtrans %}</p>
         {% if app.user.getLoginCidadaoId %}
             <p class="text-center"><span><a id="btn-skip" class="btn" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></span><button class="btn btn-success" onclick="go()">{{ 'Enter Meu RS'|trans }}</button></p>
         {% else %}
           {% for owner in hwi_oauth_resource_owners() %}
-          <p><a class="btn btn-success" role="button" href="{{ hwi_oauth_login_url(owner) }}">{{ 'Enter Meu RS'|trans }}</a></p>
+          {# <p><a class="btn btn-success" role="button" href="{{ hwi_oauth_login_url(owner) }}">{{ 'Enter Meu RS'|trans }}</a></p> #}
+
+                        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
+                            <span></span>Vote com Login Cidadão
+                        </a>
+
+
           {% endfor %}
         {% endif %}
 
-        {# <p><a id="btn-skip" class="btn btn-success" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a></p> #}
     </div>
 
     <div class="modal fade" id="lc-listener" tabindex="-1" role="dialog" aria-labelledby="lc-listener" aria-hidden="true">
@@ -39,6 +44,7 @@
               <div class="modal-footer">
                   <a class="btn">{{ 'Skip Step'|trans }}</a>
                   <a class="btn btn-primary" href="{{ link_lc }}" target="_blank">Acesse aqui o Meu RS</a></p>
+
               </div>
           </div>
       </div>

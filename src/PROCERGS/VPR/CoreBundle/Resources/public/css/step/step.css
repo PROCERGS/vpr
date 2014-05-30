@@ -81,12 +81,8 @@
   .ac-custom input[type="checkbox"]:checked + label::before {
     opacity: 0.8;
   }
-#confirmation-content label {
-    border-bottom: dashed 1px #039935;
-    padding: 0.4em 0;
-    margin: auto;
-    font-weight: 300;
-}
+
+
 /* ==========================================================================
    General SVG and path styles
    ========================================================================== */
@@ -657,6 +653,16 @@
     cursor: default;
   }
 
+#confirmation-modal {
+  margin-bottom: 0;
+}
+
   #confirmation-modal label:before {
     display: none;
   }
+
+  #confirmation-modal label {
+    padding: 0.4em 0;
+    margin: auto;
+    font-weight: 300;
+}

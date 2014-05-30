@@ -57,7 +57,7 @@
             <img src="{{ asset_url }}" alt="{%trans%}Loading{%endtrans%}" class="loader" width="43" height="11">
             {% endimage %}
 
-            <div class="ballot">
+            <div class="ballot" id="ballot-main">
                 <dl class="steps">
                 {% for currStep,categories in options %}
                     <dt class="step-title">
@@ -100,7 +100,7 @@
                 <button id="btn-vote" type="button" class="btn btn-success btn-lg js-toggle" data-loading-text="Aguarde...">{{ 'Cast Vote' | trans }}</button>
             </div>
 
-            <div class="modal fade" id="confirmation-modal">
+            <div class="modal fade ballot" id="confirmation-modal">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">

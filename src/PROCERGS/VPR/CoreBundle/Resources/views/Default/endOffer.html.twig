@@ -13,40 +13,27 @@
       </div>
       <div class="modal-footer">
         <a id="btn-popup-sm" data-dismiss="modal" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a>
+        <a data-dismiss="modal">Não, obrigado.</a>
       </div>
     </div>
   </div>
 </div>
 
 <div class="row end-offer">
-    <div class="col-md-12">
+ <div class="col-md-12">
         <h3>{{ 'Thank you for voting'|trans }}</h3>
-        <div class="alert alert-success">{% trans %}Thank you for helping Rio Grande do Sul to grow. Your participation is very important!{% endtrans %}</div>
-    </div>
-    <div class="col-md-4">
-      <div class="thumbnail">
-        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-bancoMundial.png' %}
-        <img src="{{ asset_url }}" alt="{%trans%}Banco Mundial{%endtrans%}" class="img-responsive">
-        {% endimage %}
-        <div class="caption">
-          <h3>{% trans %}Banco Mundial research{% endtrans %}</h3>
-          <div class="text">
-            <p>{% trans %}Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
-          </div>
-          <a id="btn-popup-sm" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a>
-        </div>
-      </div>
+        <div class="">{% trans %}Thank you for helping Rio Grande do Sul to grow. Your participation is very important!{% endtrans %}</div>
     </div>
 
     <div class="col-md-4">
-      <div class="thumbnail">
+      <div class="thumbnail"><a  href="{{ link_nfg }}" title="Concorra até R$ 1 milhão!">
         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-NFG.png' %}
         <img src="{{ asset_url }}" alt="{%trans%}NFG{%endtrans%}" class="img-responsive">
-        {% endimage %}
+        {% endimage %}</a>
         <div class="caption">
-          <h3>Nota Fiscal Gaúcha</h3>
+          <h3>{% trans %}Chance to win 1 million!{% endtrans %}</h3>
           <div class="text">
-            <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe and compete for prizes of up to R$ 1 million!{% endtrans %}</p>
+            <p>{% trans %}Join the Nota Fiscal Gaucha and compete for prizes of up to R$ 1 million. Register Now!{% endtrans %}</p>
           </div>
           <a id="btn-popup-nfg" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a>
         </div>
@@ -54,20 +41,35 @@
     </div>
 
     <div class="col-md-4">
-      <div class="thumbnail">
+      <div class="thumbnail"><a href="{{ link_lc }}" title="Crie sua conta!">
         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-meuRS.png' %}
         <img src="{{ asset_url }}" alt="{%trans%}MEU-RS{%endtrans%}" class="img-responsive">
-        {% endimage %}
+        {% endimage %}</a>
         <div class="caption">
-          <h3>Login Cidadão</h3>
+          <h3>{% trans %}Create your account{% endtrans %}</h3>
           <div class="text">
             <p>{% trans %}Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul's services.{% endtrans %}</p>
           </div>
-          <a id="btn-popup-lc" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'Register Here'|trans }}</a>
+          <a title="Cadastre-se aqui" id="btn-popup-lc" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'Register Here'|trans }}</a>
         </div>
       </div>
     </div>
 
+
+    <div class="col-md-4">
+      <div class="thumbnail"><a href="{{ link_sm }}" title="Banco Mundial Pergunta">
+        {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-BancoMundialBranco.png' %}
+        <img src="{{ asset_url }}" alt="{%trans%}Banco Mundial{%endtrans%}" class="img-responsive">
+        {% endimage %}</a>
+        <div class="caption">
+          <h3>{% trans %}Banco Mundial research{% endtrans %}</h3>
+          <div class="text">
+            <p>{% trans %}Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
+          </div>
+          <a title="Responder pesquisa" id="btn-popup-sm" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a>
+        </div>
+      </div>
+    </div>
     <div class="col-sm-12 text-center">
       <a class="btn btn-success btn-lg" role="button" href="{{ path('procergsvpr_core_homepage') }}">{{ 'Back to home' | trans }}</a>
     </div>
