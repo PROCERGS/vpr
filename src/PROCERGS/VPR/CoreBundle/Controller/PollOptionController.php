@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use JMS\Serializer\SerializationContext;
+use PROCERGS\VPR\CoreBundle\Entity\StatsOptionVote;
 
 class PollOptionController extends Controller
 {
@@ -113,6 +114,19 @@ class PollOptionController extends Controller
             $vote->setCreatedAtValue();
             $vote = $em->merge($vote);
             $em->persist($vote);
+
+            $hasLoginCidadao = ($vote->getLoginCidadaoId()) ? true : false;
+            $hasVoterRegistration = ($vote->getVoterRegistration()) ? true : false;
+            foreach($options as $option){
+                $stats = new StatsOptionVote();
+                $stats->setCoredeId($corede->getId());
+                $stats->setPollOptionId($option->getId());
+                $stats->setHasLoginCidadao($hasLoginCidadao);
+                $stats->setHasVoterRegistration($hasVoterRegistration);
+                $stats->setCreatedAt(new \DateTime());
+                $em->persist($stats);
+            }
+
             $em->flush();
             $vote->setLastStep(null);
             $vote->setPollOption(null);
