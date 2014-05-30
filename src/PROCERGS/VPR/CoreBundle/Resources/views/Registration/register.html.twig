@@ -70,10 +70,10 @@
                 <div class="row register-form-container">
                     <div class="col-sm-12 col-md-6 col-md-offset-3">
                         <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
-                            <span></span>Vote com Login Cidadão
+                            <span></span>{{ 'Vote with Citizen Login'|trans }}
                         </a>
                         <div class="spacer"><!-- <hr> --></div>
-                        <h4 class="text-center" >Ou informe os dados abaixo</h4>
+                        <h4 class="text-center" >{{ 'or fill the form below'|trans }}</h4>
 
 
                         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
