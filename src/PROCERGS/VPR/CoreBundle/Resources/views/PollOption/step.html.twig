@@ -52,7 +52,6 @@
 
         {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
             {{ form_errors(form) }}
-
         {% if options %}
             {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
             <img src="{{ asset_url }}" alt="{%trans%}Loading{%endtrans%}" class="loader" width="43" height="11">
