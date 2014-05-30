@@ -16,11 +16,15 @@ class DefaultController extends Controller
      */
     public function indexAction($pollId)
     {
+        ini_set('memory_limit', '512M');
+        set_time_limit(0);
+        $logger = $this->get('logger');
         $em = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($pollId);
 
         $voteRepo = $em->getRepository('PROCERGSVPRCoreBundle:Vote');
-        $votes = $voteRepo->findByPoll($poll);
+        $votes = $voteRepo->findBy(array('corede' => 19));
+        //$votes = $voteRepo->findByPoll($poll);
 
         $privateKeyFile = $this->container->getParameter('privateKeyFile');
         $privatePollKey = openssl_pkey_get_private($privateKeyFile, 'test');
@@ -44,6 +48,7 @@ class DefaultController extends Controller
                     $optionsCount[$id] = 1;
                 }
                 $votedOptions[$id] = $option;
+                $logger->info("1 vote for $id");
             }
         }
 
