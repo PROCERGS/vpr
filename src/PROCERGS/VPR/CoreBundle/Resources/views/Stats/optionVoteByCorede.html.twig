@@ -1,0 +1,39 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+    <h1>Resultados parciais</h1>
+    <p>Percentual de demandas escolhidas por corede</p>
+
+    <div class="jumbotron" style="padding: 0;">
+        {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
+            <div class="form-group">
+                <label>{{ 'admin.poll'|trans }}</label>
+                {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                <label>{{ 'admin.corede'|trans }}</label>
+                {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+ 
+    {% if (results) %}
+        <div class="row" style="color:black">
+            {% for name,step in results %}
+                <div class="col-md-12"><strong>{{ name }}</strong></div>
+                <div class="col-md-12" style="color:black; margin: 10px 0 50px 0;">
+                    {% if (step) %}
+                        <div class="col-md-1 text-right"><strong>Votos</strong></div><div class="col-md-11"><strong>Demandas</strong></div>
+                        {% for option in step %}
+                              <div class="col-md-1 text-right">{{ '%.0f'|format(option['percent']) }}%</div>
+                              <div class="col-md-11">{{option['number']}} - {{ option['title'] }}</div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-md-6 col-md-offset-1">Nenhum voto encontrado para o corede selecionado</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
