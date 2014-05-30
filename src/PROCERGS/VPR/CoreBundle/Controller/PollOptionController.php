@@ -120,6 +120,7 @@ class PollOptionController extends Controller
             foreach($options as $option){
                 $stats = new StatsOptionVote();
                 $stats->setCoredeId($corede->getId());
+                $stats->setPollId($poll->getId());
                 $stats->setPollOptionId($option->getId());
                 $stats->setHasLoginCidadao($hasLoginCidadao);
                 $stats->setHasVoterRegistration($hasVoterRegistration);

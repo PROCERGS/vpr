@@ -7,8 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * StatsOptionVote
  *
- * @ORM\Table(name="stats_option_vote")
- * @ORM\Entity
+ * @ORM\Table(name="stats_option_vote", indexes={
+ *      @ORM\index(name="idx_poll_option_id", columns={"poll_option_id"})
+ * })
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\StatsOptionVoteRepository")
  */
 class StatsOptionVote
 {
@@ -19,7 +21,7 @@ class StatsOptionVote
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;    
+    protected $id;
     
     /**
      * @var integer
@@ -27,6 +29,13 @@ class StatsOptionVote
      * @ORM\Column(name="poll_option_id", type="integer")
      */
     protected $pollOptionId;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="poll_id", type="integer")
+     */
+    protected $pollId;
 
     /**
      * @var integer
@@ -83,6 +92,29 @@ class StatsOptionVote
     public function setPollOptionId($pollOptionId)
     {
         $this->pollOptionId = $pollOptionId;
+
+        return $this;
+    }
+
+    /**
+     * Get pollId
+     *
+     * @return integer
+     */
+    public function getPollId()
+    {
+        return $this->pollId;
+    }
+
+    /**
+     * Set pollId
+     *
+     * @param integer $pollId
+     * @return StatsOptionVote
+     */
+    public function setPollId($pollId)
+    {
+        $this->pollId = $pollId;
 
         return $this;
     }
