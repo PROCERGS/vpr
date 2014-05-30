@@ -4,6 +4,7 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
 
 /**
  * Vote
@@ -384,13 +385,12 @@ class Vote
         $options = $this->getPlainOptions();
 
         $passphrases = null;
-        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey))) {
+        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey)) !== false) {
             $this->setOptions(base64_encode($crypted));
             $passphrase = base64_encode(reset($passphrases));
             $this->setPassphrase($passphrase);
         } else {
-            $error = openssl_error_string();
-            throw new \ErrorException($error);
+            throw new OpenSSLException();
         }
     }
 
@@ -399,7 +399,10 @@ class Vote
         $openVote = null;
         $options = base64_decode($this->getOptions());
         $passphrase = base64_decode($this->getPassphrase());
-        openssl_open($options, $openVote, $passphrase, $privateKey);
+        if (openssl_open($options, $openVote, $passphrase, $privateKey) === false) {
+            $message = openssl_error_string();
+            throw new OpenSSLException($message);
+        }
         $this->setPlainOptions($openVote);
 
         return $this;
