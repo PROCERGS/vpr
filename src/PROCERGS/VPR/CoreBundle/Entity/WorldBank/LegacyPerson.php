@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LegacyPerson
  *
- * @ORM\Table()
+ * @ORM\Table(name="wb_legacy_person")
  * @ORM\Entity
  */
 class LegacyPerson
@@ -39,7 +39,7 @@ class LegacyPerson
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +62,7 @@ class LegacyPerson
     /**
      * Get voterRegistration
      *
-     * @return string 
+     * @return string
      */
     public function getVoterRegistration()
     {
@@ -85,7 +85,7 @@ class LegacyPerson
     /**
      * Get treatment
      *
-     * @return integer 
+     * @return integer
      */
     public function getTreatment()
     {

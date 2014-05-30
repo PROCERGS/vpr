@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GabineteDigitalPerson
  *
- * @ORM\Table()
+ * @ORM\Table(name="wb_gabinete_digital_person")
  * @ORM\Entity
  */
 class GabineteDigitalPerson
@@ -39,7 +39,7 @@ class GabineteDigitalPerson
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +62,7 @@ class GabineteDigitalPerson
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -85,7 +85,7 @@ class GabineteDigitalPerson
     /**
      * Get treatment
      *
-     * @return integer 
+     * @return integer
      */
     public function getTreatment()
     {
