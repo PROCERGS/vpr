@@ -236,7 +236,7 @@ class DefaultController extends Controller
         $userManager = $this->container->get('fos_user.user_manager');
         $dispatcher = $this->container->get('event_dispatcher');
 
-        $user->setFirstName($person['full_name']);
+        $user->setFirstName($person['first_name']);
         $user->setBadges($person['badges']);
         $user->setLoginCidadaoUpdatedAt(date_create($person['updated_at']));
 
