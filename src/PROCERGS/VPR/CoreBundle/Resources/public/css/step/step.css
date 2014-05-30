@@ -653,6 +653,10 @@
     cursor: default;
   }
 
+  .ballot-search input[type="checkbox"] {
+    display: none;
+  }
+
 #confirmation-modal {
   margin-bottom: 0;
 }

@@ -76,6 +76,12 @@
 {% stylesheets 'bundles/procergsvprcore/css/step/step.css' filter='cssrewrite' %}
 <link rel="stylesheet" href="{{ asset_url }}" />
 {% endstylesheets %}
+
+{% stylesheets 'bundles/procergsvprcore/css/step/ie.css' filter='cssrewrite' %}
+<!--[if lt IE 9]>
+  <link rel="stylesheet" href="{{ asset_url }}" />
+<![endif]-->
+{% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
