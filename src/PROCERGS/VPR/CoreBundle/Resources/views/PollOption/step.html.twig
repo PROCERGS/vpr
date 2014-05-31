@@ -84,7 +84,7 @@
                                     </label>
                                     {% if option.description %}<span class="desc-toggle" title="{{ 'Description' | trans }}"></span>{% endif %}
                                 </div>
-                                {% if option.description %}<div class="desc">{{ option.description }}</div>{% endif %}
+                                {% if option.description %}<div class="desc">{{ option.description | nl2br }}</div>{% endif %}
                             </dd>
                             {% endfor %}
                         {% endfor %}

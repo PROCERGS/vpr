@@ -1,12 +1,15 @@
 <?php
+
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use JMS\Serializer\SerializationContext;
 use PROCERGS\VPR\CoreBundle\Entity\StatsOptionVote;
+use PROCERGS\VPR\CoreBundle\Entity\Vote;
 
 class PollOptionController extends Controller
 {
@@ -17,10 +20,11 @@ class PollOptionController extends Controller
      */
     public function viewByCityAction(Request $request)
     {
-        $form = $this->createFormBuilder()->add('city', 'text', array(
-            'required' => true,
-            'label' => 'form.city.select'
-        ))->add('submit', 'submit')->getForm();
+        $form = $this->createFormBuilder()->add('city', 'text',
+                        array(
+                    'required' => true,
+                    'label' => 'form.city.select'
+                ))->add('submit', 'submit')->getForm();
 
         $form->handleRequest($request);
 
@@ -41,7 +45,8 @@ class PollOptionController extends Controller
                 $pollOptionsRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
 
                 $poll = $pollRepo->findActivePoll();
-                $pollOptions = $pollOptionsRepo->findByPollCorede($poll, $city->getCorede());
+                $pollOptions = $pollOptionsRepo->findByPollCorede($poll,
+                        $city->getCorede());
 
                 foreach ($pollOptions as $option) {
                     $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
@@ -57,84 +62,42 @@ class PollOptionController extends Controller
         $serializer = $this->container->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
-        $cities = $serializer->serialize($cityRepo->findAll(), 'json', SerializationContext::create()->setSerializeNull(true)->setGroups(array(
-            'autocomplete'
+        $cities = $serializer->serialize($cityRepo->findAll(), 'json',
+                SerializationContext::create()->setSerializeNull(true)->setGroups(array(
+                    'autocomplete'
         )));
 
         return compact('form', 'options', 'cities', 'categoriesId', 'corede');
     }
 
     /**
-     * @Route("/step/{stepid}/corede/{coredeid}", name="procergsvpr_step")
+     * @Route("/step/{stepId}/corede/{coredeId}", name="procergsvpr_step")
      * @Template()
      */
-    public function stepAction($stepid, $coredeid)
+    public function stepAction(Request $request, $stepId, $coredeId)
     {
-        $request = $this->getRequest();
-        $session = $request->getSession();
-        $vote = $session->get('vote');
-        if (! $vote || ! $vote->getLastStep()) {
-            return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
-        }
         $em = $this->getDoctrine()->getManager();
-        if ($vote->getLastStep()->getId() != $stepid || $vote->getCorede()->getId() != $coredeid) {
+        $votingSession = $this->get('vpr_voting_session_provider');
+        try {
+            $vote = $this->validateVotingSession($request, $votingSession,
+                    $stepId, $coredeId);
+
+            $formBuilder = $this->createFormBuilder()->getForm();
+            $formBuilder->handleRequest($request);
+            if ($formBuilder->isValid()) {
+                return $this->handleStep($request, $votingSession, $em, $vote);
+            }
+        } catch (AccessDeniedHttpException $e) {
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
-        $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+
+
+        $repository = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $poll = $em->merge($vote->getBallotBox()->getPoll());
         $corede = $em->merge($vote->getCorede());
         $step = $em->merge($vote->getLastStep());
 
-        $form = $this->createFormBuilder()->getForm();
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $options = $request->get('options');
-            if (! $pollOptionRepo->checkStepOptions($step, $options)) {
-                return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
-            }
-            $vote->addPollOption($options);
-            $b = $pollOptionRepo->getNextPollStep($vote);
-            if ($b) {
-                $vote->setLastStep($b);
-                $session->set('vote', $vote);
-                return $this->redirect($this->generateUrl('procergsvpr_step', array(
-                    'stepid' => $vote->getLastStep()->getId(),
-                    'coredeid' => $vote->getCorede()->getid()
-                )));
-            }
-            $serializer = $this->container->get('jms_serializer');
-            $options = $pollOptionRepo->getPollOption($vote);
-            $serializedOptions = $serializer->serialize($options, 'json', SerializationContext::create()->setSerializeNull(true)->setGroups(array(
-                'vote'
-            )));
-            // $ballotBox = $em->merge($vote->getBallotBox());
-            // $vote->setBallotBox($ballotBox->setPoll($poll));
-            $vote->setPlainOptions($serializedOptions);
-            $vote->finishMe();
-            $vote->setCreatedAtValue();
-            $vote = $em->merge($vote);
-            $em->persist($vote);
-
-            $hasLoginCidadao = ($vote->getLoginCidadaoId()) ? true : false;
-            $hasVoterRegistration = ($vote->getVoterRegistration()) ? true : false;
-            foreach($options as $option){
-                $stats = new StatsOptionVote();
-                $stats->setCoredeId($corede->getId());
-                $stats->setPollId($poll->getId());
-                $stats->setPollOptionId($option->getId());
-                $stats->setHasLoginCidadao($hasLoginCidadao);
-                $stats->setHasVoterRegistration($hasVoterRegistration);
-                $stats->setCreatedAt(new \DateTime());
-                $em->persist($stats);
-            }
-
-            $em->flush();
-            $vote->setLastStep(null);
-            $vote->setPollOption(null);
-            $session->set('vote', $vote);
-            return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
-        }
-        $pollOptions = $pollOptionRepo->findByPollCoredeStep($poll, $corede, $step);
+        $pollOptions = $repository->findByPollCoredeStep($poll, $corede, $step);
 
         $options = array();
         $categoriesId = array();
@@ -143,7 +106,76 @@ class PollOptionController extends Controller
             $categoriesId[$option->getCategory()->getName()] = $option->getCategory()->getId();
         }
 
-        $form = $form->createView();
+        $form = $formBuilder->createView();
         return compact('form', 'corede', 'step', 'options', "categoriesId");
     }
+
+    private function validateVotingSession(Request $request, $votingSession,
+                                           $stepId, $coredeId)
+    {
+        $session = $request->getSession();
+        $vote = $votingSession->requireLastStep();
+
+        if ($vote->getLastStep()->getId() != $stepId || $vote->getCorede()->getId() != $coredeId) {
+            $session->getFlashBag()->add('danger',
+                    $this->get('translator')->trans('voting.session.invalid'));
+            throw new AccessDeniedHttpException();
+        }
+
+        return $vote;
+    }
+
+    private function handleStep(Request $request, $votingSession, $em,
+                                Vote $vote)
+    {
+        $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+        $stepRepo = $em->getRepository('PROCERGSVPRCoreBundle:Step');
+        $poll = $em->merge($vote->getBallotBox()->getPoll());
+        $corede = $em->merge($vote->getCorede());
+        $step = $em->merge($vote->getLastStep());
+
+        $options = $request->get('options');
+        if (!$pollOptionRepo->checkStepOptions($step, $options)) {
+            return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
+        }
+        $vote->addPollOption($options);
+        $nextStep = $stepRepo->getNextPollStep($vote);
+        if ($nextStep) {
+            $vote->setLastStep($nextStep);
+            $votingSession->updateVote($vote);
+            $params = array(
+                'stepId' => $vote->getLastStep()->getId(),
+                'coredeId' => $vote->getCorede()->getId()
+            );
+            $url = $this->generateUrl('procergsvpr_step', $params);
+            return $this->redirect($url);
+        }
+        $votingSession->persistVote();
+
+        $this->registerStats($em, $options, $corede, $poll, $vote);
+
+        $em->flush();
+        $vote->setLastStep(null);
+        $vote->setPollOption(null);
+        $votingSession->updateVote($vote);
+        return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
+    }
+
+    private function registerStats($em, $options, $corede, $poll, $vote)
+    {
+        $hasLoginCidadao = ($vote->getLoginCidadaoId()) ? true : false;
+        $hasVoterRegistration = ($vote->getVoterRegistration()) ? true : false;
+
+        foreach ($options as $option) {
+            $stats = new StatsOptionVote();
+            $stats->setCoredeId($corede->getId());
+            $stats->setPollId($poll->getId());
+            $stats->setPollOptionId($option->getId());
+            $stats->setHasLoginCidadao($hasLoginCidadao);
+            $stats->setHasVoterRegistration($hasVoterRegistration);
+            $stats->setCreatedAt(new \DateTime());
+            $em->persist($stats);
+        }
+    }
+
 }

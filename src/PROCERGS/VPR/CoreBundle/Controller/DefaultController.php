@@ -66,8 +66,8 @@ class DefaultController extends Controller
         }
 
         $urlParams = array(
-            'stepid' => $vote->getLastStep()->getId(),
-            'coredeid' => $vote->getCorede()->getid()
+            'stepId' => $vote->getLastStep()->getId(),
+            'coredeId' => $vote->getCorede()->getid()
         );
         $url = $this->generateUrl('procergsvpr_step', $urlParams);
         return $this->redirect($url);

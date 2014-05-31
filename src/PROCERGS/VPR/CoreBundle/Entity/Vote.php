@@ -125,6 +125,18 @@ class Vote
     protected $smId;
 
     /**
+     * @ORM\Column(name="wb_treatment_vpr", type="integer", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $treatmentVPR;
+
+    /**
+     * @ORM\Column(name="wb_treatment_gabinete_digital", type="integer", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $treatmentGabineteDigital;
+
+    /**
      * Get id
      *
      * @return integer
@@ -456,7 +468,7 @@ class Vote
         return $this->pollOption;
     }
 
-    public function finishMe()
+    public function close()
     {
         if (!$this->plainOptions) {
             return false;

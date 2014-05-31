@@ -149,22 +149,69 @@ class VotingSessionProvider
         if (strlen($person->getFirstName()) && $badges['email'] && $badges['nfg_access_lvl'] >= 2 && $badges['voter_registration']) {
             $vote->setNfgCpf(1);
         }
-        $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-        $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
+        $stepRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Step');
+        $vote->setLastStep($stepRepo->getNextPollStep($vote));
         return $vote;
     }
 
     public function save($vote)
     {
         $this->em->detach($vote);
-        $this->session->set('vote', $vote);
+        $this->updateVote($vote);
         return $vote;
     }
 
     public function flush()
     {
-        $this->session->set('vote', null);
+        $this->updateVote(null);
         $this->session->remove('vote');
     }
 
+    /**
+     * @return Vote
+     * @throws AccessDeniedHttpException
+     */
+    public function requireVotingSession()
+    {
+        if ($this->hasVotingSession()) {
+            return $this->getVote();
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    /**
+     * @return Vote
+     * @throws AccessDeniedHttpException
+     */
+    public function requireLastStep()
+    {
+        $vote = $this->requireVotingSession();
+        if ($vote->getLastStep()) {
+            return $vote;
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    public function persistVote(Vote $vote)
+    {
+        $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+        $serializer = $this->container->get('jms_serializer');
+        $context = SerializationContext::create()
+                ->setSerializeNull(true)
+                ->setGroups(array('vote'));
+        $options = $pollOptionRepo->getPollOption($vote);
+        $serializedOptions = $serializer->serialize($options, 'json', $context);
+        $vote->setPlainOptions($serializedOptions);
+        $vote->close();
+        $vote->setCreatedAtValue();
+        $vote = $this->em->merge($vote);
+        $this->em->persist($vote);
+    }
+
+    public function updateVote(Vote $vote)
+    {
+        $this->session->set('vote', $vote);
+    }
 }

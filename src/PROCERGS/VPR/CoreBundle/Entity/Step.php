@@ -9,7 +9,7 @@ use JMS\Serializer\Annotation\Groups;
  * Step
  *
  * @ORM\Table(name="step")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\StepRepository")
  */
 class Step
 {

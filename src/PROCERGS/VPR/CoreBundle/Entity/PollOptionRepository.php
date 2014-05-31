@@ -37,45 +37,27 @@ class PollOptionRepository extends EntityRepository
                         ->addOrderBy('o.categorySorting', 'ASC');
     }
 
-    public function getNextPollStep($vote)
-    {
-        $query = $this->getEntityManager()->createQueryBuilder()
-                ->select('s')
-                ->from('PROCERGSVPRCoreBundle:Step', 's')
-                ->where('s.poll = :poll')
-                ->addOrderBy('s.sorting', 'ASC');
-        
-        $pars = array('poll' => $vote->getBallotBox()->getPoll());
-        if ($vote->getLastStep()) {
-            $query->andWhere('s.sorting > :sorting');
-            $pars['sorting'] = $vote->getLastStep()->getSorting();
-        }
-        return $query->getQuery()
-                        ->setParameters($pars)
-                        ->setMaxResults(1)
-                        ->getOneOrNullResult();
-    }
-
     public function checkStepOptions($step, $options)
     {
-        $query = $this->getEntityManager()->createQueryBuilder()
-                ->select('count(s) total')
-                ->from('PROCERGSVPRCoreBundle:PollOption', 's')
-                ->where('s.step = :step')
-                ->andWhere('s.id in (:ids)');
-        $a = $query->getQuery()->setParameters(array('step' => $step, 'ids' => $options))
+        $count = $this->getEntityManager()->createQueryBuilder()
+                ->select('count(o) total')
+                ->from('PROCERGSVPRCoreBundle:PollOption', 'o')
+                ->where('o.step = :step')
+                ->andWhere('o.id in (:ids)')
+                ->getQuery()->setParameters(array('step' => $step, 'ids' => $options))
                 ->setMaxResults(1)
                 ->getOneOrNullResult();
-        return isset($a['total']) && $a['total'] == count($options);
+        return isset($count['total']) && $count['total'] == count($options);
     }
 
     public function getPollOption($vote)
     {
+        $ids = $vote->getPollOption();
         $query = $this->getEntityManager()->createQueryBuilder()
-                ->select('s')
-                ->from('PROCERGSVPRCoreBundle:PollOption', 's')
-                ->where('s.id in (:ids)');
-        return $query->getQuery()->setParameters(array('ids' => $vote->getPollOption()))->getResult();
+                ->select('o')
+                ->from('PROCERGSVPRCoreBundle:PollOption', 'o')
+                ->where('o.id in (:ids)');
+        return $query->getQuery()->setParameters(compact('ids'))->getResult();
     }
 
 }
