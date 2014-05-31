@@ -36,7 +36,6 @@ $(function() {
     });
 
     $("#btn-vote").on("click", function() {
-      //var selection = $(".ballot input:checked").siblings("label").clone().attr("for", "");
       var selection = $("#ballot-main input:checked").closest(".option").clone();
       selection.each(function() {
         $(this).find("input[type='checkbox']").remove();
