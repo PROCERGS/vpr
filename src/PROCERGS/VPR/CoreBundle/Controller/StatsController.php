@@ -41,4 +41,20 @@ class StatsController extends Controller
             'results' => $results
         );
     }
+
+    /**
+     * @Route("/stats/votes", name="vpr_stats_votes")
+     * @Template()
+     */
+    public function votesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsOptionVote');
+
+        $results = $statsRepos->findTotalVotesByCorede();
+
+        return array(
+            'results' => $results
+        );
+    }
 }

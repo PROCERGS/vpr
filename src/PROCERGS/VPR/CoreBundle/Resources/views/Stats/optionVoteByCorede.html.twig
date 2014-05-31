@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1>Resultados parciais</h1>
-    <p>Percentual de demandas escolhidas por corede</p>
+    <p>Demandas escolhidas por corede</p>
 
     <div class="jumbotron" style="padding: 0;">
         {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
@@ -21,19 +21,37 @@
     {% if (results) %}
         <div class="row" style="color:black">
             {% for name,step in results %}
-                <div class="col-md-12"><strong>{{ name }}</strong></div>
-                <div class="col-md-12" style="color:black; margin: 10px 0 50px 0;">
-                    {% if (step) %}
-                        <div class="col-md-1 text-right"><strong>Votos</strong></div><div class="col-md-11"><strong>Demandas</strong></div>
-                        {% for option in step %}
-                              <div class="col-md-1 text-right">{{ '%.0f'|format(option['value']) }}</div>
-                              <div class="col-md-11">{{option['number']}} - {{ option['title'] }}</div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="col-md-6 col-md-offset-1">Nenhum voto encontrado para o corede selecionado</div>
-                    {% endif %}
+                <div class="col-md-12">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th colspan="2">{{ name }}</th>
+                            </tr>
+                            <tr>
+                                <th width="10%">Votos</th>
+                                <th width="80%">Corede</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                           {% if (step) %}
+                               {% set total = 0 %}
+                               {% for option in step %}
+                                   {% set total = total + option['value'] %}
+                                   <tr>
+                                       <td class="text-center">{{ '%.0f'|format(option['value']) }}</td>
+                                       <td>{{option['number']}} - {{ option['title'] }}</td>
+                                   </tr>
+                               {% endfor %}
+                           {% else %}
+                               <tr><td colspan="2">Nenhum voto encontrado para o corede selecionado</tr></td>
+                           {% endif %}                                
+                        </tbody>
+                    </table>
                 </div>
+                <div class="col-md-8" style="margin-bottom: 30px;">
+                    <p><strong>Total de votos :</strong>{{ total }}</p>
+                </div>                    
             {% endfor %}
-        </div>
+        </div>    
     {% endif %}
-{% endblock %}
+ {% endblock %}

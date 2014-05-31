@@ -21,26 +21,19 @@ class StatsOptionVoteRepository extends EntityRepository
 
          return $query->getQuery()->getResult();
     }
-    
-    public function getTotalOptionVoteByCorede($corede, $step)
+
+    public function findTotalVotesByCorede()
     {
         $query = $this->getEntityManager()->createQueryBuilder()
-            ->select('count(s) as total')
-            ->from('PROCERGSVPRCoreBundle:StatsOptionVote', 's')
-            ->join('PROCERGSVPRCoreBundle:PollOption', 'o', 'WITH','s.pollOptionId = o.id')
-            ->where('s.coredeId = :corede')
-            ->andWhere('o.step = :step')
-            ->setParameter('corede', $corede)
-            ->setParameter('step', $step);
+            ->select('count(v.id) as total, c.name')
+            ->from('PROCERGSVPRCoreBundle:Vote', 'v')
+            ->join('PROCERGSVPRCoreBundle:Corede', 'c', 'WITH','v.corede = c')
+            ->orderBy('total','desc')
+            ->groupBy('c.name');
 
-         $result = $query->getQuery()
-                        ->setMaxResults(1)
-                        ->getOneOrNullResult();
-
-         return $result['total'];
-         
+         return $query->getQuery()->getResult();
     }
-    
+
     public function findPercentOptionVoteByCorede($corede, $step)
     {
         $em = $this->getEntityManager();

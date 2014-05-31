@@ -1,0 +1,34 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+    <h1>Resultados parciais</h1>
+    <p>Total de votos por corede</p>
+
+    {% if (results) %}
+        <div class="row" style="color:black">
+            <div class="col-md-8">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="10%">Votos</th>
+                            <th width="80%">Corede</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set total = 0 %}
+                        {% for corede in results %}
+                            {% set total = total + corede['total'] %}
+                            <tr>
+                                <td class="text-center">{{ corede['total'] }}</td>
+                                <td>{{ corede['name'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-8">
+                <p><strong>Total de votos :</strong>{{ total }}</p>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
