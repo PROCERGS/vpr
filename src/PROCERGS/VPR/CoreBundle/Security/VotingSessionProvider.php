@@ -13,18 +13,23 @@ use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializationContext;
 
 class VotingSessionProvider
 {
 
     private $session;
     private $em;
+    private $serializer;
 
     public function __construct(EntityManagerInterface $entityManager,
-                                SessionInterface $session)
+                                SessionInterface $session,
+                                Serializer $serializer)
     {
         $this->em = $entityManager;
         $this->session = $session;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -197,7 +202,7 @@ class VotingSessionProvider
     public function persistVote(Vote $vote)
     {
         $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-        $serializer = $this->container->get('jms_serializer');
+        $serializer = $this->serializer;
         $context = SerializationContext::create()
                 ->setSerializeNull(true)
                 ->setGroups(array('vote'));
@@ -214,4 +219,5 @@ class VotingSessionProvider
     {
         $this->session->set('vote', $vote);
     }
+
 }

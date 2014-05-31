@@ -150,7 +150,7 @@ class PollOptionController extends Controller
             $url = $this->generateUrl('procergsvpr_step', $params);
             return $this->redirect($url);
         }
-        $votingSession->persistVote();
+        $votingSession->persistVote($vote);
 
         $this->registerStats($em, $options, $corede, $poll, $vote);
 
@@ -163,6 +163,8 @@ class PollOptionController extends Controller
 
     private function registerStats($em, $options, $corede, $poll, $vote)
     {
+        $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+        $options = $pollOptionRepo->getPollOption($vote);
         $hasLoginCidadao = ($vote->getLoginCidadaoId()) ? true : false;
         $hasVoterRegistration = ($vote->getVoterRegistration()) ? true : false;
 
