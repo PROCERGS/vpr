@@ -3,13 +3,11 @@
 {% block metatags %}
 {{ parent() }}
 
-<meta property="og:site_name" content="{% trans %}Votação de Prioridades do Orçamento 2015
-{% endtrans %}"/>
+<meta property="og:site_name" content="{% trans %}2015 Budget Priorities Voting{% endtrans %}"/>
 <meta property="og:description" content="{% trans %}A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.{% endtrans %}"/>
 {% image '@PROCERGSVPRCoreBundle/Resources/public/images/facebook-image.png' %}
 <meta property="og:image" content="{{ app.request.scheme ~'://' ~ app.request.host ~ asset_url }}" />
 {% endimage %}
-{# <meta property="fb:app_id" content="{{ facebook_app_id }}"/> #}
 
 {% endblock %}
 
