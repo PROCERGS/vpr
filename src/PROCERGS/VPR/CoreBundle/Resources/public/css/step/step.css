@@ -633,7 +633,13 @@
   }
 
   #info-msg.complete {
+    background-color: #ffcc00;
     background-color: rgba(255, 204, 0, 1);
+  }
+
+  #info-msg.limit {
+    background-color: #FF3300;
+    color: #FFF;
   }
 
 
