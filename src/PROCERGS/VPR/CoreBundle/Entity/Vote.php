@@ -111,9 +111,7 @@ class Vote
      * @Groups({"vote"})
      */
     protected $corede;
-
     protected $lastStep;
-
     protected $pollOption = array();
 
     /**
@@ -384,13 +382,12 @@ class Vote
         }
     }
 
-
     public function encryptVote()
     {
         $crypted = null;
         $ballotBox = $this->getBallotBox();
         if (!$ballotBox) {
-          return false;
+            return false;
         }
         $poll = $ballotBox->getPoll();
         $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
@@ -450,7 +447,7 @@ class Vote
             $this->pollOption = $var;
         } else {
             if (!$var) {
-              $var = array();
+                $var = array();
             }
             $this->pollOption = array_merge($this->pollOption, $var);
         }
@@ -486,6 +483,30 @@ class Vote
     public function getSmId()
     {
         return $this->smId;
+    }
+
+    public function getTreatmentVPR()
+    {
+        return $this->treatmentVPR;
+    }
+
+    public function setTreatmentVPR($treatmentVPR)
+    {
+        $this->treatmentVPR = $treatmentVPR;
+
+        return $this;
+    }
+
+    public function getTreatmentGabineteDigital()
+    {
+        return $this->treatmentGabineteDigital;
+    }
+
+    public function setTreatmentGabineteDigital($treatmentGabineteDigital)
+    {
+        $this->treatmentGabineteDigital = $treatmentGabineteDigital;
+
+        return $this;
     }
 
 }

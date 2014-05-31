@@ -7,12 +7,55 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use JMS\Serializer\SerializationContext;
 use PROCERGS\VPR\CoreBundle\Entity\StatsOptionVote;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
+use PROCERGS\VPR\CoreBundle\Entity\City;
 
 class PollOptionController extends Controller
 {
+
+    /**
+     * @Route("/ballot/{cityId}", name="vpr_ballot_view")
+     * @Template()
+     */
+    public function viewBallotAction(Request $request, $cityId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+        if (is_numeric($cityId)) {
+            $city = $cityRepo->find($cityId);
+        } else {
+            $city = $cityRepo->findOneByName($cityId);
+        }
+
+        if (!$city instanceof City) {
+            throw new NotFoundHttpException();
+        }
+
+        $pollRepo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll');
+        $pollOptionsRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+
+        $poll = $pollRepo->findActivePoll();
+        $pollOptions = $pollOptionsRepo->findByPollCorede($poll,
+                $city->getCorede());
+
+        foreach ($pollOptions as $option) {
+            $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
+            $categoriesId[$option->getCategory()->getName()] = $option->getCategory()->getId();
+        }
+
+        $corede = $city->getCorede();
+
+        $form = $this->getCityForm()->handleRequest($request)->createView();
+        $cities = $this->getCities();
+        
+        $parameters = compact('form', 'options', 'cities', 'categoriesId',
+                'corede');
+        return $this->render('PROCERGSVPRCoreBundle:PollOption:viewByCity.html.twig',
+                        $parameters);
+    }
 
     /**
      * @Route("/ballot", name="vpr_ballotByCity")
@@ -20,11 +63,7 @@ class PollOptionController extends Controller
      */
     public function viewByCityAction(Request $request)
     {
-        $form = $this->createFormBuilder()->add('city', 'text',
-                        array(
-                    'required' => true,
-                    'label' => 'form.city.select'
-                ))->add('submit', 'submit')->getForm();
+        $form = $this->getCityForm();
 
         $form->handleRequest($request);
 
@@ -35,37 +74,16 @@ class PollOptionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $data = $form->getData();
 
-            $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
-            $city = $cityRepo->findOneBy(array(
-                'name' => $data['city']
-            ));
-
-            if ($city) {
-                $pollRepo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll');
-                $pollOptionsRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-
-                $poll = $pollRepo->findActivePoll();
-                $pollOptions = $pollOptionsRepo->findByPollCorede($poll,
-                        $city->getCorede());
-
-                foreach ($pollOptions as $option) {
-                    $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
-                    $categoriesId[$option->getCategory()->getName()] = $option->getCategory()->getId();
-                }
-
-                $corede = $city->getCorede();
+            $name = trim($data['city']);
+            if (strlen($name) > 0) {
+                $url = $this->generateUrl('vpr_ballot_view',
+                        array('cityId' => $name));
+                return $this->redirect($url);
             }
         }
 
         $form = $form->createView();
-
-        $serializer = $this->container->get('jms_serializer');
-        $em = $this->getDoctrine()->getManager();
-        $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
-        $cities = $serializer->serialize($cityRepo->findAll(), 'json',
-                SerializationContext::create()->setSerializeNull(true)->setGroups(array(
-                    'autocomplete'
-        )));
+        $cities = $this->getCities();
 
         return compact('form', 'options', 'cities', 'categoriesId', 'corede');
     }
@@ -150,7 +168,7 @@ class PollOptionController extends Controller
             $url = $this->generateUrl('procergsvpr_step', $params);
             return $this->redirect($url);
         }
-        $votingSession->persistVote($vote);
+        $votingSession->persistVote($vote, $this->getUser());
 
         $this->registerStats($em, $options, $corede, $poll, $vote);
 
@@ -178,6 +196,26 @@ class PollOptionController extends Controller
             $stats->setCreatedAt(new \DateTime());
             $em->persist($stats);
         }
+    }
+
+    private function getCityForm()
+    {
+        return $this->createFormBuilder()->add('city', 'text',
+                        array(
+                    'required' => true,
+                    'label' => 'form.city.select'
+                ))->add('submit', 'submit')->getForm();
+    }
+
+    private function getCities()
+    {
+        $serializer = $this->container->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+        return $serializer->serialize($cityRepo->findAll(), 'json',
+                        SerializationContext::create()->setSerializeNull(true)->setGroups(array(
+                            'autocomplete'
+        )));
     }
 
 }

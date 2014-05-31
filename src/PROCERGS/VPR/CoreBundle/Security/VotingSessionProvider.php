@@ -13,6 +13,8 @@ use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
+use PROCERGS\VPR\CoreBundle\Entity\WorldBank\LegacyPerson;
+use PROCERGS\VPR\CoreBundle\Entity\WorldBank\GabineteDigitalPerson;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializationContext;
 
@@ -199,8 +201,9 @@ class VotingSessionProvider
         }
     }
 
-    public function persistVote(Vote $vote)
+    public function persistVote(Vote $vote, Person $person)
     {
+        $vote = $this->detectWorldBankTreatment($person, $vote);
         $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $serializer = $this->serializer;
         $context = SerializationContext::create()
@@ -218,6 +221,31 @@ class VotingSessionProvider
     public function updateVote(Vote $vote)
     {
         $this->session->set('vote', $vote);
+    }
+
+    protected function detectWorldBankTreatment(Person $person,
+                                                Vote $vote = null)
+    {
+        if (is_null($vote)) {
+            $vote = $this->getVote();
+        }
+        $voterRegistration = $vote->getVoterRegistration();
+        if ($voterRegistration) {
+            $vprLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\LegacyPerson');
+            $legacyPerson = $vprLegacyRepo->findOneBy(compact('voterRegistration'));
+            if ($legacyPerson instanceof LegacyPerson) {
+                $vote->setTreatmentVPR($legacyPerson->getTreatment());
+            }
+        }
+        if ($person->getEmail()) {
+            $email = $person->getEmail();
+            $gdLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\GabineteDigitalPerson');
+            $gdPerson = $gdLegacyRepo->findOneBy(compact('email'));
+            if ($gdPerson instanceof LegacyPerson) {
+                $vote->setTreatmentGabineteDigital($gdPerson->getTreatment());
+            }
+        }
+        return $vote;
     }
 
 }
