@@ -51,10 +51,12 @@ class StatsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsOptionVote');
 
-        $results = $statsRepos->findTotalVotesByCorede();
+        $results = $statsRepos->findTotalVotes();
+        $created_at = date('d/m/Y H:i:s');
 
         return array(
-            'results' => $results
+            'results' => $results,
+            'created_at' => $created_at
         );
     }
 }

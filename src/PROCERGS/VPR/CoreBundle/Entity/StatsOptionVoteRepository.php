@@ -22,18 +22,6 @@ class StatsOptionVoteRepository extends EntityRepository
          return $query->getQuery()->getResult();
     }
 
-    public function findTotalVotesByCorede()
-    {
-        $query = $this->getEntityManager()->createQueryBuilder()
-            ->select('count(v.id) as total, c.name')
-            ->from('PROCERGSVPRCoreBundle:Vote', 'v')
-            ->join('PROCERGSVPRCoreBundle:Corede', 'c', 'WITH','v.corede = c')
-            ->orderBy('total','desc')
-            ->groupBy('c.name');
-
-         return $query->getQuery()->getResult();
-    }
-
     public function findPercentOptionVoteByCorede($corede, $step)
     {
         $em = $this->getEntityManager();
@@ -63,5 +51,36 @@ class StatsOptionVoteRepository extends EntityRepository
         $statement->execute();
 
         return $statement->fetchAll();
+    }    
+
+    public function findTotalVotes()
+    {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+
+        $statement = $connection->prepare('
+                SELECT COUNT(*) AS total,  c.name, COUNT(CASE WHEN v.voter_registration IS NOT NULL THEN 1 ELSE NULL END) AS total_voter_registration
+                  FROM vote v
+            INNER JOIN corede c
+                    ON v.corede_id = c.id
+              GROUP BY c.name
+              ORDER BY total DESC
+        ');
+
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
+
+    public function findTotalVotesByCorede()
+    {
+        $query = $this->getEntityManager()->createQueryBuilder()
+            ->select('count(v.id) as total, c.name')
+            ->from('PROCERGSVPRCoreBundle:Vote', 'v')
+            ->join('PROCERGSVPRCoreBundle:Corede', 'c', 'WITH','v.corede = c')
+            ->orderBy('total','desc')
+            ->groupBy('c.name');
+
+         return $query->getQuery()->getResult();
     }    
 }

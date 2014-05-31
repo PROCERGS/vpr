@@ -2,32 +2,42 @@
 
 {% block body %}
     <h1>Resultados parciais</h1>
+    
     <p>Total de votos por corede</p>
 
     {% if (results) %}
-        <div class="row" style="color:black">
+        <div class="row" style="color: #000;">
             <div class="col-md-8">
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th width="10%">Votos</th>
-                            <th width="80%">Corede</th>
+                            <th width="40%">Corede</th>
+                            <th width="30%" class="text-center">Votos com Título</th>
+                            <th width="30%" class="text-center">Total de Votos</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% set total = 0 %}
+                        {% set total_voter_registration = 0 %}
                         {% for corede in results %}
                             {% set total = total + corede['total'] %}
+                            {% set total_voter_registration = total_voter_registration + corede['total_voter_registration'] %}
                             <tr>
-                                <td class="text-center">{{ corede['total'] }}</td>
                                 <td>{{ corede['name'] }}</td>
+                                <td class="text-center">{{ corede['total_voter_registration'] }}</td>
+                                <td class="text-center">{{ corede['total'] }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-right"><strong>Total</strong></td>
+                            <td class="text-center">{{ total_voter_registration }}</td>
+                            <td class="text-center">{{ total }}</td>
+                        </tr>
+                    </tfoot>
                 </table>
-            </div>
-            <div class="col-md-8">
-                <p><strong>Total de votos :</strong>{{ total }}</p>
+                <p style="color: #000;">Atualizado em: {{ created_at }}</p>
             </div>
         </div>
     {% endif %}
