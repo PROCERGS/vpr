@@ -97,7 +97,7 @@
     <div class="container">
         <div class="row images">
             <div class="col-xs-4 col-sm-3 text-center">
-                <a href="http://www.portaldaparticipacao.rs.gov.br">
+                <a href="http://www.portaldaparticipacao.rs.gov.br" target="_blank">
                   {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-PPCF.png' %}
                   <img src="{{ asset_url }}" alt="{%trans%}PPC{%endtrans%}" class="img-responsive">
                   {% endimage %}
@@ -155,9 +155,9 @@
 <script>
     var loadNavbar = function() {
         $.getScript('{{ login_cidadao_navbar_url }}?app_id={{ login_cidadao_app_id }}', function() {
-        	while ($("#external").length) {
-        		$("#external").remove();
-        	}
+          while ($("#external").length) {
+            $("#external").remove();
+          }
             citizenLogin.navbar.init();
         });
     };
