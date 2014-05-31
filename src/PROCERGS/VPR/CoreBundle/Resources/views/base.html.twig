@@ -9,6 +9,13 @@
 <meta property="og:image" content="{{ app.request.scheme ~'://' ~ app.request.host ~ asset_url }}" />
 {% endimage %}
 
+<meta name="keywords" content="orçamento, participação popular, votação, consulta, cidadania, cidadão, planejamento, Rio Grande do Sul, RS, #VotaRS, governo, procergs">
+<meta name="author" content="PROCERGS">
+<meta name="rating" content="general">
+<meta name="robots" content="index,follow">
+<meta name="googlebot" content="index,follow">
+<meta name="revisit-after" content="7 days">
+
 {% endblock %}
 
 {% block header %}
@@ -21,10 +28,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 text-center">
-        {# ==========================================================================
-           TODO: FIX SOCIAL PLUGINS URL
-           ========================================================================== #}
-                <div class="pull-left"><a href="https://twitter.com/share" data-url="{{ path('procergsvpr_core_homepage') }}" class="twitter-share-button" data-lang="en">Tweet</a>
+                <div class="pull-left"><a href="https://twitter.com/share" data-url="{{ path('procergsvpr_core_homepage') }}" class="twitter-share-button" data-lang="pt" data-text="{% trans %}A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.{% endtrans %}">Tweet</a>
                     <script>
                         !function(d, s, id) {
                             var js, fjs = d.getElementsByTagName(s)[0];
@@ -129,9 +133,6 @@
                 <img src="{{ asset_url }}" alt="{%trans%}PROCERGS{%endtrans%}" class="img-responsive">
                 {% endimage %}
             </div>
-            <div class="col-xs-6 text-center">
-                <a href="">{% trans %}Terms of Use{% endtrans %}</a>
-            </div>
         </div>
     </div>
 
@@ -143,6 +144,7 @@
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/*' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
+
 {% endjavascripts %}
 
 <!--[if lt IE 10]>
