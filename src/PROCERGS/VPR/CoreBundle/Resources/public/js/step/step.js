@@ -7,8 +7,18 @@ $(function() {
     var confirmationContent = $("#confirmation-content");
     var itensCount = $("#info-msg .itens-count");
 
+    function init() {
+      $("#ballot-main input[type='checkbox']").each(function() {
+        $(this).prop("checked", false);
+        resetCheckbox($(this).get(0));
+      });
+    }
+
+    init();
+
     $("#ballot-main input[type='checkbox']").on("click", function(event) {
         var sel = $("#ballot-main input:checked");
+
         if (sel.length > maxItems) {
             if (!event.preventDefault) {
                 event.preventDefault = function() {
@@ -19,6 +29,7 @@ $(function() {
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
         } else {
+
           $(this).parent(".content").toggleClass("checked");
 
           itensCount.text(sel.length);
@@ -36,20 +47,23 @@ $(function() {
     });
 
     $("#btn-vote").on("click", function() {
-      var selection = $("#ballot-main input:checked").closest(".option").clone();
-      selection.each(function() {
+      var sel = $("#ballot-main input:checked").closest(".option").clone();
+      sel.each(function() {
         $(this).find("input[type='checkbox']").remove();
         $(this).find("label").attr("for", "");
         $(this).find(".content").removeClass("checked");
       });
 
-      if (selection.length > 0 )
-        confirmationContent.html(selection);
-      else
-        confirmationContent.html(voteEmptyMessage);
-
-      confirmationModal.modal("show");
-      infoMessage.hide();
+      if (sel.length > 0 && sel.length <= maxItems) {
+        confirmationContent.html(sel);
+        infoMessage.hide();
+        confirmationModal.modal("show");
+      } else if (sel.length <= 0) {
+          confirmationContent.html(voteEmptyMessage);
+          infoMessage.hide();
+          confirmationModal.modal("show");
+      } else if (sel.length > maxItems)
+          $("#alert-limit").modal("show");
     });
 
     $("#dropdown-categories .scrollTo").on("click", function(event) {

@@ -38,7 +38,7 @@ if( document.createElement('svg').getAttributeNS ) {
             else {
                 resetCheckbox( el );
             }
-        } );
+        });
     }
 
     checkbxsCheckmark.forEach( function( el, i ) { controlCheckbox( el, 'checkmark' ); } );
