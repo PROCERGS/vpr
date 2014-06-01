@@ -51,8 +51,7 @@ security:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/end$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/end/offer$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/stats/, role: IS_AUTHENTICATED_ANONYMOUSLY }

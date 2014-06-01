@@ -7,21 +7,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\FormError;
-use PROCERGS\VPR\CoreBundle\Entity\Person;
-use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
-use PROCERGS\VPR\CoreBundle\Entity\Poll;
-use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Exception\VotingTimeoutException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterAlreadyVotedException;
 use PROCERGS\VPR\CoreBundle\Exception\VoterRegistrationAlreadyVotedException;
 use PROCERGS\VPR\CoreBundle\Event\PersonEvent;
 use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Assetic\Exception\Exception;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 use PROCERGS\VPR\CoreBundle\Exception\VotedException;
 
 class DefaultController extends Controller
@@ -55,12 +46,13 @@ class DefaultController extends Controller
                 if ($vote->getNfgCpf()) { // Vote has NFG validation
                     throw new VotedException();
                 }
-                $votingSession->checkExistingVotes($person, $vote->getBallotBox());
+                $votingSession->checkExistingVotes($person,
+                        $vote->getBallotBox());
                 $votingSession->flush();
                 return $this->indexAction();
             } catch (VotedException $e) {
                 $url = $this->generateUrl('fos_user_security_logout',
-                        array('code' => $vote->getSurveyMonkeyId()));
+                        array('surveyMonkeyId' => $vote->getSurveyMonkeyId()));
                 return $this->redirect($url);
             }
         }
@@ -82,7 +74,8 @@ class DefaultController extends Controller
         $user = $this->getUser();
         $formBuilder = $this->createFormBuilder();
         if (!$user->getFirstName()) {
-            $formBuilder->add('firstname', 'text', array(
+            $formBuilder->add('firstname', 'text',
+                    array(
                 'required' => true
             ));
         }
@@ -150,19 +143,19 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/end/offer", name="procergsvpr_core_end_offer")
+     * @Route("/end/offer/{surveyMonkeyId}", name="procergsvpr_core_end_offer", defaults={"surveyMonkeyId" = ""})
      * @Template()
      */
-    public function endOfferAction(Request $request)
+    public function endOfferAction(Request $request, $surveyMonkeyId)
     {
-        $r = $request->get('code');
-        if (!$r) {
-            $r = '';
-        }
-        $url['link_nfg'] = $this->container->getParameter('nfg_register_url');
-        $url['link_lc'] = $this->container->getParameter('lc_register_url');
-        $url['link_sm'] = $this->container->getParameter('sm_register_url') . $r;
-        return $url;
+        $skipModal = $request->get('skip', false) ? true: false;
+        $nfgLink = $this->container->getParameter('nfg_register_url');
+        $loginCidadaoLink = $this->container->getParameter('lc_register_url');
+        $surveyMonkeyLink = $this->container->getParameter('world_bank_survey_url') . $surveyMonkeyId;
+        return compact(
+                'nfgLink', 'loginCidadaoLink', 'surveyMonkeyLink',
+                'surveyMonkeyId', 'skipModal'
+        );
     }
 
     /**
