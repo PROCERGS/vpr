@@ -60,7 +60,7 @@ class DefaultController extends Controller
                 return $this->indexAction();
             } catch (VotedException $e) {
                 $url = $this->generateUrl('fos_user_security_logout',
-                        array('code' => $vote->getSmId()));
+                        array('code' => $vote->getSurveyMonkeyId()));
                 return $this->redirect($url);
             }
         }

@@ -117,10 +117,10 @@ class Vote
     /**
      * @var string
      *
-     * @ORM\Column(name="sm_id", type="string", length=33, nullable=true, unique=true)
+     * @ORM\Column(name="surveymonkey_id", type="string", length=100, nullable=true, unique=true)
      * @Groups({"vote"})
      */
-    protected $smId;
+    protected $surveyMonkeyId;
 
     /**
      * @ORM\Column(name="wb_treatment_vpr", type="integer", nullable=true)
@@ -474,15 +474,15 @@ class Vote
         $this->encryptVote();
     }
 
-    public function setSmId($var)
+    public function setSurveyMonkeyId($surveyMonkeyId)
     {
-        $this->smId = $var;
+        $this->surveyMonkeyId = $surveyMonkeyId;
         return $this;
     }
 
-    public function getSmId()
+    public function getSurveyMonkeyId()
     {
-        return $this->smId;
+        return $this->surveyMonkeyId;
     }
 
     public function getTreatmentVPR()
