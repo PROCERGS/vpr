@@ -7,19 +7,23 @@ $(function() {
     var confirmationContent = $("#confirmation-content");
     var itensCount = $("#info-msg .itens-count");
 
-    function init() {
-      $("#ballot-main input[type='checkbox']").each(function() {
-        $(this).prop("checked", false);
-        resetCheckbox($(this).get(0));
-      });
+    function updateInfo(sel) {
+      if (sel.length == maxItems) {
+        infoMessage.addClass("complete");
+        infoMessage.removeClass("limit");
+      } else if (sel.length > maxItems) {
+        infoMessage.removeClass("complete");
+        infoMessage.addClass("limit");
+      } else {
+        infoMessage.removeClass("complete limit");
+      }
+      itensCount.text(sel.length);
     }
-
-    init();
 
     $("#ballot-main input[type='checkbox']").on("click", function(event) {
         var sel = $("#ballot-main input:checked");
 
-        if (sel.length > maxItems) {
+        if (sel.length > maxItems && $(this).is(":checked")) {
             if (!event.preventDefault) {
                 event.preventDefault = function() {
                     event.returnValue = false; //ie
@@ -30,15 +34,12 @@ $(function() {
             resetCheckbox($(this).get(0));
         } else {
 
-          $(this).parent(".content").toggleClass("checked");
+          if($(this).is(":checked"))
+            $(this).parent(".content").addClass("checked");
+          else
+            $(this).parent(".content").removeClass("checked");
 
-          itensCount.text(sel.length);
-
-          if (sel.length == maxItems) {
-            infoMessage.addClass("complete");
-          } else {
-            infoMessage.removeClass("complete");
-          }
+          updateInfo(sel);
         }
     });
 
@@ -84,5 +85,8 @@ $(function() {
         $(this).closest(".option").children(".desc").slideToggle();
         $(this).toggleClass("less");
     });
+
+    //init
+    updateInfo($("#ballot-main input:checked"));
 
 });
