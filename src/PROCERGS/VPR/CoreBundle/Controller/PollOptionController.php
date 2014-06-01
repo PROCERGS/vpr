@@ -50,7 +50,7 @@ class PollOptionController extends Controller
 
         $form = $this->getCityForm()->handleRequest($request)->createView();
         $cities = $this->getCities();
-        
+
         $parameters = compact('form', 'options', 'cities', 'categoriesId',
                 'corede');
         return $this->render('PROCERGSVPRCoreBundle:PollOption:viewByCity.html.twig',
@@ -157,7 +157,7 @@ class PollOptionController extends Controller
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
         $vote->addPollOption($options);
-        $nextStep = $stepRepo->getNextPollStep($vote);
+        $nextStep = $stepRepo->findNextPollStep($vote);
         if ($nextStep) {
             $vote->setLastStep($nextStep);
             $votingSession->updateVote($vote);

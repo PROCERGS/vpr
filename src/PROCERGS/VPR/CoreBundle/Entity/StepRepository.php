@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 class StepRepository extends EntityRepository
 {
 
-    public function getNextPollStep($vote)
+    public function findNextPollStep($vote)
     {
         $query = $this->getEntityManager()->createQueryBuilder()
                 ->select('s')

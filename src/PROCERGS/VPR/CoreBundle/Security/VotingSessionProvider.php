@@ -157,7 +157,7 @@ class VotingSessionProvider
             $vote->setNfgCpf(1);
         }
         $stepRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Step');
-        $vote->setLastStep($stepRepo->getNextPollStep($vote));
+        $vote->setLastStep($stepRepo->findNextPollStep($vote));
         return $vote;
     }
 
