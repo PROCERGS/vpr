@@ -191,3 +191,5 @@ vote.empty.message: 'Nenhuma opção selecionada'
 voting.session.invalid: 'Ocorreu um erro durante sua votação, por favor tente novamente.'
 voting.session.invalid.options: 'Opções inválidas. Verifique se você não selecionou mais opções que o permitido.'
 'No, thanks.': Não, obrigado.
+Wait! : Aguarde
+'The poll %poll% begins in %openingTime%': 'A %poll% inicia em %openingTime%'

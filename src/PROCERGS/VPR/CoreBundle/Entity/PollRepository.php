@@ -16,4 +16,12 @@ class PollRepository extends EntityRepository
                         )->setParameters(compact('now'))->setMaxResults(1)->getOneOrNullResult();
     }
 
+    public function findLastPoll()
+    {
+        return $this->getEntityManager()
+                        ->createQuery(
+                                'SELECT p FROM PROCERGSVPRCoreBundle:Poll p ORDER BY p.openingTime DESC'
+                        )->setMaxResults(1)->getOneOrNullResult();
+    }
+
 }

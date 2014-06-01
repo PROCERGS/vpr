@@ -166,10 +166,12 @@ class DefaultController extends Controller
     {
         $poll = $this->getDoctrine()->getManager()
                 ->getRepository('PROCERGSVPRCoreBundle:Poll')
-                ->findActivePoll();
+                ->findLastPoll();
         return array(
             'name' => $poll->getName(),
-            'closingTime' => $poll->getClosingTime()
+            'openingTime' => $poll->getOpeningTime(),
+            'closingTime' => $poll->getClosingTime(),
+            'currentTime' => new \DateTime()
         );
     }
 

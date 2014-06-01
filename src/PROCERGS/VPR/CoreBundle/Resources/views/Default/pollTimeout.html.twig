@@ -7,12 +7,28 @@
 {% if closingTime is not defined %}
 {% set closingTime = '' %}
 {% endif %}
-<div class="row">
+{% if openingTime is not defined %}
+{% set openingTime = '' %}
+{% endif %}
+{% if currentTime is not defined %}
+{% set currentTime = '' %}
+{% endif %}
+
+<div class="row" style="margin-top: 15px;">
     <div class="col-md-12">
-        <div class="alert alert-danger fade in">
-            <h4>{{ 'Voting time is up!' | trans }}</h4>
-            <p>{{ 'The poll %poll% has ended at %closingTime%' | trans({'%poll%' : name, '%closingTime%': closingTime |date('d/m/Y H:i:s')}) }}</p>
-        </div>
+        {% if (currentTime > closingTime) %}
+            <div class="alert alert-danger fade in">
+                <h4>{{ 'Voting time is up!' | trans }}</h4>
+                <p>{{ 'The poll %poll% has ended at %closingTime%' | trans({'%poll%' : name, '%closingTime%': closingTime |date('d/m/Y H:i:s')}) }}</p>
+            </div>
+        {% endif %}            
+        {% if (currentTime < openingTime) %}
+            <div class="alert alert-info fade in">
+                <h4>{{ 'Wait!' | trans }}</h4>
+                <p>{{ 'The poll %poll% begins in %openingTime%' | trans({'%poll%' : name, '%openingTime%': openingTime |date('d/m/Y H:i:s')}) }}</p>
+            </div>
+        {% endif %}
     </div>
 </div>
+
 {% endblock %}
