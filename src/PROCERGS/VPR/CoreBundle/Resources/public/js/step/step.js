@@ -47,7 +47,7 @@ $(function() {
         infoMessage.show();
     });
 
-    $("form.step-form").on("submit", function() {
+    $("form.step-form").on("submit", function(event) {
         if ($('form.step-form').is('.confirmed')) {
             return true;
         }
@@ -72,6 +72,7 @@ $(function() {
             $("#alert-limit").modal("show");
         }
 
+        event.preventDefault();
         return false;
     });
 
