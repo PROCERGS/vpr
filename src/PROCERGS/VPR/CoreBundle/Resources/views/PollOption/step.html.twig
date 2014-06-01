@@ -50,7 +50,7 @@
 <div class="row">
     <div class="col-md-12">
 
-        {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
+        {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark step-form'}}) }}
             {{ form_errors(form) }}
         {% if options %}
             {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
@@ -97,23 +97,23 @@
       {% endif %}
 
             <div id="button-bar">
-                <button id="btn-vote" type="button" class="btn btn-success btn-lg js-toggle" data-loading-text="Aguarde...">{{ 'Cast Vote' | trans }}</button>
+                <button id="btn-vote" type="submit" class="btn btn-success btn-lg js-toggle" data-loading-text="Aguarde...">{{ 'Cast Vote' | trans }}</button>
             </div>
 
             <div class="modal fade ballot" id="confirmation-modal">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Altere ou confirme seu voto</h4>
-                  </div>
-                  <div class="modal-body" id="confirmation-content"></div>
-                  <div class="modal-footer">
-                    <a id="btn-rectify" role="button" class="btn btn-lg" data-dismiss="modal">{{ 'Change' | trans }}</a>
-                    <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
-                  </div>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Altere ou confirme seu voto</h4>
+                        </div>
+                        <div class="modal-body" id="confirmation-content"></div>
+                        <div class="modal-footer">
+                            <a id="btn-rectify" role="button" class="btn btn-lg" data-dismiss="modal">{{ 'Change' | trans }}</a>
+                            <button id="btn-confirm" type="button" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
 
       {{ form_end(form) }}
