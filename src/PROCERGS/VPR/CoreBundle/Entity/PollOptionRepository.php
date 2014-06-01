@@ -37,8 +37,11 @@ class PollOptionRepository extends EntityRepository
                         ->addOrderBy('o.categorySorting', 'ASC');
     }
 
-    public function checkStepOptions($step, $options)
+    public function checkStepOptions(Step $step, $options)
     {
+        if (count($options) > $step->getMaxSelection()) {
+            return false;
+        }
         $count = $this->getEntityManager()->createQueryBuilder()
                 ->select('count(o) total')
                 ->from('PROCERGSVPRCoreBundle:PollOption', 'o')

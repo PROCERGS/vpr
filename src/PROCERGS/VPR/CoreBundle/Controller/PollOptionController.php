@@ -154,6 +154,9 @@ class PollOptionController extends Controller
 
         $options = $request->get('options');
         if (!$pollOptionRepo->checkStepOptions($step, $options)) {
+            $session = $request->getSession();
+            $session->getFlashBag()->add('danger',
+                    $this->get('translator')->trans('voting.session.invalid.options'));
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
         $vote->addPollOption($options);

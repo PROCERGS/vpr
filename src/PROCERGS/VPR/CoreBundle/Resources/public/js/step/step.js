@@ -8,7 +8,7 @@ $(function() {
     var itensCount = $("#info-msg .itens-count");
 
     function updateInfo(sel) {
-        if (sel.length == maxItems) {
+        if (sel.length === maxItems) {
             infoMessage.addClass("complete");
             infoMessage.removeClass("limit");
         } else if (sel.length > maxItems) {
