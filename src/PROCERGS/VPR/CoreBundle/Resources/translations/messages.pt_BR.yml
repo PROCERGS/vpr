@@ -74,7 +74,7 @@ Rectify: Corrigir
 'Join the Nota Fiscal Gaucha and compete for prizes of up to R$ 1 million. Register Now!': 'Participe da Nota Fiscal Gaúcha e concorra a prêmios de até R$ 1 milhão. Cadastre agora!'
 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Aproveite e faça agora seu cadastro no Login Cidadão, e acompanhe as propostas da sua região.'
 # 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Já se cadastrou no Login Cidadão? Acesse todos os serviços do Rio Grande do Sul com uma única conta personalizada.'
-'Answer to World Bank research on Priorities Voting and help to strengthen participation in RS!': 'Responda à pesquisa do Banco Mundial sobre a Votação de Prioridades e ajude a fortalecer a participação no RS!'
+'Answer to the World Bank''s survey on Priorities Voting and help to strengthen participation in RS!': 'Responda à pesquisa do Banco Mundial sobre a Votação de Prioridades e ajude a fortalecer a participação no RS!'
 'Register Here': 'Cadastre-se aqui'
 'Answer Survey': 'Responder Pesquisa'
 Warning!: Atenção!
@@ -169,7 +169,7 @@ Loading: Carregando
 form.city.select: 'Digite o município'
 'Thank you for helping Rio Grande do Sul to grow. Your participation is very important!': 'Muito obrigado por ajudar o Rio Grande do Sul a crescer. Sua participação é muito importante!'
 'Confirm your Voter Registration': 'Confirme seu título'
-'Banco Mundial research': 'Responda à pesquisa!'
+'World Bank Survey': 'Responda à pesquisa!'
 'Change': 'Alterar'
 'Accepts create an account in Citizen Login service?': 'Criar meu Login Cidadão'
 'You have already chose <span class=''itens-count''>0</span> up to %max% items': 'Você já escolheu <span class=''itens-count''>0</span> de até %max% items'
@@ -190,3 +190,4 @@ vote.empty.message: 'Nenhuma opção selecionada'
 '2015 Budget Priorities Voting': 'Votação de Prioridades do Orçamento 2015'
 voting.session.invalid: 'Ocorreu um erro durante sua votação, por favor tente novamente.'
 voting.session.invalid.options: 'Opções inválidas. Verifique se você não selecionou mais opções que o permitido.'
+'No, thanks.': Não, obrigado.
