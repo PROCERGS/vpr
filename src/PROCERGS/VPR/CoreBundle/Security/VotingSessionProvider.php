@@ -145,7 +145,7 @@ class VotingSessionProvider
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
         $vote->setCorede($person->getCityOrTreCity()->getCorede());
-        $surveyMonkeyId = uniqid(hash('sha256', mt_rand()), true);
+        $surveyMonkeyId = uniqid(hash('sha256', mt_rand() . $person->getId()), true);
         $vote->setSurveyMonkeyId($surveyMonkeyId);
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());
@@ -219,7 +219,7 @@ class VotingSessionProvider
         $this->em->persist($vote);
     }
 
-    public function updateVote(Vote $vote)
+    public function updateVote(Vote $vote = null)
     {
         $this->session->set('vote', $vote);
     }
