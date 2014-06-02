@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1>Resultados parciais</h1>
-    
+
     <p>Total de votos por corede</p>
 
     {% if (results) %}
@@ -18,26 +18,26 @@
                     </thead>
                     <tbody>
                         {% set total = 0 %}
-                        {% set total_voter_registration = 0 %}
-                        {% for corede in results %}
-                            {% set total = total + corede['total'] %}
-                            {% set total_voter_registration = total_voter_registration + corede['total_voter_registration'] %}
+                        {% set totalWithVoterRegistration = 0 %}
+                        {% for entity in results %}
+                            {% set total = total + entity.getTotalVotes %}
+                            {% set totalWithVoterRegistration = totalWithVoterRegistration + entity.getTotalWithVoterRegistration %}
                             <tr>
-                                <td>{{ corede['name'] }}</td>
-                                <td class="text-center">{{ corede['total_voter_registration'] }}</td>
-                                <td class="text-center">{{ corede['total'] }}</td>
+                                <td>{{ entity.getCoredeName }}</td>
+                                <td class="text-center">{{ entity.getTotalWithVoterRegistration }}</td>
+                                <td class="text-center">{{ entity.getTotalVotes }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                     <tfoot>
                         <tr>
                             <td class="text-right"><strong>Total</strong></td>
-                            <td class="text-center">{{ total_voter_registration }}</td>
+                            <td class="text-center">{{ totalWithVoterRegistration }}</td>
                             <td class="text-center">{{ total }}</td>
                         </tr>
                     </tfoot>
                 </table>
-                <p style="color: #000;">Atualizado em: {{ created_at }}</p>
+                <p style="color: #000;">Atualizado em: {% if (created_at) %}{{ created_at |date('d/m/Y H:i:s') }}{% endif%}</p>
             </div>
         </div>
     {% endif %}
