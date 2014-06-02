@@ -76,12 +76,12 @@ $(document).ready(function() {
         var e = $(this);
         var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
         if (u) {
-            window.open(u, '_blank', e.attr('data-specs'));
+            var windowFeatures = e.attr('data-specs') + ',scrollbars=yes';
+            window.open(u, '_blank', windowFeatures);
         }
         return false;
     });
-
-
+    
     /*
      * Disable input spinner's scroll
      */
