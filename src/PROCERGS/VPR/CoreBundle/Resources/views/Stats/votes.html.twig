@@ -1,44 +1,140 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
-    <h1>Resultados parciais</h1>
 
-    <p>Total de votos por corede</p>
+<h1>Resultados parciais</h1>
 
-    {% if (results) %}
-        <div class="row" style="color: #000;">
-            <div class="col-md-8">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th width="40%">Corede</th>
-                            <th width="30%" class="text-center">Votos com Título</th>
-                            <th width="30%" class="text-center">Total de Votos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% set total = 0 %}
-                        {% set totalWithVoterRegistration = 0 %}
-                        {% for entity in results %}
-                            {% set total = total + entity.getTotalVotes %}
-                            {% set totalWithVoterRegistration = totalWithVoterRegistration + entity.getTotalWithVoterRegistration %}
-                            <tr>
-                                <td>{{ entity.getCoredeName }}</td>
-                                <td class="text-center">{{ entity.getTotalWithVoterRegistration }}</td>
-                                <td class="text-center">{{ entity.getTotalVotes }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td class="text-right"><strong>Total</strong></td>
-                            <td class="text-center">{{ totalWithVoterRegistration }}</td>
-                            <td class="text-center">{{ total }}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-                <p style="color: #000;">Atualizado em: {% if (created_at) %}{{ created_at |date('d/m/Y H:i:s') }}{% endif%}</p>
-            </div>
-        </div>
-    {% endif %}
+<p>Total de votos por corede</p>
+
+
+{% if (results) %}
+<div id="chart" style="width:100%" height:"1500px";></div>
+
+<div class="row" style="color: #000;">
+  <div class="col-md-8">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th width="40%">Corede</th>
+          <th width="30%" class="text-center">Votos com Título</th>
+          <th width="30%" class="text-center">Total de Votos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set total = 0 %}
+        {% set totalWithVoterRegistration = 0 %}
+        {% for entity in results %}
+        {% set total = total + entity.getTotalVotes %}
+        {% set totalWithVoterRegistration = totalWithVoterRegistration + entity.getTotalWithVoterRegistration %}
+        <tr>
+          <td>{{ entity.getCoredeName }}</td>
+          <td class="text-center">{{ entity.getTotalWithVoterRegistration }}</td>
+          <td class="text-center">{{ entity.getTotalVotes }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <td class="text-right"><strong>Total</strong></td>
+          <td class="text-center">{{ totalWithVoterRegistration }}</td>
+          <td class="text-center">{{ total }}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <p style="color: #000;">Atualizado em: {% if (created_at) %}{{ created_at |date('d/m/Y H:i:s') }}{% endif%}</p>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/stats/highcharts.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/stats/highcharts-3d.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+<script type="text/javascript">
+  $(function () {
+
+    var results = {{ jsonContent|json_encode|raw }};
+    var obj = $.parseJSON(results);
+    var categories = [];
+    var totalVR = [];
+    var totalLC = [];
+    var total = [];
+
+    $.each(obj, function( key, value ) {
+      categories.push(value.coredeName);
+      totalVR.push(parseInt(value.totalWithVoterRegistration));
+      totalLC.push(parseInt(value.totalWithLoginCidadao));
+      total.push(parseInt(value.totalVotes));
+    });
+
+    console.log(total);
+
+        $('#chart').highcharts({
+            chart: {
+                type: 'bar',
+                height: 1500
+            },
+            title: {
+                text: 'Total de votos por Corede'
+            },
+            xAxis: {
+                categories: categories,
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Votos',
+                    align: 'high'
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 100,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF'),
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+              name: 'Total de Votos',
+              data: total
+            }, {
+              name: 'Voto com Login Cidadão',
+              data: totalLC
+            },
+            {
+              name: 'Total com título',
+              data: totalVR
+            }]
+        });
+    });
+</script>
 {% endblock %}

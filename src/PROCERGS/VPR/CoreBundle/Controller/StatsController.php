@@ -65,8 +65,15 @@ class StatsController extends Controller
         $entity = reset($results);
         $created_at = $entity->getCreatedAt();
 
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new GetSetMethodNormalizer());
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $jsonContent = $serializer->serialize($results, 'json');
+
         return array(
             'results' => $results,
+            'jsonContent' => $jsonContent,
             'created_at' => $created_at
         );
     }
@@ -126,9 +133,9 @@ class StatsController extends Controller
         $serializer = new Serializer($normalizers, $encoders);
 
         $jsonContent = $serializer->serialize($results, 'json');
-        
+
         $response = new Response($jsonContent);
         $response->headers->add(array('Content-Type'=> 'application/json'));
         return $response;
-    }    
+    }
 }
