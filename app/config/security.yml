@@ -43,7 +43,7 @@ security:
                 success_handler: vpr.logout.handler
 
     access_control:
-        - { path: ^/counting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/counting, role: ROLE_ADMIN }
 
         - { path: ^/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/places, roles: IS_AUTHENTICATED_ANONYMOUSLY }
