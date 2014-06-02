@@ -267,7 +267,9 @@ ul {
 }
 
 .home-icon,
-.logout-icon {
+.logout-icon,
+.stats-icon
+ {
     background-color: #f9f9f9;
     padding: 8px;
     border-radius: 100px;
@@ -277,7 +279,8 @@ ul {
 }
 
 .home-icon:hover,
-.logout-icon:hover {
+.logout-icon:hover,
+.stats-icon:hover {
     background-color: #e9e9e9;
 }
 

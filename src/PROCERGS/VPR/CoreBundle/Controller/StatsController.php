@@ -79,6 +79,15 @@ class StatsController extends Controller
     }
 
     /**
+     * @Route("/stats", name="vpr_stats_main")
+     * @Template()
+     */
+    public function votesMainAction()
+    {
+        return array();
+    }
+
+    /**
      * @Route("/stats/update_total_votes", name="vpr_stats_update_total_votes")
      */
     public function updateTotalVotesAction()
