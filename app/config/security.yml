@@ -55,5 +55,5 @@ security:
         - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }
-        - { path: ^/stats, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/stats, role: ROLE_ADMIN }
         - { path: ^/, role: IS_AUTHENTICATED_FULLY }
