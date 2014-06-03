@@ -36,7 +36,17 @@ class Corede
      * @ORM\OneToMany(targetEntity="City", mappedBy="corede")
      */
     protected $cities;
-
+    
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=7, nullable=true) 
+     */
+    protected $latitude;
+    
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=7, nullable=true)
+     */
+    protected $longitude;
+    
     /**
      * Get id
      *
@@ -69,5 +79,29 @@ class Corede
     {
         return $this->name;
     }
+    
+    public function setLatitude($var)
+    {
+        $this->latitude = $var;
+    
+        return $this;
+    }
+    
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }    
 
+    public function setLongitude($var)
+    {
+        $this->longitude = $var;
+    
+        return $this;
+    }
+    
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+    
 }
