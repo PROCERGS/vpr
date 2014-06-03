@@ -22,7 +22,7 @@ class RegistrationFormType extends BaseType
                 )))
                 ->add('loginCidadaoAcceptRegistration', 'checkbox', array(
                     'required'  => false,
-                    'attr' => array('checked','checked')
+                    'attr' => array('checked' => 'checked')
                 ));
     }
 
