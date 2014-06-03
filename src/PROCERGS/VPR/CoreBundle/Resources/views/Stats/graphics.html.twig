@@ -1,16 +1,27 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
-{% block body %}
-<a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">Voltar</a>
 {% block stylesheets %}
 {{ parent() }}
-    {% stylesheets 'bundles/procergsvprcore/css/graphics/graphics.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+{% stylesheets 'bundles/procergsvprcore/css/graphics/graphics.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
 {% endblock %}
- <div id="graphics">
-    <div class="map-graphic-container"><div id="graphic-map"></div></div>
+
+{% block body %}
+<div class="row" style="margin-top: 20px;">
+  <div class="col-xs-12">
+    <a href="{{ path('vpr_stats_main') }}" class="btn btn-default" title="{{ 'Check stats' | trans }}">Voltar</a>
+  </div>
 </div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div id="graphics">
+      <div class="map-graphic-container"><div id="graphic-map"></div></div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
 
 
@@ -21,8 +32,8 @@
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 <script type="text/javascript">
-var graphics_at_page = {
-  map: [
+  var graphics_at_page = {
+    map: [
     {
       title:    "Estado",
       url:      '{{ path('vpr_stats_graphics_query1') }}',
@@ -37,19 +48,19 @@ var graphics_at_page = {
 
         // configura o detalhe
         var details = '<div class="detail">' +
-          ' <strong>' + pin.name + '</strong>' +
-          ' <p><span>População:</span>' + parseFloat(pin.population).formatMoney(0, ',', '.') + '</p>' +
-          ' <hr>' +
-          ' <p><span>Número de diárias no período:</span>' + parseFloat(pin.quantity).formatMoney(2, ',', '.') + ' </p>' +
-          ' <p><span>Valor gasto com diárias no período:</span> R$ ' + parseFloat(pin.amount).formatMoney(2, ',', '.') + ' </p>' +
-          link_corede +
-          ' <a href="javascript:void(0);" class="close"><span class="close"></span>Fechar</a>' +
-          '</div>';
+        ' <strong>' + pin.name + '</strong>' +
+        ' <p><span>População:</span>' + parseFloat(pin.population).formatMoney(0, ',', '.') + '</p>' +
+        ' <hr>' +
+        ' <p><span>Número de diárias no período:</span>' + parseFloat(pin.quantity).formatMoney(2, ',', '.') + ' </p>' +
+        ' <p><span>Valor gasto com diárias no período:</span> R$ ' + parseFloat(pin.amount).formatMoney(2, ',', '.') + ' </p>' +
+        link_corede +
+        ' <a href="javascript:void(0);" class="close"><span class="close"></span>Fechar</a>' +
+        '</div>';
 
         return details;
       }
     }
-  ]      
-};
+    ]
+  };
 </script>
 {% endblock %}
