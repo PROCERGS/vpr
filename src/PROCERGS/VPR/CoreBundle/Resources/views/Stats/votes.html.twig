@@ -1,7 +1,7 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
-
+<a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">Voltar</a>
 <h1>Resultados parciais</h1>
 
 <p>Total de votos por corede</p>
@@ -111,11 +111,11 @@
             },
             legend: {
                 layout: 'vertical',
-                align: 'left',
+                align: 'top',
                 verticalAlign: 'top',
                 x: 0,
-                y: -10,
-                floating: true,
+                y: 0,
+                floating: false,
                 borderWidth: 1,
                 backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF'),
                 shadow: true
