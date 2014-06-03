@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\HttpFoundation\Response;
+use PROCERGS\VPR\CoreBundle\Helper\Utils;
 
 class StatsController extends Controller
 {
@@ -150,4 +151,58 @@ class StatsController extends Controller
         $response->headers->add(array('Content-Type'=> 'application/json'));
         return $response;
     }
+    
+    /**
+     * @Route("/stats/graphics", name="vpr_stats_graphics")
+     * @Template()
+     */
+    public function graphicsAction()
+    {
+        return array();
+    }
+    
+    /**
+     * @Route("/stats/graphics/query1", name="vpr_stats_graphics_query1")
+     * @Template()
+     */
+    public function query1Action() {
+        $em = $this->getDoctrine()->getManager();
+        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsOptionVote');
+        $items = $statsRepos->query1();
+    
+        $em = $this->getDoctrine()->getManager();
+        
+        $query = $em->createQueryBuilder()
+        ->select('v')
+        ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+        ->orderBy('v.totalVotes','DESC')
+        ->getQuery();
+        
+        $results = $query->getResult();
+        
+        
+        $maxAmount = mt_rand();
+        $maxQuantity = mt_rand();
+    
+        foreach($items as $item) {
+            $item["quantidade"] = mt_rand();
+            $item["pibpercapita"] = mt_rand();
+            $item["valor"] = mt_rand();
+            $obj[] = array(
+                "lastyearmonth" => '',
+                "codibge"       => "",
+                "color"         => Utils::colorByQuantity($item["quantidade"], $maxQuantity),
+                "quantity"      => $item["quantidade"],
+                "pibpercapita"  => $item["pibpercapita"],
+                "population"    => $item["populacao"],
+                "lat"           => $item["latitude"],
+                "long"          => $item["longitude"],
+                "name"          => $item["corede"],
+                "link_corede"   => null,
+                "size"          => Utils::sizeByAmount($item["valor"], $maxAmount),
+                "amount"  => $item["valor"]);
+        }
+        return new JsonResponse($obj);
+    }
+    
 }
