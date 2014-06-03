@@ -99,6 +99,15 @@ class StatsController extends Controller
         $results = $statsRepos->findTotalVotes();
         $created_at = new \DateTime();
 
+        $items = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
+        $map = array();
+        foreach ($items as $item) {
+            $map[$item->getId()] = array(
+                'latitude' => $item->getLatitude(),
+                'longitude' => $item->getLongitude()
+            );
+        }
+        
         foreach($results as $line){
             $entity = $statsRepos->findOneByCoredeId($line['corede_id']);
             if(!$entity){
@@ -113,6 +122,8 @@ class StatsController extends Controller
             $entity->setTotalWithVoterRegistrationAndLoginCidadao($line['total_with_voter_registration_and_login_cidadao']);
             $entity->setTotalVotes($line['total_votes']);
             $entity->setCreatedAt($created_at);
+            $entity->setLatitude($map[$line['corede_id']]['latitude']);
+            $entity->setLongitude($map[$line['corede_id']]['longitude']);
 
             $em->persist($entity);
             $em->flush();
@@ -168,11 +179,6 @@ class StatsController extends Controller
      */
     public function query1Action() {
         $em = $this->getDoctrine()->getManager();
-        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsOptionVote');
-        $items = $statsRepos->query1();
-    
-        $em = $this->getDoctrine()->getManager();
-        
         $query = $em->createQueryBuilder()
         ->select('v')
         ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
@@ -183,34 +189,24 @@ class StatsController extends Controller
         
         $maxQuantity = 0;
         $maxAmount = 0;
-        foreach ($items as $idx => $item) {
-            $items[$idx]['quantity'] = 0;
-            $items[$idx]['quantityReg'] = 0;
-            $items[$idx]['quantityLc'] = 0;
-            foreach ($results as $val) {
-                if ($val->getCoredeId() == $item['codcorede']) {
-                    $items[$idx]['quantity'] = $val->getTotalVotes();
-                    $maxAmount += $val->getTotalVotes();
-                    if ($val->getTotalVotes() > $maxQuantity) {
-                        $maxQuantity = $val->getTotalVotes();
-                    }
-                    $items[$idx]['quantityReg'] = $val->getTotalWithVoterRegistration();
-                    $items[$idx]['quantityLc'] = $val->getTotalWithLoginCidadao();
-                }
+        foreach ($results as $val) {
+            $maxAmount += $val->getTotalVotes();
+            if ($val->getTotalVotes() > $maxQuantity) {
+                $maxQuantity = $val->getTotalVotes();
             }
         }
-        foreach($items as $item) {
+        foreach($results as $val) {
             $obj[] = array(
-                "color"         => Utils::colorByQuantity($item["quantity"], $maxQuantity),
-                "size"          => Utils::sizeByAmount($item["quantity"], $maxAmount),
-                "quantity"      => $item["quantity"],                
-                "population"    => $item["populacao"],
-                "lat"           => $item["latitude"],
-                "long"          => $item["longitude"],
-                "name"          => $item["corede"],
+                "color"         => Utils::colorByQuantity($val->getTotalVotes(), $maxQuantity),
+                "size"          => Utils::sizeByAmount($val->getTotalVotes(), $maxAmount),
+                "quantity"      => $val->getTotalVotes(),                
+                "lat"           => $val->getLatitude(),
+                "long"          => $val->getLongitude(),
+                "name"          => $val->getCoredeName(),
                 "link_corede"   => null,
-                "quantityReg"  => $item["quantityReg"],
-                "quantityLc"  => $item["quantityLc"],
+                "totReg"  => $val->getTotalWithVoterRegistration(),
+                "totLc"  => $val->getTotalWithLoginCidadao(),
+                "totRegLc"  => $val->getTotalWithVoterRegistrationAndLoginCidadao(),
             );
         }
         return new JsonResponse($obj);

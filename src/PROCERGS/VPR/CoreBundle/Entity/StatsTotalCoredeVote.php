@@ -72,6 +72,16 @@ class StatsTotalCoredeVote
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
+    
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=7, nullable=true)
+     */
+    protected $latitude;
+    
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=7, nullable=true)
+     */
+    protected $longitude;    
 
     /**
      * Get id
@@ -265,5 +275,30 @@ class StatsTotalCoredeVote
     {
         return $this->createdAt;
     }
+    
+    public function setLatitude($var)
+    {
+        $this->latitude = $var;
+    
+        return $this;
+    }
+    
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+    
+    public function setLongitude($var)
+    {
+        $this->longitude = $var;
+    
+        return $this;
+    }
+    
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+    
 
 }
