@@ -13,8 +13,9 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
 
         $statement = $connection->prepare('
              SELECT v.ballot_box_id, c.id AS corede_id, c.name AS corede_name, 
-                    COUNT(CASE WHEN v.voter_registration IS NOT NULL THEN 1 ELSE NULL END) AS total_with_voter_registration, 
-                    COUNT(CASE WHEN v.login_cidadao_id IS NOT NULL THEN 1 ELSE NULL END) AS total_with_login_cidadao,
+                    COUNT(CASE WHEN v.voter_registration IS NOT NULL AND v.login_cidadao_id IS NULL THEN 1 ELSE NULL END) AS total_with_voter_registration, 
+                    COUNT(CASE WHEN v.login_cidadao_id IS NOT NULL AND v.voter_registration IS NULL THEN 1 ELSE NULL END) AS total_with_login_cidadao,
+                    COUNT(CASE WHEN v.voter_registration IS NOT NULL AND v.login_cidadao_id IS NOT NULL THEN 1 ELSE NULL END) AS total_with_voter_registration_and_login_cidadao,
                     COUNT(*) AS total_votes
                FROM vote v
          INNER JOIN corede c

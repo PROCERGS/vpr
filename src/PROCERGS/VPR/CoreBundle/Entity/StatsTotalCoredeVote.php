@@ -53,7 +53,13 @@ class StatsTotalCoredeVote
      * @ORM\Column(name="total_with_login_cidadao", type="integer", nullable=true)
      */
     protected $totalWithLoginCidadao;
-    
+
+    /**
+     * @var integer
+     * @ORM\Column(name="total_with_voter_registration_and_login_cidadao", type="integer")
+     */
+    protected $totalWithVoterRegistrationAndLoginCidadao;
+
     /**
      * @var integer
      * @ORM\Column(name="total_votes", type="integer")
@@ -188,6 +194,29 @@ class StatsTotalCoredeVote
     public function setTotalWithLoginCidadao($totalWithLoginCidadao)
     {
         $this->totalWithLoginCidadao = $totalWithLoginCidadao;
+
+        return $this;
+    }
+
+    /**
+     * Get totalWithVoterRegistrationAndLoginCidadao
+     *
+     * @return integer
+     */
+    public function getTotalWithVoterRegistrationAndLoginCidadao()
+    {
+        return $this->totalWithVoterRegistrationAndLoginCidadao;
+    }
+
+    /**
+     * Set totalWithVoterRegistrationAndLoginCidadao
+     *
+     * @param integer $totalWithVoterRegistration
+     * @return StatsTotalCoredeVote
+     */
+    public function setTotalWithVoterRegistrationAndLoginCidadao($totalWithVoterRegistrationAndLoginCidadao)
+    {
+        $this->totalWithVoterRegistrationAndLoginCidadao = $totalWithVoterRegistrationAndLoginCidadao;
 
         return $this;
     }

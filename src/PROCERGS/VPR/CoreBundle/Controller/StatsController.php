@@ -110,6 +110,7 @@ class StatsController extends Controller
             $entity->setCoredeName($line['corede_name']);
             $entity->setTotalWithVoterRegistration($line['total_with_voter_registration']);
             $entity->setTotalWithLoginCidadao($line['total_with_login_cidadao']);
+            $entity->setTotalWithVoterRegistrationAndLoginCidadao($line['total_with_voter_registration_and_login_cidadao']);
             $entity->setTotalVotes($line['total_votes']);
             $entity->setCreatedAt($created_at);
 

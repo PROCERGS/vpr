@@ -1,56 +1,89 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
+
 <a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">Voltar</a>
-<h1>Resultados parciais</h1>
+<h1>Resultados parciais Online</h1>
 
-<p>Total de participações por corede</p>
+<div class="row">
+    <div class="col-md-6">
+        <p>Total de participações por Corede</p>
+    </div>    
+    <div class="col-md-6 text-right">
+        <p style="margin-bottom: 0;">Atualizado em: {% if (created_at) %}{{ created_at |date('d/m/Y H:i:s') }}{% endif%}</p>
+        <p style="color: #CCC;">(Atualizações a cada 15 minutos)</p>
+    </div>    
+</div>    
 
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">Gráfico</a></li>
+                <li><a href="#tab2" data-toggle="tab">Tabela</a></li>
+            </ul>
+            <div class="tab-content" style="padding-top: 25px;">
+                <div class="tab-pane active" id="tab1">
+                    {% if (results) %}
+                        <div id="chart" style="width:100%; height:1500px;"></div>
+                    {% endif %}
+                </div>
+                <div class="tab-pane" id="tab2">
+                    {% if (results) %}
+                        <div class="row" style="color: #000;">
+                            <div class="col-md-12">
+                                <table class="table table-hover table-bordered">
+                                    <thead style="background: #F5F5F5;">
+                                        <tr>
+                                            <th class="text-center"></th>
+                                            <th colspan="4" class="text-center">Participações</th>
+                                        </tr>
+                                        <tr>
+                                            <th width="20%">Corede</th>
+                                            <th width="20%" class="text-center">Título</th>
+                                            <th width="20%" class="text-center">Login Cidadão</th>
+                                            <th width="20%" class="text-center">Título e Login Cidadão</th>
+                                            <th width="20%" class="text-center">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% set total = 0 %}
+                                        {% set totalWithVoterRegistration = 0 %}
+                                        {% set totalWithLoginCidadao = 0 %}
+                                        {% set totalWithVoterRegAndLoginCidadao = 0 %}
 
-{% if (results) %}
-<div id="chart" style="width:100%; height:1500px;"></div>
-
-<div class="row" style="color: #000;margin-top: 50px;">
-  <div class="col-md-12">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th width="30%">Corede</th>
-          <th width="25%" class="text-center">Participações com Título</th>
-          <th width="25%" class="text-center">Participações com Login Cidadão</th>
-          <th width="20%" class="text-center">Total de Participações</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% set total = 0 %}
-        {% set totalWithVoterRegistration = 0 %}
-        {% set totalWithLoginCidadao = 0 %}
-
-        {% for entity in results %}
-        {% set total = total + entity.getTotalVotes %}
-        {% set totalWithVoterRegistration = totalWithVoterRegistration + entity.getTotalWithVoterRegistration %}
-        {% set totalWithLoginCidadao = totalWithLoginCidadao + entity.getTotalWithLoginCidadao %}
-        <tr>
-          <td>{{ entity.getCoredeName }}</td>
-          <td class="text-center">{{ entity.getTotalWithVoterRegistration }}</td>
-          <td class="text-center">{{ entity.getTotalWithLoginCidadao }}</td>
-          <td class="text-center">{{ entity.getTotalVotes }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-      <tfoot>
-        <tr>
-          <td class="text-right"><strong>Total</strong></td>
-          <td class="text-center">{{ totalWithVoterRegistration }}</td>
-          <td class="text-center">{{ totalWithLoginCidadao }}</td>
-          <td class="text-center">{{ total }}</td>
-        </tr>
-      </tfoot>
-    </table>
-    <p style="color: #000;">Atualizado em: {% if (created_at) %}{{ created_at |date('d/m/Y H:i:s') }}{% endif%}</p>
-  </div>
+                                        {% for entity in results %}
+                                            {% set total = total + entity.getTotalVotes %}
+                                            {% set totalWithVoterRegistration = totalWithVoterRegistration + entity.getTotalWithVoterRegistration %}
+                                            {% set totalWithLoginCidadao = totalWithLoginCidadao + entity.getTotalWithLoginCidadao %}
+                                            {% set totalWithVoterRegAndLoginCidadao = totalWithVoterRegAndLoginCidadao + entity.getTotalWithVoterRegistrationAndLoginCidadao %}
+                                            <tr>
+                                                <td>{{ entity.getCoredeName }}</td>
+                                                <td class="text-center">{{ entity.getTotalWithVoterRegistration |number_format(0, ',', '.') }}</td>
+                                                <td class="text-center">{{ entity.getTotalWithLoginCidadao |number_format(0, ',', '.') }}</td>
+                                                <td class="text-center">{{ entity.getTotalWithVoterRegistrationAndLoginCidadao |number_format(0, ',', '.') }}</td>
+                                                <td class="text-center">{{ entity.getTotalVotes |number_format(0, ',', '.') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-right"><strong>Total</strong></td>
+                                            <td class="text-center">{{ totalWithVoterRegistration |number_format(0, ',', '.') }}</td>
+                                            <td class="text-center">{{ totalWithLoginCidadao |number_format(0, ',', '.')}}</td>
+                                            <td class="text-center">{{ totalWithVoterRegAndLoginCidadao |number_format(0, ',', '.') }}</td>
+                                            <td class="text-center">{{ total |number_format(0, ',', '.') }}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-{% endif %}
 
 {% endblock %}
 
@@ -66,24 +99,31 @@
 {% endjavascripts %}
 
 <script type="text/javascript">
-  $(function () {
+    $(function () {
 
-    var results = {{ jsonContent|json_encode|raw }};
-    var obj = $.parseJSON(results);
-    var categories = [];
-    var totalVR = [];
-    var totalLC = [];
-    var total = [];
+        var results = {{ jsonContent|json_encode|raw }};
+        var obj = $.parseJSON(results);
+        var categories = [];
+        var totalVR = [];
+        var totalLC = [];
+        var totalVRLC = [];
+        var total = [];
 
-    $.each(obj, function( key, value ) {
-      categories.push(value.coredeName);
-      totalVR.push(parseInt(value.totalWithVoterRegistration));
-      totalLC.push(parseInt(value.totalWithLoginCidadao));
-      total.push(parseInt(value.totalVotes));
-    });
-
-    console.log(total);
-
+        $.each(obj, function( key, value ) {
+            categories.push(value.coredeName);
+            totalVR.push(parseInt(value.totalWithVoterRegistration));
+            totalLC.push(parseInt(value.totalWithLoginCidadao));
+            totalVRLC.push(parseInt(value.totalWithVoterRegistrationAndLoginCidadao));
+            total.push(parseInt(value.totalVotes));
+        });
+ 
+        Highcharts.setOptions({
+            lang: {
+                decimalPoint: ',',
+                thousandsSep: '.'
+            }
+        });
+            
         $('#chart').highcharts({
             chart: {
                 type: 'bar',
@@ -130,15 +170,17 @@
                 enabled: false
             },
             series: [{
-              name: 'Total de Participações',
-              data: total
+                name: 'Participações com Login Cidadão',
+                data: totalLC
             }, {
-              name: 'Participações com Login Cidadão',
-              data: totalLC
-            },
-            {
-              name: 'Participações com título',
-              data: totalVR
+                name: 'Participações com Título e Login Cidadão',
+                data: totalVRLC
+            }, {
+                name: 'Participações com Título',
+                data: totalVR
+            }, {
+                name: 'Total de Participações',
+                data: total
             }]
         });
     });
