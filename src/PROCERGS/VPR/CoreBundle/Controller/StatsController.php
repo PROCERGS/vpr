@@ -180,27 +180,37 @@ class StatsController extends Controller
         
         $results = $query->getResult();
         
-        
-        $maxAmount = mt_rand();
-        $maxQuantity = mt_rand();
-    
+        $maxQuantity = 0;
+        $maxAmount = 0;
+        foreach ($items as $idx => $item) {
+            $items[$idx]['quantity'] = 0;
+            $items[$idx]['quantityReg'] = 0;
+            $items[$idx]['quantityLc'] = 0;
+            foreach ($results as $val) {
+                if ($val->getCoredeId() == $item['codcorede']) {
+                    $items[$idx]['quantity'] = $val->getTotalVotes();
+                    $maxAmount += $val->getTotalVotes();
+                    if ($val->getTotalVotes() > $maxQuantity) {
+                        $maxQuantity = $val->getTotalVotes();
+                    }
+                    $items[$idx]['quantityReg'] = $val->getTotalWithVoterRegistration();
+                    $items[$idx]['quantityLc'] = $val->getTotalWithLoginCidadao();
+                }
+            }
+        }
         foreach($items as $item) {
-            $item["quantidade"] = mt_rand();
-            $item["pibpercapita"] = mt_rand();
-            $item["valor"] = mt_rand();
             $obj[] = array(
-                "lastyearmonth" => '',
-                "codibge"       => "",
-                "color"         => Utils::colorByQuantity($item["quantidade"], $maxQuantity),
-                "quantity"      => $item["quantidade"],
-                "pibpercapita"  => $item["pibpercapita"],
+                "color"         => Utils::colorByQuantity($item["quantity"], $maxQuantity),
+                "size"          => Utils::sizeByAmount($item["quantity"], $maxAmount),
+                "quantity"      => $item["quantity"],                
                 "population"    => $item["populacao"],
                 "lat"           => $item["latitude"],
                 "long"          => $item["longitude"],
                 "name"          => $item["corede"],
                 "link_corede"   => null,
-                "size"          => Utils::sizeByAmount($item["valor"], $maxAmount),
-                "amount"  => $item["valor"]);
+                "quantityReg"  => $item["quantityReg"],
+                "quantityLc"  => $item["quantityLc"],
+            );
         }
         return new JsonResponse($obj);
     }

@@ -23,10 +23,10 @@ class StatsOptionVoteRepository extends EntityRepository
     } 
     
     public function query1(){
-        $municipiosQuery =  "SELECT m.latitude, m.longitude, m.corede, (SELECT SUM(mu.populacao) FROM PROCERGSVPRCoreBundle:Municipality mu WHERE mu.corede = m.corede) as populacao";
+        $municipiosQuery =  "SELECT m.latitude, m.longitude, m.codcorede, m.corede, (SELECT SUM(mu.populacao) FROM PROCERGSVPRCoreBundle:Municipality mu WHERE mu.corede = m.corede) as populacao";
         $municipiosQuery .= " FROM PROCERGSVPRCoreBundle:Municipality m";
         $municipiosQuery .= " WHERE m.populacao in (SELECT MAX(im.populacao) FROM PROCERGSVPRCoreBundle:Municipality im GROUP BY im.corede)";
-        $municipiosQuery .= " GROUP BY m.latitude, m.longitude, m.corede";
+        $municipiosQuery .= " GROUP BY m.latitude, m.longitude, m.codcorede, m.corede";
         $municipios = $this->getEntityManager()->createQuery($municipiosQuery)->getResult();
         return $municipios;
     }    

@@ -41,19 +41,12 @@
       location: "#graphic-map",
       loader:   true,
       detailsCallback: function(pin) {
-        var link_corede = "";
-        if(pin.link_corede != undefined){
-          link_corede = '<a href="' + pin.link_corede + '" class="view"><span class="show-more"></span>Veja cidades do corede</a>';
-        }
-
-        // configura o detalhe
         var details = '<div class="detail">' +
         ' <strong>' + pin.name + '</strong>' +
-        ' <p><span>População:</span>' + parseFloat(pin.population).formatMoney(0, ',', '.') + '</p>' +
+        ' <p><span>Participações com Título:</span>' + parseFloat(pin.quantityReg).format(0, '', '.') + '</p>' +
         ' <hr>' +
-        ' <p><span>Número de diárias no período:</span>' + parseFloat(pin.quantity).formatMoney(2, ',', '.') + ' </p>' +
-        ' <p><span>Valor gasto com diárias no período:</span> R$ ' + parseFloat(pin.amount).formatMoney(2, ',', '.') + ' </p>' +
-        link_corede +
+        ' <p><span>Participações com Login Cidadão:</span>' + parseFloat(pin.quantityLc).format(0, '', '.') + ' </p>' +
+        ' <p><span>Total de Participações:</span>' + parseFloat(pin.quantity).format(0, '', '.') + ' </p>' +
         ' <a href="javascript:void(0);" class="close"><span class="close"></span>Fechar</a>' +
         '</div>';
 
