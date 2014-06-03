@@ -117,7 +117,10 @@ class StatsController extends Controller
         }
 
         $response = new JsonResponse();
-        $response->setData(array('success'=>true));
+        $response->setData(array(
+            'success' => true,
+            'created_at' => $created_at
+        ));
 
         return $response;
     }
