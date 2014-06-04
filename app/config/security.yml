@@ -56,6 +56,6 @@ security:
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }
         - { path: ^/stats/update_total_option_votes$, role: ROLE_ADMIN }
-        - { path: ^/stats/option_vote_by_corede$, role: ROLE_ADMIN }
-        - { path: ^/stats, role: ROLE_ADMIN }
+        - { path: ^/reports, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/stats, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_FULLY }

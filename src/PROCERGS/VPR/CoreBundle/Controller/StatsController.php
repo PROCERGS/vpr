@@ -20,7 +20,7 @@ class StatsController extends Controller
 {
 
     /**
-     * @Route("/stats/option/votes", name="vpr_option_vote_by_corede")
+     * @Route("/reports/option/votes", name="vpr_option_vote_by_corede")
      * @Template()
      */
     public function optionVotesAction(Request $request)
