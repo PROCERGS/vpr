@@ -22,7 +22,7 @@ class StatsController extends Controller
 
     const CACHE_KEY_LAST_UPDATED = 'vpr_stats_last_updated';
     const CACHE_UPDATE_LOCK = 'vpr_stats_last_updated_running';
-    const CACHE_TIME_MINUTES = 1;
+    const CACHE_TIME_MINUTES = 15;
 
     /**
      * @Route("/reports/corede/{coredeId}", name="vpr_report_voted_options_by_corede")
