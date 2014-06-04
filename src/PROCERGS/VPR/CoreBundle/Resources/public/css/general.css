@@ -586,3 +586,17 @@ input::-webkit-inner-spin-button {
   width: 42px;
   text-indent: -9999px;
 }
+
+.results {
+  color: #000;
+}
+
+.results .table-striped>tbody>tr:nth-child(odd)>td,
+.results .table-striped>tbody>tr:nth-child(odd)>th {
+  background-color: #f9f9f9;
+}
+
+.results .table-striped thead {
+  background-color: #FFF;
+  color: #000;
+}
