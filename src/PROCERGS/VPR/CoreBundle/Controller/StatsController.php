@@ -30,39 +30,45 @@ class StatsController extends Controller
      */
     public function reportOptionsCoredeAction($coredeId)
     {
-        $em = $this->getDoctrine()->getManager();
-        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
-        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
-
         $form = $this->getCityForm();
+        $params = array(
+            'form' => $form->createView(),
+            'cities' => $this->getCities(),
+            'updateCache' => $this->shouldUpdateCache()
+        );
+        if ($coredeId != 2) {
+            $em = $this->getDoctrine()->getManager();
+            $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
+            $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
 
-        $results = array();
-        $created_at = null;
-        $poll = $pollRepo->findLastPoll();
+            $results = array();
+            $created_at = null;
+            $poll = $pollRepo->findLastPoll();
 
-        $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($coredeId);
+            $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($coredeId);
 
-        $steps = $poll->getSteps();
-        foreach ($steps as $step) {
-            $data = $statsRepo->findPercentOptionVoteByCoredeAndStep($coredeId,
-                    $step->getId());
-            $results[$step->getName()] = $data;
+            $steps = $poll->getSteps();
+            foreach ($steps as $step) {
+                $data = $statsRepo->findPercentOptionVoteByCoredeAndStep($coredeId,
+                        $step->getId());
+                $results[$step->getName()] = $data;
 
-            if (empty($created_at)) {
-                $data = reset($data);
-                $created_at = $data['created_at'];
+                if (empty($created_at)) {
+                    $data = reset($data);
+                    $created_at = $data['created_at'];
+                }
             }
+
+            $params['created_at'] = $created_at;
+            $params['results'] = $results;
+            $params['statsCorede'] = $statsCorede;
+        } else {
+            $message = 'Devido a uma liminar, não é possível acessar as informações desse COREDE.';
+            $params['error'] = $message;
         }
 
         return $this->render('PROCERGSVPRCoreBundle:Stats:optionVotes.html.twig',
-                        array(
-                    'form' => $form->createView(),
-                    'created_at' => $created_at,
-                    'results' => $results,
-                    'statsCorede' => $statsCorede,
-                    'cities' => $this->getCities(),
-                    'updateCache' => $this->shouldUpdateCache()
-        ));
+                        $params);
     }
 
     /**
@@ -94,7 +100,7 @@ class StatsController extends Controller
         $cities = $this->getCities();
         $updateCache = $this->shouldUpdateCache();
 
-        return compact('form', 'options', 'cities', 'categoriesId', 'corede', 'updateCache');
+        return compact('form', 'cities', 'updateCache');
     }
 
     /**

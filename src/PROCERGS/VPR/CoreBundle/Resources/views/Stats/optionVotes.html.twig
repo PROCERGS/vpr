@@ -63,6 +63,12 @@
 {% endfor %}
 </div>
 {% endif %}
+{% if error is defined %}
+<div class="alert alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{ error }}
+</div>
+{% endif %}
 
 {% if statsCorede.totalVotes is defined %}
 <div class="row" style="padding-top:20px;">
