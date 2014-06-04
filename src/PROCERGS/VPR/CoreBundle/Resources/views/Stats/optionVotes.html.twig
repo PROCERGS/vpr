@@ -5,13 +5,13 @@
     <div class="row" style="margin-top: 20px;">
       <div class="col-xs-12">
         <a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">{{ 'Back'|trans }}</a>
-        <h1>{{ "Total of poll's options by COREDE"|trans }}</h1>
+        <h1>{{ "Partial results of the online vote"|trans }}</h1>
       </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
-            <p>{{ 'Total votes by COREDE'|trans }}</p>
+            <p>{{ "Percent of poll options by COREDE"|trans }}</p>
         </div>    
         <div class="col-md-6 text-right">
             {% if (created_at is defined) %}

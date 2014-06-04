@@ -188,7 +188,7 @@ class StatsController extends Controller
         $response = new JsonResponse();
         $response->setData(array(
             'success' => true,
-            'action' => 'update_corede_total_votes',
+            'action' => 'update_option_total_votes',
             'created_at' => $created_at
         ));
 
