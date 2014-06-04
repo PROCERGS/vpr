@@ -16,7 +16,7 @@
             </tr>
         </thead>
         <tbody>
-            {% if(entities.items) %}
+            {% if(entities is defined) %}
                 {% for entity in entities %}
                     <tr data-id="{{entity.id}}">
                         <td class="text-center">
