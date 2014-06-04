@@ -1,0 +1,8 @@
+.twitter-typeahead {
+    width: auto;
+}
+
+form label.city-label {
+    margin-bottom: -5px !important;
+    vertical-align: middle;
+}

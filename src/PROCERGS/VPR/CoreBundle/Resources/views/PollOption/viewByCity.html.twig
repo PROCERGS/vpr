@@ -3,70 +3,70 @@
 {% block body %}
 
 <div class="row">
-  <div class="col-md-12 text-center">
-    <h2 class="main-title search-title">
-      <span class="glyphicon glyphicon-list-alt"></span>
-      <span>{% trans %}Ballot Search{% endtrans %}</span>
-    </h2>
-  </div>
+    <div class="col-md-12 text-center">
+        <h2 class="main-title search-title">
+            <span class="glyphicon glyphicon-list-alt"></span>
+            <span>{% trans %}Ballot Search{% endtrans %}</span>
+        </h2>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12 text-center">
-    <p>{% trans %}Type a city to check the ballot for your region.{% endtrans %}</p>
+    <div class="col-md-12 text-center">
+        <p>{% trans %}Type a city to check the ballot for your region.{% endtrans %}</p>
     {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
-    <div class="form-group">
+        <div class="form-group">
       {{ form_label(form.city) }}
-    </div>
-    <div class="form-group">
+        </div>
+        <div class="form-group">
       {{ form_errors(form.city) }}
       {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
-    </div>
-    <div class="form-group">
+        </div>
+        <div class="form-group">
       {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search' | trans}) }}
-    </div>
+        </div>
     {{ form_end(form) }}
-  </div>
+    </div>
 </div>
 
 <div class="row">
-  <div class="col-md-12">
+    <div class="col-md-12">
     {% if options %}
-      <div class="ballot ballot-search ac-custom">
-        <dl class="steps">
+        <div class="ballot ballot-search ac-custom">
+            <dl class="steps">
           {% for currStep,categories in options %}
-          <dt class="step-title">{{ currStep }} - {{ corede.name }}</dt>
-          <dd>
-            <dl>
+                <dt class="step-title">{{ currStep }} - {{ corede.name }}</dt>
+                <dd>
+                    <dl>
               {% for category,pollOptions in categories %}
-              <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">
-                <span class="icon"><i class="img"></i></span>
-                <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
-              </dt>
+                        <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">
+                        <span class="icon"><i class="img"></i></span>
+                        <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
+                        </dt>
               {% for option in pollOptions %}
-              <dd class="option">
-                <div class="content ctg-{{ attribute(categoriesId, category) }}">
-                  <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
-                  <label for="option_{{ option.id }}">{{ option.getCategorySorting}} - {{ option.title |trans }}
+                        <dd class="option">
+                            <div class="content ctg-{{ attribute(categoriesId, category) }}">
+                                <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
+                                <label for="option_{{ option.id }}">{{ option.getCategorySorting}} - {{ option.title |trans }}
                     {% if option.cost is not null and option.cost > 0 %}
-                    - {{ 'Cost: R$'|trans }} {{ option.cost|number_format(2, ',', '.') }}
+                                    - {{ 'Cost: R$'|trans }} {{ option.cost|number_format(2, ',', '.') }}
                     {% endif %}
-                  </label>
+                                </label>
                   {% if option.description %}<span class="desc-toggle" title="{{ 'Description' | trans }}"></span>{% endif %}
-                </div>
+                            </div>
                 {% if option.description %}<div class="desc">{{ option.description }}</div>{% endif %}
-              </dd>
+                        </dd>
               {% endfor %}
               {% endfor %}
-            </dl>
-          </dd>
+                    </dl>
+                </dd>
           {% endfor %}
-        </dl>
-      </div>
+            </dl>
+        </div>
 
 
     {% endif %}
-  </div>
+    </div>
 </div>
 
 {% endblock %}
@@ -87,15 +87,14 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-  var citiesList = {{ cities | raw }};
+    var citiesList = {{ cities | raw }};
 
-  $(".ballot .desc-toggle").on("click", function() {
-    $(this).closest(".option").children(".desc").slideToggle();
-    $(this).toggleClass("less");
-  });
+    $(".ballot .desc-toggle").on("click", function() {
+        $(this).closest(".option").children(".desc").slideToggle();
+        $(this).toggleClass("less");
+    });
 </script>
-{% javascripts
-  '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
-  <script type="text/javascript" src="{{ asset_url }}"></script>
-  {% endjavascripts %}
-  {% endblock %}
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}

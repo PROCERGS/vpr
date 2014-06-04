@@ -1,77 +1,91 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
-
-    <div class="row" style="margin-top: 20px;">
-      <div class="col-xs-12">
-        <a href="javascript:void()" onclick="history.back()" title="{{ 'Check stats' | trans }}">{{ 'Back'|trans }}</a>
-        <h1>{{ "Partial results of the online vote"|trans }}</h1>
-      </div>
+<div class="row" style="margin-top: 20px;">
+    <div class="col-xs-12">
+        <h1>{% trans %}Partial Results for the Online Voting{% endtrans %}</h1>
+        {% if statsCorede is defined %}
+        <h2>COREDE {{ statsCorede.coredeName }}</h2>
+        {% endif %}
     </div>
+</div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <p>{{ "Percent of poll options by COREDE"|trans }}</p>
-        </div>    
-        <div class="col-md-6 text-right">
-            {% if (created_at is defined) %}
-                <p style="margin-bottom: 0;">{{ 'Updated on:'|trans }} {{ created_at |date('d/m/Y H:i:s') }}</p>
-            {% endif%}
-            <p style="color: #CCC;">({{ 'Updates every 15 minutes'|trans }})</p>
+<div class="row">
+    <div class="col-md-6">
+        <p>{{ "Percent of poll options by COREDE"|trans }}</p>
+    </div>
+    <div class="col-md-6 text-right">
+    {% if (created_at is defined) %}
+        <p style="margin-bottom: 0;">{{ 'Updated on:'|trans }} {{ created_at |date('d/m/Y H:i:s') }}</p>
+    {% endif%}
+        <p style="color: #CCC;">({{ 'Updates every 15 minutes'|trans }})</p>
+    </div>
+</div>
+
+<div class="jumbotron" style="padding: 0;">
+    {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
+        <div class="form-group">
+            {{ form_label(form.city, 'admin.city'|trans, {'label_attr': {'class': 'city-label'} }) }}
+            {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
         </div>
-    </div>
+        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'admin.filter' | trans}) }}
+    {{ form_end(form) }}
+</div>
 
-    <div class="jumbotron" style="padding: 0;">
-        {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
-            <div class="form-group hide">
-                <label>{{ 'admin.poll'|trans }}</label>
-                {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                <label>{{ 'admin.corede'|trans }}</label>
-                {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-        {{ form_end(form) }}
+{% if results is defined %}
+<div class="row" style="color:black">
+{% for step,options in results %}
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2" style="background-color: #F5F5F5;">{{ step }}</th>
+                </tr>
+                <tr>
+                    <th width="10%">Percentual</th>
+                    <th width="80%">Opção</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if (options) %}
+                {% for line in options %}
+                <tr>
+                    <td class="text-center">{{ '%.2f'|format(line['percent']) }}%</td>
+                    <td>{{line['option_number']}} - {{ line['option_title'] }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="2">Nenhum voto encontrado para o corede selecionado</tr></td>
+            {% endif %}
+            </tbody>
+        </table>
     </div>
- 
-    {% if (results) %}
-        <div class="row" style="color:black">
-            {% for step,options in results %}
-                <div class="col-md-12">
-                    <table class="table table-hover table-bordered">
-                        <thead>
-                            <tr>
-                                <th colspan="2" style="background-color: #F5F5F5;">{{ step }}</th>
-                            </tr>
-                            <tr>
-                                <th width="10%">Percentual</th>
-                                <th width="80%">Opção</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if (options) %}
-                                {% for line in options %}
-                                    <tr>
-                                        <td class="text-center">{{ '%.2f'|format(line['percent']) }}%</td>
-                                        <td>{{line['option_number']}} - {{ line['option_title'] }}</td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr><td colspan="2">Nenhum voto encontrado para o corede selecionado</tr></td>
-                            {% endif %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-        </div>    
-    {% endif %}
+{% endfor %}
+</div>
+{% endif %}
 
-    {% if statsCorede.totalVotes is defined %}
-        <div class="row" style="padding-top:20px;">
-            <div class="col-md-6">
-                <p><strong>Total de votantes no Corede: </strong>{{ statsCorede.totalVotes |number_format(0, ',', '.') }}</p>
-            </div>
-        </div>
-    {% endif %}
- {% endblock %}
+{% if statsCorede.totalVotes is defined %}
+<div class="row" style="padding-top:20px;">
+    <div class="col-md-6">
+        <p><strong>Total de votantes no Corede: </strong>{{ statsCorede.totalVotes |number_format(0, ',', '.') }}</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergsvprcore/css/reports/citySelector.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    var citiesList = {{ cities | raw }};
+</script>
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}

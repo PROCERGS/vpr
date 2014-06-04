@@ -15,50 +15,79 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\VPR\CoreBundle\Helper\Utils;
+use JMS\Serializer\SerializationContext;
 
 class StatsController extends Controller
 {
 
     /**
-     * @Route("/reports/option/votes", name="vpr_option_vote_by_corede")
+     * @Route("/reports/corede/{coredeId}", name="vpr_report_voted_options_by_corede")
+     * @Template()
+     */
+    public function reportOptionsCoredeAction($coredeId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+
+        $form = $this->getCityForm();
+
+        $results = array();
+        $created_at = null;
+        $poll = $pollRepo->findLastPoll();
+
+        $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($coredeId);
+
+        $steps = $poll->getSteps();
+        foreach ($steps as $step) {
+            $data = $statsRepo->findPercentOptionVoteByCoredeAndStep($coredeId,
+                    $step->getId());
+            $results[$step->getName()] = $data;
+
+            if (empty($created_at)) {
+                $data = reset($data);
+                $created_at = $data['created_at'];
+            }
+        }
+
+        return $this->render('PROCERGSVPRCoreBundle:Stats:optionVotes.html.twig', array(
+            'form' => $form->createView(),
+            'created_at' => $created_at,
+            'results' => $results,
+            'statsCorede' => $statsCorede,
+            'cities' => $this->getCities()
+        ));
+    }
+
+    /**
+     * @Route("/reports/corede", name="vpr_option_vote_by_corede")
      * @Template()
      */
     public function optionVotesAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
+        $form = $this->getCityForm();
 
-        $form = $this->createForm(new PollOptionFilterType());
-        
-        $results = array();
-        $created_at = null;
-        $statsCorede = null;
-        if ($request->isMethod('POST')) {
-            $form->bind($request);
+        $form->handleRequest($request);
 
-            $poll = $form->get('poll')->getData();
-            $corede = $form->get('corede')->getData();
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $data = $form->getData();
 
-            $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($corede->getId());
+            $name = trim($data['city']);
+            $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+            $city = $cityRepo->findOneByName($name);
 
-            $steps = $poll->getSteps();
-            foreach($steps as $step){
-                $data = $statsRepos->findPercentOptionVoteByCoredeAndStep($corede->getId(),$step->getId());
-                $results[$step->getName()] = $data;
-
-                if(empty($created_at)){
-                    $data = reset($data);
-                    $created_at = $data['created_at'];
-                }
+            if (strlen($name) > 0) {
+                $url = $this->generateUrl('vpr_report_voted_options_by_corede',
+                        array('coredeId' => $city->getCorede()->getId()));
+                return $this->redirect($url);
             }
         }
 
-        return array(
-            'form' => $form->createView(),
-            'created_at' => $created_at,
-            'results' => $results,
-            'statsCorede' => $statsCorede
-        );
+        $form = $form->createView();
+        $cities = $this->getCities();
+
+        return compact('form', 'options', 'cities', 'categoriesId', 'corede');
     }
 
     /**
@@ -70,10 +99,10 @@ class StatsController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
-            ->select('v')
-            ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
-            ->orderBy('v.totalVotes','DESC')
-            ->getQuery();
+                ->select('v')
+                ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+                ->orderBy('v.totalVotes', 'DESC')
+                ->getQuery();
 
         $results = $query->getResult();
         $entity = reset($results);
@@ -92,6 +121,26 @@ class StatsController extends Controller
         );
     }
 
+    private function getCityForm()
+    {
+        return $this->createFormBuilder()->add('city', 'text',
+                        array(
+                    'required' => true,
+                    'label' => 'form.city.select'
+                ))->add('submit', 'submit')->getForm();
+    }
+
+    private function getCities()
+    {
+        $serializer = $this->container->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+        return $serializer->serialize($cityRepo->findAll(), 'json',
+                        SerializationContext::create()->setSerializeNull(true)->setGroups(array(
+                            'autocomplete'
+        )));
+    }
+
     /**
      * @Route("/stats", name="vpr_stats_main")
      * @Template()
@@ -107,9 +156,9 @@ class StatsController extends Controller
     public function updateTotalVotesAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
 
-        $results = $statsRepos->findTotalVotes();
+        $results = $statsRepo->findTotalVotes();
         $created_at = new \DateTime();
 
         $items = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
@@ -120,10 +169,10 @@ class StatsController extends Controller
                 'longitude' => $item->getLongitude()
             );
         }
-        
-        foreach($results as $line){
-            $entity = $statsRepos->findOneByCoredeId($line['corede_id']);
-            if(!$entity){
+
+        foreach ($results as $line) {
+            $entity = $statsRepo->findOneByCoredeId($line['corede_id']);
+            if (!$entity) {
                 $entity = new StatsTotalCoredeVote();
             }
 
@@ -158,17 +207,17 @@ class StatsController extends Controller
     public function updateTotalOptionVotesAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
 
         $created_at = new \DateTime();
 
         $coredes = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
-        foreach($coredes as $corede){
-            $results = $statsRepos->findTotalOptionVoteByCorede($corede);
+        foreach ($coredes as $corede) {
+            $results = $statsRepo->findTotalOptionVoteByCorede($corede);
 
-            foreach($results as $line){
-                $entity = $statsRepos->findOneBy(array('coredeId'=> $line['coredeId'],'optionId'=> $line['optionId']));
-                if(!$entity){
+            foreach ($results as $line) {
+                $entity = $statsRepo->findOneBy(array('coredeId' => $line['coredeId'], 'optionId' => $line['optionId']));
+                if (!$entity) {
                     $entity = new StatsTotalOptionVote();
                 }
 
@@ -203,10 +252,10 @@ class StatsController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
-            ->select('v')
-            ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
-            ->orderBy('v.totalVotes','DESC')
-            ->getQuery();
+                ->select('v')
+                ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+                ->orderBy('v.totalVotes', 'DESC')
+                ->getQuery();
 
         $results = $query->getResult();
 
@@ -217,10 +266,10 @@ class StatsController extends Controller
         $jsonContent = $serializer->serialize($results, 'json');
 
         $response = new Response($jsonContent);
-        $response->headers->add(array('Content-Type'=> 'application/json'));
+        $response->headers->add(array('Content-Type' => 'application/json'));
         return $response;
     }
-    
+
     /**
      * @Route("/stats/graphics", name="vpr_stats_graphics")
      * @Template()
@@ -229,31 +278,32 @@ class StatsController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->createQueryBuilder()
-        ->select('v')
-        ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
-        ->orderBy('v.totalVotes','DESC')
-        ->setMaxResults(1)->getQuery()->getOneOrNullResult();
+                        ->select('v')
+                        ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+                        ->orderBy('v.totalVotes', 'DESC')
+                        ->setMaxResults(1)->getQuery()->getOneOrNullResult();
         $response = array();
         if ($entity) {
             $response['created_at'] = $entity->getCreatedAt();
         }
         return $response;
     }
-    
+
     /**
      * @Route("/stats/graphics/query1", name="vpr_stats_graphics_query1")
      * @Template()
      */
-    public function query1Action() {
+    public function query1Action()
+    {
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder()
-        ->select('v')
-        ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
-        ->orderBy('v.totalVotes','DESC')
-        ->getQuery();
-        
+                ->select('v')
+                ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+                ->orderBy('v.totalVotes', 'DESC')
+                ->getQuery();
+
         $results = $query->getResult();
-        
+
         $maxQuantity = 0;
         $maxAmount = 0;
         foreach ($results as $val) {
@@ -262,21 +312,22 @@ class StatsController extends Controller
                 $maxQuantity = $val->getTotalVotes();
             }
         }
-        foreach($results as $val) {
+        foreach ($results as $val) {
             $obj[] = array(
-                "color"         => Utils::colorByQuantity($val->getTotalVotes(), $maxQuantity),
-                "size"          => Utils::sizeByAmount($val->getTotalVotes(), $maxAmount),
-                "quantity"      => $val->getTotalVotes(),                
-                "lat"           => $val->getLatitude(),
-                "long"          => $val->getLongitude(),
-                "name"          => $val->getCoredeName(),
-                "link_corede"   => null,
-                "totReg"  => $val->getTotalWithVoterRegistration(),
-                "totLc"  => $val->getTotalWithLoginCidadao(),
-                "totRegLc"  => $val->getTotalWithVoterRegistrationAndLoginCidadao(),
+                "color" => Utils::colorByQuantity($val->getTotalVotes(),
+                        $maxQuantity),
+                "size" => Utils::sizeByAmount($val->getTotalVotes(), $maxAmount),
+                "quantity" => $val->getTotalVotes(),
+                "lat" => $val->getLatitude(),
+                "long" => $val->getLongitude(),
+                "name" => $val->getCoredeName(),
+                "link_corede" => null,
+                "totReg" => $val->getTotalWithVoterRegistration(),
+                "totLc" => $val->getTotalWithLoginCidadao(),
+                "totRegLc" => $val->getTotalWithVoterRegistrationAndLoginCidadao(),
             );
         }
         return new JsonResponse($obj);
     }
-    
+
 }
