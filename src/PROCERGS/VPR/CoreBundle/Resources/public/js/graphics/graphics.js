@@ -235,9 +235,9 @@ var graphics =
             var _this = $( this );
 
             if ( _this.hasClass( 'plus' ) ) {
-            	graphics.map.graphic.setZoom( graphics.map.graphic.getZoom() - 1 );
+              graphics.map.graphic.setZoom( graphics.map.graphic.getZoom() + 1 );
             } else if ( _this.hasClass( 'minus' ) ) {
-            	graphics.map.graphic.setZoom( graphics.map.graphic.getZoom() + 1 );
+              graphics.map.graphic.setZoom( graphics.map.graphic.getZoom() - 1 );
             }
             return false;
           }
@@ -341,22 +341,22 @@ function closeMoreSection() {
   return false;
 }
 function formatShortNumericValue(value) {
-	  if(value > 1000000000000)     return Math.round(value/1000000000000) + ' Tri';
-	  else if(value >= 1000000000)  return Math.round(value/1000000000) + ' Bi';
-	  else if(value >= 1000000)     return Math.round(value/1000000) + ' Mi';
-	  else if(value >= 1000)        return Math.round(value/1000) + ' mil';
-	  else return Math.round(value);
-	}
+    if(value > 1000000000000)     return Math.round(value/1000000000000) + ' Tri';
+    else if(value >= 1000000000)  return Math.round(value/1000000000) + ' Bi';
+    else if(value >= 1000000)     return Math.round(value/1000000) + ' Mi';
+    else if(value >= 1000)        return Math.round(value/1000) + ' mil';
+    else return Math.round(value);
+  }
 Number.prototype.format = function(c, d, t){
-	var n = this, 
-	    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-	    d = d == undefined ? "." : d, 
-	    t = t == undefined ? "," : t, 
-	    s = n < 0 ? "-" : "", 
-	    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
-	    j = (j = i.length) > 3 ? j % 3 : 0;
-	   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-	 };
+  var n = this,
+      c = isNaN(c = Math.abs(c)) ? 2 : c,
+      d = d == undefined ? "." : d,
+      t = t == undefined ? "," : t,
+      s = n < 0 ? "-" : "",
+      i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+      j = (j = i.length) > 3 ? j % 3 : 0;
+     return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+   };
 
 $( document ).ready
 (
