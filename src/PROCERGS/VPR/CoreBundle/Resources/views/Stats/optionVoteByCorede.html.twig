@@ -33,18 +33,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                           {% if (step) %}
-                               {% set total = 0 %}
-                               {% for option in step %}
-                                   {% set total = total + option['value'] %}
-                                   <tr>
-                                       <td class="text-center">{{ '%.0f'|format(option['value']) }}</td>
-                                       <td>{{option['number']}} - {{ option['title'] }}</td>
-                                   </tr>
-                               {% endfor %}
-                           {% else %}
-                               <tr><td colspan="2">Nenhum voto encontrado para o corede selecionado</tr></td>
-                           {% endif %}                                
+                            {% set total = 0 %}
+                            {% if (step) %}
+                                {% for option in step %}
+                                    {% set total = total + option['value'] %}
+                                    <tr>
+                                        <td class="text-center">{{ '%.0f'|format(option['value']) }}</td>
+                                        <td>{{option['number']}} - {{ option['title'] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="2">Nenhum voto encontrado para o corede selecionado</tr></td>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

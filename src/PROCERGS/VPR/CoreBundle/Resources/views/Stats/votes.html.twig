@@ -3,7 +3,7 @@
 {% block body %}
 
 <a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">Voltar</a>
-<h1>Resultados parciais Online</h1>
+<h1>Resultados parciais Votação Online</h1>
 
 <div class="row">
     <div class="col-md-6">
@@ -12,8 +12,8 @@
     <div class="col-md-6 text-right">
         <p style="margin-bottom: 0;">Atualizado em: {% if (created_at) %}{{ created_at |date('d/m/Y H:i:s') }}{% endif%}</p>
         <p style="color: #CCC;">(Atualizações a cada 15 minutos)</p>
-    </div>    
-</div>    
+    </div>
+</div>
 
 <div class="row">
     <div class="col-md-12">

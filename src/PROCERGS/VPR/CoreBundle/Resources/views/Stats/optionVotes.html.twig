@@ -1,0 +1,72 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">Voltar</a>
+    <h1>Resultados parciais da Votação Online</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p>Demandas escolhidas por Corede</p>
+        </div>    
+        <div class="col-md-6 text-right">
+            {% if (created_at) %}
+                <p style="margin-bottom: 0;">Atualizado em: {{ created_at |date('d/m/Y H:i:s') }}</p>
+                <p style="color: #CCC;">(Atualizações a cada 15 minutos)</p>
+            {% endif %}                
+        </div>    
+    </div>
+
+    <div class="jumbotron" style="padding: 0;">
+        {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
+            <div class="form-group hide">
+                <label>{{ 'admin.poll'|trans }}</label>
+                {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <div class="form-group">
+                <label>{{ 'admin.corede'|trans }}</label>
+                {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
+            </div>
+            <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+ 
+    {% if (results) %}
+        <div class="row" style="color:black">
+            {% for step,options in results %}
+                <div class="col-md-12">
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="2" style="background-color: #F5F5F5;">{{ step }}</th>
+                            </tr>
+                            <tr>
+                                <th width="10%">Percentual</th>
+                                <th width="80%">Opção</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if (options) %}
+                                {% for line in options %}
+                                    <tr>
+                                        <td class="text-center">{{ '%.2f'|format(line['percent']) }}%</td>
+                                        <td>{{line['option_number']}} - {{ line['option_title'] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr><td colspan="2">Nenhum voto encontrado para o corede selecionado</tr></td>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>    
+    {% endif %}
+
+    {% if statsCorede.totalVotes is defined %}
+        <div class="row" style="padding-top:20px;">
+            <div class="col-md-6">
+                <p><strong>Total de votantes no Corede: </strong>{{ statsCorede.totalVotes |number_format(0, ',', '.') }}</p>
+            </div>
+        </div>
+    {% endif %}
+ {% endblock %}

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
 use PROCERGS\VPR\CoreBundle\Entity\StatsTotalCoredeVote;
+use PROCERGS\VPR\CoreBundle\Entity\StatsTotalOptionVote;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -45,6 +46,48 @@ class StatsController extends Controller
         return array(
             'form' => $form->createView(),
             'results' => $results
+        );
+    }
+    
+    /**
+     * @Route("/stats/option/votes", name="vpr_option_vote_by_corede")
+     * @Template()
+     */
+    public function optionVotesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
+
+        $form = $this->createForm(new PollOptionFilterType());
+        
+        $results = array();
+        $created_at = null;
+        $statsCorede = null;
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
+
+            $poll = $form->get('poll')->getData();
+            $corede = $form->get('corede')->getData();
+
+            $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($corede->getId());
+
+            $steps = $poll->getSteps();
+            foreach($steps as $step){
+                $data = $statsRepos->findPercentOptionVoteByCoredeAndStep($corede->getId(),$step->getId());
+                $results[$step->getName()] = $data;
+
+                if(empty($created_at)){
+                    $data = reset($data);
+                    $created_at = $data['created_at'];
+                }
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
+            'created_at' => $created_at,
+            'results' => $results,
+            'statsCorede' => $statsCorede
         );
     }
 
@@ -132,6 +175,50 @@ class StatsController extends Controller
         $response = new JsonResponse();
         $response->setData(array(
             'success' => true,
+            'action' => 'update_corede_total_votes',
+            'created_at' => $created_at
+        ));
+
+        return $response;
+    }
+
+    /**
+     * @Route("/stats/update_total_option_votes", name="vpr_stats_update_total_option_votes")
+     */
+    public function updateTotalOptionVotesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $statsRepos = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
+
+        $created_at = new \DateTime();
+
+        $coredes = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
+        foreach($coredes as $corede){
+            $results = $statsRepos->findTotalOptionVoteByCorede($corede);
+
+            foreach($results as $line){
+                $entity = $statsRepos->findOneBy(array('coredeId'=> $line['coredeId'],'optionId'=> $line['optionId']));
+                if(!$entity){
+                    $entity = new StatsTotalOptionVote();
+                }
+
+                $entity->setCoredeId($line['coredeId']);
+                $entity->setOptionStepId($line['stepId']);
+                $entity->setOptionNumber($line['optionNumber']);
+                $entity->setOptionTitle($line['optionTitle']);
+                $entity->setOptionId($line['optionId']);
+                $entity->setTotalVotes($line['totalVotes']);
+                $entity->setCreatedAt($created_at);
+
+                $em->persist($entity);
+                $em->flush();
+            }
+        }
+
+        $response = new JsonResponse();
+        $response->setData(array(
+            'success' => true,
+            'action' => 'update_corede_total_votes',
             'created_at' => $created_at
         ));
 
