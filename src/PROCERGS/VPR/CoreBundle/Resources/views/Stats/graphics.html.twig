@@ -34,7 +34,6 @@
     </div>
   </div>
 </div>
-
 {% endblock %}
 
 
@@ -46,6 +45,7 @@
 {% endjavascripts %}
 <script type="text/javascript">
   var graphics_at_page = {
+    kml: '{{ app.request.scheme ~ "://" ~ app.request.httpHost ~ "/coredes.kml" }}',
     map: [
     {
       title:    "Estado",
@@ -61,7 +61,7 @@
         ' <p><span>Participações com Título e Login Cidadão:</span>' + parseFloat(pin.totRegLc).format(0, '', '.') + ' </p>' +
         ' <p><span>Participações com Login Cidadão:</span>' + parseFloat(pin.totLc).format(0, '', '.') + ' </p>' +
         ' <p><span>Total de Participações:</span>' + parseFloat(pin.quantity).format(0, '', '.') + ' </p>' +
-        ' <a href="javascript:void(0);" class="close"><span class="close"></span>Fechar</a>' +
+        ' <a class="close" href="javascript:void(0);">×</a>' +
         '</div>';
 
         return details;
@@ -69,5 +69,7 @@
     }
     ]
   };
+
+
 </script>
 {% endblock %}

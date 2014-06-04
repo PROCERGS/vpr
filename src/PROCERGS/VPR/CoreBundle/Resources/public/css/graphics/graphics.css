@@ -142,7 +142,7 @@ ul.ui-autocomplete a:hover {
   height: 100%;
 }
 #graphics .map .detail {
-  border:8px solid #01A6AA;
+  border: #80A34F solid 2px;
   background-color: #F6F6F6;
   position: absolute;
   width: 389px;
@@ -156,7 +156,6 @@ ul.ui-autocomplete a:hover {
 #graphics .map .detail p,
 #graphics .map .detail p span,
 #graphics .map .detail a {
-  font-family: 'Merriweather Sans';
   font-weight: 600;
   font-size: 26px;
   color: #00b3b6;
@@ -207,11 +206,13 @@ ul.ui-autocomplete a:hover {
   position: absolute;
 }
 #graphics .map .detail a.close {
-  background-color: #009799;
+  background-color: transparent;
+  color: #000;
   position: absolute;
-  top: 20px;
-  right: 30px;
-  width: 96px;
+  font-size: 30px;
+  top: 0;
+  right: 10px;
+  width: auto;
   text-indent: 7px;
 }
 
