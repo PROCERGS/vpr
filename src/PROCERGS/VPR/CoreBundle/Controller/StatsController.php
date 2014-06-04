@@ -20,6 +20,10 @@ use JMS\Serializer\SerializationContext;
 class StatsController extends Controller
 {
 
+    const CACHE_KEY_LAST_UPDATED = 'vpr_stats_last_updated';
+    const CACHE_UPDATE_LOCK = 'vpr_stats_last_updated_running';
+    const CACHE_TIME_MINUTES = 1;
+
     /**
      * @Route("/reports/corede/{coredeId}", name="vpr_report_voted_options_by_corede")
      * @Template()
@@ -50,12 +54,14 @@ class StatsController extends Controller
             }
         }
 
-        return $this->render('PROCERGSVPRCoreBundle:Stats:optionVotes.html.twig', array(
-            'form' => $form->createView(),
-            'created_at' => $created_at,
-            'results' => $results,
-            'statsCorede' => $statsCorede,
-            'cities' => $this->getCities()
+        return $this->render('PROCERGSVPRCoreBundle:Stats:optionVotes.html.twig',
+                        array(
+                    'form' => $form->createView(),
+                    'created_at' => $created_at,
+                    'results' => $results,
+                    'statsCorede' => $statsCorede,
+                    'cities' => $this->getCities(),
+                    'updateCache' => $this->shouldUpdateCache()
         ));
     }
 
@@ -86,8 +92,9 @@ class StatsController extends Controller
 
         $form = $form->createView();
         $cities = $this->getCities();
+        $updateCache = $this->shouldUpdateCache();
 
-        return compact('form', 'options', 'cities', 'categoriesId', 'corede');
+        return compact('form', 'options', 'cities', 'categoriesId', 'corede', 'updateCache');
     }
 
     /**
@@ -161,12 +168,12 @@ class StatsController extends Controller
         $results = $statsRepo->findTotalVotes();
         $created_at = new \DateTime();
 
-        $items = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
+        $coredes = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
         $map = array();
-        foreach ($items as $item) {
-            $map[$item->getId()] = array(
-                'latitude' => $item->getLatitude(),
-                'longitude' => $item->getLongitude()
+        foreach ($coredes as $corede) {
+            $map[$corede->getId()] = array(
+                'latitude' => $corede->getLatitude(),
+                'longitude' => $corede->getLongitude()
             );
         }
 
@@ -328,6 +335,46 @@ class StatsController extends Controller
             );
         }
         return new JsonResponse($obj);
+    }
+
+    private function shouldUpdateCache()
+    {
+        if (!$this->has('session.memcached')) {
+            return false;
+        }
+        $cache = $this->get('session.memcached');
+
+        $lastUpdated = $cache->get(self::CACHE_KEY_LAST_UPDATED);
+        $locked = $cache->get(self::CACHE_UPDATE_LOCK);
+        if ($lastUpdated !== false || $locked !== false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * @Route("/reports/update/corede", name="vpr_update_corede_report_cache")
+     */
+    public function updateCacheAction()
+    {
+        if ($this->shouldUpdateCache()) {
+            $cache = $this->get('session.memcached');
+
+            $cache->set(self::CACHE_UPDATE_LOCK, true, null, 60);
+            try {
+                $this->updateTotalOptionVotesAction();
+                $this->updateTotalVotesAction();
+
+                $lastUpdated = new \DateTime();
+                $cache->set(self::CACHE_KEY_LAST_UPDATED, $lastUpdated, null,
+                        60 * self::CACHE_TIME_MINUTES);
+                $cache->delete(self::CACHE_UPDATE_LOCK);
+            } catch (Exception $e) {
+                $cache->delete(self::CACHE_UPDATE_LOCK);
+            }
+        }
+        die();
     }
 
 }
