@@ -23,7 +23,7 @@
 </div>
 
 <div class="jumbotron" style="padding: 0;">
-    {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
+    {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}, 'action' : path('vpr_option_vote_by_corede')}) }}
         <div class="form-group">
             {{ form_label(form.city, 'admin.city'|trans, {'label_attr': {'class': 'city-label'} }) }}
             {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
