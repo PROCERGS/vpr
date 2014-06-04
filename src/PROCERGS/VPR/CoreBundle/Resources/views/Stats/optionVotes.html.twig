@@ -1,19 +1,24 @@
 {% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
 
 {% block body %}
-    <a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">Voltar</a>
-    <h1>Resultados parciais da Votação Online</h1>
+
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-xs-12">
+        <a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">{{ 'Back'|trans }}</a>
+        <h1>{{ "Total of poll's options by COREDE"|trans }}</h1>
+      </div>
+    </div>
 
     <div class="row">
         <div class="col-md-6">
-            <p>Demandas escolhidas por Corede</p>
+            <p>{{ 'Total votes by COREDE'|trans }}</p>
         </div>    
         <div class="col-md-6 text-right">
-            {% if (created_at) %}
-                <p style="margin-bottom: 0;">Atualizado em: {{ created_at |date('d/m/Y H:i:s') }}</p>
-                <p style="color: #CCC;">(Atualizações a cada 15 minutos)</p>
-            {% endif %}                
-        </div>    
+            {% if (created_at is defined) %}
+                <p style="margin-bottom: 0;">{{ 'Updated on:'|trans }} {{ created_at |date('d/m/Y H:i:s') }}</p>
+            {% endif%}
+            <p style="color: #CCC;">({{ 'Updates every 15 minutes'|trans }})</p>
+        </div>
     </div>
 
     <div class="jumbotron" style="padding: 0;">

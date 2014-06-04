@@ -2,11 +2,17 @@
 
 {% block body %}
 
-<h1>Resultados parciais</h1>
+<h1>Relatórios dos Resultados parciais</h1>
 
 <ul>
   <li>
-    <a href="{{ path('vpr_stats_votes') }}">Veje aqui a participação dos Coredes</a>
+    <a href="{{ path('vpr_stats_votes') }}">{{ 'Total votes by COREDE via graph'|trans }}</a>
+  </li>
+    <li>
+    <a href="{{ path('vpr_stats_graphics') }}">{{ 'Total votes by COREDE via map'|trans }}</a>
+  </li>
+  <li>
+    <a href="{{ path('vpr_option_vote_by_corede') }}">{{ "Total of poll's options by COREDE"|trans }}</a>
   </li>
 </ul>
 

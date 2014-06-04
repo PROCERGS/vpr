@@ -193,3 +193,9 @@ voting.session.invalid.options: 'Opções inválidas. Verifique se você não se
 'No, thanks.': Não, obrigado.
 Wait! : Aguarde
 'The poll %poll% begins in %openingTime%': 'A %poll% inicia em %openingTime%'
+'Total votes by COREDE via graph': 'Total de participações por corede via gráfico'
+'Total votes by COREDE via map': 'Total de participações por corede via mapa'
+'Total of poll''s options by COREDE': 'Totais de demandas escolhidas por corede'
+'Back' : 'Voltar'
+'Total votes by COREDE': 'Total de participações por Corede'
+'Updates every 15 minutes': 'Atualizações a cada 15 minutos'
