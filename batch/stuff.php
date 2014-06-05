@@ -77,3 +77,8 @@ function getInsertOpenVoteQuery()
 {
     return 'INSERT INTO open_vote (ballot_box_id, corede_id, poll_option_id, signature, auth_type, voter_registration) VALUE (:ballot_box_id, :corede_id, :poll_option_id, :signature, :auth_type, :voter_registration)';
 }
+
+function getInsertOpenBallotQuery()
+{
+    return 'INSERT INTO open_ballot (`ballot_box_id`, `corede_id`, `options`, `created_at`, `signature`, `auth_type`, `has_nfg`, `has_voter_registration`, `has_citizen_login`, `wb_treatment_vpr`, `wb_treatment_gabinete_digital`, `surveymonkey_id`) VALUE (:ballot_box_id, :corede_id, :options, :created_at, :signature, :auth_type, :has_nfg, :has_voter_registration, :has_citizen_login, :wb_treatment_vpr, :wb_treatment_gabinete_digital, :surveymonkey_id)';
+}
