@@ -60,6 +60,7 @@ try {
             if (!$openOptions) {
                 throw new Exception("weird! no vote for id" . $row['id']);
             }
+
             $openOptions = json_decode($openOptions, true);
             if ($openOptions === false) {
                 throw new Exception("weird! no valid serializaded vote for id" . $row['id']);
