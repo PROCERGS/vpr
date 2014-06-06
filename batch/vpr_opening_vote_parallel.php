@@ -48,7 +48,8 @@ try {
                 'voter_registration' => $data[10],
                 'wb_treatment_vpr' => $data[11],
                 'wb_treatment_gabinete_digital' => $data[12],
-                'surveymonkey_id' => $data[13]
+                'surveymonkey_id' => $data[13],
+                'city_id' => $data[14]
             );
             $openOptions = null;
             $options = base64_decode($row['options']);
@@ -75,6 +76,7 @@ try {
             $openBallot['wb_treatment_gabinete_digital'] = $row['wb_treatment_gabinete_digital'];
             //$openBallot['surveymonkey_id'] = $row['surveymonkey_id'];
             $openBallot['surveymonkey_id'] = null;
+            $openBallot['city_id'] = $row['city_id'];
             $openBallot['signature'] = signVote($openBallot, $config);
 
             $insertOpenBalot->execute($openBallot);

@@ -48,7 +48,8 @@ try {
                 'voter_registration' => $data[10],
                 'wb_treatment_vpr' => $data[11],
                 'wb_treatment_gabinete_digital' => $data[12],
-                'surveymonkey_id' => $data[13]
+                'surveymonkey_id' => $data[13],
+                'city_id' => $data[14]
             );
             $openOptions = null;
             $options = base64_decode($row['options']);
@@ -71,13 +72,13 @@ try {
                 $openVote = array();
                 $openVote['ballot_box_id'] = $row['ballot_box_id'];
                 $openVote['corede_id'] = $option['corede']['id'];
+                $openVote['city_id'] = $row['city_id'];
                 $openVote['poll_option_id'] = $option['id'];
                 $openVote['auth_type'] = $row['auth_type'];
                 $openVote['voter_registration'] = !empty($row['voter_registration']);
                 $openVote['signature'] = null;
                 $openVote['signature'] = signVote($openVote, $config);
 
-                @$counting[$openVote['poll_option_id']] += 1;
                 $insertOpenVote->execute($openVote);
             }
             //$conn->commit();

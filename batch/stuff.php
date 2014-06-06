@@ -6,11 +6,8 @@ function checkArguments($argv)
         e("Missing config file, private key or passphrase");
         exit(1);
     }
-    $config = parse_ini_file($argv[1]);
-    if (!$config) {
-        e("Couldn't parse the config file.");
-        exit(1);
-    }
+
+    $config = loadConfigFromFile($argv[1]);
 
     $privateKeyFile = realpath($argv[2]);
     $passphrase = $argv[3];
@@ -21,6 +18,16 @@ function checkArguments($argv)
 
     $config['privateKeyFile'] = $privateKeyFile;
     $config['passphrase'] = $passphrase;
+    return $config;
+}
+
+function loadConfigFromFile($file)
+{
+    $config = parse_ini_file($file);
+    if (!$config) {
+        e("Couldn't parse the config file.");
+        exit(1);
+    }
     return $config;
 }
 
@@ -81,4 +88,42 @@ function getInsertOpenVoteQuery()
 function getInsertOpenBallotQuery()
 {
     return 'INSERT INTO open_ballot (`ballot_box_id`, `corede_id`, `options`, `created_at`, `signature`, `auth_type`, `has_nfg`, `has_voter_registration`, `has_citizen_login`, `wb_treatment_vpr`, `wb_treatment_gabinete_digital`, `surveymonkey_id`) VALUE (:ballot_box_id, :corede_id, :options, :created_at, :signature, :auth_type, :has_nfg, :has_voter_registration, :has_citizen_login, :wb_treatment_vpr, :wb_treatment_gabinete_digital, :surveymonkey_id)';
+}
+
+function getAllValidVotesQuery()
+{
+    $sql = <<<SQL
+SELECT
+    *
+FROM
+    (SELECT
+        v.*
+    FROM
+        vote v
+        INNER JOIN tre_voter_corede vc ON vc.id = v.voter_registration
+    WHERE
+        vc.corede_id = v.corede_id
+    ) valid_corede
+GROUP BY
+    valid_corede.voter_registration
+HAVING
+    COUNT(valid_corede.voter_registration) = 1
+UNION ALL
+SELECT * FROM
+(
+	SELECT
+		v.*
+	FROM
+		vote v
+		INNER JOIN conflicting_voter_registration c ON c.voter_registration = v.voter_registration
+	ORDER BY
+		v.voter_registration DESC,
+		v.nfg_cpf DESC,
+		v.login_cidadao_id DESC,
+		v.created_at DESC
+) x
+GROUP BY
+	x.voter_registration;
+SQL;
+    return $sql;
 }
