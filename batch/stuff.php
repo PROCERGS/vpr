@@ -127,3 +127,17 @@ GROUP BY
 SQL;
     return $sql;
 }
+
+function createOpenVote($optionId, $coredeId, $config, $row)
+{
+    $openVote = array();
+    $openVote['ballot_box_id'] = $row['ballot_box_id'];
+    $openVote['corede_id'] = $coredeId;
+    $openVote['city_id'] = $row['city_id'];
+    $openVote['poll_option_id'] = $optionId;
+    $openVote['auth_type'] = $row['auth_type'];
+    $openVote['voter_registration'] = !empty($row['voter_registration']);
+    $openVote['signature'] = null;
+    $openVote['signature'] = signVote($openVote, $config);
+    return $openVote;
+}

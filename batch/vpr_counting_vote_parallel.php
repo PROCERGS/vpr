@@ -32,6 +32,8 @@ try {
     $conn = getPDOConnection($config);
     $insertOpenVote = $conn->prepare(getInsertOpenVoteQuery());
 
+    $start = date('Y-m-d H:i:s');
+    e("[$start] Counting started!");
     if (($handle = fopen($chunkFile, "r")) !== FALSE) {
         while (($data = fgetcsv($handle)) !== FALSE) {
             $row = array(
@@ -68,18 +70,17 @@ try {
             }
 
             //$conn->beginTransaction();
-            foreach ($openOptions as $option) {
-                $openVote = array();
-                $openVote['ballot_box_id'] = $row['ballot_box_id'];
-                $openVote['corede_id'] = $option['corede']['id'];
-                $openVote['city_id'] = $row['city_id'];
-                $openVote['poll_option_id'] = $option['id'];
-                $openVote['auth_type'] = $row['auth_type'];
-                $openVote['voter_registration'] = !empty($row['voter_registration']);
-                $openVote['signature'] = null;
-                $openVote['signature'] = signVote($openVote, $config);
-
+            if (is_array($openOptions) && count($openOptions) == 0) {
+                $openVote = createOpenVote(null, $row['corede_id'], $config,
+                        $row);
                 $insertOpenVote->execute($openVote);
+            } else {
+                continue; // This is here to insert only empty votes!
+                foreach ($openOptions as $option) {
+                    $openVote = createOpenVote($option['id'],
+                            $option['corede']['id'], $config, $row);
+                    $insertOpenVote->execute($openVote);
+                }
             }
             //$conn->commit();
         }
@@ -90,3 +91,6 @@ try {
     e($e->getMessage());
     exit(1);
 }
+
+$end = date('Y-m-d H:i:s');
+e("[$end] Counting ended!");
