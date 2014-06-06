@@ -135,6 +135,12 @@ class Vote
     protected $treatmentGabineteDigital;
 
     /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $city;
+    /**
      * Get id
      *
      * @return integer
@@ -507,6 +513,18 @@ class Vote
         $this->treatmentGabineteDigital = $treatmentGabineteDigital;
 
         return $this;
+    }
+    
+    public function setCity($var)
+    {
+        $this->city = $var;
+    
+        return $this;
+    }
+    
+    public function getCity()
+    {
+        return $this->city;
     }
 
 }

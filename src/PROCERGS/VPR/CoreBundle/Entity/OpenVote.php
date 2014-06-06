@@ -42,7 +42,7 @@ class OpenVote
     /**
      * @var string
      *
-     * @ORM\Column(name="signature", type="string", length=255)
+     * @ORM\Column(name="signature", type="text")
      */
     protected $signature;
 
@@ -59,6 +59,12 @@ class OpenVote
      * @ORM\Column(name="voter_registration", type="boolean")
      */
     protected $validVoterRegistration;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     */
+    protected $city;
 
 
     /**
@@ -139,4 +145,28 @@ class OpenVote
     {
         return $this->voterRegistration;
     }
+    
+    public function setCity($var)
+    {
+        $this->city = $var;
+    
+        return $this;
+    }
+    
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    public function setCorede($var)
+    {
+        $this->corede = $var;
+    
+        return $this;
+    }
+    
+    public function getCorede()
+    {
+        return $this->corede;
+    }    
 }
