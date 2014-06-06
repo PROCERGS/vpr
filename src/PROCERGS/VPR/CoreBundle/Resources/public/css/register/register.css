@@ -23,6 +23,10 @@
   text-rendering:optimizeLegibility;
 }
 
+.main-content .btn-tab {
+  white-space: normal;
+}
+
 .btn-tab
 {
   border: transparent solid 2px;
@@ -215,6 +219,7 @@
       height: 200px;
       padding-top: 130px;
       position: relative;
+      line-height: 27px;
     }
 
     .main-content .btn .glyphicon {

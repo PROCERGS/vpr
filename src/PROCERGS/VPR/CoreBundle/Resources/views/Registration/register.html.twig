@@ -24,16 +24,16 @@
     </div>
 
     <div class="col-sm-4">
-        <a href="#howto" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-howto">
-            <span class="glyphicon glyphicon-info-sign"></span>
-            {% trans %}How do I vote?{% endtrans %}
+        <a href="http://www.portaldaparticipacao.rs.gov.br/consulta-de-demandas/" class="btn btn-primary btn-block btn-lg btn-tab btn-howto" target="_blank">
+            <span class="glyphicon glyphicon-search"></span>
+            {% trans %}Check demands{% endtrans %}
         </a>
     </div>
 
     <div class="col-sm-4">
-      <a href="#vote" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-vote active">
-        <span class="glyphicon glyphicon-check"></span>
-        {% trans %}Vote now!{% endtrans %}
+      <a href="{{ path('vpr_option_vote_by_corede') }}" class="btn btn-primary btn-block btn-lg btn-tab btn-vote active">
+        <span class="glyphicon glyphicon-stats"></span>
+        {% trans %}Results{% endtrans %}
       </a>
     </div>
 
@@ -68,7 +68,7 @@
 
             <div class="tab-pane tab-vote active" id="vote">
                 <div class="row register-form-container">
-                    <div class="col-sm-12 col-md-6 col-md-offset-3">
+                    {# <div class="col-sm-12 col-md-6 col-md-offset-3">
                         <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
                             <span></span>{{ 'Vote with Citizen Login'|trans }}
                         </a>
@@ -104,7 +104,7 @@
                             <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
                             <h6 class="text-center">* {{ 'Required fields'|trans }}</h6>
                         {{ form_end(form) }}
-                    </div>
+                    </div> #}
                 </div>
             </div>
         </div>
