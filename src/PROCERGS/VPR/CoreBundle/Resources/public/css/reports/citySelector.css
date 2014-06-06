@@ -2,7 +2,8 @@
     width: auto;
 }
 
-form label.city-label {
+form label.city-label,
+form label.corede-label {
     margin-bottom: -5px !important;
     vertical-align: middle;
 }

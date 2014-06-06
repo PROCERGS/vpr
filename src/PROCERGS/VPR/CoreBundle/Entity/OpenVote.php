@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * OpenVote
  *
  * @ORM\Table(name="open_vote")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\OpenVoteRepository")
  */
 class OpenVote
 {
@@ -59,7 +59,7 @@ class OpenVote
      * @ORM\Column(name="voter_registration", type="boolean")
      */
     protected $validVoterRegistration;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
@@ -145,14 +145,14 @@ class OpenVote
     {
         return $this->voterRegistration;
     }
-    
+
     public function setCity($var)
     {
         $this->city = $var;
-    
+
         return $this;
     }
-    
+
     public function getCity()
     {
         return $this->city;
@@ -161,12 +161,12 @@ class OpenVote
     public function setCorede($var)
     {
         $this->corede = $var;
-    
+
         return $this;
     }
-    
+
     public function getCorede()
     {
         return $this->corede;
-    }    
+    }
 }

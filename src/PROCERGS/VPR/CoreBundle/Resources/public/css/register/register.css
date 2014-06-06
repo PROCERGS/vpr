@@ -239,3 +239,15 @@
     }
 
   }
+
+  .main-content #results {
+    font-size: 20px;
+  }
+
+  .main-content #results .glyphicon {
+    margin-right: 10px;
+  }
+
+  .main-content #results .col-sm-6 {
+    margin-bottom: 20px;
+  }

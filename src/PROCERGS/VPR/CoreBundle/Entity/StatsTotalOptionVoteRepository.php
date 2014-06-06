@@ -29,13 +29,13 @@ class StatsTotalOptionVoteRepository extends EntityRepository
             SELECT s.option_number, s.option_title, s.total_votes, (s.total_votes / t.total ) * 100 AS percent, s.created_at
               FROM stats_total_option_vote s
         INNER JOIN (
-                       SELECT SUM(total_votes) AS total, s.corede_id, s.option_step_id 
-                         FROM stats_total_option_vote s 
+                       SELECT SUM(total_votes) AS total, s.corede_id, s.option_step_id
+                         FROM stats_total_option_vote s
                         WHERE s.corede_id = :corede_id
                           AND s.option_step_id = :step_id
                      GROUP BY s.option_step_id,s.corede_id
-                   ) AS t 
-                ON t.corede_id = s.corede_id 
+                   ) AS t
+                ON t.corede_id = s.corede_id
                AND t.option_step_id =  s.option_step_id
           ORDER BY s.total_votes DESC
         ');
@@ -45,5 +45,32 @@ class StatsTotalOptionVoteRepository extends EntityRepository
         $statement->execute();
 
         return $statement->fetchAll();
-    }    
+    }
+
+    public function findTotalOptionVoteByCoredeAndStep($corede_id, $step_id)
+    {
+        $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+
+        $statement = $connection->prepare('
+            SELECT s.option_number, s.option_title, s.total_votes AS total, s.created_at
+              FROM stats_total_option_vote s
+        INNER JOIN (
+                       SELECT SUM(total_votes) AS total, s.corede_id, s.option_step_id
+                         FROM stats_total_option_vote s
+                        WHERE s.corede_id = :corede_id
+                          AND s.option_step_id = :step_id
+                     GROUP BY s.option_step_id,s.corede_id
+                   ) AS t
+                ON t.corede_id = s.corede_id
+               AND t.option_step_id =  s.option_step_id
+          ORDER BY s.total_votes DESC
+        ');
+
+        $statement->bindParam('corede_id', $corede_id);
+        $statement->bindParam('step_id', $step_id);
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
 }

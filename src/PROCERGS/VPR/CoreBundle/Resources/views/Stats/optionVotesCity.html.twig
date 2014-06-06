@@ -4,8 +4,8 @@
 <div class="row" style="margin-top: 20px;">
     <div class="col-xs-12">
         <h1>{% trans %}Results for the Online Voting{% endtrans %}</h1>
-        {% if statsCorede is defined %}
-        <h2>COREDE {{ statsCorede.coredeName }}</h2>
+        {% if city is defined %}
+        <h2>Município - {{ city.name }}</h2>
         {% endif %}
     </div>
 </div>
@@ -19,10 +19,10 @@
 </div>
 
 <div class="jumbotron" style="padding: 0;">
-    {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}, 'action' : path('vpr_option_vote_by_corede')}) }}
+    {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}, 'action' : path('vpr_option_vote_by_city')}) }}
         <div class="form-group">
-            {{ form_label(form.corede, 'admin.corede'|trans, {'label_attr': {'class': 'corede-label'} }) }}
-            {{ form_widget(form.corede, {'attr': {'class': 'form-control corede'}}) }}
+            {{ form_label(form.city, 'admin.city'|trans, {'label_attr': {'class': 'city-label'} }) }}
+            {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
         </div>
         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'admin.filter' | trans}) }}
     {{ form_end(form) }}
@@ -38,7 +38,7 @@
                     <th colspan="2" style="background-color: #F5F5F5;">{{ step }}</th>
                 </tr>
                 <tr>
-                    <th width="10%">Percentual</th>
+                    <th width="10%">Votos</th>
                     <th width="80%">Opção</th>
                 </tr>
             </thead>
@@ -51,7 +51,7 @@
                 </tr>
                 {% endfor %}
             {% else %}
-                <tr><td colspan="2">Nenhum voto encontrado para o corede selecionado</tr></td>
+                <tr><td colspan="2">Nenhum voto encontrado para o município selecionado</tr></td>
             {% endif %}
             </tbody>
         </table>
@@ -66,10 +66,10 @@
 </div>
 {% endif %}
 
-{% if statsCorede.totalVotes is defined %}
+{% if cityTotal is defined %}
 <div class="row" style="padding-top:20px;">
     <div class="col-md-6">
-        <p><strong>Total de votantes no Corede: </strong>{{ statsCorede.totalVotes |number_format(0, ',', '.') }}</p>
+        <p><strong>Total de votantes no município: </strong>{{ cityTotal.total |number_format(0, ',', '.') }}</p>
     </div>
 </div>
 {% endif %}
@@ -89,9 +89,9 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-    var coredesList = {{ coredes | raw }};
+    var citiesList = {{ cities | raw }};
 </script>
-{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/components/coredesTypeahead.js' %}
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}

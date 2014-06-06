@@ -30,10 +30,10 @@ class StatsController extends Controller
      */
     public function reportOptionsCoredeAction($coredeId)
     {
-        $form = $this->getCityForm();
+        $form = $this->getCoredeForm();
         $params = array(
             'form' => $form->createView(),
-            'cities' => $this->getCities(),
+            'coredes' => $this->getCoredes(),
             'updateCache' => $this->shouldUpdateCache()
         );
         if ($coredeId != 2) {
@@ -49,7 +49,7 @@ class StatsController extends Controller
 
             $steps = $poll->getSteps();
             foreach ($steps as $step) {
-                $data = $statsRepo->findPercentOptionVoteByCoredeAndStep($coredeId,
+                $data = $statsRepo->findTotalOptionVoteByCoredeAndStep($coredeId,
                         $step->getId());
                 $results[$step->getName()] = $data;
 
@@ -72,10 +72,80 @@ class StatsController extends Controller
     }
 
     /**
+     * @Route("/reports/city/{cityId}", name="vpr_report_voted_options_by_city")
+     * @Template()
+     */
+    public function reportOptionsCityAction($cityId)
+    {
+        $form = $this->getCityForm();
+        $params = array(
+            'form' => $form->createView(),
+            'cities' => $this->getCities(),
+            'updateCache' => $this->shouldUpdateCache()
+        );
+
+        $em = $this->getDoctrine()->getManager();
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        $openVoteRepo = $em->getRepository('PROCERGSVPRCoreBundle:OpenVote');
+
+        $results = array();
+        $poll = $pollRepo->findLastPoll();
+
+        $city = $em->getRepository('PROCERGSVPRCoreBundle:City')->findOneById($cityId);
+        $cityTotal = $openVoteRepo->findTotalByCity($cityId);
+
+        $steps = $poll->getSteps();
+        foreach ($steps as $step) {
+            $data = $openVoteRepo->findOptionVoteByCityAndStep($cityId, $step->getId());
+            $results[$step->getName()] = $data;
+        }
+
+        $params['results'] = $results;
+        $params['city'] = $city;
+        $params['cityTotal'] = $cityTotal;
+
+
+        return $this->render('PROCERGSVPRCoreBundle:Stats:optionVotesCity.html.twig',
+                        $params);
+    }
+
+    /**
      * @Route("/reports/corede", name="vpr_option_vote_by_corede")
      * @Template()
      */
     public function optionVotesAction(Request $request)
+    {
+        $form = $this->getCoredeForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $data = $form->getData();
+
+            $name = trim($data['corede']);
+            $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+            $corede = $coredeRepo->findOneByName($name);
+
+            if (strlen($name) > 0) {
+                $url = $this->generateUrl('vpr_report_voted_options_by_corede',
+                        array('coredeId' => $corede->getId()));
+                return $this->redirect($url);
+            }
+        }
+
+        $form = $form->createView();
+        $coredes = $this->getCoredes();
+        $updateCache = $this->shouldUpdateCache();
+
+        return compact('form', 'coredes', 'updateCache');
+    }
+
+    /**
+     * @Route("/reports/city", name="vpr_option_vote_by_city")
+     * @Template()
+     */
+    public function optionVotesCityAction(Request $request)
     {
         $form = $this->getCityForm();
 
@@ -90,8 +160,8 @@ class StatsController extends Controller
             $city = $cityRepo->findOneByName($name);
 
             if (strlen($name) > 0) {
-                $url = $this->generateUrl('vpr_report_voted_options_by_corede',
-                        array('coredeId' => $city->getCorede()->getId()));
+                $url = $this->generateUrl('vpr_report_voted_options_by_city',
+                        array('cityId' => $city->getId()));
                 return $this->redirect($url);
             }
         }
@@ -143,6 +213,15 @@ class StatsController extends Controller
                 ))->add('submit', 'submit')->getForm();
     }
 
+    private function getCoredeForm()
+    {
+        return $this->createFormBuilder()->add('corede', 'text',
+                        array(
+                    'required' => true,
+                    'label' => 'form.corede.select'
+                ))->add('submit', 'submit')->getForm();
+    }
+
     private function getCities()
     {
         $serializer = $this->container->get('jms_serializer');
@@ -151,6 +230,17 @@ class StatsController extends Controller
         return $serializer->serialize($cityRepo->findAll(), 'json',
                         SerializationContext::create()->setSerializeNull(true)->setGroups(array(
                             'autocomplete'
+        )));
+    }
+
+    private function getCoredes()
+    {
+        $serializer = $this->container->get('jms_serializer');
+        $em = $this->getDoctrine()->getManager();
+        $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        return $serializer->serialize($coredeRepo->findAll(), 'json',
+                        SerializationContext::create()->setSerializeNull(true)->setGroups(array(
+                            'vote'
         )));
     }
 
