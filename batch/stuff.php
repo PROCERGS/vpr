@@ -82,7 +82,7 @@ function signVote($vote, $config)
 
 function getInsertOpenVoteQuery()
 {
-    return 'INSERT INTO open_vote (ballot_box_id, corede_id, poll_option_id, signature, auth_type, voter_registration) VALUE (:ballot_box_id, :corede_id, :poll_option_id, :signature, :auth_type, :voter_registration)';
+    return 'INSERT INTO open_vote (ballot_box_id, corede_id, poll_option_id, signature, auth_type, voter_registration, city_id) VALUE (:ballot_box_id, :corede_id, :poll_option_id, :signature, :auth_type, :voter_registration, :city_id)';
 }
 
 function getInsertOpenBallotQuery()
