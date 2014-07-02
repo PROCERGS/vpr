@@ -13,7 +13,6 @@ $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
 $conn1 = getPDOConnection($config1);
 $conn1->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
 $TABLES = array(
-    /*
     array( // row #4
         'table_name' => 'corede'
     ),
@@ -23,7 +22,6 @@ $TABLES = array(
     array( // row #21
         'table_name' => 'tre_voter'
     ),
-    */
     array( // row #11
         'table_name' => 'poll'
     ),
