@@ -84,6 +84,14 @@ class PollOption
      * @Groups({"vote"})
      */
     protected $category;
+    
+    /**
+     * just to have compatibiliti to migrate to system ppp, this is not used in the system
+     * @var string
+     *
+     * @ORM\Column(name="cod_desc_cedula", type="integer", nullable=true)
+     */
+    protected $codDescCedula;
 
     /**
      * Get id
@@ -244,6 +252,17 @@ class PollOption
     public function getCorede()
     {
         return $this->corede;
+    }
+    
+    public function setCodDescCedula($var)
+    {
+        $this->codDescCedula = $var;
+        return $this;
+    }
+    
+    public function getCodDescCedula()
+    {
+        return $this->codDescCedula;
     }
 
 }

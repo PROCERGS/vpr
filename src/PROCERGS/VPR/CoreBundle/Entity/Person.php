@@ -20,7 +20,8 @@ use JMS\Serializer\Annotation\Groups;
  *              name     = "email",
  *              type     = "string",
  *              length   = 255,
- *              nullable = true
+ *              nullable = true,
+ *              unique   = false
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="emailCanonical",
@@ -28,7 +29,7 @@ use JMS\Serializer\Annotation\Groups;
  *              name     = "email_canonical",
  *              type     = "string",
  *              nullable = true,
- *              unique   = true,
+ *              unique   = false,
  *              length   = 255
  *          )
  *      ),

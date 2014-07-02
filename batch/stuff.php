@@ -60,10 +60,11 @@ function getPDOConnection($config)
     $db_name = $config['database_name'];
     $db_user = $config['database_user'];
     $db_pass = $config['database_password'];
-    return new PDO("$db_driver:host=$db_host;dbname=$db_name;charset=utf8",
-            $db_user, $db_pass,
-            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES UTF8")
+    $pdo = new PDO("$db_driver:host=$db_host;dbname=$db_name",
+            $db_user, $db_pass            
     );
+    $pdo->query("SET NAMES 'UTF8'");
+    return $pdo;
 }
 
 function e($message, $breakLinke = true)
