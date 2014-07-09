@@ -65,49 +65,7 @@
                 </p>
             </div>
 
-
-            {#<div class="tab-pane tab-vote active" id="vote">
-                <div class="row register-form-container">
-                     <div class="col-sm-12 col-md-6 col-md-offset-3">
-                        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
-                            <span></span>{{ 'Vote with Citizen Login'|trans }}
-                        </a>
-                        <div class="spacer"><!-- <hr> --></div>
-                        <h4 class="text-center" >{{ 'or fill the form below'|trans }}</h4>
-
-
-                        {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
-                            {{ form_errors(form) }}
-                            <div class="form-group has-feedback clearfix">
-                                {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
-                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
-                            </div>
-                            <div class="form-group has-feedback">
-                                {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
-                                <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
-                            </div>
-                            <div class="form-group has-feedback">
-                                {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
-                                <p class="text-left accept_registration">
-                                    {{ form_widget(form.loginCidadaoAcceptRegistration) }}
-                                    {{ form_label(form.loginCidadaoAcceptRegistration, 'Accepts create an account in Citizen Login service?' | trans) }}
-                                </p>
-                            </div>
-                            <div class="form-group has-feedback">
-                                {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                                <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
-                            </div>
-
-                            <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
-                            <h6 class="text-center">* {{ 'Required fields'|trans }}</h6>
-                        {{ form_end(form) }}
-                    </div>
-                </div>
-            </div>#}
-
+            {% if votingClosed %}
             <div class="tab-pane tab-vote active" id="results">
               <div class="row">
                 <div class="col-sm-6 text-center">
@@ -124,6 +82,50 @@
                 </div>
               </div>
             </div>
+            {% else %}
+            <div class="tab-pane tab-vote active" id="vote">
+              <div class="row register-form-container">
+                 <div class="col-sm-12 col-md-6 col-md-offset-3">
+                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
+                        <span></span>{{ 'Vote with Citizen Login'|trans }}
+                    </a>
+                    <div class="spacer"><!-- <hr> --></div>
+                    <h4 class="text-center" >{{ 'or fill the form below'|trans }}</h4>
+
+
+                    {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
+                        {{ form_errors(form) }}
+                        <div class="form-group has-feedback clearfix">
+                            {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
+                            <p class="text-left accept_registration">
+                                {{ form_widget(form.loginCidadaoAcceptRegistration) }}
+                                {{ form_label(form.loginCidadaoAcceptRegistration, 'Accepts create an account in Citizen Login service?' | trans) }}
+                            </p>
+                        </div>
+                        <div class="form-group has-feedback">
+                            {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
+                        <h6 class="text-center">* {{ 'Required fields'|trans }}</h6>
+                    {{ form_end(form) }}
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
         </div>
     </div>
 </div>
