@@ -30,6 +30,7 @@ class StatsController extends Controller
      */
     public function reportOptionsCoredeAction($coredeId)
     {
+        $this->updateCacheAction();
         $form = $this->getCoredeForm();
         $params = array(
             'form' => $form->createView(),
@@ -77,6 +78,7 @@ class StatsController extends Controller
      */
     public function reportOptionsCityAction($cityId)
     {
+        $this->updateCacheAction();
         $form = $this->getCityForm();
         $params = array(
             'form' => $form->createView(),
@@ -115,6 +117,7 @@ class StatsController extends Controller
      */
     public function optionVotesAction(Request $request)
     {
+        $this->updateCacheAction();
         $form = $this->getCoredeForm();
 
         $form->handleRequest($request);
@@ -147,6 +150,7 @@ class StatsController extends Controller
      */
     public function optionVotesCityAction(Request $request)
     {
+        $this->updateCacheAction();
         $form = $this->getCityForm();
 
         $form->handleRequest($request);
@@ -179,6 +183,7 @@ class StatsController extends Controller
      */
     public function votesAction()
     {
+        $this->updateCacheAction();
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
@@ -352,6 +357,7 @@ class StatsController extends Controller
      */
     public function votesByCoredeAction()
     {
+        $this->updateCacheAction();
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
@@ -379,6 +385,7 @@ class StatsController extends Controller
      */
     public function graphicsAction()
     {
+        $this->updateCacheAction();
         $em = $this->getDoctrine()->getManager();
         $entity = $em->createQueryBuilder()
                         ->select('v')
@@ -398,6 +405,7 @@ class StatsController extends Controller
      */
     public function query1Action()
     {
+        $this->updateCacheAction();
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQueryBuilder()
                 ->select('v')
@@ -451,6 +459,7 @@ class StatsController extends Controller
 
     /**
      * @Route("/reports/update/corede", name="vpr_update_corede_report_cache")
+     * @template()
      */
     public function updateCacheAction()
     {
@@ -469,8 +478,13 @@ class StatsController extends Controller
             } catch (Exception $e) {
                 $cache->delete(self::CACHE_UPDATE_LOCK);
             }
+            return array('lastUpdated' => $cache->get(self::CACHE_KEY_LAST_UPDATED));
+        } else if ($this->has('session.memcached')) {
+            $cache = $this->get('session.memcached');
+            return array('lastUpdated' => $cache->get(self::CACHE_KEY_LAST_UPDATED));
+        } else {
+            return array('lastUpdated' => new \DateTime());
         }
-        die();
     }
 
 }
