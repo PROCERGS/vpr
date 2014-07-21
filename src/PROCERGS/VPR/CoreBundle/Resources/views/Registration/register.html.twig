@@ -22,7 +22,7 @@
         {% trans %}What is it?{% endtrans %}
       </a>
     </div>
-
+    {% if votingClosed %}
     <div class="col-sm-4">
         <a href="http://www.portaldaparticipacao.rs.gov.br/consulta-de-demandas/" class="btn btn-primary btn-block btn-lg btn-tab btn-howto" target="_blank">
             <span class="glyphicon glyphicon-search"></span>
@@ -36,6 +36,21 @@
         {% trans %}Results{% endtrans %}
       </a>
     </div>
+    {% else %}
+    <div class="col-sm-4">
+        <a href="#howto" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-howto">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            {% trans %}How do I vote?{% endtrans %}
+        </a>
+    </div>
+
+    <div class="col-sm-4">
+      <a href="#vote" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-vote active">
+        <span class="glyphicon glyphicon-check"></span>
+        {% trans %}Vote now!{% endtrans %}
+      </a>
+    </div>    
+    {% endif %}
 
 
     <div class="col-sm-12">
