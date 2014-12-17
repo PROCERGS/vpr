@@ -1,62 +1,53 @@
 /*global $:false */
 $(function() {
-    "use strict";
+  "use strict";
 
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-      // $("footer").css("visibility", "hidden");
-      $(".tab-close").show();
+  var btnTabs = $(".btn-tab");
+  var tabClose = $(".main-content .tab-close");
+  var tabContentTop = $(".tab-content").offset().top;
 
-      $("html, body").animate({
-            scrollTop: $(".tab-content").offset().top
-        }, 900);
+  btnTabs.on("shown.bs.tab", function () {
+    btnTabs.removeClass("active");
+    $(this).addClass("active");
+
+    tabClose.show();
+
+    $("html, body").animate({
+      scrollTop: tabContentTop
+    }, 900);
+  });
+
+  tabClose.on("click", function() {
+    var self = $(this);
+    $("html, body").animate({
+      scrollTop: 0
+    }, 900, function() {
+      self.hide();
     });
-
-    $(".tab-close").on("click", function() {
-      var self = $(this);
-      $("html, body").animate({
-            scrollTop: 0
-        }, 900, function() {
-          self.hide();
-        });
-    });
+  });
 
 
-    /*
-     * Show 'how to vote' text
-     */
-    $("#how-to-vote").on("click", function() {
-      $("#how-to-vote-text").slideToggle();
-    });
+  // Show 'how to vote' text
+  $("#how-to-vote").on("click", function() {
+    $("#how-to-vote-text").slideToggle();
+  });
 
 
-    /*
-     * Mobile behavior to register form
-     */
-    // var formContainer = $(".register-form-container");
+  // Show alert about LC
+  $("#about-lc-link a").on("click", function(e) {
+    e.preventDefault();
+    $("#about-lc").toggleClass("hidden");
+  });
 
-    // $(".register-label").on("click", function() {
-    //     if ($(window).width() <= 768) {
-    //         formContainer.toggleClass("animate");
-    //         $(".register-tooltip").tooltip("hide");
-    //     }
-    // });
-
-    // $(window).resize(function() {
-    //     if ($(window).width() > 768 && formContainer.is(":hidden")) {
-    //         formContainer.show();
-    //     }
-
-    //     $(".register-tooltip").tooltip("hide");
-
-    // });
-
-
-    /*
-     * Show alert about LC
-     */
-    $("#about-lc-link a").on("click", function(e) {
-        e.preventDefault();
-        $("#about-lc").toggleClass("hidden");
+    $('#fos_user_registration_form_mobile').mask("(00) 0000-00009").focusout(function () {
+        var phone, element;
+        element = $(this); element.unmask();
+        phone = element.val().replace(/\D/g, '');
+        if (phone.length > 10) {
+            element.mask("(00) 90000-0000");
+        } else {
+            element.mask("(00) 0000-00009");
+        }
     });
 
 });

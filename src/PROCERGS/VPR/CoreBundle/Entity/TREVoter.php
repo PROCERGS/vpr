@@ -51,6 +51,12 @@ class TREVoter
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
      */
     protected $city;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Corede")
+     * @ORM\JoinColumn(name="corede_id", referencedColumnName="id", nullable=true)
+     */
+    protected $corede;    
 
     
     public function __construct(&$id = null)

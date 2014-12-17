@@ -27,18 +27,19 @@ if( document.createElement('svg').getAttributeNS ) {
         return svg;
     }
 
-    function controlCheckbox( el, type, svgDef ) {
-        var svg = createSVGEl( svgDef );
-        el.parentNode.appendChild( svg );
-
-        el.addEventListener( 'change', function() {
-            if( el.checked ) {
-                draw( el, type );
-            }
-            else {
-                resetCheckbox( el );
-            }
-        } );
+    function controlCheckbox(el, type, svgDef) {
+      var svg = createSVGEl(svgDef);
+      el.parentNode.appendChild(svg);
+      if (el.checked) {
+        draw(el, type);
+      }
+      el.addEventListener('change', function() {
+        if (el.checked) {
+          draw(el, type);
+        } else {
+          resetCheckbox(el);
+        }
+      });
     }
 
     checkbxsCheckmark.forEach( function( el, i ) { controlCheckbox( el, 'checkmark' ); } );

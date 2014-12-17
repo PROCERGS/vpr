@@ -1,10 +1,29 @@
-/*global $:false, maxItems:false, resetCheckbox */
+/*global $:false, maxItems:false, resetCheckbox, voteEmptyMessage */
 $(function() {
     "use strict";
 
-    $(".ballot input").on("click", function(event) {
-        var sel = $(".ballot input:checked");
-        if (sel.length > maxItems) {
+    var infoMessage = $("#info-msg");
+    var confirmationModal = $("#confirmation-modal");
+    var confirmationContent = $("#confirmation-content");
+    var itensCount = $("#info-msg .itens-count");
+
+    function updateInfo(sel) {
+        if (sel.length === maxItems) {
+            infoMessage.addClass("complete");
+            infoMessage.removeClass("limit");
+        } else if (sel.length > maxItems) {
+            infoMessage.removeClass("complete");
+            infoMessage.addClass("limit");
+        } else {
+            infoMessage.removeClass("complete limit");
+        }
+        itensCount.text(sel.length);
+    }
+
+    $("#ballot-main input[type='checkbox']").on("click", function(event) {
+        var sel = $("#ballot-main input:checked");
+
+        if (sel.length > maxItems && $(this).is(":checked")) {
             if (!event.preventDefault) {
                 event.preventDefault = function() {
                     event.returnValue = false; //ie
@@ -13,20 +32,52 @@ $(function() {
             event.preventDefault();
             $("#alert-limit").modal("show");
             resetCheckbox($(this).get(0));
+        } else {
+
+            if ($(this).is(":checked"))
+                $(this).parent(".content").addClass("checked");
+            else
+                $(this).parent(".content").removeClass("checked");
+
+            updateInfo(sel);
         }
     });
 
-    $("#btn-vote").on("click", function() {
-        $("#btn-vote").button("loading");
+    confirmationModal.on("hidden.bs.modal", function() {
+        infoMessage.show();
+    });
 
-        // $("#max-selection").fadeOut();
-        // $(".confirm-message").fadeIn();
-        $("#info-msg").addClass("confirm").find("p").toggleClass("hidden");
+    $("form.step-form").on("submit", function(event) {
+        if ($('form.step-form').is('.confirmed')) {
+            return true;
+        }
+        var sel = $("#ballot-main input:checked").closest(".option").clone();
+        sel.each(function() {
+            $(this).find("input[type='checkbox']").remove();
+            $(this).find("label").attr("for", "");
+            $(this).find(".content").removeClass("checked");
+        });
 
-        $("html, body").animate({
-            scrollTop: $(".step-title").offset().top
-        }, 900);
-        $(".ballot").slideUp(1100, confirmation);
+        if (sel.length > 0 && sel.length <= maxItems) {
+            confirmationContent.html(sel);
+            infoMessage.hide();
+            confirmationModal.modal("show");
+        }
+        if (sel.length <= 0) {
+            confirmationContent.html(voteEmptyMessage);
+            infoMessage.hide();
+            confirmationModal.modal("show");
+        }
+        if (sel.length > maxItems) {
+            $("#alert-limit").modal("show");
+        }
+
+        event.preventDefault();
+        return false;
+    });
+
+    $("#btn-confirm").on('click', function() {
+        $('form.step-form').addClass('confirmed').submit();
     });
 
     $("#dropdown-categories .scrollTo").on("click", function(event) {
@@ -39,44 +90,16 @@ $(function() {
         var id = $(this).attr("href").replace("#", "");
         var selector = "a[name=" + id + "]";
         $("html, body").animate({
-            scrollTop: $(selector).offset().top
+            scrollTop: $(selector).offset().top - 100
         }, 500);
     });
 
-    function confirmation() {
-        $(".confirmation-buttons").show();
-
-        $(".ballot input").not(":checked").closest(".option").addClass("hidden");
-        $("input:checked").each(function(i) {
-            $(this).closest(".option").prevAll(".step-category").first().addClass("checked");
-        });
-        $(".step-category").not(".checked").addClass("hidden");
-
-        if (!$(".ballot input:checked").length) {
-            $("#vote-empty").removeClass("hidden");
-        }
-
-        $(".ballot").slideDown(500, function() {
-            $("#btn-vote").hide();
-        });
-    }
-
-    $("#btn-rectify").on("click", function() {
-        $("#info-msg").removeClass("confirm").find("p").toggleClass("hidden");
-
-        $(".ballot").slideUp(500, function() {
-            $("#vote-empty").addClass("hidden");
-            $(".ballot .option, .step-category").removeClass("hidden");
-            $(".step-category").removeClass("checked");
-            $("#btn-vote").button("reset").show();
-            $(".ballot").slideDown(500);
-        });
-        $(".confirm-message, .confirmation-buttons").slideUp();
-    });
-
-    $(".ballot .desc-toggle").on("click", function() {
+    $("#ballot-main .desc-toggle").on("click", function() {
         $(this).closest(".option").children(".desc").slideToggle();
         $(this).toggleClass("less");
     });
+
+    //init
+    updateInfo($("#ballot-main input:checked"));
 
 });

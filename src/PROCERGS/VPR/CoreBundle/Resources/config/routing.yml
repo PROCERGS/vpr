@@ -7,6 +7,13 @@ vpr_person:
     resource: "@PROCERGSVPRCoreBundle/Controller/PersonController.php"
     type:     annotation
 
+# API
+vpr_api:
+    resource: "@PROCERGSVPRCoreBundle/Controller/APIController.php"
+    defaults: { _format: json }
+    type:     annotation
+    prefix:   /
+
 #Admin
 vpr_admin:
     resource: "@PROCERGSVPRCoreBundle/Controller/Admin/DefaultController.php"

@@ -41,11 +41,13 @@ class LoggedInUserListener
         $_route = $event->getRequest()->attributes->get('_route');
 
         $isCitySelectionRoute = ($_route === self::CITY_SELECTION_ROUTE);
-        $hasCity = $user->getCityOrTreCity() instanceof City;
-        if (!$hasCity && !$isCitySelectionRoute) {
-            $url = $this->router->generate(self::CITY_SELECTION_ROUTE);
-            $event->setResponse(new RedirectResponse($url));
-            return;
+        if (strpos($_route, 'admin') !== 0) {
+            $hasCity = $user->getCityOrTreCity() instanceof City;
+            if (!$hasCity && !$isCitySelectionRoute) {
+                $url = $this->router->generate(self::CITY_SELECTION_ROUTE);
+                $event->setResponse(new RedirectResponse($url));
+                return;
+            }            
         }
 
         if ($_route == 'fos_user_security_login') {

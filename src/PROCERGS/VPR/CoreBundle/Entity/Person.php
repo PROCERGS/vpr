@@ -20,7 +20,8 @@ use JMS\Serializer\Annotation\Groups;
  *              name     = "email",
  *              type     = "string",
  *              length   = 255,
- *              nullable = true
+ *              nullable = true,
+ *              unique   = false
  *          )
  *      ),
  *      @ORM\AttributeOverride(name="emailCanonical",
@@ -28,7 +29,7 @@ use JMS\Serializer\Annotation\Groups;
  *              name     = "email_canonical",
  *              type     = "string",
  *              nullable = true,
- *              unique   = true,
+ *              unique   = false,
  *              length   = 255
  *          )
  *      ),
@@ -80,6 +81,13 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     protected $loginCidadaoUsername;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="login_cidadao_refresh_token", type="string", length=255, nullable=true)
+     */
+    protected $loginCidadaoRefreshToken;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -105,11 +113,24 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      */
     protected $mobile;
 
-
     /**
      * @ORM\Column(name="badges",type="array", nullable=true)
      */
     protected $badges;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="login_cidadao_updated_at", type="datetime", nullable=true)
+     */
+    protected $loginCidadaoUpdatedAt;
+
+    /**
+     * @var boolean
+     * @ORM\Column(name="login_cidadao_accept_registration", type="boolean", nullable=true)
+     */
+    protected $loginCidadaoAcceptRegistration;
+
     /**
      * Get id
      *
@@ -265,7 +286,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this->city;
     }
 
-    public function setCity(City $city)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
 
@@ -277,7 +298,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this->treVoter;
     }
 
-    public function setTreVoter(TREVoter $var)
+    public function setTreVoter(TREVoter $var = null)
     {
         $this->treVoter = $var;
 
@@ -351,4 +372,55 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
         return strtr($value, $map);
     }
+
+    public function setLoginCidadaoUpdatedAt($var)
+    {
+        $this->loginCidadaoUpdatedAt = $var;
+        return $this;
+    }
+
+    public function getLoginCidadaoUpdatedAt()
+    {
+        return $this->loginCidadaoUpdatedAt;
+    }
+
+    public function setLoginCidadaoRefreshToken($var)
+    {
+        $this->loginCidadaoRefreshToken = $var;
+        return $this;
+    }
+
+    public function getLoginCidadaoRefreshToken()
+    {
+        return $this->loginCidadaoRefreshToken;
+    }
+
+    public function setLoginCidadaoAcceptRegistration($loginCidadaoAcceptRegistration)
+    {
+        $this->loginCidadaoAcceptRegistration = $loginCidadaoAcceptRegistration;
+        return $this;
+    }
+
+    public function getLoginCidadaoAcceptRegistration()
+    {
+        return $this->loginCidadaoAcceptRegistration;
+    }    
+    
+    public function getCheckList()
+    {
+        $badges = $this->getBadges();
+        $return['item']['full_name'] = strlen($this->getFirstName()) > 0;
+        $return['item']['email'] = isset($badges['login-cidadao.valid_email']) && $badges['login-cidadao.valid_email'];
+        $return['item']['nfg_access_lvl'] = isset($badges['login-cidadao.nfg_access_lvl']) && $badges['login-cidadao.nfg_access_lvl'] >= 2;
+        $return['item']['voter_registration'] = isset($badges['login-cidadao.voter_registration']) && $badges['login-cidadao.voter_registration'];
+        if (!is_null($this->getLoginCidadaoUpdatedAt())) {
+            $return['updated_at'] = $this->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s');
+        } else {
+            $return['updated_at'] = null;
+        }
+        $return['code'] = ($return['item']['full_name'] && $return['item']['email'] && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration']) ? 0 : 1;
+        $return['msg'] = null;
+        return $return;
+    }
+
 }

@@ -1,3 +1,5 @@
+/*global $:false */
+'use strict';
 function somenteNumeros(e) {
     if (window.event) {
         // for IE, e.keyCode or window.event.keyCode can be used
@@ -74,34 +76,21 @@ $(document).ready(function() {
         var e = $(this);
         var u = e.attr('data-href') ? e.attr('data-href') : e.attr('href');
         if (u) {
-            window.open(u, '_blank', e.attr('data-specs'));
+            var windowFeatures = e.attr('data-specs') + ',scrollbars=yes';
+            window.open(u, '_blank', windowFeatures);
         }
         return false;
     });
-
-
+    
     /*
      * Disable input spinner's scroll
      */
     $('form').on('focus', 'input[type=number]', function(e) {
         $(this).on('mousewheel.disableScroll', function(e) {
-            e.preventDefault()
-        })
-    })
+            e.preventDefault();
+        });
+    });
     $('form').on('blur', 'input[type=number]', function(e) {
-        $(this).off('mousewheel.disableScroll')
-    })
-
-
-    /*
-     * Add tooltip for Voter Registration input
-     */
-    $(".voter-registration-input").on({
-        focusin: function() {
-            $(".tre-search-link").fadeIn().css("display", "block");
-        },
-        focusout: function() {
-            $(".tre-search-link").fadeOut();
-        }
+        $(this).off('mousewheel.disableScroll');
     });
 });

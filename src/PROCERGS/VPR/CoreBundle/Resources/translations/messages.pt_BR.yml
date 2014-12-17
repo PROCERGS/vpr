@@ -1,22 +1,22 @@
-'First name': 'Primeiro Nome'
+'First name': 'Nome'
 Email: Email
 'Mobile Phone': Celular
 'Begin Voting': 'Iniciar Votação'
-'How do I vote?': 'Como faço para votar?'
+'How do I vote?': 'Como votar?'
 'Vote with your Voter Registration': 'Vote com seu Título de eleitor'
 'Vote with your Citizen Login': 'Vote com seu Login Cidadão'
-form.city-selection.tried-different-city: 'Embora você tenha digitado uma cidade diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'
+form.city-selection.tried-different-city: 'Embora você tenha digitado um município diferente, utilizamos o domicílio eleitoral do seu título de eleitor.'
 Previous: Anterior
 Next: Próximo
 admin_users: Usuários
 'What''s your voting city?': 'Qual seu domicílio eleitoral?'
-'You need to type the city where you vote so that we can show you the relevant options for you.': 'Você precisa digitar a cidade onde você vota para que possamos lhe mostrar as opções relevantes para sua região.'
-'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Por favor, note que ao informar a cidade errada seu voto não poderá ser contado para o programa de participação popular.'
-City: Cidade
-'Alternatively you can type your voter registration, without the need to type your city.': 'Alternativamente, você pode digitar seu título de eleitor para não precisar digitar a cidade. Essa informação será solicitada ao fim da votação.'
+'You need to type the city where you vote so that we can show you the relevant options for you.': 'Informe o nome do município onde você vota para ver as opções da sua região.'
+'Please be aware that informing the wrong city will cause your vote to be discarted.': 'Assim o voto será registrado no Sistema de Participação Popular.'
+City: Município
+'Alternatively you can type your voter registration, without the need to type your city.': 'Você também pode informar apenas seu título de eleitor (não precisa informar o município).'
 'Voter Registration': 'Título de Eleitor'
 Continue: Continuar
-'Type a city to see it''s presential polling places.': 'Digite o nome da cidade onde deseja listar os locais de votação presencial.'
+'Type a city to see it''s presential polling places.': 'Digite o nome do município onde deseja listar os locais de votação presencial.'
 'Voting time is up!': 'Horário de Votação Encerrado'
 default.closing_time.poll.name: votação
 'The poll %poll% has ended at %closingTime%': 'A %poll% foi encerrada em %closingTime%'
@@ -26,18 +26,19 @@ default.closing_time.poll.name: votação
 'Check the polling places': 'Confira os locais de votação'
 register.voter_registration.mismatch: 'Algum dos dados informados não conferem com os dados cadastrados no TRE-RS'
 register.voter_registration.notfound: 'Cadastro não encontrado no TRE-RS'
-'Thank you for your participation': 'Obrigado pela sua participação'
+'Thank you for your participation': 'Obrigado pela sua participação!'
 'Thank you for your collaboration in this process, your participation was very important!': 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
 CPF: CPF
 Birthdate: 'Data de Nascimento'
 form.trevoter.invalid: 'Titulo eleitor inválido'
-end.change.nfg.user.wrongdata: 'Algum dos dados informados não conferem com os dados cadastrado na Nota Fiscal Gaúcha'
+end.change.nfg.user.wrongdata: 'Algum dos dados informados não conferem com os dados cadastrados na Nota Fiscal Gaúcha'
 end.change.nfg.user.notfound: 'Cadastro não encontrado na Nota Fiscal Gaúcha'
 end.change.nfg.return.problem: 'Houve um retorno inesperado do sistema Nota Fiscal Gaúcha'
 end.change.nfg.query.problem: 'Há algum problema com a conexão com o sistema Nota Fiscal Gaúcha'
-'Duplicate Vote Detected': 'Já há um voto com os dados cadastrais informados.'
-'It was detected that a vote were already cast by you.': 'Caso acredite que outra pessoa tenha utilizado os seus dados para votar, você pode ainda votar caso tenha cadastro no Login Cidadão associada a sua conta da Nota Fiscal Gaucha'
-'If you believe that''s a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.': 'Se você acredita que isso é um engano, você ainda pode votar utilizando seu login cidadão do Meu RS que esteja vinculado a uma conta da Nota Fiscal Gaúcha para sobrescrever esse voto.'
+'Duplicate Vote Detected': 'Você já votou!'
+'It was detected that a vote were already cast by you.': 'Encontramos um voto com estes dados informados.'
+'You can still vote with your Citizen Login linked to Nota Fiscal Gaucha.': 'Você ainda pode votar com seu Login Cidadão vinculado à Nota Fiscal Gaúcha.'
+# 'If you believe that''s a mistake, you can still vote using your citizen login on Meu RS enabled with a Nota Fiscal Gaúcha account to override this vote.': 'Se acreditar que isso é um engano, você ainda pode votar com seu Login Cidadão do Meu RS que esteja vinculado à uma conta da Nota Fiscal Gaúcha para sobrescrever esse voto.'
 'Validation with Nota Fiscal Gaúcha': 'Validação com a Nota Fiscal Gaúcha'
 'To continue the votingp rocess, fill in the information below to vote with Nota Fiscal Gaúcha': 'Para continuar com o processo de votação preencha os dados abaixo para validação com o cadastro da Nota Fiscal Gaúcha'
 end.change.nfg.puny.title: 'Cadastro muito básico com a Nota Fiscal Gaúcha'
@@ -55,7 +56,7 @@ default.continue.click: Continuar
 'Don''t know your Voter Registration?': 'Não lembra seu título?'
 'Click here to check it out': 'Consulte aqui'
 'Ballot Search': 'Consulta de cédula'
-'Type your city': 'Digite sua cidade:'
+'Type your city': 'Digite seu município:'
 Search: Pesquisar
 'Cast Vote': Votar
 Confirm: Confirmar
@@ -69,9 +70,11 @@ Rectify: Corrigir
 'Choose up to <span class=''itens-count''>%max%</span> items': 'Escolha até <span class=''itens-count''>%max%</span> itens'
 'Thank you for voting': 'Obrigado por ter votado'
 'Thank you for your collaboration on this process, your participation was very important!': 'Muito obrigado pela sua colaboração nesse processo, sua participação foi muito importante!'
-'Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!': 'Você ja tem cadastro na Nota Fiscal Gaucha? Não?! Inscreva-se agora e concorra a premios!'
-'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Você ja tem cadastro no Login Cidadão? Cadastre-se agora e obtenha conteudo personalizado para o serviços do Rio Grande do Sul!'
-'World Bank wants to know your opinion! Click below to answer the Survey.': 'O Banco Mundial quer escutar sua opinião! Responda agora o questionario abaixo!'
+'Are you participating on Nota Fiscal Gaúcha? Subscribe and compete for prizes of up to R$ 1 million!': 'Você já tem cadastro na Nota Fiscal Gaúcha? Inscreva-se e concorra a prêmios de até R$ 1 milhão!'
+'Join the Nota Fiscal Gaucha and compete for prizes of up to R$ 1 million. Register Now!': 'Participe da Nota Fiscal Gaúcha e concorra a prêmios de até R$ 1 milhão. Cadastre agora!'
+'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Aproveite e faça agora seu cadastro no Login Cidadão, e acompanhe as propostas da sua região.'
+# 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Já se cadastrou no Login Cidadão? Acesse todos os serviços do Rio Grande do Sul com uma única conta personalizada.'
+'Answer to the World Bank''s survey on Priorities Voting and help to strengthen participation in RS!': 'Responda à pesquisa do Banco Mundial sobre a Votação de Prioridades e ajude a fortalecer a participação no RS!'
 'Register Here': 'Cadastre-se aqui'
 'Answer Survey': 'Responder Pesquisa'
 Warning!: Atenção!
@@ -98,7 +101,7 @@ admin.name: Nome
 admin.title: Título
 admin.sorting: Ordem
 admin.actions: Ações
-admin.city: Cidade
+admin.city: Município
 admin.corede: Corede
 admin.opening_time: 'Data abertura'
 admin.closing_time: 'Data fechamento'
@@ -139,9 +142,9 @@ admin.saving: Salvando...
 admin.select_a_poll: 'Selecione uma Votação'
 admin.clear_filters: 'Limpar filtros'
 admin.add_poll_option: 'Adicionar opção'
-lc.missing.required.field: 'Os seguintes campos do login cidadão devem ser preenxidos: %field%'
+lc.missing.required.field: 'Os seguintes campos do Login Cidadão devem ser preenxidos: %field%'
 lc.full_name: 'Nome Completo'
-'Polling places in your city.': 'Locais de votação na sua cidade'
+'Polling places in your city.': 'Locais de votação no seu município'
 Categories: Categorias
 'Priorities Voting': 'Votação de Prioridades'
 PPC: CPP
@@ -153,8 +156,55 @@ PROCERGS: PROCERGS
 '{0} You can''t select any options|{1} You can select up to one option|]1,Inf] You can select up to %maxSelection% options': '{0} Não é possível selecionar uma opção|{1} Selecione, no máximo, uma opção|]1,Inf] Selecione, no máximo, %maxSelection% opções'
 Description: Descrição
 posvote.validate.click: Validar
-'Enter Meu RS': 'Acessar o Meu RS'
+'Enter Meu RS': 'Acessar o Login Cidadão'
 R$: R$
 Loading: Carregando
 'Cost: R$': 'Valor: R$'
-'Back to home': 'Voltar para a pagina principal'
+'Back to home': 'Voltar para a página principal'
+'What is it?': 'O que é?'
+'Vote now!': 'Vote agora!'
+'Where to vote?': 'Onde votar?'
+'Check ballot': 'Ver cédula'
+'Type a city to check the ballot for your region.': 'Digite o município desejada para consultar a sua respectiva cédula de votação.'
+form.city.select: 'Digite o município'
+'Thank you for helping Rio Grande do Sul to grow. Your participation is very important!': 'Muito obrigado por ajudar o Rio Grande do Sul a crescer. Sua participação é muito importante!'
+'Confirm your Voter Registration': 'Confirme seu título'
+'World Bank Survey': 'Responda à pesquisa!'
+'Change': 'Alterar'
+'Accepts create an account in Citizen Login service?': 'Criar meu Login Cidadão'
+'You have already chose <span class=''itens-count''>0</span> up to %max% items': 'Você já escolheu <span class=''itens-count''>0</span> de até %max% items'
+vote.voter_registration.outsider: 'Seu título de eleitor não foi encontrato no cadastro do TRE-RS, portanto seu voto não será considerado válido, mas você ainda participará da votação.'
+vote.empty.message: 'Nenhuma opção selecionada'
+'Priorities Voting<br />2015 BUDGET<br />02-04 of june': 'Votação de Prioridades<br />ORÇAMENTO 2015<br />02 a 04 de junho'
+'Create your account': 'Crie sua conta!'
+'Chance to win 1 million!': 'Concorra até R$ 1 milhão!'
+'Exit voting': 'Sair da votação'
+'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!' : 'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!'
+'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.': 'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.'
+'Quit': 'Sair'
+'Complete your data below to continue this poll': 'Complete seus dados abaixo no login cidadão para poder continuar no processo de votação.'
+'Practice more your citizenship with:': 'Pratique ainda mais sua cidadania com:'
+'You can still vote, back to home page and use a Citizen Login.': 'Você ainda pode votar, volte para página principal e utilize o login cidadao!'
+'Vote with Citizen Login': 'Vote com Login Cidadão'
+'or fill the form below': 'Ou informe os dados abaixo'
+'2015 Budget Priorities Voting': 'Votação de Prioridades do Orçamento 2015'
+voting.session.invalid: 'Ocorreu um erro durante sua votação, por favor tente novamente.'
+voting.session.invalid.options: 'Opções inválidas. Verifique se você não selecionou mais opções que o permitido.'
+'No, thanks.': Não, obrigado.
+Wait! : Aguarde
+'The poll %poll% begins in %openingTime%': 'A %poll% inicia em %openingTime%'
+'Total votes by COREDE via graph': 'Total de participações por corede via gráfico'
+'Total votes by COREDE via map': 'Total de participações por corede via mapa'
+'Partial Results for the Online Voting': 'Resultados Parciais da Votação Online'
+'Percent of poll options by COREDE': 'Percentual de demandas escolhidas por COREDE'
+'Back' : 'Voltar'
+'Total votes by COREDE': 'Total de participações por Corede'
+'Updates every 15 minutes': 'Atualizações a cada 15 minutos'
+'Updated on:': 'Atualizado em:'
+'Report of the vpr': 'Relatórios dos Resultados parciais da votação online'
+'Check stats': 'Confira os resultados'
+'Results': 'Resultados'
+'Check demands': 'Consulta de demandas'
+'Percent of poll options by city': 'Percentual de demandas escolhidas por município'
+'Results for the Online Voting': 'Resultados da Votação Online'
+'Votes by demand': 'Votos por demanda'

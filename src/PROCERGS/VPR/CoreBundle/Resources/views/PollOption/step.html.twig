@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button type="button" id="btn-categories" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
+                    <button type="button" id="btn-categories" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu" id="dropdown-categories">
                     {% for category,id in categoriesId %}
                         <li role="presentation">
@@ -20,15 +20,6 @@
                     </ul>
                 </div>
             </div>
-            {# <div class="col-md-9 check-count">
-                <p class="pull-left">Você pode votar em até x opções</p>
-                <ul class="pull-left ac-custom ac-checkmark">
-                  <li><input type="checkbox"/></li>
-                  <li><input type="checkbox"/></li>
-                  <li><input type="checkbox"/></li>
-                  <li><input type="checkbox"/></li>
-                </ul>
-            </div> #}
         </div>
     </div>
 </div>
@@ -55,36 +46,24 @@
 {% endblock %}
 
 {% block body %}
+
 <div class="row">
     <div class="col-md-12">
 
-        {# <h1 class="main-title">{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</h1>
-        <p class="alert alert-info" id="max-selection">{% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}</p>
-        <div class="alert alert-danger confirm-message" style="display:none">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</div> #}
-
-
-        {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark'}}) }}
+        {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'ac-custom ac-checkmark step-form'}}) }}
             {{ form_errors(form) }}
-
         {% if options %}
             {% image '@PROCERGSVPRCoreBundle/Resources/public/images/ajax-loader.gif' %}
             <img src="{{ asset_url }}" alt="{%trans%}Loading{%endtrans%}" class="loader" width="43" height="11">
             {% endimage %}
 
-            <div class="ballot">
+            <div class="ballot" id="ballot-main">
                 <dl class="steps">
                 {% for currStep,categories in options %}
                     <dt class="step-title">
-                      <p>{{ 'Ballot for %name%'| trans({'%name%' : corede.name}) }}</p>
-                      <p>{{ currStep }}</p>
-                      <div class="alert alert-info affix-top" id="info-msg" data-spy="affix" data-offset-top="300">
-                        <div class="center-block">
-                          <p>
-                            {% trans with {'%max%': step.getMaxSelection} %}Choose up to <span class='itens-count'>%max%</span> items{% endtrans %}
-                            <span>- Você já selecionou <span class="count">0</span></span>
-                          </p>
-                          <p class="hidden">{% trans %}Please review your choices and click confirm to proceed or rectify to correct them.{% endtrans %}</p>
-                        </div>
+                      <p>{{ currStep }} - {{ corede.name }}</p>
+                      <div class="alert alert-info affix-top text-center" id="info-msg" data-spy="affix" data-offset-top="300">
+                          <p>{% trans with {'%max%': step.getMaxSelection} %}You have already chose <span class='itens-count'>0</span> up to %max% items{% endtrans %}</p>
                       </div>
                     </dt>
                     <dd>
@@ -105,7 +84,7 @@
                                     </label>
                                     {% if option.description %}<span class="desc-toggle" title="{{ 'Description' | trans }}"></span>{% endif %}
                                 </div>
-                                {% if option.description %}<div class="desc">{{ option.description }}</div>{% endif %}
+                                {% if option.description %}<div class="desc">{{ option.description | nl2br }}</div>{% endif %}
                             </dd>
                             {% endfor %}
                         {% endfor %}
@@ -113,18 +92,28 @@
                     </dd>
                 {% endfor %}
                 </dl>
-                <div class="alert alert-danger hidden" id="vote-empty">Nenhuma opção selecionada</div>
-
-                <div id="confirmation" class="confirmation-buttons" style="display:none">
-                    <button id="btn-confirm" type="submit" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
-                    <button id="btn-rectify" type="button" class="btn btn-warning btn-lg">{{ 'Rectify' | trans }}</button>
-                </div>
             </div>
 
       {% endif %}
 
             <div id="button-bar">
-                <button id="btn-vote" type="button" class="btn btn-success btn-lg js-toggle" data-loading-text="Aguarde...">{{ 'Cast Vote' | trans }}</button>
+                <button id="btn-vote" type="submit" class="btn btn-success btn-lg js-toggle" data-loading-text="Aguarde...">{{ 'Cast Vote' | trans }}</button>
+            </div>
+
+            <div class="modal fade ballot" id="confirmation-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Altere ou confirme seu voto</h4>
+                        </div>
+                        <div class="modal-body" id="confirmation-content"></div>
+                        <div class="modal-footer">
+                            <a id="btn-rectify" role="button" class="btn btn-lg" data-dismiss="modal">{{ 'Change' | trans }}</a>
+                            <button id="btn-confirm" type="button" class="btn btn-success btn-lg">{{ 'Confirm' | trans }}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
       {{ form_end(form) }}
@@ -150,7 +139,8 @@
 {% block javascripts %}
 {{ parent() }}
     <script>
-        var maxItems = {{ step.getMaxSelection }}
+        var maxItems = {{ step.getMaxSelection }};
+        var voteEmptyMessage = "{% trans %}vote.empty.message{% endtrans %}";
     </script>
 
     {% javascripts 'bundles/procergsvprcore/js/step/svgcheckbx.js'

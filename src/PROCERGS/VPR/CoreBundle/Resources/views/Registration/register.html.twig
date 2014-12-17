@@ -17,134 +17,166 @@
 
 <div class="row main-content">
     <div class="col-sm-4">
-        <a href="#about" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-about">
-            <span class="glyphicon glyphicon-question-sign"></span>
-            <span class="text">O que é</span>
+      <a href="#about" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-about">
+        <span class="glyphicon glyphicon-question-sign"></span>
+        {% trans %}What is it?{% endtrans %}
+      </a>
+    </div>
+    {% if votingClosed %}
+    <div class="col-sm-4">
+        <a href="http://www.portaldaparticipacao.rs.gov.br/consulta-de-demandas/" class="btn btn-primary btn-block btn-lg btn-tab btn-howto" target="_blank">
+            <span class="glyphicon glyphicon-search"></span>
+            {% trans %}Check demands{% endtrans %}
         </a>
     </div>
 
     <div class="col-sm-4">
-        <a href="#howto" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-howto">
+      <a href="#results" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-vote active">
+        <span class="glyphicon glyphicon-stats"></span>
+        {% trans %}Results{% endtrans %}
+      </a>
+    </div>
+    {% else %}
+    <div class="col-sm-4">
+        <a href="#howto" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-howto">
             <span class="glyphicon glyphicon-info-sign"></span>
-            <span class="text">Como votar?</span>
+            {% trans %}How do I vote?{% endtrans %}
         </a>
     </div>
 
     <div class="col-sm-4">
-        <a href="#vote" data-toggle="tab" class="btn btn-primary btn-lg btn-block btn-vote">
-            <span class="glyphicon glyphicon-check"></span>
-            <span class="text">Vote agora!</span>
-        </a>
-    </div>
-</div>
+      <a href="#vote" data-toggle="tab" class="btn btn-primary btn-block btn-lg btn-tab btn-vote active">
+        <span class="glyphicon glyphicon-check"></span>
+        {% trans %}Vote now!{% endtrans %}
+      </a>
+    </div>    
+    {% endif %}
 
-<div class="row">
-    <div class="col-md-12">
+
+    <div class="col-sm-12">
         <div class="tab-content">
             <button type="button" class="close tab-close" aria-hidden="true">
                 <span class="glyphicon glyphicon-chevron-up"></span>
             </button>
-            <div class="tab-pane active" id="about">
-                <h1>O que é o VPR</h1><br>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <div class="tab-pane tab-about" id="about">
+                <h1>{% trans %}What is it?{% endtrans %}</h1>
+                <p>
+                    A Votação de Prioridades é a etapa final da elaboração colaborativa do Orçamento Anual do Rio Grande do Sul. Com seu voto, os cidadãos gaúchos ajudam a decidir o destino de R$ 192 milhões  vinculados à execução orçamentária de 2015 do Governo do Estado. É um dos maiores processos de participação direta do globo, premiado pela ONU em 2013 e referência para Orçamentos Participativos em todo o mundo.
+                </p>
+                <p>
+                    A sua cédula de votação inclui as prioridades definidas em Audiências Públicas nas 28 regiões do estado e em Assembleias Municipais de 427 municípios gaúchos. O resultado final indicará quais obras e serviços serão prioritários para o próximo período. Para conhecer melhor o Ciclo Orçamentário, acesse o <a href="http://www.portaldaparticipacao.rs.gov.br/wp-content/uploads/2013/01/Caderno-de-Diretrizes.pdf
+" target="_blank" title="Caderno de Diretrizes da Participação Popular e Cidadã">Caderno de Diretrizes da Participação Popular e Cidadã</a>.
+                </p>
             </div>
-            <div class="tab-pane" id="howto">
-                <h1>Como votar no vpr</h1><br>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <div class="tab-pane tab-howto" id="howto">
+                <h1>{% trans %}How do I vote?{% endtrans %}</h1>
+                <p>
+                    A cédula de votação de cada região está dividida em dois campos. No primeiro campo são até 20 (vinte) demandas que terão valor alocado e constarão do orçamento do Estado em 2015.  São R$ 192 milhões, distribuídos entre as regiões, conforme critérios estabelecidos por lei. Nesse campo você pode escolher até 4 (quatro) demandas.
+                </p>
+                <p>
+                    No segundo campo de votação estão disponíveis 5 (cinco) prioridades da região e você pode escolher até 2 (duas) delas. Estas escolhas balizam as obras e serviços prioritárias para a sua região e passarão a compor o orçamento geral elaborado pelo Governo do Estado.
+                </p>
             </div>
-            <div class="tab-pane" id="vote">
-                <div class="register-form-container content">
-                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
-                        Vote com seu Login Cidadão<span></span>
-                    </a>
-                    <div class="spacer"><hr><span>ou</span></div>
 
-                  {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
-                  {{ form_errors(form) }}
-                    <div class="form-group has-feedback clearfix">
-                    {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
-                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                        <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
-                    </div>
-                    <div class="form-group has-feedback">
-                    {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
-                        <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                        <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
-                    </div>
-                    <div class="form-group has-feedback">
-                    {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                        <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
-                    </div>
-                    <div class="form-group has-feedback">
-                    {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
-                        <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
-                    </div>
-                    <span>* {{ 'Required fields'|trans }}</span>
-
-                    <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
-                  {{ form_end(form) }}
-
+            {% if votingClosed %}
+            <div class="tab-pane tab-vote active" id="results">
+              <div class="row">
+                <div class="col-sm-6 text-center">
+                  <a href="{{ path('vpr_option_vote_by_city')}}">
+                    <span class="glyphicon glyphicon-stats"></span>
+                    Ver os resultados por município
+                  </a>
                 </div>
+                <div class="col-sm-6 text-center">
+                  <a href="{{ path('vpr_option_vote_by_corede')}}">
+                    <span class="glyphicon glyphicon-stats"></span>
+                    Ver os resultados por Corede
+                  </a>
+                </div>
+              </div>
             </div>
+            {% else %}
+            <div class="tab-pane tab-vote active" id="vote">
+              <div class="row register-form-container">
+                 <div class="col-sm-12 col-md-6 col-md-offset-3">
+                    <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="btn btn-primary lc-link" role="button">
+                        <span></span>{{ 'Vote with Citizen Login'|trans }}
+                    </a>
+                    <div class="spacer"><!-- <hr> --></div>
+                    <h4 class="text-center" >{{ 'or fill the form below'|trans }}</h4>
+
+
+                    {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'register-form'}}) }}
+                        {{ form_errors(form) }}
+                        <div class="form-group has-feedback clearfix">
+                            {{ form_label(form.username, '* ' ~ 'Voter Registration' | trans) }} {{ form_widget(form.username, {'attr': {'class': 'form-control register-tooltip' }}) }}
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.username) }}</div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            {{ form_label(form.firstname, '* ' ~ 'First name' | trans) }} {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
+                            <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.firstname) }}</div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            {{ form_label(form.email, 'Email' | trans) }} {{ form_widget(form.email, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.email) }}</div>
+                            <p class="text-left accept_registration">
+                                {{ form_widget(form.loginCidadaoAcceptRegistration) }}
+                                {{ form_label(form.loginCidadaoAcceptRegistration, 'Accepts create an account in Citizen Login service?' | trans) }}
+                            </p>
+                        </div>
+                        <div class="form-group has-feedback">
+                            {{ form_label(form.mobile, 'Mobile Phone' | trans) }} {{ form_widget(form.mobile, {'attr': {'class': 'form-control' }}) }} <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+                            <div class="input-error alert-danger">{{ form_errors(form.mobile) }}</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg">{{ 'Begin Voting' | trans }}</button>
+                        <h6 class="text-center">* {{ 'Required fields'|trans }}</h6>
+                    {{ form_end(form) }}
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
         </div>
     </div>
 </div>
 
 <div class="row sub-content">
     <div class="col-sm-6">
-        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block">
-            <span class="glyphicon glyphicon-globe"></span> Onde votar?
+        <a href="{{ path('vpr_list_ballotboxes') }}" role="button" class="btn btn-primary btn-lg btn-block btn-cedula">
+            <span class="glyphicon glyphicon-globe"></span>{% trans %}Where to vote?{% endtrans %}
         </a>
     </div>
     <div class="col-sm-6">
-        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block">
-            <span class="glyphicon glyphicon glyphicon-list-alt"></span> Ver cédula
+        <a href="{{ path('vpr_ballotByCity') }}" role="button" class="btn btn-primary btn-lg btn-block btn-cedula">
+            <span class="glyphicon glyphicon glyphicon-list-alt"></span>{% trans %}Check ballot{% endtrans %}
         </a>
     </div>
 </div>
 
+{% endblock %}
 
-  {% endblock %}
-
-  {% block stylesheets %}
-  {{ parent() }}
-  {% stylesheets 'bundles/procergsvprcore/css/register/register.css' filter='cssrewrite' %}
+{% block stylesheets %}
+{{ parent() }}
+{% stylesheets 'bundles/procergsvprcore/css/register/register.css' filter='cssrewrite' %}
 <link rel="stylesheet" href="{{ asset_url }}" />
-  {% endstylesheets %}
-  {% endblock %}
+{% endstylesheets %}
+{% endblock %}
 
-  {% block javascripts %}
-  {{ parent() }}
+{% block javascripts %}
+{{ parent() }}
 
 <script type="text/javascript">
     var usernameId = "#{{ form.username.vars.id }}";
     $(usernameId).mask('000000000000');
 </script>
 
-  {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/register/register.js' %}
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/register/register.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
-  {% endjavascripts %}
+{% endjavascripts %}
 
-  {% endblock %}
+{% endblock %}

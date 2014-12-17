@@ -1,18 +1,18 @@
 <?php
+
 namespace PROCERGS\VPR\CoreBundle\Security;
 
 use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 
 class AuthenticationHandler implements LogoutSuccessHandlerInterface
 {
+
     protected $router;
-    
-    public function setRouter(RouterInterface $var) 
+
+    public function setRouter(RouterInterface $var)
     {
         $this->router = $var;
     }
@@ -20,12 +20,17 @@ class AuthenticationHandler implements LogoutSuccessHandlerInterface
     public function onLogoutSuccess(Request $request)
     {
         //procergsvpr_core_end_offer
-        $r = $request->get('code');
-        if ($r) {
-            $url = $this->router->generate('procergsvpr_core_end_offer', array('code' => $r));    
+        if ($request->get('home')) {
+            return new RedirectResponse($this->router->generate('procergsvpr_core_homepage'));
+        }
+        $surveyMonkeyId = $request->get('surveyMonkeyId');
+        if ($surveyMonkeyId) {
+            $url = $this->router->generate('procergsvpr_core_end_offer',
+                    compact('surveyMonkeyId'));
         } else {
             $url = $this->router->generate('procergsvpr_core_end');
         }
         return new RedirectResponse($url);
     }
+
 }

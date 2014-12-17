@@ -1,20 +1,99 @@
 {% extends 'PROCERGSVPRCoreBundle::base.logout.html.twig' %}
 
 {% block body %}
-<div class="row">
-    <div class="col-md-12">
-        <h3>{{ 'Thank you for voting'|trans }}</h3>
-        <div class="alert alert-success">{% trans %}Thank you for your collaboration on this process, your participation was very important!{% endtrans %}</div>
-    </div>
-
-    <div class="col-md-12">
-        <p>{% trans %}Are you participating on Nota Fiscal Gaúcha? Subscribe now and compete for prizes!{% endtrans %}</p>
-        <p><a id="btn-popup-nfg" class="btn btn-success btn-lg link-popup" role="button" data-specs="width=1024,height=600" href="{{ link_nfg }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a></p>
-        <p>{% trans %}Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul's services.{% endtrans %}</p>
-        <p><a id="btn-popup-lc" class="btn btn-success btn-lg link-popup" role="button" data-specs="width=800,height=600" href="{{ link_lc }}">{{ 'Register Here'|trans }}</a></p>
-        <p>{% trans %}World Bank wants to know your opinion! Click below to answer the Survey.{% endtrans %}</p>
-        <p><a id="btn-popup-sm" class="btn btn-success btn-lg link-popup" role="button" data-specs="width=800,height=600" href="{{ link_sm }}">{{ 'Answer Survey' | trans }}</a></p>
-        <p><a class="btn btn-success btn-lg" role="button" href="{{ path('procergsvpr_core_homepage') }}">{{ 'Back to home' | trans }}</a></p>
+{% if skipModal == false %}
+<div class="modal fade" id="worldBankModal" tabindex="-1" role="dialog" aria-labelledby="worldBankSurveyModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="worldBankSurveyModal">{% trans %}World Bank Survey{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{% trans %}Answer to the World Bank's survey on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
+            </div>
+            <div class="modal-footer">
+                <a id="btn-popup-sm" data-dismiss="modal" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ surveyMonkeyLink }}">{{ 'Answer Survey' | trans }}</a>
+                <a data-dismiss="modal">{% trans %}No, thanks.{% endtrans %}</a>
+            </div>
+        </div>
     </div>
 </div>
+{% endif %}
+
+<div class="row end-offer">
+    <div class="col-md-12">
+        <h3>{{ 'Thank you for voting'|trans }}</h3>
+        <div>{% trans %}Thank you for helping Rio Grande do Sul to grow. Your participation is very important!{% endtrans %}</div>
+        <h3>{% trans %}Practice more your citizenship with:{% endtrans %}</h3>
+    </div>
+
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <a  href="{{ nfgLink }}" title="Concorra até R$ 1 milhão!" target="_blank">
+          {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-NFG.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}NFG{%endtrans%}" class="img-responsive">
+          {% endimage %}
+            </a>
+            <div class="caption">
+                <h3>{% trans %}Chance to win 1 million!{% endtrans %}</h3>
+                <div class="text">
+                    <p>{% trans %}Join the Nota Fiscal Gaucha and compete for prizes of up to R$ 1 million. Register Now!{% endtrans %}</p>
+                </div>
+                <a id="btn-popup-nfg" class="btn btn-success btn-lg btn-block link-popup" role="button" href="{{ nfgLink }}">{% trans %}Access Nota Fiscal Gaúcha{% endtrans %}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <a href="{{ loginCidadaoLink }}" title="Crie sua conta!" target="_blank">
+          {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-meuRS.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}MEU-RS{%endtrans%}" class="img-responsive">
+          {% endimage %}
+            </a>
+            <div class="caption">
+                <h3>{% trans %}Create your account{% endtrans %}</h3>
+                <div class="text">
+                    <p>{% trans %}Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul's services.{% endtrans %}</p>
+                </div>
+                <a title="Cadastre-se aqui" id="btn-popup-lc" class="btn btn-success btn-lg btn-block link-popup" role="button" href="{{ loginCidadaoLink }}">{{ 'Register Here'|trans }}</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <a href="{{ surveyMonkeyLink }}" title="Banco Mundial Pergunta" target="_blank">
+          {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-BancoMundialBranco.png' %}
+                <img src="{{ asset_url }}" alt="{%trans%}Banco Mundial{%endtrans%}" class="img-responsive">
+          {% endimage %}
+            </a>
+            <div class="caption">
+                <h3>{% trans %}World Bank Survey{% endtrans %}</h3>
+                <div class="text">
+                    <p>{% trans %}Answer to the World Bank's survey on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
+                </div>
+                <a title="Responder pesquisa" id="btn-popup-sm" class="btn btn-success btn-lg btn-block link-popup" role="button" href="{{ surveyMonkeyLink }}">{{ 'Answer Survey' | trans }}</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 text-center">
+        <a class="btn btn-success btn-lg" role="button" href="{{ path('procergsvpr_core_homepage') }}">{{ 'Back to home' | trans }}</a>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script type="text/javascript">
+{% if skipModal == false %}
+    $(function() {
+        $('#worldBankModal').modal('show');
+    });
+</script>
+{% endif %}
 {% endblock %}

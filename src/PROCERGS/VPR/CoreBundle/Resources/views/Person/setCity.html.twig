@@ -2,27 +2,47 @@
 
 {% block body %}
 <div class="row">
+  {% for type, messages in app.session.flashbag.all() %}
+  {% for message in messages %}
+    <div class="col-md-12">
+        <div class="text-center alert alert-{{ type }}">
+      {{ message }}
+        </div>
+    </div>
+  {% endfor %}
+  {% endfor %}
+</div>
+
+<div class="row">
     <div class="col-xs-12">
         <h1>{% trans %}What's your voting city?{% endtrans %}</h1>
 
         {{ form_start(form, { 'action': path('vpr_city_selection'), 'attr': { 'role': 'form' } }) }}
         <div class="row">
-            <div class="col-md-6 col-xs-12">
-                <p>{% trans %}You need to type the city where you vote so that we can show you the relevant options for you.{% endtrans %}</p>
-                <p>{% trans %}Please be aware that informing the wrong city will cause your vote to be discarted.{% endtrans %}</p>
+            <div class="col-md-6 col-xs-12 form-inline-6col">
+                <p>{% trans %}You need to type the city where you vote so that we can show you the relevant options for you.{% endtrans %} {% trans %}Please be aware that informing the wrong city will cause your vote to be discarted.{% endtrans %}</p>
                 <div class="form-group">
-                        {{ form_label(form.city, 'City' | trans) }}
+                        <span class="glyphicon glyphicon-globe"></span> {{ form_label(form.city, 'City' | trans) }}
                         {{ form_widget(form.city, { 'attr': { 'class': 'form-control city' } } ) }}
                         {{ form_errors(form.city) }}
                 </div>
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div class="col-md-6 col-xs-12 form-inline-6col">
                 <p>{% trans %}Alternatively you can type your voter registration, without the need to type your city.{% endtrans %}</p>
-                <div class="form-group">
-                        {{ form_label(form.voterRegistration, 'Voter Registration' | trans) }}
-                        {{ form_widget(form.voterRegistration, { 'attr': { 'class': 'form-control' } } ) }}
-                        {{ form_errors(form.voterRegistration) }}
+                <div class="form-group clearfix">
+                    <span class="glyphicon glyphicon-credit-card"></span> {{ form_label(form.voterRegistration, 'Voter Registration' | trans) }}
+                    {{ form_widget(form.voterRegistration, { 'attr': { 'class': 'form-control' } } ) }}
+                    {{ form_errors(form.voterRegistration) }}
                 </div>
+                {% if form.firstname is defined %}
+                    <div class="form-group">
+                        {{ form_label(form.firstname, 'First name'| trans) }}
+                        {{ form_errors(form.firstname) }}
+                        <div class="form-group clearfix">
+                          {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
+                        </div>
+                    </div>
+                {% endif %}
             </div>
 
             <div class="col-xs-12 text-center">

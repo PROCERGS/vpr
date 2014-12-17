@@ -12,48 +12,18 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12 text-center">
-
-      <p>{% trans %}Type a city to see it's presential polling places.{% endtrans %}</p>
-      {{ form_start(form, {'attr' : {'role' : 'form', 'class' : 'form-inline'}}) }} {{ form_errors(form) }}
-      <div class="form-group">
-          {{ form_label(form.city) }}
-      </div>
-      <div class="form-group">
-          {{ form_errors(form.city) }}
-          {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
-      </div>
-      <div class="form-group">
-        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'Search' | trans}) }}
-      </div>
-
-    {{ form_end(form) }}
-  </div>
-</div>
-
-<div class="row">
   <div class="col-md-12">
-    {% if boxes %}
-
-      <h3 class="subtitle">{% trans %}Polling places in your city.{% endtrans %}</h3>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Votação</th>
-            <th>Endereço</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for box in boxes %}
-          <tr>
-            <td>{{ box.poll.name }}</td>
-            <td>{{ box.address }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-    {% endif %}
+      <p>Conheça os pontos de votação presencial no site do <a href="http://www.portaldaparticipacao.rs.gov.br/locais-de-votacao" target="_blank">Sistema Estadual de Participação Popular e Cidadã</a>. Informações sobre a Votação de Prioridades podem ser obtidas através do telefone: (51) 3288.1489.</p>
+      <p>Saiba mais aqui: <a href="http://www.portaldaparticipacao.rs.gov.br">http://www.portaldaparticipacao.rs.gov.br</a></p>
+      <p>Contato:</p>
+      <p>
+        Secretaria Estadual de Planejamento, Gestão e Participação Cidadã<br>
+        Av. Borges de Medeiros, 1.501, 9° andar. Porto Alegre – RS.<br>
+        CEP: Cep: 90119 – 900<br>
+        E-mail: participacao@seplag.rs.gov.br<br>
+        Fone: (51) 3288-1486 / 3288-1489<br>
+        Fax: (51) 3226-9722
+      </p>
   </div>
 </div>
 

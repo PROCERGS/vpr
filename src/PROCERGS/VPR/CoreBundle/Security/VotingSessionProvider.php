@@ -12,18 +12,26 @@ use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
+use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
+use PROCERGS\VPR\CoreBundle\Entity\WorldBank\LegacyPerson;
+use PROCERGS\VPR\CoreBundle\Entity\WorldBank\GabineteDigitalPerson;
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializationContext;
 
 class VotingSessionProvider
 {
 
     private $session;
     private $em;
+    private $serializer;
 
     public function __construct(EntityManagerInterface $entityManager,
-                                SessionInterface $session)
+                                SessionInterface $session,
+                                Serializer $serializer)
     {
         $this->em = $entityManager;
         $this->session = $session;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -68,15 +76,20 @@ class VotingSessionProvider
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
     }
 
-    public function checkExistingVotes(Person $person, &$ballotBox = null)
+    /**
+     * Checks if a given person has already cast a vote in the specified BallotBox.
+     * @param \PROCERGS\VPR\CoreBundle\Entity\Person $person
+     * @param \PROCERGS\VPR\CoreBundle\Entity\BallotBox $ballotBox
+     * @param \PROCERGS\VPR\CoreBundle\Entity\Vote $conflictingVote (optional) the conflicting/current vote
+     * @return boolean
+     * @throws AccessDeniedHttpException
+     * @throws VoterAlreadyVotedException
+     * @throws VoterRegistrationAlreadyVotedException
+     */
+    public function checkExistingVotes(Person $person, BallotBox $ballotBox,
+                                       Vote $conflictingVote = null)
     {
-        if (null === $ballotBox) {
-            $ballotBox = $this->getOnlineBallotBox();
-            if (!$ballotBox) {
-                throw new VotingTimeoutException();
-            }
-        }
-        $filter['ballotBox'] = $ballotBox;
+        $filter = compact('ballotbox');
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
         if ($person->getTreVoter() instanceof TREVoter) {
             $filter['voterRegistration'] = $person->getTreVoter()->getId();
@@ -85,10 +98,12 @@ class VotingSessionProvider
         } else {
             throw new AccessDeniedHttpException('Invalid voter');
         }
-
         $votes = $voteRepo->findBy($filter);
         if (!empty($votes)) {
             foreach ($votes as $vote) {
+                if ($conflictingVote instanceof Vote && $vote->getId() === $conflictingVote->getId()) {
+                    continue;
+                }
                 if ($vote->getNfgCpf()) {
                     throw new VoterAlreadyVotedException();
                 }
@@ -107,11 +122,10 @@ class VotingSessionProvider
         if ($this->hasVotingSession()) {
             return $this->getVote();
         }
-        $vote = $this->createVotingSession($person);
-        $this->em->detach($vote);
-        $this->session->set('vote', $vote);
-
-        return $vote;
+        if (!$this->checkExistingVotes($person, $this->getOnlineBallotBox())) {
+            return;
+        }
+        return $this->save($this->createVotingSession($person));
     }
 
     public function getNextStep()
@@ -119,31 +133,120 @@ class VotingSessionProvider
         return $this->getVote()->getLastStep();
     }
 
-    private function createVotingSession(Person $person)
+    public function createVotingSession(Person $person, $ballotBox = null)
     {
-        if (!$this->checkExistingVotes($person, $ball)) {
-            return;
+        if (null === $ballotBox) {
+            $ballotBox = $this->getOnlineBallotBox();
+            if (!$ballotBox) {
+                throw new VotingTimeoutException();
+            }
         }
-
         $vote = new Vote();
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
-        $vote->setBallotBox($ball);
+        $vote->setBallotBox($ballotBox);
         $vote->setCorede($person->getCityOrTreCity()->getCorede());
-        $vote->setSmId(uniqid(mt_rand(), true));
+        $surveyMonkeyId = uniqid(hash('sha256', mt_rand() . $person->getId()), true);
+        $vote->setSurveyMonkeyId($surveyMonkeyId);
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());
         }
         if ($person->getLoginCidadaoId()) {
             $vote->setLoginCidadaoId($person->getLoginCidadaoId());
         }
-        $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-        $vote->setLastStep($pollOptionRepo->getNextPollStep($vote));
+        $badges = $person->getBadges();
+        if (strlen($person->getFirstName()) && isset($badges['login-cidadao.valid_email']) && $badges['login-cidadao.valid_email'] && isset($badges['login-cidadao.nfg_access_lvl']) && $badges['login-cidadao.nfg_access_lvl'] >= 2 && isset($badges['login-cidadao.voter_registration']) && $badges['login-cidadao.voter_registration']) {
+            $vote->setNfgCpf(1);
+        }
+        $stepRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Step');
+        $vote->setLastStep($stepRepo->findNextPollStep($vote));
+        return $vote;
+    }
+
+    public function save($vote)
+    {
+        $this->em->detach($vote);
+        $this->updateVote($vote);
         return $vote;
     }
 
     public function flush()
     {
-        $this->session->set('vote', null);
+        $this->updateVote(null);
         $this->session->remove('vote');
     }
+
+    /**
+     * @return Vote
+     * @throws AccessDeniedHttpException
+     */
+    public function requireVotingSession()
+    {
+        if ($this->hasVotingSession()) {
+            return $this->getVote();
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    /**
+     * @return Vote
+     * @throws AccessDeniedHttpException
+     */
+    public function requireLastStep()
+    {
+        $vote = $this->requireVotingSession();
+        if ($vote->getLastStep()) {
+            return $vote;
+        } else {
+            throw new AccessDeniedHttpException();
+        }
+    }
+
+    public function persistVote(Vote $vote, Person $person)
+    {
+        $vote = $this->detectWorldBankTreatment($person, $vote);
+        $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+        $serializer = $this->serializer;
+        $context = SerializationContext::create()
+                ->setSerializeNull(true)
+                ->setGroups(array('vote'));
+        $options = $pollOptionRepo->getPollOption($vote);
+        $serializedOptions = $serializer->serialize($options, 'json', $context);
+        $vote->setPlainOptions($serializedOptions);
+        $vote->close();
+        $vote->setCreatedAtValue();
+        $vote = $this->em->merge($vote);
+        $this->em->persist($vote);
+    }
+
+    public function updateVote(Vote $vote = null)
+    {
+        $this->session->set('vote', $vote);
+    }
+
+    protected function detectWorldBankTreatment(Person $person,
+                                                Vote $vote = null)
+    {
+        if (is_null($vote)) {
+            $vote = $this->getVote();
+        }
+        $voterRegistration = $vote->getVoterRegistration();
+        if ($voterRegistration) {
+            $vprLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\LegacyPerson');
+            $legacyPerson = $vprLegacyRepo->findOneBy(compact('voterRegistration'));
+            if ($legacyPerson instanceof LegacyPerson) {
+                $vote->setTreatmentVPR($legacyPerson->getTreatment());
+            }
+        }
+        if ($person->getEmail()) {
+            $email = $person->getEmail();
+            $gdLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\GabineteDigitalPerson');
+            $gdPerson = $gdLegacyRepo->findOneBy(compact('email'));
+            if ($gdPerson instanceof LegacyPerson) {
+                $vote->setTreatmentGabineteDigital($gdPerson->getTreatment());
+            }
+        }
+        return $vote;
+    }
+
 }

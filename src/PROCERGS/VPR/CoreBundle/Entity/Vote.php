@@ -4,14 +4,15 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
 
 /**
  * Vote
  *
  * @ORM\Table(name="vote", indexes={
- *      @ORM\index(name="idx_voter_registration", columns={"voter_registration"}),
- *      @ORM\index(name="idx_login_cidadao_id", columns={"login_cidadao_id"}),
- *      @ORM\index(name="idx_nfg_cpf", columns={"nfg_cpf"})
+ *      @ORM\Index(name="idx_voter_registration", columns={"voter_registration"}),
+ *      @ORM\Index(name="idx_login_cidadao_id", columns={"login_cidadao_id"}),
+ *      @ORM\Index(name="idx_nfg_cpf", columns={"nfg_cpf"})
  * })
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\VoteRepository")
  * @ORM\HasLifecycleCallbacks
@@ -110,19 +111,35 @@ class Vote
      * @Groups({"vote"})
      */
     protected $corede;
-
     protected $lastStep;
-
     protected $pollOption = array();
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sm_id", type="string", length=33, nullable=true, unique=true)
+     * @ORM\Column(name="surveymonkey_id", type="string", length=100, nullable=true, unique=false)
      * @Groups({"vote"})
      */
-    protected $smId;
+    protected $surveyMonkeyId;
 
+    /**
+     * @ORM\Column(name="wb_treatment_vpr", type="integer", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $treatmentVPR;
+
+    /**
+     * @ORM\Column(name="wb_treatment_gabinete_digital", type="integer", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $treatmentGabineteDigital;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     * @Groups({"vote"})
+     */
+    protected $city;
     /**
      * Get id
      *
@@ -371,26 +388,24 @@ class Vote
         }
     }
 
-
     public function encryptVote()
     {
         $crypted = null;
         $ballotBox = $this->getBallotBox();
         if (!$ballotBox) {
-        	return false;
+            return false;
         }
         $poll = $ballotBox->getPoll();
         $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
         $options = $this->getPlainOptions();
 
         $passphrases = null;
-        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey))) {
+        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey)) !== false) {
             $this->setOptions(base64_encode($crypted));
             $passphrase = base64_encode(reset($passphrases));
             $this->setPassphrase($passphrase);
         } else {
-            $error = openssl_error_string();
-            throw new \ErrorException($error);
+            throw new OpenSSLException();
         }
     }
 
@@ -399,7 +414,10 @@ class Vote
         $openVote = null;
         $options = base64_decode($this->getOptions());
         $passphrase = base64_decode($this->getPassphrase());
-        openssl_open($options, $openVote, $passphrase, $privateKey);
+        if (openssl_open($options, $openVote, $passphrase, $privateKey) === false) {
+            $message = openssl_error_string();
+            throw new OpenSSLException($message);
+        }
         $this->setPlainOptions($openVote);
 
         return $this;
@@ -434,6 +452,9 @@ class Vote
         if (!$this->pollOption) {
             $this->pollOption = $var;
         } else {
+            if (!$var) {
+                $var = array();
+            }
             $this->pollOption = array_merge($this->pollOption, $var);
         }
         return $this;
@@ -450,7 +471,7 @@ class Vote
         return $this->pollOption;
     }
 
-    public function finishMe()
+    public function close()
     {
         if (!$this->plainOptions) {
             return false;
@@ -459,15 +480,51 @@ class Vote
         $this->encryptVote();
     }
 
-    public function setSmId($var)
+    public function setSurveyMonkeyId($surveyMonkeyId)
     {
-        $this->smId = $var;
+        $this->surveyMonkeyId = $surveyMonkeyId;
         return $this;
     }
 
-    public function getSmId()
+    public function getSurveyMonkeyId()
     {
-        return $this->smId;
+        return $this->surveyMonkeyId;
+    }
+
+    public function getTreatmentVPR()
+    {
+        return $this->treatmentVPR;
+    }
+
+    public function setTreatmentVPR($treatmentVPR)
+    {
+        $this->treatmentVPR = $treatmentVPR;
+
+        return $this;
+    }
+
+    public function getTreatmentGabineteDigital()
+    {
+        return $this->treatmentGabineteDigital;
+    }
+
+    public function setTreatmentGabineteDigital($treatmentGabineteDigital)
+    {
+        $this->treatmentGabineteDigital = $treatmentGabineteDigital;
+
+        return $this;
+    }
+    
+    public function setCity($var)
+    {
+        $this->city = $var;
+    
+        return $this;
+    }
+    
+    public function getCity()
+    {
+        return $this->city;
     }
 
 }

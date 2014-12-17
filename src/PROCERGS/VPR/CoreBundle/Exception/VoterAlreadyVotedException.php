@@ -1,7 +1,6 @@
 <?php
-
 namespace PROCERGS\VPR\CoreBundle\Exception;
 
-class VoterAlreadyVotedException extends VoterRegistrationAlreadyVotedException
+class VoterAlreadyVotedException extends VotedException
 {
 }

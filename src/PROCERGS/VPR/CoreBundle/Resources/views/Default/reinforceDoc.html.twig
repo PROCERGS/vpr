@@ -3,23 +3,31 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <h1>{{ 'Reinforce your Vote'|trans }}</h1>
+        <h1>{{ 'Confirm your Voter Registration'|trans }}</h1>
         <p>{% trans %}Thank you for casting your vote. If you vote on Rio Grande do Sul you can still reinforce your vote using your Voter Registration.{% endtrans %}</p>
         <p>{% trans %}To continue the voting process fill the information below to validate your vote.{% endtrans %}</p>
         {{ form_start(form, {'attr' : {'role' : 'form', 'id': 'form-posvote-reinforce'}}) }}
             {{ form_errors(form) }}
         <div class="form-group">
-                {{ form_label(form.trevoter, 'Voter Registration'| trans) }}
-                {{ form_errors(form.trevoter) }}
-                <div class="form-group clearfix">
-                  {{ form_widget(form.trevoter) }}
-                </div>
+            {{ form_label(form.trevoter, 'Voter Registration'| trans) }}
+            {{ form_errors(form.trevoter) }}
+            <div class="form-group clearfix">
+              {{ form_widget(form.trevoter) }}
+            </div>
         </div>
+            {% if form.firstname is defined %}
+        <div class="form-group">
+            {{ form_label(form.firstname, 'First name'| trans) }}
+            {{ form_errors(form.firstname) }}
+            <div class="form-group clearfix">
+              {{ form_widget(form.firstname, {'attr': {'class': 'form-control' }}) }}
+            </div>
+        </div>
+            {% endif %}
+
         <p>
-            <a id="btn-continue" class="btn btn-primary" role="button" >{{ 'posvote.validate.click'|trans }}</a>
-        </p>
-        <p>
-            <a id="btn-skip" class="btn btn-primary" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a>
+          <a id="btn-skip" class="btn" role="button" href="{{ path('fos_user_security_logout', { 'code': vote.surveyMonkeyId }) }}">{{ 'Skip Step' | trans }}</a>
+          <a id="btn-continue" class="btn btn-primary" role="button" >{{ 'Confirm'|trans }}</a>
         </p>
         {{ form_end(form) }}
     </div>

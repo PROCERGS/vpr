@@ -7,7 +7,6 @@
 
 .main-title {
   color: #f0731f;
-  margin: 10px 0;
 }
 
 /* ==========================================================================
@@ -22,15 +21,23 @@
     position: relative;
   }
 
+  .ac-custom .option .checked {
+    opacity: 0.5opacity: 0.8;
+    background-color: #e9e9e9 !important;
+  }
+
+
   .ac-custom label {
     display: block;
     line-height: normal;
-    font-size: 17px;
-    font-weight: normal;
+    font-size: 16px;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
     vertical-align: top;
     cursor: pointer;
     -webkit-transition: color 0.3s;
     transition: color 0.3s;
+
   }
 
   .ac-custom input[type="checkbox"],
@@ -44,12 +51,20 @@
     cursor: pointer;
   }
 
-  .ac-custom input[type="checkbox"]{
+  .ac-custom input[type="checkbox"] {
+    float: left;
+    height: 20px;
+    width: 20px;
+  }
+
+  .ac-custom input[type="checkbox"] {
     opacity: 0;
     -webkit-appearance: none;
     display: block;
     vertical-align: middle;
     z-index: 100;
+    width: 30px;
+    height: 30px;
   }
 
   .ac-custom label::before {
@@ -60,12 +75,13 @@
   }
 
   .ac-custom input[type="checkbox"]:checked + label {
-    color: #007034;
+    color: #606B61;
   }
 
   .ac-custom input[type="checkbox"]:checked + label::before {
     opacity: 0.8;
   }
+
 
 /* ==========================================================================
    General SVG and path styles
@@ -207,8 +223,9 @@
    ballot nav + categories dropdown menu
    ========================================================================== */
    .ballot-nav {
-    background-color: #ffcf9e;
-    padding: 5px 10px 0;
+    background-color: #f6f6f6;
+    margin-bottom: 20px;
+    padding: 0 10px;
     vertical-align: middle;
   }
 
@@ -224,17 +241,10 @@
   }
 
   #btn-categories {
-    background: none;
-    color: #f0731f;
-    font-weight: bold;
-    padding-left: 0;
   }
 
   .btn-group.open #btn-categories,
   .btn-group #btn-categories:active {
-    box-shadow: none;
-    color: #007136;
-    -webkit-box-shadow: none;
   }
 
   #btn-categories .caret {
@@ -243,8 +253,10 @@
 
   #dropdown-categories {
     border-radius: 0;
+    left: 5px;
     margin: 0;
     padding: 0;
+    top: 32px;
     width: 100%;
   }
 
@@ -290,50 +302,51 @@
 
   .check-count svg {
     left: 5px;
-  }*/
+    }*/
 
-  @media (min-width: 768px) {
+    @media (min-width: 768px) {
 
-    .ballot-nav .btn-group {
-      margin-left: 0;
+      .ballot-nav .btn-group {
+        margin-left: 0;
+      }
+
+      #dropdown-categories {
+        left: 15px;
+        width: auto;
+      }
     }
 
-    #dropdown-categories {
-      width: auto;
+    #dropdown-categories li {
+      border-bottom: solid 1px #CCC;
     }
-  }
 
-  #dropdown-categories li {
-    border-bottom: solid 1px #CCC;
-  }
+    #dropdown-categories li a {
+      display: block;
+      line-height: 40px;
+      padding: 5px 0 0;
+      white-space: normal;
+      width: 100%;
+    }
 
-  #dropdown-categories li a {
-    display: block;
-    line-height: 40px;
-    padding: 5px 0 0;
-    white-space: normal;
-    width: 100%;
-  }
+    #dropdown-categories li a span {
+      display: inline-block;
+      line-height: normal;
+      padding-left: 60px;
+      padding-right: 20px;
+      position: relative;
+    }
 
-  #dropdown-categories li a span {
-    display: inline-block;
-    line-height: normal;
-    padding-left: 60px;
-    padding-right: 20px;
-    position: relative;
-  }
-
-  #dropdown-categories li a span .icon {
-    background-image: url(../../images/cat-icons.svg);
-    content: "";
-    display: block;
-    height: 40px;
-    margin-top: -20px;
-    left: 0;
-    position: absolute;
-    top: 50%;
-    width: 60px;
-  }
+    #dropdown-categories li a span .icon {
+      background-image: url(../../images/cat-icons.svg);
+      content: "";
+      display: block;
+      height: 40px;
+      margin-top: -20px;
+      left: 0;
+      position: absolute;
+      top: 50%;
+      width: 60px;
+    }
 
 /* ==========================================================================
    ballot
@@ -576,14 +589,11 @@
     position: absolute;
   }
 
-  #button-bar .btn {
+  #btn-vote {
     display: block;
     margin: 10px auto;
-    width: 300px;
-  }
-
-  #btn-vote {
     margin-top: 40px;
+    min-width: 200px;
   }
 
 /* ==========================================================================
@@ -592,6 +602,10 @@
    @media (min-width: 768px) {
     .ballot .step-title {
       font-size: 25px;
+    }
+
+    #button-bar .btn {
+      width: 300px;
     }
   }
 
@@ -602,8 +616,9 @@
     -o-transition: background-color 100ms linear;
     -ms-transition: background-color 100ms linear;
     transition: background-color 100ms linear;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 10px;
+    padding: 5px 15px;
     z-index: 9999;
   }
 
@@ -617,9 +632,20 @@
     font-size: 25px;
   }
 
+  #info-msg.complete {
+    background-color: #ffcc00;
+    background-color: rgba(255, 204, 0, 1);
+  }
+
+  #info-msg.limit {
+    background-color: #FF3300;
+    color: #FFF;
+  }
+
 
 
   #info-msg.affix {
+    border-bottom: solid 1px #CCC;
     left: 0;
     margin-top: 0;
     text-align: center;
@@ -628,7 +654,25 @@
   }
 
   .ballot-search label,
-  .ac-custom input[type="checkbox"],
-  .ac-custom label::before {
+  .ballot-search input[type="checkbox"],
+  .ballot-search label::before {
     cursor: default;
   }
+
+  .ballot-search input[type="checkbox"] {
+    display: none;
+  }
+
+#confirmation-modal {
+  margin-bottom: 0;
+}
+
+  #confirmation-modal label:before {
+    display: none;
+  }
+
+  #confirmation-modal label {
+    padding: 0.4em 0;
+    margin: auto;
+    font-weight: 300;
+}

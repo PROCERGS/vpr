@@ -1,0 +1,75 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block stylesheets %}
+{{ parent() }}
+{% stylesheets 'bundles/procergsvprcore/css/graphics/graphics.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+<div class="row" style="margin-top: 20px;">
+  <div class="col-xs-12">
+    <a href="{{ path('vpr_stats_main') }}" title="{{ 'Check stats' | trans }}">{{ 'Back'|trans }}</a>
+    <h1>{{ 'Total votes by COREDE via map'|trans }}</h1>
+  </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>{{ 'Total votes by COREDE'|trans }}</p>
+    </div>    
+    <div class="col-md-6 text-right">
+        {% if (created_at is defined) %}
+            <p style="margin-bottom: 0;">{{ 'Updated on:'|trans }} {{ created_at |date('d/m/Y H:i:s') }}</p>
+        {% endif%}
+        <p style="color: #CCC;">({{ 'Updates every 15 minutes'|trans }})</p>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div id="graphics">
+      <div class="map-graphic-container"><div id="graphic-map"></div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/graphics/*' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<script type="text/javascript">
+  var graphics_at_page = {
+    kml: '{{ app.request.scheme ~ "://" ~ app.request.httpHost ~ "/coredes.kml" }}',
+    map: [
+    {
+      title:    "Estado",
+      url:      '{{ path('vpr_stats_graphics_query1') }}',
+      coredes:  true,
+      location: "#graphic-map",
+      loader:   true,
+      detailsCallback: function(pin) {
+        var details = '<div class="detail">' +
+        ' <strong>' + pin.name + '</strong>' +
+        ' <p><span>Participações com Título:</span>' + parseFloat(pin.totReg).format(0, '', '.') + '</p>' +
+        ' <hr>' +
+        ' <p><span>Participações com Título e Login Cidadão:</span>' + parseFloat(pin.totRegLc).format(0, '', '.') + ' </p>' +
+        ' <p><span>Participações com Login Cidadão:</span>' + parseFloat(pin.totLc).format(0, '', '.') + ' </p>' +
+        ' <p><span>Total de Participações:</span>' + parseFloat(pin.quantity).format(0, '', '.') + ' </p>' +
+        ' <a class="close" href="javascript:void(0);">×</a>' +
+        '</div>';
+
+        return details;
+      }
+    }
+    ]
+  };
+
+
+</script>
+{% endblock %}

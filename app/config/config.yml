@@ -25,6 +25,7 @@ framework:
 
 # Twig Configuration
 twig:
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
     globals:
         login_cidadao_navbar_url: %login_cidadao_navbar_url%
         login_cidadao_app_id: %login_cidadao_id%
@@ -83,6 +84,7 @@ swiftmailer:
 
 hwi_oauth:
     connect:
+        confirmation: false
         account_connector: user_provider
     fosub:
         username_iterations: 30
@@ -97,8 +99,8 @@ hwi_oauth:
             client_secret:        %login_cidadao_secret%
             access_token_url:     %login_cidadao_base_url%/oauth/v2/token
             authorization_url:    %login_cidadao_base_url%/oauth/v2/auth
-            infos_url:            %login_cidadao_base_url%/api/v1/person
-            scope:                "id username full_name name cpf birthdate email city picture public_profile voter_registration badges"
+            infos_url:            %login_cidadao_base_url%/api/v1/person.json
+            scope:                "id username first_name last_name full_name name cpf birthdate email city picture public_profile voter_registration badges country state city addresses id_cards get_all_notifications notifications cep mobile"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
@@ -128,3 +130,13 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig
+
+fos_rest:
+    view:
+        force_redirects:
+            html: true
+        formats:
+            json: true
+            xml: true
+        templating_formats:
+            html: true

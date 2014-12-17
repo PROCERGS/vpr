@@ -1,0 +1,20 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+
+<h1>{{ 'Report of the vpr'|trans }}</h1>
+
+<ul>
+  <li>
+    <a href="{{ path('vpr_stats_votes') }}">{{ 'Total votes by COREDE via graph'|trans }}</a>
+  </li>
+    <li>
+    <a href="{{ path('vpr_stats_graphics') }}">{{ 'Total votes by COREDE via map'|trans }}</a>
+  </li>
+  <li>
+    <a href="{{ path('vpr_option_vote_by_corede') }}">{{ "Partial results of the online vote"|trans }}</a>
+  </li>
+</ul>
+
+
+{% endblock %}

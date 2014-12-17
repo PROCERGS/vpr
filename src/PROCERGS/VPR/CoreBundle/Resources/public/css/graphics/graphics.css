@@ -1,0 +1,627 @@
+* {
+  margin: 0;
+  padding: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+}
+
+#graphics {
+  margin-top: 10px;
+}
+
+/* > GOOGLE MAP */
+#graphics .map {
+  float: left;
+  width: 100%;
+  height: 421px;
+  position: relative;
+}
+
+#graphics .map .header {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 10px;
+}
+#graphics .map .header .title {
+  width: 138px;
+  height: 46px;
+  line-height: 46px;
+  display: block;
+  text-decoration: none;
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 13px;
+  color: #696054;
+  text-indent: 19px;
+  background: url(../../images/graphics.png) -153px -352px no-repeat #ADA195;
+}
+#graphics .map .header .title.closed {
+  background: url(../../images/graphics.png) 105px -352px no-repeat #ADA195;
+}
+
+#graphics .map .header .city-search {
+  max-height: 150px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: none;
+}
+#graphics .map .header div input {
+  width: 112px;
+  height: 38px;
+  padding-right: 26px;
+  line-height: 38px;
+  display: block;
+  text-decoration: none;
+  font-family: 'Merriweather Sans';
+  font-weight: 300;
+  font-size: 11px;
+  color: #f7f3ef;
+  text-indent: 19px;
+  outline: none;
+  background: url(../../images/graphics.png) 118px -320px no-repeat  #4E463B;
+}
+.ui-helper-hidden-accessible {
+  display: none;
+}
+ul.ui-autocomplete {
+  z-index: 50;
+}
+
+ul.ui-autocomplete a {
+  width: 138px;
+  height: 20px;
+  line-height: 20px;
+  display: block;
+  background-color: #F7F4EF;
+  text-decoration: none;
+  font-family: 'Merriweather Sans';
+  font-weight: 300;
+  font-size: 11px;
+  color: #534a3e;
+  text-indent: 19px;
+  outline: none;
+  overflow: hidden;
+}
+
+ul.ui-autocomplete a:hover {
+  background-color: #534a3e;
+  color: #F7F4EF;
+}
+#graphics .map .header .zoom
+{
+  margin-top: 10px;
+}
+#graphics .map .header .zoom a
+{
+  width: 92px;
+  height: 25px;
+  display: block;
+  color: #695F56;
+  background-color: #D8D8D0;
+  text-decoration: none;
+  float: right;
+  clear: right;
+  line-height: 25px;
+  text-indent: 9px;
+  margin: 1px 0;
+  position: relative;
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 13px;
+  z-index: 2;
+}
+#graphics .map .header .zoom a.plus,
+#graphics .map .header .zoom a.minus
+{
+  width: 30px;
+  height: 30px;
+  background-color: #ADA195;
+  color: #FFF;
+  line-height: 30px;
+  text-indent: 12px;
+  margin: 0;
+}
+#graphics .map .header .zoom a.current
+{
+  color: #FFF;
+  background-color: #993400;
+}
+#graphics .map .header .zoom a i
+{
+  background-color: #B4AA9E;
+  height: 1px;
+  width: 11px;
+  position: absolute;
+  top: 12px;
+  right: 9px;
+}
+#graphics .map .graphic {
+  width: 100%;
+  height: 100%;
+}
+#graphics .map .detail {
+  border: #80A34F solid 2px;
+  background-color: #F6F6F6;
+  position: absolute;
+  width: 389px;
+  height: 350px;
+  padding: 20px 30px;
+  margin: 25px 88px;
+  top: 0;
+  z-index: 2;
+}
+#graphics .map .detail strong,
+#graphics .map .detail p,
+#graphics .map .detail p span,
+#graphics .map .detail a {
+  font-weight: 600;
+  font-size: 26px;
+  color: #00b3b6;
+}
+#graphics .map .detail p {
+  font-weight: 300;
+  font-size: 19px;
+  margin-top: 10px;
+}
+#graphics .map .detail p span {
+  font-size: 16px;
+  color: #696054;
+  display: block;
+  margin-bottom: 4px;
+}
+#graphics .map .detail hr {
+  border-top: 1px solid #E6E2DF;
+  margin: 12px 0;
+}
+#graphics .map .detail a span {
+  height: 35px;
+  width: 37px;
+  float: left;
+  background-image: url(../../images/graphics.png);
+  background-repeat: no-repeat;
+}
+#graphics .map .detail a span.show-more {
+  background-position: 12px 0;
+}
+#graphics .map .detail a span.close {
+  background-position: 12px -35px;
+}
+#graphics .map .detail a {
+  width: 212px;
+  float: right;
+  line-height: 36px;
+  text-indent: 12px;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #FFF;
+  font-size: 11px;
+  background-color: #D85D3B;
+  display: block;
+}
+#graphics .map .detail a.view {
+  bottom: 20px;
+  right: 30px;
+  position: absolute;
+}
+#graphics .map .detail a.close {
+  background-color: transparent;
+  color: #000;
+  position: absolute;
+  font-size: 30px;
+  top: 0;
+  right: 10px;
+  width: auto;
+  text-indent: 7px;
+}
+
+#graphics .map .legends {
+  position: absolute;
+  top: 392px;
+  background: url(../../images/graphics.png) 0 -70px;
+  width: 174px;
+  height: 29px;
+}
+
+#graphics .map .legends a {
+  overflow: hidden;
+  text-indent: -9999em;
+  display: block;
+  height: 29px;
+  width: 174px;
+}
+#graphics .map .legends a.closed {
+  background: url(../../images/graphics.png) 0 -288px;
+}
+#graphics .map .legends p
+{
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 10px;
+  color: #696054;
+  margin: 7px;
+  position: absolute;
+  display: none;
+}
+#graphics .map .legends p.min
+{
+  right: 0;
+}
+/* < GOOGLE MAP */
+
+/* > TREEMAP */
+#graphics .treemap div {
+  position: relative;
+}
+#graphics .treemap .node {
+  overflow: visible;
+  position: absolute;
+}
+#graphics .treemap .node a {
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+#graphics .treemap .node a span.name {
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #FFF;
+  display: block;
+  top: 40%;
+  left: 5%;
+  position: relative;
+}
+#graphics .treemap .node a strong {
+  font-family: 'Open Sans Condensed';
+  font-weight: 300;
+  letter-spacing: -2px;
+  text-transform: none;
+  color: #FFF;
+  display: block;
+  top: 38%;
+  left: 5%;
+  position: relative;
+  white-space: nowrap;
+}
+#graphics .treemap .node a .more-info {
+  display: none;
+  background-color: #FFF;
+  padding: 10px 20px;
+  text-align: center;
+  box-shadow: 1px 1px 2px #444;
+  position: relative;
+  z-index: 10;
+}
+#graphics .treemap .node a:hover .more-info {
+  display: block;
+}
+#graphics .treemap .node a .more-info span {
+  color: #000;
+  margin: 0;
+  position: static;
+  text-transform: none;
+  white-space: nowrap;
+}
+#graphics .treemap .node a .name-inside,
+#graphics .treemap .node a .year-and-amount,
+#graphics .treemap .node a .percent {
+  display: block;
+  text-align: center;
+}
+#graphics .treemap .node a .name-inside {
+  text-shadow: 1px 1px #444;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+/* < TREEMAP */
+
+
+/* > CONTAINER */
+#graphics .second-container {
+  width: 966px;
+  height: 520px;
+  clear: both;
+  border:12px solid #60D497;
+  display: none;
+}
+/* < CONTAINER */
+
+
+/* > BAR */
+#graphics .bar {
+  float: left;
+  width: 298px;
+  height: 421px;
+  border: 12px solid #ADA097;
+  position: relative;
+  margin: 0 0 10px 3px;
+  vertical-align: top;
+  overflow: hidden;
+}
+#graphics .bar .header {
+  margin: 10px 16px;
+}
+#graphics .bar .header .title {
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 11px;
+  color: #48b37b;
+  text-transform: uppercase;
+  line-height: 35px;
+  display: inline-block;
+}
+#graphics .bar .header .period {
+  display: inline-block;
+  line-height: 35px;
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  z-index: 1;
+}
+#graphics .bar .header .period li {
+  display: none;
+  width: 100px;
+}
+#graphics .bar .header .period li a {
+  display: block;
+  background-color: #48B37B;
+  border-bottom: 1px solid #3A9063;
+  font-family: 'Merriweather Sans';
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #FFF;
+  text-indent: 14px;
+  text-decoration: none;
+}
+#graphics .bar .header .period li:last-child a {
+  border-bottom: none;
+}
+#graphics .bar .header .period li.current {
+  display: block;
+}
+#graphics .bar .header .period li.current a {
+  color: #3b885f;
+  font-weight: 600;
+  background:url(../../images/graphics.png) no-repeat 77px -247px #E0DFDA;
+  border-bottom: 4px solid #48B37B;
+}
+#graphics .bar #graphic-bar {
+  width: 304px;
+  height: 276px;
+}
+
+#graphics .bar #graphic-bar path:nth-of-type(1) {
+  stroke-width: 10px;
+}
+
+#graphics .bar #graphic-bar rect:hover {
+  fill: #AEADAA !important;
+}
+#graphics .bar #graphic-bar .morris-hover {
+  background-color: #48B37B;
+  border: none;
+  border-radius:0;
+  cursor: pointer;
+}
+#graphics .bar #graphic-bar .morris-hover strong,
+#graphics .bar #graphic-bar .morris-hover span {
+  color: #FFF !important;
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: uppercase;
+  display: block;
+}
+#graphics .bar #graphic-bar .morris-hover span {
+  font-size: 12px;
+  white-space: nowrap;
+}
+#graphics .bar .legends {
+  border-top: 1px solid #ADA195;
+  width: 273px;
+  height: 25px;
+  margin: 0 13px;
+  background: url(../../images/graphics.png) no-repeat 0 -170px;
+}
+#graphics .bar .legends p,
+#graphics .bar .legends a {
+  text-indent: -9999em;
+  overflow: hidden;
+  display: block;
+  height: 25px;
+}
+#graphics .bar .legends a {
+  width: 273px;
+  height: 49px;
+  margin-top: 7px;
+}
+/* < HORIZONTAL BAR */
+
+
+
+/* > DONUT */
+#graphic-donut {
+  width: 250px;
+  margin: 0 auto;
+}
+#graphics .donut .header .title {
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 16px;
+  color: #4daf7c;
+  display: block;
+  text-transform: uppercase;
+}
+#graphics .donut .header .title a {
+  text-indent: -999em;
+  overflow: hidden;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background: url(../../images/graphics.png) no-repeat -40px -330px;
+}
+#graphics .donut .header .amount {
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 28px;
+  color: #ada095;
+}
+#graphics .donut .header .description {
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+#graphics .donut #graphic-donut {
+  margin: 0 auto;
+}
+#graphics .donut #graphic-donut text {
+  font-family: 'Merriweather Sans' !important;
+  font-weight: 600 !important;
+  font-size: 45px;
+}
+#graphics .donut .legends {
+  margin: 0px 15px;
+}
+#graphics .donut .legends .left,
+#graphics .donut .legends .right {
+  width: 47%;
+  float: left;
+  padding: 0 5px;
+}
+#graphics .donut .legends li {
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #1c874f;
+  margin-bottom: 3px;
+}
+#graphics .donut .legends li p span {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 2px;
+}
+#graphics .donut .legends li.label-1 p span {
+  background-color: #4DAF7C;
+}
+#graphics .donut .legends li.label-2 p span {
+  background-color: #E8643E;
+}
+#graphics .donut .legends li.label-3 p span {
+  background-color: #FC8511;
+}
+#graphics .donut .legends li.label-4 p span {
+  background-color: #FEC726;
+}
+/* < DONUT */
+
+
+/* > LINE */
+#graphics .line { }
+#graphics .hbar .header .title,
+#graphics .donut .header .description,
+#graphics .line .header .title {
+  /*color: #4DAF7C;*/
+  color: #685F53;
+  font-family: 'Merriweather Sans' !important;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  line-height: 50px;
+  margin-top: 20px;
+}
+#graphics .donut .header .description {
+  margin-left: 10px;
+}
+#graphics .line #graphic-line {
+  background-color: #61D499;
+  height: 360px;
+}
+/*#graphics .line #graphic-line path {
+  stroke: #FFFFFF;
+}*/
+#graphics .line #graphic-line .morris-hover {
+  background-color: #48B37B;
+  border: none;
+  border-radius:0;
+}
+
+#graphics .line #graphic-line .morris-hover div {
+  margin: 5px;
+}
+
+#graphics .line #graphic-line .morris-hover div strong,
+#graphics .line #graphic-line .morris-hover div span {
+  color: #FFF !important;
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+#graphics .line #graphic-line text {
+  fill: #FFFFFF !important;
+  font-family: 'Merriweather Sans' !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+#graphics .line .legends {
+  background-color: #61D499;
+  padding-left:36px;
+}
+#graphics .line .legends li {
+  display: inline-block;
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #1c874f;
+  margin-right: 15px;
+  line-height: 40px;
+}
+#graphics .line .legends li p span {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 2px;
+}
+
+#graphics .line .legends li.label-1 p span {
+  background-color: #1C7245;
+}
+
+#graphics .line .legends li.label-2 p span {
+  background-color: #339967;
+}
+
+#graphics .line .legends li.label-3 p span {
+  background-color: #66FECB;
+}
+
+#graphics .line .legends li.label-4 p span {
+  background-color: #FFF;
+}
+/* < LINE */
+
+/* > HBAR */
+#graphics #graphic-hbar
+{
+  width: 330px;
+  height: 250px;
+}
+
+#graphics .hbar .jqplot-yaxis-tick
+{
+  font-family: 'Merriweather Sans';
+  font-weight: 600;
+  font-size: 11px;
+  color:#AEA093;
+  white-space: nowrap;
+}
+/* < HBAR */

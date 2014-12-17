@@ -39,8 +39,18 @@ class RegistrationController extends Controller
                 return $response;
             }
         }
+
+        try {
+          $votingSession = $this->get('vpr_voting_session_provider');
+          $votingClosed = false;
+          $poll = $votingSession->getActivePollOrFail();
+        } catch (\Exception $e) {
+          $votingClosed = true;
+        }
+
         return array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'votingClosed' => $votingClosed
         );
     }
 

@@ -1,0 +1,94 @@
+{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+
+{% block body %}
+<div class="row" style="margin-top: 20px;">
+    <div class="col-xs-12">
+        <h1>{% trans %}Results for the Online Voting{% endtrans %}</h1>
+        {% if city is defined %}
+        <h2>Município - {{ city.name }}</h2>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>{{ "Votes by demand"|trans }}</p>
+    </div>
+    <div class="col-md-6 text-right">
+    </div>
+</div>
+
+<div class="jumbotron" style="padding: 0;">
+    {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}, 'action' : path('vpr_option_vote_by_city')}) }}
+        <div class="form-group">
+            {{ form_label(form.city, 'admin.city'|trans, {'label_attr': {'class': 'city-label'} }) }}
+            {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
+        </div>
+        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'admin.filter' | trans}) }}
+    {{ form_end(form) }}
+</div>
+
+{% if results is defined %}
+<div class="row results">
+{% for step,options in results %}
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th colspan="2" style="background-color: #F5F5F5;">{{ step }}</th>
+                </tr>
+                <tr>
+                    <th width="10%">Votos</th>
+                    <th width="80%">Opção</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if (options) %}
+                {% for line in options %}
+                <tr>
+                    <td class="text-center">{{ line['total'] }}</td>
+                    <td>{{line['option_number']}} - {{ line['option_title'] }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="2">Nenhum voto encontrado para o município selecionado</tr></td>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+{% if error is defined %}
+<div class="alert alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{ error }}
+</div>
+{% endif %}
+
+{% if cityTotal is defined %}
+<div class="row" style="padding-top:20px;">
+    <div class="col-md-6">
+        <p><strong>Total de votantes no município: </strong>{{ cityTotal.total |number_format(0, ',', '.') }}</p>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+    {% stylesheets 'bundles/procergsvprcore/css/reports/citySelector.css' filter='cssrewrite' %}
+<link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+    var citiesList = {{ cities | raw }};
+</script>
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}
