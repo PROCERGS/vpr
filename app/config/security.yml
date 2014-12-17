@@ -43,16 +43,20 @@ security:
                 success_handler: vpr.logout.handler
 
     access_control:
-        - { path: ^/counting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/counting, role: ROLE_ADMIN }
 
+        - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/places, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/ballot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/end$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/end/offer$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }
+        - { path: ^/stats/update_total_option_votes$, role: ROLE_ADMIN }
+        - { path: ^/reports, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/stats, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: IS_AUTHENTICATED_FULLY }
