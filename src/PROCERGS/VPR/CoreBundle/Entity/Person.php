@@ -130,6 +130,12 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      * @ORM\Column(name="login_cidadao_accept_registration", type="boolean", nullable=true)
      */
     protected $loginCidadaoAcceptRegistration;
+    
+    /**
+     * @var boolean
+     * @ORM\Column(name="login_cidadao_sended_registration", type="integer", nullable=true)
+     */
+    protected $loginCidadaoSendedRegistration;    
 
     /**
      * Get id
@@ -422,5 +428,17 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         $return['msg'] = null;
         return $return;
     }
+    
+    public function setLoginCidadaoSendedRegistration($loginCidadaoAcceptRegistration)
+    {
+        $this->loginCidadaoSendedRegistration = $loginCidadaoAcceptRegistration;
+        return $this;
+    }
+    
+    public function getLoginCidadaoSendedRegistration()
+    {
+        return $this->loginCidadaoSendedRegistration;
+    }
+        
 
 }
