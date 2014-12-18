@@ -40,3 +40,4 @@ parameters:
     http_proxy: ~
     mailer_sender_mail: ~
     mailer_sender_name: ~
+    login_cidadao_register_prefilled_path: '/register/prefilled'

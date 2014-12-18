@@ -295,9 +295,9 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Route("/public/promo/nfg/{ballout}", name="procergsvpr_core_promo_nfg")
+     * @Route("/public/send/registration", name="procergsvpr_core_send_registration")
      */
-    public function promoNfgAction($ballout = 0)
+    public function sendRegistrationAction($ballout = 0)
     {
         //pegar a pessoa
         $em = $this->getDoctrine()->getEntityManager();
@@ -305,13 +305,21 @@ class DefaultController extends Controller
         ->select('p')
         ->from('PROCERGSVPRCoreBundle:person', 'p')
         ->where('p.email is not null and p.loginCidadaoAcceptRegistration = true and p.loginCidadaoSendedRegistration is null')
-        ->setMaxResults('5')
+        ->setMaxResults('3')
         ->getQuery();        
         $count = 3;
+        $urlCustomBase =  $this->container->getParameter('login_cidadao_base_url') . $this->container->getParameter('login_cidadao_register_prefilled_path') . '?';
         while (--$count && $results = $sql->getResult()) {
             foreach ($results as &$person) {
-                $urlCustom = 'http://localhost';
-                $htmlBody = $this->renderView('PROCERGSVPRCoreBundle:Default:promoNfgEmail.html.twig',array('fullName' => $person->getFirstName(), 'urlCustom' => $urlCustom));
+                $urlCustom = $urlCustomBase . http_build_query(array(
+                    'full_name'=> $person->getFirstName(),
+                    'email' => $person->getEmail(),
+                    'mobile' => $person->getMobile()
+                ));
+                $htmlBody = $this->renderView('PROCERGSVPRCoreBundle:Default:promoNfgEmail.html.twig',array(
+                    'fullName' => $person->getFirstName(), 
+                    'urlCustom' => $urlCustom
+                ));
                 $message = \Swift_Message::newInstance();
                 $message->setSubject('Aviso');
                 $message->setFrom($this->container->getParameter('mailer_sender_mail'),$this->container->getParameter('mailer_sender_name'));
