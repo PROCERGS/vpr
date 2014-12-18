@@ -50,12 +50,12 @@ class DefaultController extends Controller
                     throw new VotedException();
                 }
                 $votingSession->checkExistingVotes($person,
-                        $vote->getBallotBox());
+                                                   $vote->getBallotBox());
                 $votingSession->flush();
                 return $this->indexAction();
             } catch (VotedException $e) {
                 $url = $this->generateUrl('fos_user_security_logout',
-                        array('surveyMonkeyId' => $vote->getSurveyMonkeyId()));
+                                          array('surveyMonkeyId' => $vote->getSurveyMonkeyId()));
                 return $this->redirect($url);
             }
         }
@@ -78,12 +78,12 @@ class DefaultController extends Controller
         $formBuilder = $this->createFormBuilder();
         if (!$user->getFirstName()) {
             $formBuilder->add('firstname', 'text',
-                    array(
+                              array(
                 'required' => true
             ));
         }
         $formBuilder->add('trevoter', 'voter_registration',
-                array('required' => true));
+                          array('required' => true));
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
         $messages = '';
@@ -101,7 +101,7 @@ class DefaultController extends Controller
             $event = new PersonEvent($user, $treVoterTmp);
             try {
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
-                        $event);
+                                      $event);
                 $em = $this->getDoctrine()->getManager();
 
                 /* just think
@@ -151,13 +151,13 @@ class DefaultController extends Controller
      */
     public function endOfferAction(Request $request, $surveyMonkeyId)
     {
-        $skipModal = $request->get('skip', false) ? true: false;
+        $skipModal = $request->get('skip', false) ? true : false;
         $nfgLink = $this->container->getParameter('nfg_register_url');
         $loginCidadaoLink = $this->container->getParameter('lc_register_url');
         $surveyMonkeyLink = $this->container->getParameter('world_bank_survey_url') . $surveyMonkeyId;
         return compact(
-                'nfgLink', 'loginCidadaoLink', 'surveyMonkeyLink',
-                'surveyMonkeyId', 'skipModal'
+            'nfgLink', 'loginCidadaoLink', 'surveyMonkeyLink', 'surveyMonkeyId',
+            'skipModal'
         );
     }
 
@@ -168,8 +168,8 @@ class DefaultController extends Controller
     public function pollTimeoutAction()
     {
         $poll = $this->getDoctrine()->getManager()
-                ->getRepository('PROCERGSVPRCoreBundle:Poll')
-                ->findLastPoll();
+            ->getRepository('PROCERGSVPRCoreBundle:Poll')
+            ->findLastPoll();
         return array(
             'name' => $poll->getName(),
             'openingTime' => $poll->getOpeningTime(),
@@ -229,7 +229,7 @@ class DefaultController extends Controller
         } catch (\Exception $e) {
             $received = $e->getMessage() ? json_decode($e->getMessage()) : null;
             return new JsonResponse(($received !== false && $received) ? $received : null,
-                    $e->getCode());
+                                    $e->getCode());
         }
         $userManager = $this->container->get('fos_user.user_manager');
         $dispatcher = $this->container->get('event_dispatcher');
@@ -243,7 +243,7 @@ class DefaultController extends Controller
             if (!$return['code']) {
                 $event = new PersonEvent($user, $person['voter_registration']);
                 $dispatcher->dispatch(PersonEvent::VOTER_REGISTRATION_EDIT,
-                        $event);
+                                      $event);
 
                 $userManager->updateUser($user, false);
                 $votingSession = $this->get('vpr_voting_session_provider');
@@ -277,9 +277,9 @@ class DefaultController extends Controller
             }
         }
         throw new \Exception(json_encode(array('error' => 'Request Timeout')),
-        '408');
+                                         '408');
     }
-    
+
     /**
      * @Route("/public/return/notification/login-cidadao", name="procergsvpr_core_return_notification_login_cidadao")
      */
@@ -287,51 +287,70 @@ class DefaultController extends Controller
     {
         $data = $request->get('data');
         $sig = $request->get('signature');
-        $sigHash = hash_hmac('sha256', $data, '148ogt4q1wu8sgcok00koogkwgk4cok0ocso0sc8c8sgccccko');
+        $sigHash = hash_hmac('sha256', $data,
+                             '148ogt4q1wu8sgcok00koogkwgk4cok0ocso0sc8c8sgccccko');
         if (strcmp($sig, $sigHash) != 0) {
             throw new \Exception('deu certo');
         }
         return new Response();
     }
-    
+
     /**
      * @Route("/public/send/registration", name="procergsvpr_core_send_registration")
      */
-    public function sendRegistrationAction($ballout = 0)
+    public function sendRegistrationAction()
     {
-        //pegar a pessoa
+        $iterationsLimit = 3;
+        $queryLimit = 3;
+        $mailer = $this->get('mailer');
         $em = $this->getDoctrine()->getEntityManager();
-        $sql = $em->createQueryBuilder()
-        ->select('p')
-        ->from('PROCERGSVPRCoreBundle:person', 'p')
-        ->where('p.email is not null and p.loginCidadaoAcceptRegistration = true and p.loginCidadaoSendedRegistration is null')
-        ->setMaxResults('3')
-        ->getQuery();        
-        $count = 3;
-        $urlCustomBase =  $this->container->getParameter('login_cidadao_base_url') . $this->container->getParameter('login_cidadao_register_prefilled_path') . '?';
+        $sql = $em->getRepository('PROCERGSVPRCoreBundle:Person')
+            ->getPendingReminderQuery($queryLimit);
+        $count = $iterationsLimit;
+
+        $registrationUrlBase = $this->getLoginCidadaoPrefilledRegistrationUrl();
         while (--$count && $results = $sql->getResult()) {
             foreach ($results as &$person) {
-                $urlCustom = $urlCustomBase . http_build_query(array(
-                    'full_name'=> $person->getFirstName(),
-                    'email' => $person->getEmail(),
-                    'mobile' => $person->getMobile()
-                ));
-                $htmlBody = $this->renderView('PROCERGSVPRCoreBundle:Default:promoNfgEmail.html.twig',array(
-                    'fullName' => $person->getFirstName(), 
-                    'urlCustom' => $urlCustom
-                ));
-                $message = \Swift_Message::newInstance();
-                $message->setSubject('Aviso');
-                $message->setFrom($this->container->getParameter('mailer_sender_mail'),$this->container->getParameter('mailer_sender_name'));
-                $message->setBody($htmlBody, 'text/html')->addPart($htmlBody, 'text/plain');
-                //$message->setTo($person->getEmail());
-                $message->setTo('cristiano-davila@procergs.rs.gov.br');
-                $person->setLoginCidadaoSendedRegistration($this->get('mailer')->send($message));
+                $message = $this->getReminderMessage($person,
+                                                     $registrationUrlBase);
+                $person->setLoginCidadaoSentReminder($mailer->send($message));
                 $em->flush($person);
                 $em->clear($person);
             }
         }
         return new Response();
+    }
+
+    private function getLoginCidadaoPrefilledRegistrationUrl()
+    {
+        $lcBase = $this->container->getParameter('login_cidadao_base_url');
+        $lcPrefilledPath = $this->container->getParameter('login_cidadao_register_prefilled_path');
+        return $lcBase . $lcPrefilledPath;
+    }
+
+    private function getReminderMessage(Person $person, $registrationUrlBase)
+    {
+        $params = http_build_query(array(
+            'full_name' => $person->getFirstName(),
+            'email' => $person->getEmail(),
+            'mobile' => $person->getMobile()
+        ));
+        $registrationUrl = "$registrationUrlBase?$params";
+
+        $htmlBody = $this->renderView('PROCERGSVPRCoreBundle:Default:promoNfgEmail.html.twig',
+                                      array(
+            'fullName' => $person->getFirstName(),
+            'urlCustom' => $registrationUrl
+        ));
+
+        $message = \Swift_Message::newInstance();
+        $message->setSubject('Aviso');
+        $message->setFrom($this->container->getParameter('mailer_sender_mail'),
+                                                         $this->container->getParameter('mailer_sender_name'));
+        $message->setBody($htmlBody, 'text/html')->addPart($htmlBody,
+                                                           'text/plain');
+        $message->setTo($person->getEmail());
+        return $message;
     }
 
 }

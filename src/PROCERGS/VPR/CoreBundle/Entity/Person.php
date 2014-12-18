@@ -130,12 +130,12 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
      * @ORM\Column(name="login_cidadao_accept_registration", type="boolean", nullable=true)
      */
     protected $loginCidadaoAcceptRegistration;
-    
+
     /**
      * @var boolean
-     * @ORM\Column(name="login_cidadao_sended_registration", type="integer", nullable=true)
+     * @ORM\Column(name="login_cidadao_sent_reminder", type="boolean", nullable=true)
      */
-    protected $loginCidadaoSendedRegistration;    
+    protected $loginCidadaoSentReminder;
 
     /**
      * Get id
@@ -428,17 +428,16 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         $return['msg'] = null;
         return $return;
     }
-    
-    public function setLoginCidadaoSendedRegistration($loginCidadaoAcceptRegistration)
+
+    public function setLoginCidadaoSentReminder($loginCidadaoSentReminder)
     {
-        $this->loginCidadaoSendedRegistration = $loginCidadaoAcceptRegistration;
+        $this->loginCidadaoSentReminder = $loginCidadaoSentReminder;
         return $this;
     }
-    
-    public function getLoginCidadaoSendedRegistration()
+
+    public function getLoginCidadaoSentReminder()
     {
-        return $this->loginCidadaoSendedRegistration;
+        return $this->loginCidadaoSentReminder;
     }
-        
 
 }
