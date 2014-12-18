@@ -12,7 +12,7 @@ use JMS\Serializer\Annotation\Groups;
  * Person
  *
  * @ORM\Table(name="person")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\PersonRepository")
  * @ORM\HasLifecycleCallbacks
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="email",
@@ -404,8 +404,8 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
     public function getLoginCidadaoAcceptRegistration()
     {
         return $this->loginCidadaoAcceptRegistration;
-    }    
-    
+    }
+
     public function getCheckList()
     {
         $badges = $this->getBadges();
