@@ -295,30 +295,42 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Route("/public/promo/nfg/{ballout}", name="procergsvpr_core_promo_nfg")
+     * @Route("/public/send/registration", name="procergsvpr_core_send_registration")
      */
-    public function promoNfgAction($ballout = 0)
+    public function sendRegistrationAction($ballout = 0)
     {
-        //montar base        
-        $message = \Swift_Message::newInstance()
-        ->setSubject('Aviso')
-        ->setFrom($this->container->getParameter('mailer_sender_mail'),$this->container->getParameter('mailer_sender_name'));
         //pegar a pessoa
-        $em = $this->getDoctrine()->getManager()->getRepository('PROCERGSVPRCoreBundle:person');
-        $person = $em->find('46');       
-        //fazer o custom
-        $urlCustom = 'http://localhost';
-        $message->setBody(
-            $this->renderView(
-                'PROCERGSVPRCoreBundle:Default:promoNfgEmail.html.twig',
-                array('fullName' => $person->getFirstName(), 'urlCustom' => $urlCustom)
-            )
-        );
-        $message->setTo($person->getEmail());
-        //enviar sync
-        $out = $this->get('mailer')->send($message);
-        //persistir resultado
-        throw new \Exception(print_r($out,1));
+        $em = $this->getDoctrine()->getEntityManager();
+        $sql = $em->createQueryBuilder()
+        ->select('p')
+        ->from('PROCERGSVPRCoreBundle:person', 'p')
+        ->where('p.email is not null and p.loginCidadaoAcceptRegistration = true and p.loginCidadaoSendedRegistration is null')
+        ->setMaxResults('3')
+        ->getQuery();        
+        $count = 3;
+        $urlCustomBase =  $this->container->getParameter('login_cidadao_base_url') . $this->container->getParameter('login_cidadao_register_prefilled_path') . '?';
+        while (--$count && $results = $sql->getResult()) {
+            foreach ($results as &$person) {
+                $urlCustom = $urlCustomBase . http_build_query(array(
+                    'full_name'=> $person->getFirstName(),
+                    'email' => $person->getEmail(),
+                    'mobile' => $person->getMobile()
+                ));
+                $htmlBody = $this->renderView('PROCERGSVPRCoreBundle:Default:promoNfgEmail.html.twig',array(
+                    'fullName' => $person->getFirstName(), 
+                    'urlCustom' => $urlCustom
+                ));
+                $message = \Swift_Message::newInstance();
+                $message->setSubject('Aviso');
+                $message->setFrom($this->container->getParameter('mailer_sender_mail'),$this->container->getParameter('mailer_sender_name'));
+                $message->setBody($htmlBody, 'text/html')->addPart($htmlBody, 'text/plain');
+                //$message->setTo($person->getEmail());
+                $message->setTo('cristiano-davila@procergs.rs.gov.br');
+                $person->setLoginCidadaoSendedRegistration($this->get('mailer')->send($message));
+                $em->flush($person);
+                $em->clear($person);
+            }
+        }
         return new Response();
     }
 
