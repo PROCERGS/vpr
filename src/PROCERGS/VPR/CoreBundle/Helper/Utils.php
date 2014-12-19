@@ -108,4 +108,44 @@ class Utils {
     } 
     return $monthName;
   }
+  
+  private static function toCssInline($htmlFile)
+  {
+      $dom = new \DOMDocument();
+      $b = file_get_contents($htmlFile);
+      $a  = $dom->loadHTML($b);
+      $css = str_replace(array("\r","\n", "\t"), array(' ',' ', ' '), $dom->getElementsByTagName('style')->item(0)->nodeValue);
+      $c = preg_match_all('/\.([a-zA-Z0-9]{0,})[\\ ]{0,}\{([a-zA-Z0-9:\.\"\\\ ;#-]+)\}/', $css, $mat);
+      foreach (array('p', 'body', 'table', 'tr', 'td', 'span', 'a') as $tag) {
+          foreach ($dom->getElementsByTagName($tag) as $node) {
+              if ($node->hasAttributes()) {
+                  $attr = $node->attributes->getNamedItem('class');
+                  if ($attr) {
+                      $style = $node->attributes->getNamedItem('style');
+                      if ($style === null) {
+                          $style = '';
+                      }
+                      foreach (explode(' ', $attr->value) as $class) {
+                          foreach ($mat[1] as $idx => $selector) {
+                              if ($class == $selector) {
+                                  if ($style != '') {
+                                      $style .= ';';
+                                  }
+                                  $style .= trim($mat[2][$idx]);
+                                  break;
+                              }
+                          }
+                      }
+                      if ($style == '') {
+                          $break = null;
+                      }
+                      $node->removeAttribute('class');
+      
+                      $node->setAttribute("style", $style);
+                  }
+              }
+          }
+      }
+      return $dom->saveHTML();      
+  }
 }
