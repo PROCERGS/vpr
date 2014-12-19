@@ -24,16 +24,30 @@ class EmailController extends Controller
      */
     public function sendReminderAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $personRepo = $em->getRepository('PROCERGSVPRCoreBundle:Person');
-        $people = $personRepo->getPendingReminder();
+        $iterationsLimit = 1;
+        $queryLimit = 3;
+        $mailer = $this->get('mailer');
+        $em = $this->getDoctrine()->getEntityManager();
+        $sql = $em->getRepository('PROCERGSVPRCoreBundle:Person')
+            ->getPendingReminderQuery($queryLimit);
+        $count = $iterationsLimit;
 
-        $names = array();
-        foreach ($people as $person) {
-            $names[] = $this->nameCapitalizer($person->getFirstName());
+        $registrationUrlBase = $this->getLoginCidadaoPrefilledRegistrationUrl();
+        $people = array();
+        while (--$count && $results = $sql->getResult()) {
+            foreach ($results as &$person) {
+                $message = $this->getReminderMessage($person,
+                                                     $registrationUrlBase);
+                $sendResult = false; //$mailer->send($message);
+                $person->setLoginCidadaoSentReminder($sendResult);
+                $em->flush($person);
+                $em->clear($person);
+                if ($person->getLoginCidadaoSentReminder()) {
+                    $people[] = $person;
+                }
+            }
         }
-
-        return compact('people', 'names');
+        return compact('people');
     }
 
     private function nameCapitalizer($string)
@@ -62,6 +76,38 @@ class EmailController extends Controller
             $string = join($delimiter, $newwords);
         }
         return $string;
+    }
+
+    private function getLoginCidadaoPrefilledRegistrationUrl()
+    {
+        $lcBase = $this->container->getParameter('login_cidadao_base_url');
+        $lcPrefilledPath = $this->container->getParameter('login_cidadao_register_prefilled_path');
+        return $lcBase . $lcPrefilledPath;
+    }
+
+    private function getReminderMessage(Person $person, $registrationUrlBase)
+    {
+        $params = http_build_query(array(
+            'full_name' => $this->nameCapitalizer($person->getFirstName()),
+            'email' => $person->getEmail(),
+            'mobile' => $person->getMobile()
+        ));
+        $registrationUrl = "$registrationUrlBase?$params";
+
+        $htmlBody = $this->renderView('PROCERGSVPRCoreBundle:Default:promoNfgEmail.html.twig',
+                                      array(
+            'fullName' => $person->getFirstName(),
+            'urlCustom' => $registrationUrl
+        ));
+
+        $message = \Swift_Message::newInstance();
+        $message->setSubject('Aviso');
+        $message->setFrom($this->container->getParameter('mailer_sender_mail'),
+                                                         $this->container->getParameter('mailer_sender_name'));
+        $message->setBody($htmlBody, 'text/html')
+            ->addPart($htmlBody, 'text/plain');
+        $message->setTo($person->getEmail());
+        return $message;
     }
 
 }
