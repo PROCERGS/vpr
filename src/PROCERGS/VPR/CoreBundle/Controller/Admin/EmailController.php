@@ -6,11 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PROCERGS\VPR\CoreBundle\Entity\Person;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Default controller.
  *
- * @Route("/admin/email")
+ * @Route("/public/email")
  */
 class EmailController extends Controller
 {
@@ -20,12 +22,11 @@ class EmailController extends Controller
      *
      * @Route("/reminders/send", name="admin_send_reminders")
      * @Method("GET")
-     * @Template()
      */
     public function sendReminderAction()
     {
-        $iterationsLimit = 1;
-        $queryLimit = 3;
+        $iterationsLimit = 2;
+        $queryLimit = 10;
         $mailer = $this->get('mailer');
         $em = $this->getDoctrine()->getEntityManager();
         $sql = $em->getRepository('PROCERGSVPRCoreBundle:Person')
@@ -38,7 +39,7 @@ class EmailController extends Controller
             foreach ($results as &$person) {
                 $message = $this->getReminderMessage($person,
                                                      $registrationUrlBase);
-                $sendResult = false; //$mailer->send($message);
+                $sendResult = $mailer->send($message);
                 $person->setLoginCidadaoSentReminder($sendResult);
                 $em->flush($person);
                 $em->clear($person);
@@ -47,7 +48,12 @@ class EmailController extends Controller
                 }
             }
         }
-        return compact('people');
+        if (null == $results) {
+            $code = 204;
+        } else {
+            $code = 200;
+        }
+        return new Response('', $code);
     }
 
     private function nameCapitalizer($string)
@@ -85,7 +91,7 @@ class EmailController extends Controller
         return $lcBase . $lcPrefilledPath;
     }
 
-    private function getReminderMessage(Person $person, $registrationUrlBase)
+    private function getReminderMessage(Person &$person, &$registrationUrlBase)
     {
         $params = http_build_query(array(
             'full_name' => $this->nameCapitalizer($person->getFirstName()),
