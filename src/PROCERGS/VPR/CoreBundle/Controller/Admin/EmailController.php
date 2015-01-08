@@ -37,9 +37,12 @@ class EmailController extends Controller
         $people = array();
         while (--$count && $results = $sql->getResult()) {
             foreach ($results as &$person) {
-                $message = $this->getReminderMessage($person,
-                                                     $registrationUrlBase);
-                $sendResult = $mailer->send($message);
+                try {
+                    $message = $this->getReminderMessage($person, $registrationUrlBase);
+                    $sendResult = $mailer->send($message, $failures);                    
+                } catch (\Exception $e) {
+                    $sendResult = false;
+                }
                 $person->setLoginCidadaoSentReminder($sendResult);
                 $em->flush($person);
                 $em->clear($person);
@@ -93,6 +96,9 @@ class EmailController extends Controller
 
     private function getReminderMessage(Person &$person, &$registrationUrlBase)
     {
+        if (!filter_var($person->getEmail(), FILTER_VALIDATE_EMAIL)) {
+            throw new \Exception('invalido');
+        }
         $params = http_build_query(array(
             'full_name' => $this->nameCapitalizer($person->getFirstName()),
             'email' => $person->getEmail(),

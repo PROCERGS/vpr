@@ -17,8 +17,8 @@ class PersonRepository extends EntityRepository
             ->andWhere('p.email IS NOT NULL')
             ->andWhere('p.loginCidadaoAcceptRegistration = TRUE')
             ->andWhere('p.firstName IS NOT NULL')
-            ->andWhere('p.loginCidadaoId IS NULL')
-            ->andWhere('p.loginCidadaoSentReminder != TRUE');
+            ->andWhere('p.loginCidadaoId IS NULL')            
+            ->andWhere('p.loginCidadaoSentReminder is null');
 
         if ($limit !== null) {
             $query->setMaxResults($limit);
