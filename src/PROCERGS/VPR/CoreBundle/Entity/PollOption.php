@@ -20,7 +20,7 @@ class PollOption
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $id;
 
@@ -28,7 +28,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $title;
 
@@ -36,7 +36,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $description;
 
@@ -44,7 +44,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="coverage", type="text", nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $scope;
 
@@ -52,7 +52,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="cost", type="decimal", precision=12, scale=2, nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $cost;
 
@@ -60,7 +60,7 @@ class PollOption
      * @var integer
      *
      * @ORM\Column(name="category_sorting", type="integer")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $categorySorting;
 
@@ -74,14 +74,14 @@ class PollOption
     /**
      * @ORM\ManyToOne(targetEntity="Corede")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $corede;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="pollOptions")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $category;
     

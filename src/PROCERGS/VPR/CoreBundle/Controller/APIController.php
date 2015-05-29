@@ -2,10 +2,13 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Controller\FOSRestController;
 use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use JMS\Serializer\SerializationContext;
 
 class APIController extends FOSRestController
 {
@@ -17,7 +20,7 @@ class APIController extends FOSRestController
     public function waitPersonChangeAction()
     {
         $accessToken = $this->getUser()->getLoginCidadaoAccessToken();
-        $parameters = http_build_query(array(
+        $parameters  = http_build_query(array(
             'access_token' => $accessToken,
             'updated_at' => '2014-05-25 00:00:00'
         ));
@@ -25,24 +28,24 @@ class APIController extends FOSRestController
         $url = $this->container->getParameter('login_cidadao_base_url');
         $url .= "/api/v1/wait/person/update?$parameters";
 
-        $browser = $this->get('buzz.browser');
+        $browser  = $this->get('buzz.browser');
         $callback = $this->getWaitPersonCallback($browser, $url);
-        $person = $this->runTimeLimited($callback);
+        $person   = $this->runTimeLimited($callback);
 
         $personArray = $this->objectToArray($person);
-        $view = $this->view()->setData($personArray);
-        
+        $view        = $this->view()->setData($personArray);
+
         return $this->handleView($view);
     }
 
     private function runTimeLimited($callback, $waitTime = 1)
     {
         $maxExecutionTime = ini_get('max_execution_time');
-        $limit = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
-        $startTime = time();
+        $limit            = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
+        $startTime        = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
-            $delta = time() - $startTime;
+            $delta  = time() - $startTime;
 
             if ($result !== false) {
                 return $result;
@@ -65,7 +68,8 @@ class APIController extends FOSRestController
             switch ($response->getStatusCode()) {
                 case 200:
                     $receivedPerson = json_decode($response->getContent());
-                    return ($response !== false && $receivedPerson) ? $receivedPerson : false;
+                    return ($response !== false && $receivedPerson) ? $receivedPerson
+                            : false;
                 case 408:
                     return false;
                 default:
@@ -102,4 +106,34 @@ class APIController extends FOSRestController
         }
     }
 
+    /**
+     * @REST\Post("/ballotbox/{pin}", name="procergsvpr_core_dump_ballotbox")
+     * @REST\View
+     */
+    public function dumpBallotBoxAction(Request $request, $pin)
+    {
+        $poll = $this->getDoctrine()->getManager()
+            ->getRepository('PROCERGSVPRCoreBundle:Poll')
+            ->findLastPoll();
+
+        $ballotBox = $this->getDoctrine()->getManager()
+            ->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+            ->findOneByPin($pin);
+
+        $passphrase = $request->get('passphrase', null);
+        $privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
+            $passphrase);
+        if ($privateKey === false) {
+            throw new AccessDeniedHttpException("Invalid credentials");
+        }
+
+        $context = SerializationContext::create()
+            ->setSerializeNull(true)
+            ->setGroups(array('setup'));
+
+        $view = $this->view()->setData($ballotBox);
+        $view->setSerializationContext($context);
+
+        return $this->handleView($view);
+    }
 }

@@ -50,28 +50,35 @@
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.closingTime|date('d/m/Y H:i:s') }}</p>
             </div>
-        </div>            
+        </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.secret'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.secret }}</p>
             </div>
-        </div>            
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{ 'Pin'|trans }}</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.pin }}</p>
+            </div>
+        </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.private_key'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.privateKey }}</p>
             </div>
-        </div>            
+        </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.public_key'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.publicKey }}</p>
             </div>
-        </div>            
+        </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.city'|trans }}</label>

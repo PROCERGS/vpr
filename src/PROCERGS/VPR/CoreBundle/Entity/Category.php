@@ -20,7 +20,7 @@ class Category
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $id;
 
@@ -28,7 +28,7 @@ class Category
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $name;
 
@@ -36,7 +36,7 @@ class Category
      * @var integer
      *
      * @ORM\Column(name="sorting", type="integer")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $sorting;
 
