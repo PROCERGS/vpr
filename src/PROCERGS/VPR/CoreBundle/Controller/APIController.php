@@ -118,7 +118,7 @@ class APIController extends FOSRestController
 
         $ballotBox = $this->getDoctrine()->getManager()
             ->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-            ->findOneByPin($pin);
+            ->findOneBy(compact('pin', 'poll'));
 
         $passphrase = $request->get('passphrase', null);
         $privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
