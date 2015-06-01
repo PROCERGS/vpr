@@ -1,21 +1,21 @@
 #lc-navbar{
     margin-bottom: 0 !important;
 }
-#procergs_vpr_corebundle_poll_closingTime select, 
-#procergs_vpr_corebundle_poll_openingTime select, 
-#procergs_vpr_corebundle_ballotbox_openingTime select, 
-#procergs_vpr_corebundle_ballotbox_closingTime select { 
+#procergs_vpr_corebundle_poll_closingTime select,
+#procergs_vpr_corebundle_poll_openingTime select,
+#procergs_vpr_corebundle_ballotbox_openingTime select,
+#procergs_vpr_corebundle_ballotbox_closingTime select {
     margin-right: 6px;
 }
-#procergs_vpr_corebundle_poll_openingTime_time_minute, 
-#procergs_vpr_corebundle_poll_closingTime_time_minute, 
-#procergs_vpr_corebundle_ballotbox_openingTime_time_minute, 
+#procergs_vpr_corebundle_poll_openingTime_time_minute,
+#procergs_vpr_corebundle_poll_closingTime_time_minute,
+#procergs_vpr_corebundle_ballotbox_openingTime_time_minute,
 #procergs_vpr_corebundle_ballotbox_closingTime_time_minute {
     margin-left: 6px;
 }
-#procergs_vpr_corebundle_poll_openingTime_date, 
-#procergs_vpr_corebundle_poll_closingTime_date, 
-#procergs_vpr_corebundle_ballotbox_openingTime_date, 
+#procergs_vpr_corebundle_poll_openingTime_date,
+#procergs_vpr_corebundle_poll_closingTime_date,
+#procergs_vpr_corebundle_ballotbox_openingTime_date,
 #procergs_vpr_corebundle_ballotbox_closingTime_date {
     float: left;
     margin-right: 20px;
@@ -31,11 +31,11 @@
     float: left;
     margin-right: 10px;
 }
-.table > thead > tr > th, 
-.table > tbody > tr > th, 
-.table > tfoot > tr > th, 
-.table > thead > tr > td, 
-.table > tbody > tr > td, 
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
 .table > tfoot > tr > td {
     vertical-align: inherit;
 }
@@ -49,7 +49,7 @@ a.save-sorted-step{
 }
 
 .alert-save-sorted{
-    padding: 8px 15px; 
+    padding: 8px 15px;
     display: none;
 }
 .container .jumbotron {
@@ -75,5 +75,22 @@ a.save-sorted-step{
 
 }
 .poll-option-step p.category {
-    
+
+}
+
+.passphrase-box {
+    padding: 20px;
+    /*background-color: #FFFFCC;*/
+}
+
+.passphrase-box .passphrase {
+    color: #f00;
+    font-weight: bold;
+    font-size: 100%;
+    opacity: 0.2;
+    transition: opacity .25s ease-in-out;
+}
+
+.passphrase-box:hover .passphrase {
+    opacity: 1;
 }

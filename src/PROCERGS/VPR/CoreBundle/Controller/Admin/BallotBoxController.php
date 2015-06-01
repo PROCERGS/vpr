@@ -27,18 +27,17 @@ class BallotBoxController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
-        $paginator  = $this->get('knp_paginator');
-        $form = $this->createForm(new BallotBoxFilterType());
+        $em        = $this->getDoctrine()->getManager();
+        $session   = $this->getRequest()->getSession();
+        $paginator = $this->get('knp_paginator');
+        $form      = $this->createForm(new BallotBoxFilterType());
 
-        if($request->isMethod('POST')){
+        if ($request->isMethod('POST')) {
             $form->handleRequest($request);
-            $session->set('ballotBox_filters',$request);
-        }else{
+            $session->set('ballotBox_filters', $request);
+        } else {
             $request = $session->get('ballotBox_filters');
-            if($request)
-                $form->handleRequest($request);
+            if ($request) $form->handleRequest($request);
         }
 
         $filters = $form->getData();
@@ -48,30 +47,30 @@ class BallotBoxController extends Controller
             ->select('b')
             ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
             ->where('1=1')
-            ->leftJoin('b.city','c')
-            ->innerJoin('b.poll','p')
-            ->orderBy('p.openingTime','DESC')
-            ->addOrderBy('c.name','ASC')
-            ->addOrderBy('b.address','ASC');
+            ->leftJoin('b.city', 'c')
+            ->innerJoin('b.poll', 'p')
+            ->orderBy('p.openingTime', 'DESC')
+            ->addOrderBy('c.name', 'ASC')
+            ->addOrderBy('b.address', 'ASC');
 
-        if(isset($filters['poll'])){
+        if (isset($filters['poll'])) {
             $queryBuilder->andWhere('b.poll = :poll');
             $queryBuilder->setParameter('poll', $filters['poll']);
         }
 
-        if(isset($filters['city'])){
+        if (isset($filters['city'])) {
             $queryBuilder->andWhere('b.city = :city');
             $queryBuilder->setParameter('city', $filters['city']);
         }
 
-        if(!is_null($filters['is_online'])){
+        if (!is_null($filters['is_online'])) {
             $queryBuilder->andWhere('b.isOnline = :online');
             $queryBuilder->setParameter('online', $filters['is_online']);
         }
 
         $query = $queryBuilder->getQuery();
 
-        $page = $this->get('request')->query->get('page',1);
+        $page     = $this->get('request')->query->get('page', 1);
         $entities = $paginator->paginate($query, $page, 20);
 
         return array(
@@ -90,36 +89,44 @@ class BallotBoxController extends Controller
     public function createAction(Request $request)
     {
         $entity = new BallotBox();
-        $form = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+            $pin  = $repo->generateUniquePin($entity->getPoll(), 4);
+            $entity->setPin($pin);
+
             $em->persist($entity);
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_added_record'));
+            $this->get('session')->getFlashBag()->add('success',
+                $translator->trans('admin.successfully_added_record'));
 
-            return $this->redirect($this->generateUrl('admin_ballotbox_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_ballotbox_show',
+                        array('id' => $entity->getId())));
         }
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
     /**
-    * Creates a form to create a BallotBox entity.
-    *
-    * @param BallotBox $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to create a BallotBox entity.
+     *
+     * @param BallotBox $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createCreateForm(BallotBox $entity)
     {
-        $form = $this->createForm(new BallotBoxType(), $entity, array(
+        $form = $this->createForm(new BallotBoxType(), $entity,
+            array(
             'action' => $this->generateUrl('admin_ballotbox_create'),
             'method' => 'POST',
         ));
@@ -143,7 +150,7 @@ class BallotBoxController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'form' => $form->createView(),
         );
     }
 
@@ -167,7 +174,7 @@ class BallotBoxController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
+            'entity' => $entity,
             'delete_form' => $deleteForm->createView(),
         );
     }
@@ -189,27 +196,29 @@ class BallotBoxController extends Controller
             throw $this->createNotFoundException('Unable to find BallotBox entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a BallotBox entity.
-    *
-    * @param BallotBox $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a BallotBox entity.
+     *
+     * @param BallotBox $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(BallotBox $entity)
     {
-        $form = $this->createForm(new BallotBoxType(), $entity, array(
-            'action' => $this->generateUrl('admin_ballotbox_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new BallotBoxType(), $entity,
+            array(
+            'action' => $this->generateUrl('admin_ballotbox_update',
+                array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -217,6 +226,7 @@ class BallotBoxController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing BallotBox entity.
      *
@@ -235,24 +245,27 @@ class BallotBoxController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_changed_record'));
+            $this->get('session')->getFlashBag()->add('success',
+                $translator->trans('admin.successfully_changed_record'));
 
-            return $this->redirect($this->generateUrl('admin_ballotbox_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_ballotbox_show',
+                        array('id' => $id)));
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a BallotBox entity.
      *
@@ -265,7 +278,7 @@ class BallotBoxController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em     = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
 
             if (!$entity) {
@@ -276,7 +289,8 @@ class BallotBoxController extends Controller
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
+            $this->get('session')->getFlashBag()->add('success',
+                $translator->trans('admin.successfully_removed_record'));
         }
 
         return $this->redirect($this->generateUrl('admin_ballotbox'));
@@ -292,10 +306,11 @@ class BallotBoxController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('admin_ballotbox_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
+                ->setAction($this->generateUrl('admin_ballotbox_delete',
+                        array('id' => $id)))
+                ->setMethod('DELETE')
+                ->add('submit', 'submit', array('label' => 'Delete'))
+                ->getForm()
         ;
     }
 
@@ -309,5 +324,5 @@ class BallotBoxController extends Controller
         $session = $this->getRequest()->getSession();
         $session->remove('ballotBox_filters');
         return $this->redirect($this->generateUrl('admin_ballotbox'));
-    }    
+    }
 }

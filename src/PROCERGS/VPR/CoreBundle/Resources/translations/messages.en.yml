@@ -89,3 +89,4 @@ Ballots: Ballots
 Ballot Boxes: Ballot Boxes
 Users: Users
 Logout: Logout
+'<strong>WARNING</strong>: Below you''ll find this ballot box password for it''s private key. Copy and save it to a safe place. If you don''t, it <strong>CANNOT BE RECOVERED</strong> and you''ll have to create another ballot box.': '<strong>WARNING</strong>: Below you''ll find this ballot box password for it''s private key. Copy and save it to a safe place. If you don''t, it <strong>CANNOT BE RECOVERED</strong> and you''ll have to create another ballot box.'

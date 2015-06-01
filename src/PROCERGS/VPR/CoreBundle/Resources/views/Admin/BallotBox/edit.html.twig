@@ -68,22 +68,6 @@
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label">{{ 'admin.private_key'|trans }}</label>
-        <div class="col-sm-7">
-            {{ form_errors(edit_form.privateKey) }}
-            {{ form_widget(edit_form.privateKey, {'attr': {'class': 'form-control'}}) }}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-2 control-label">{{ 'admin.public_key'|trans }}</label>
-        <div class="col-sm-7">
-            {{ form_errors(edit_form.publicKey) }}
-            {{ form_widget(edit_form.publicKey, {'attr': {'class': 'form-control'}}) }}
-        </div>
-    </div>
-
-    <div class="form-group">
         <label class="col-sm-2 control-label">{{ 'admin.city'|trans }}</label>
         <div class="col-sm-5">
             {{ form_errors(edit_form.city) }}

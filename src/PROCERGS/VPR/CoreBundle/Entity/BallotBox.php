@@ -5,12 +5,14 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * BallotBox
  *
  * @ORM\Table(name="ballot_box")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository")
+ * @UniqueEntity({"poll", "pin"})
  * @ORM\HasLifecycleCallbacks
  */
 class BallotBox
@@ -35,8 +37,6 @@ class BallotBox
 
     /**
      * @var string
-     *
-     * @ ORM\Column(name="secret", type="string", length=255)
      */
     protected $secret;
 
@@ -44,7 +44,7 @@ class BallotBox
      * @var integer
      *
      * @Assert\Range(min = 0, max = 999999)
-     * @ORM\Column(name="pin", type="integer", unique=true, nullable=true)
+     * @ORM\Column(name="pin", type="integer", nullable=false)
      */
     protected $pin;
 
