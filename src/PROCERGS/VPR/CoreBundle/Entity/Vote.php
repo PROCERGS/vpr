@@ -19,8 +19,7 @@ use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
  */
 class Vote
 {
-
-    const AUTH_LOGIN_CIDADAO = 'lc';
+    const AUTH_LOGIN_CIDADAO      = 'lc';
     const AUTH_VOTER_REGISTRATION = 'doc';
 
     /**
@@ -140,6 +139,7 @@ class Vote
      * @Groups({"vote"})
      */
     protected $city;
+
     /**
      * Get id
      *
@@ -390,17 +390,18 @@ class Vote
 
     public function encryptVote()
     {
-        $crypted = null;
+        $crypted   = null;
         $ballotBox = $this->getBallotBox();
         if (!$ballotBox) {
             return false;
         }
-        $poll = $ballotBox->getPoll();
+        $poll          = $ballotBox->getPoll();
         $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
-        $options = $this->getPlainOptions();
+        $options       = $this->getPlainOptions();
 
         $passphrases = null;
-        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey)) !== false) {
+        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey))
+            !== false) {
             $this->setOptions(base64_encode($crypted));
             $passphrase = base64_encode(reset($passphrases));
             $this->setPassphrase($passphrase);
@@ -411,8 +412,8 @@ class Vote
 
     public function openVote($privateKey)
     {
-        $openVote = null;
-        $options = base64_decode($this->getOptions());
+        $openVote   = null;
+        $options    = base64_decode($this->getOptions());
         $passphrase = base64_decode($this->getPassphrase());
         if (openssl_open($options, $openVote, $passphrase, $privateKey) === false) {
             $message = openssl_error_string();
@@ -471,12 +472,13 @@ class Vote
         return $this->pollOption;
     }
 
-    public function close()
+    public function close($passphrase)
     {
         if (!$this->plainOptions) {
             return false;
         }
-        $this->signature = $this->ballotBox->sign($this->plainOptions);
+        $this->signature = $this->ballotBox->sign($this->plainOptions,
+            $passphrase);
         $this->encryptVote();
     }
 
@@ -514,17 +516,16 @@ class Vote
 
         return $this;
     }
-    
+
     public function setCity($var)
     {
         $this->city = $var;
-    
+
         return $this;
     }
-    
+
     public function getCity()
     {
         return $this->city;
     }
-
 }

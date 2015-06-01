@@ -36,7 +36,7 @@ class BallotBox
     /**
      * @var string
      *
-     * @ORM\Column(name="secret", type="string", length=255)
+     * @ ORM\Column(name="secret", type="string", length=255)
      */
     protected $secret;
 
@@ -414,6 +414,7 @@ class BallotBox
             "digest_alg" => "sha512",
             "private_key_bits" => 4096,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            "encrypt_key" => true,
         );
 
         $res = openssl_pkey_new($config);
@@ -465,10 +466,9 @@ class BallotBox
         return $this->city;
     }
 
-    public function sign($serializedOptions)
+    public function sign($serializedOptions, $passphrase)
     {
         $encryptedPrivate = $this->getPrivateKey();
-        $passphrase       = $this->getSecret();
         $privateKey       = openssl_pkey_get_private($encryptedPrivate,
             $passphrase);
 
@@ -488,5 +488,12 @@ class BallotBox
         $this->pin = $pin;
 
         return $this;
+    }
+
+    public function generatePassphrase($length = 20)
+    {
+        $chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
+
+        return substr(str_shuffle($chars), 0, $length);
     }
 }

@@ -28,7 +28,11 @@ services:
 
     vpr_voting_session_provider:
         class: %vpr_voting_session_provider.class%
-        arguments: [ @doctrine.orm.entity_manager, @session, @jms_serializer ]
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @session
+            - @jms_serializer
+            - %vpr_ballotbox_passphrase%
 
     procergs_person.registration.form.type:
         class: %procergs_person.registration.form.type.class%
