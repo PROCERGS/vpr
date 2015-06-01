@@ -217,3 +217,5 @@ Ballot Boxes: Urnas
 Users: Usuários
 Logout: Sair
 '<strong>WARNING</strong>: Below you''ll find this ballot box password for it''s private key. Copy and save it to a safe place. If you don''t, it <strong>CANNOT BE RECOVERED</strong> and you''ll have to create another ballot box.': '<strong>ATENÇÃO</strong>: A seguir está a senha da chave privada dessa urna. Salve-a em um local seguro. Se você não salvá-la, ela <strong>NÃO PODERÁ SER RECUPERADA</strong> e você terá que criar uma nova urna.'
+(poll-defined): (definido pela votação)
+Show Private Key: Exibir Chave Privada
