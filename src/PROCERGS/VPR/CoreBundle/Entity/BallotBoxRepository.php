@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use PROCERGS\VPR\CoreBundle\Entity\Poll;
 
 class BallotBoxRepository extends EntityRepository
 {
@@ -33,5 +34,21 @@ class BallotBoxRepository extends EntityRepository
         } while (array_search($pin, $pins) !== false);
 
         return $pin;
+    }
+
+    public function findByPinAndPollFilteredByCorede(Poll $poll, $pin)
+    {
+        $query = $this->createQueryBuilder('b')
+            ->select('b, c, p, s, o')
+            ->join('b.city', 'c')
+            ->join('b.poll', 'p')
+            ->join('p.steps', 's')
+            ->join('s.pollOptions', 'o')
+            ->where('b.poll = :poll')
+            ->andWhere('b.pin = :pin')
+            ->andWhere('o.corede = c.corede')
+            ->setParameters(compact('poll', 'pin'));
+
+        return $query->getQuery()->getOneOrNullResult();
     }
 }
