@@ -94,3 +94,10 @@ a.save-sorted-step{
 .passphrase-box:hover .passphrase {
     opacity: 1;
 }
+
+.category-list .category-color {
+    border: solid 1px #CCC;
+    height: 20px;
+    margin: 0 auto;
+    width: 20px;
+}

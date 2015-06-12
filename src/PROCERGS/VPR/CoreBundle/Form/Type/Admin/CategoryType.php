@@ -17,6 +17,9 @@ class CategoryType extends AbstractType
         $builder
             ->add('name')
             ->add('sorting','integer')
+            ->add('titleBg')
+            ->add('iconBg')
+            ->add('optionBg')
         ;
     }
 
