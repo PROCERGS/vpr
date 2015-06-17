@@ -74,7 +74,7 @@ class PollOption
     /**
      * @ORM\ManyToOne(targetEntity="Corede")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id")
-     * @Groups({"vote", "setup"})
+     * @Groups({"vote"})
      */
     protected $corede;
 
@@ -84,7 +84,7 @@ class PollOption
      * @Groups({"vote", "setup"})
      */
     protected $category;
-    
+
     /**
      * just to have compatibiliti to migrate to system ppp, this is not used in the system
      * @var string
@@ -231,35 +231,35 @@ class PollOption
     {
         return $this->step;
     }
-    
+
     public function setCategory($var)
     {
         $this->category = $var;
         return $this;
     }
-    
+
     public function getCategory()
     {
         return $this->category;
     }
-    
+
     public function setCorede($var)
     {
         $this->corede = $var;
         return $this;
     }
-    
+
     public function getCorede()
     {
         return $this->corede;
     }
-    
+
     public function setCodDescCedula($var)
     {
         $this->codDescCedula = $var;
         return $this;
     }
-    
+
     public function getCodDescCedula()
     {
         return $this->codDescCedula;
