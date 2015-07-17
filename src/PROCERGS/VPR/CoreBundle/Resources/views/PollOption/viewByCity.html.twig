@@ -32,20 +32,22 @@
 <div class="row">
     <div class="col-md-12">
     {% if options %}
+    	{% set cat1 = null %}
         <div class="ballot ballot-search ac-custom">
             <dl class="steps">
           {% for currStep,categories in options %}
                 <dt class="step-title">{{ currStep }} - {{ corede.name }}</dt>
                 <dd>
                     <dl>
-              {% for category,pollOptions in categories %}
-                        <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">
+              {% for category,pollOptions in categories %}              
+					{% set cat1 = attribute(categoriesId, category) %}	
+                        <dt class="step-category pre-icon-{{ cat1.iconNum }}" style="background-color: {{ cat1.titleBg }}">
                         <span class="icon"><i class="img"></i></span>
-                        <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
+                        <a class="title" name="ctg-{{ cat1.id }}">{{ category }}</a>
                         </dt>
               {% for option in pollOptions %}
                         <dd class="option">
-                            <div class="content ctg-{{ attribute(categoriesId, category) }}">
+                            <div class="content" style="background-color: {{ cat1.optionBg }}">
                                 <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
                                 <label for="option_{{ option.id }}">{{ option.getCategorySorting}} - {{ option.title |trans }}
                     {% if option.cost is not null and option.cost > 0 %}

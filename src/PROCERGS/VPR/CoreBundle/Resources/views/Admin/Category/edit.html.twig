@@ -56,6 +56,17 @@
                 <div class="colorSelector"><div class="bg" style="background-color: {{ edit_form.vars.data.iconBg}}"></div></div>
             </div>
         </div>
+        
+        <div class="form-group">
+            <label class="col-sm-2 control-label">{% trans %}admin.icon.bg{% endtrans %}</label>
+            <div class="col-sm-2 col-input">
+                {{ form_errors(edit_form.iconNum) }}
+                {{ form_widget(edit_form.iconNum, {'attr': {'class': 'form-control colorHex'}}) }}
+            </div>
+            <div class="col-sm-2">
+                <div class="colorSelector"><div class="bg"><i class="icon"></i></div></div>
+            </div>
+        </div>
 
         <div class="form-group">
             <label class="col-sm-2 control-label">{% trans %}admin.option.bg{% endtrans %}</label>

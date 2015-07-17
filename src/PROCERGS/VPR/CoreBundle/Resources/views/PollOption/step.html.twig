@@ -2,7 +2,7 @@
 
 {% block header %}
 {{ parent() }}
-
+{% set cat1 = null %}
 <div class="ballot-nav">
     <div class="container">
         <div class="row">
@@ -10,10 +10,10 @@
                 <div class="btn-group">
                     <button type="button" id="btn-categories" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">{% trans %}Categories{% endtrans %}<span class="caret"></span></button>
                     <ul class="dropdown-menu" role="menu" id="dropdown-categories">
-                    {% for category,id in categoriesId %}
+                    {% for category in categoriesId %}
                         <li role="presentation">
-                            <a role="menuitem" tabindex="-1" href="#ctg-{{ attribute(categoriesId, category) }}" class="scrollTo">
-                                <span class="ctg-{{id}}"><i class="icon"></i>{{category}}</span>
+                            <a role="menuitem" tabindex="-1" href="#ctg-{{ category.id }}" class="scrollTo">
+                                <span class="pre-icon-{{category.iconNum}}"><i class="icon"></i>{{category.name}}</span>
                             </a>
                         </li>
                     {% endfor %}
@@ -69,13 +69,14 @@
                     <dd>
                         <dl>
                         {% for category,pollOptions in categories %}
-                            <dt class="step-category ctg-{{ attribute(categoriesId, category) }}">
+                        {% set cat1 = attribute(categoriesId, category) %}
+                            <dt class="step-category pre-icon-{{ cat1.iconNum }}" style="background-color: {{ cat1.titleBg }}">
                                 <span class="icon"><i class="img"></i></span>
-                                <a class="title" name="ctg-{{ attribute(categoriesId, category) }}">{{ category }}</a>
+                                <a class="title" name="ctg-{{ cat1.id }}">{{ category }}</a>
                             </dt>
                             {% for option in pollOptions %}
                             <dd class="option">
-                                <div class="content ctg-{{ attribute(categoriesId, category) }}">
+                                <div class="content" style="background-color: {{ cat1.optionBg }}">
                                     <input type="checkbox" id="option_{{ option.id }}" name="options[]" value="{{ option.id }}"/>
                                     <label for="option_{{ option.id }}">{{ option.getCategorySorting}} - {{ option.title |trans }}
                                     {% if option.cost is not null and option.cost > 0 %}

@@ -64,6 +64,14 @@ class Category
     /**
      * @var string
      *
+     * @ORM\Column(name="icon_num", type="integer", nullable=true)
+     * @Groups({"setup"})
+     */
+    protected $iconNum;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="option_bg", type="string", length=7)
      * @Groups({"setup"})
      */
@@ -169,6 +177,29 @@ class Category
     public function getIconBg()
     {
         return $this->iconBg;
+    }
+
+    /**
+     * Set icon_bg
+     *
+     * @param string $icon_bg
+     * @return Category
+     */
+    public function setIconNum($var)
+    {
+        $this->iconNum = $var;
+
+        return $this;
+    }
+
+    /**
+     * Get icon_bg
+     *
+     * @return string
+     */
+    public function getIconNum()
+    {
+        return $this->iconNum;
     }
 
      /**

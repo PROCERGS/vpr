@@ -105,117 +105,117 @@
   }
 
 /* ==========================================================================
-   category icons background
+   category pre-icons background
    ========================================================================== */
-   .ctg-1 .icon {
+   .pre-icon-1 .icon {
     background-position: 0 -9px;
   }
-  .ctg-1 .icon .img {
+  .pre-icon-1 .icon .img {
     background-position: -65px -9px;
   }
 
-  .ctg-2 .icon {
+  .pre-icon-2 .icon {
     background-position: 0px -68px;
   }
-  .ctg-2 .icon .img {
+  .pre-icon-2 .icon .img {
     background-position: -65px -68px;
   }
 
-  .ctg-3 .icon {
+  .pre-icon-3 .icon {
     background-position: 0 -130px;
   }
-  .ctg-3 .icon .img {
+  .pre-icon-3 .icon .img {
     background-position: -65px -130px;
   }
 
-  .ctg-4 .icon {
+  .pre-icon-4 .icon {
     background-position: 0 -191px;
   }
-  .ctg-4 .icon .img {
+  .pre-icon-4 .icon .img {
     background-position: -65px -191px;
   }
 
-  .ctg-5 .icon {
+  .pre-icon-5 .icon {
     background-position: 0 -250px;
   }
-  .ctg-5 .icon .img {
+  .pre-icon-5 .icon .img {
     background-position: -65px -250px;
   }
 
-  .ctg-6 .icon {
+  .pre-icon-6 .icon {
     background-position: 0 -310px;
   }
-  .ctg-6 .icon .img {
+  .pre-icon-6 .icon .img {
     background-position: -65px -310px;
   }
 
-  .ctg-7 .icon {
+  .pre-icon-7 .icon {
     background-position: 0 -370px;
   }
-  .ctg-7 .icon .img {
+  .pre-icon-7 .icon .img {
     background-position: -65px -370px;
   }
 
-  .ctg-8 .icon {
+  .pre-icon-8 .icon {
     background-position: 0 -430px;
   }
-  .ctg-8 .icon .img {
+  .pre-icon-8 .icon .img {
     background-position: -65px -430px;
   }
 
-  .ctg-9 .icon {
+  .pre-icon-9 .icon {
     background-position: 0 -490px;
   }
-  .ctg-9 .icon .img {
+  .pre-icon-9 .icon .img {
     background-position: -65px -490px;
   }
 
-  .ctg-10 .icon {
+  .pre-icon-10 .icon {
     background-position: 0 -550px;
   }
-  .ctg-10 .icon .img {
+  .pre-icon-10 .icon .img {
     background-position: -65px -550px;
   }
 
-  .ctg-11 .icon {
+  .pre-icon-11 .icon {
     background-position: 0 -610px;
   }
-  .ctg-11 .icon .img {
+  .pre-icon-11 .icon .img {
     background-position: -65px -610px;
   }
 
-  .ctg-12 .icon {
+  .pre-icon-12 .icon {
     background-position: 0 -670px;
   }
-  .ctg-12 .icon .img {
+  .pre-icon-12 .icon .img {
     background-position: -65px -670px;
   }
 
-  .ctg-13 .icon {
+  .pre-icon-13 .icon {
     background-position: 0 -730px;
   }
-  .ctg-13 .icon .img {
+  .pre-icon-13 .icon .img {
     background-position: -65px -730px;
   }
 
-  .ctg-14 .icon {
+  .pre-icon-14 .icon {
     background-position: 0 -790px;
   }
-  .ctg-14 .icon .img {
+  .pre-icon-14 .icon .img {
     background-position: -65px -790px;
   }
 
-  .ctg-15 .icon {
+  .pre-icon-15 .icon {
     background-position: 0 -850px;
   }
-  .ctg-15 .icon .img {
+  .pre-icon-15 .icon .img {
     background-position: -65px -850px;
   }
 
-  .ctg-16 .icon {
+  .pre-icon-16 .icon {
     background-position: 0 -910px;
   }
-  .ctg-16 .icon .img {
+  .pre-icon-16 .icon .img {
     background-position: -65px -910px;
   }
 
@@ -414,140 +414,6 @@
 
   .ballot .step-category .title:hover {
     text-decoration: none;
-  }
-
-/* ==========================================================================
-   ballot categories title background
-   ========================================================================== */
-   .ballot .step-category.ctg-1 {
-    background-color: #3B65DB;
-  }
-
-  .ballot .step-category.ctg-2 {
-    background-color: #44B752;
-  }
-
-  .ballot .step-category.ctg-3 {
-    background-color: #C9B435;
-  }
-
-  .ballot .step-category.ctg-4 {
-    background-color: #CC5252;
-  }
-
-  .ballot .step-category.ctg-5 {
-    background-color: #DD863E;
-  }
-
-  .ballot .step-category.ctg-6 {
-    background-color: #40C0DD;
-  }
-
-  .ballot .step-category.ctg-7 {
-    background-color: #784C9B;
-  }
-
-  .ballot .step-category.ctg-8 {
-    background-color: #93C445;
-  }
-
-  .ballot .step-category.ctg-9 {
-    background-color: #CE57B7;
-  }
-
-  .ballot .step-category.ctg-10 {
-    background-color: #B8BC2A;
-  }
-
-  .ballot .step-category.ctg-11 {
-    background-color: #4C845A;
-  }
-
-  .ballot .step-category.ctg-12 {
-    background-color: #A31414;
-  }
-
-  .ballot .step-category.ctg-13 {
-    background-color: #487CA3;
-  }
-
-  .ballot .step-category.ctg-14 {
-    background-color: #7F7F7F;
-  }
-
-  .ballot .step-category.ctg-15 {
-    background-color: #AF5715;
-  }
-
-  .ballot .step-category.ctg-16 {
-    background-color: #46AF91;
-  }
-
-/* ==========================================================================
-   ballot categories options background
-   ========================================================================== */
-   .ballot .option .ctg-1 {
-    background-color: #D2D8F5;
-  }
-
-  .ballot .option .ctg-2 {
-    background-color: #DCECD6;
-  }
-
-  .ballot .option .ctg-3 {
-    background-color: #EFECD0;
-  }
-
-  .ballot .option .ctg-4 {
-    background-color: #ECD4D4;
-  }
-
-  .ballot .option .ctg-5 {
-    background-color: #F1E0D0;
-  }
-
-  .ballot .option .ctg-6 {
-    background-color: #DDEFF6;
-  }
-
-  .ballot .option .ctg-7 {
-    background-color: #DAD2E5;
-  }
-
-  .ballot .option .ctg-8 {
-    background-color: #E7F0D3;
-  }
-
-  .ballot .option .ctg-9 {
-    background-color: #ECD5EC;
-  }
-
-  .ballot .option .ctg-10 {
-    background-color: #EDEECE;
-  }
-
-  .ballot .option .ctg-11 {
-    background-color: #D7E0D6;
-  }
-
-  .ballot .option .ctg-12 {
-    background-color: #E2C6C6;
-  }
-
-  .ballot .option .ctg-13 {
-    background-color: #D6DEE7;
-  }
-
-  .ballot .option .ctg-14 {
-    background-color: #DEDEDE;
-  }
-
-  .ballot .option .ctg-15 {
-    background-color: #E6D5C7;
-  }
-
-  .ballot .option .ctg-16 {
-    background-color: #DBEAE3;
   }
 
   .ballot .option .desc-toggle {

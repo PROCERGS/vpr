@@ -43,7 +43,7 @@ class PollOptionController extends Controller
 
         foreach ($pollOptions as $option) {
             $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
-            $categoriesId[$option->getCategory()->getName()] = $option->getCategory()->getId();
+            $categoriesId[$option->getCategory()->getName()] = $option->getCategory();
         }
 
         $corede = $city->getCorede();
@@ -121,7 +121,7 @@ class PollOptionController extends Controller
         $categoriesId = array();
         foreach ($pollOptions as $option) {
             $options[$option->getStep()->getName()][$option->getCategory()->getName()][] = $option;
-            $categoriesId[$option->getCategory()->getName()] = $option->getCategory()->getId();
+            $categoriesId[$option->getCategory()->getName()] = $option->getCategory();
         }
 
         $form = $formBuilder->createView();
