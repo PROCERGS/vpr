@@ -26,7 +26,7 @@
             {% endif %}
 
         <p>
-          <a id="btn-skip" class="btn" role="button" href="{{ path('fos_user_security_logout', { 'code': vote.surveyMonkeyId }) }}">{{ 'Skip Step' | trans }}</a>
+          <a id="btn-skip" class="btn" role="button" href="{{ path('fos_user_security_logout') }}">{{ 'Skip Step' | trans }}</a>
           <a id="btn-continue" class="btn btn-primary" role="button" >{{ 'Confirm'|trans }}</a>
         </p>
         {{ form_end(form) }}

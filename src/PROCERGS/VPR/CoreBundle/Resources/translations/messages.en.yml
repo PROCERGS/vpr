@@ -25,8 +25,6 @@ end.change.nfg.puny.offer: __end.change.nfg.puny.offer
 'Access Nota Fiscal Gaúcha': 'Access Nota Fiscal Gaúcha'
 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.'
 'Register Here': 'Register Here'
-'World Bank wants to know your opinion! Click below to answer the Survey.': 'World Bank wants to know your opinion! Click below to answer the Survey.'
-'Answer Survey': 'Answer Survey'
 default.closing_time.poll.name: __default.closing_time.poll.name
 'Voting time is up!': 'Voting time is up!'
 'The poll %poll% has ended at %closingTime%': 'The poll %poll% has ended at %closingTime%'

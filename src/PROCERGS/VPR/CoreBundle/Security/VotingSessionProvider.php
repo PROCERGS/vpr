@@ -13,8 +13,6 @@ use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
-use PROCERGS\VPR\CoreBundle\Entity\WorldBank\LegacyPerson;
-use PROCERGS\VPR\CoreBundle\Entity\WorldBank\GabineteDigitalPerson;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializationContext;
 
@@ -142,14 +140,11 @@ class VotingSessionProvider
                 throw new VotingTimeoutException();
             }
         }
-        $vote           = new Vote();
+        $vote = new Vote();
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO
                     : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
         $vote->setCorede($person->getCityOrTreCity()->getCorede());
-        $surveyMonkeyId = uniqid(hash('sha256', mt_rand().$person->getId()),
-            true);
-        $vote->setSurveyMonkeyId($surveyMonkeyId);
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());
         }
@@ -210,7 +205,6 @@ class VotingSessionProvider
 
     public function persistVote(Vote $vote, Person $person)
     {
-        $vote              = $this->detectWorldBankTreatment($person, $vote);
         $pollOptionRepo    = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $serializer        = $this->serializer;
         $context           = SerializationContext::create()
@@ -228,30 +222,5 @@ class VotingSessionProvider
     public function updateVote(Vote $vote = null)
     {
         $this->session->set('vote', $vote);
-    }
-
-    protected function detectWorldBankTreatment(Person $person,
-                                                Vote $vote = null)
-    {
-        if (is_null($vote)) {
-            $vote = $this->getVote();
-        }
-        $voterRegistration = $vote->getVoterRegistration();
-        if ($voterRegistration) {
-            $vprLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\LegacyPerson');
-            $legacyPerson  = $vprLegacyRepo->findOneBy(compact('voterRegistration'));
-            if ($legacyPerson instanceof LegacyPerson) {
-                $vote->setTreatmentVPR($legacyPerson->getTreatment());
-            }
-        }
-        if ($person->getEmail()) {
-            $email        = $person->getEmail();
-            $gdLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\GabineteDigitalPerson');
-            $gdPerson     = $gdLegacyRepo->findOneBy(compact('email'));
-            if ($gdPerson instanceof LegacyPerson) {
-                $vote->setTreatmentGabineteDigital($gdPerson->getTreatment());
-            }
-        }
-        return $vote;
     }
 }
