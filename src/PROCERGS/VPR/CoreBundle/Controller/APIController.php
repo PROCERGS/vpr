@@ -136,4 +136,28 @@ class APIController extends FOSRestController
 
         return $this->handleView($view);
     }
+
+    /**
+     * @REST\Post("/ballotbox/{pin}/votes", name="procergsvpr_core_receive_votes")
+     * @REST\View
+     */
+    public function receiveVotesAction(Request $request, $pin)
+    {
+        $em         = $this->getDoctrine()->getManager();
+        $votes      = $request->get('votes');
+        $serializer = $this->getJmsSerializer();
+        $data       = $serializer->deserialize($votes,
+            'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\Vote>', 'json');
+
+        var_dump($data);
+        die();
+    }
+
+    /**
+     * @return \JMS\Serializer\SerializerInterface
+     */
+    private function getJmsSerializer()
+    {
+        return $this->get('jms_serializer');
+    }
 }
