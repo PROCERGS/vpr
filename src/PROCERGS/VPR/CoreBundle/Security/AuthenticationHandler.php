@@ -9,7 +9,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 class AuthenticationHandler implements LogoutSuccessHandlerInterface
 {
-
     protected $router;
 
     public function setRouter(RouterInterface $var)
@@ -23,14 +22,7 @@ class AuthenticationHandler implements LogoutSuccessHandlerInterface
         if ($request->get('home')) {
             return new RedirectResponse($this->router->generate('procergsvpr_core_homepage'));
         }
-        $surveyMonkeyId = $request->get('surveyMonkeyId');
-        if ($surveyMonkeyId) {
-            $url = $this->router->generate('procergsvpr_core_end_offer',
-                    compact('surveyMonkeyId'));
-        } else {
-            $url = $this->router->generate('procergsvpr_core_end');
-        }
+        $url = $this->router->generate('procergsvpr_core_end');
         return new RedirectResponse($url);
     }
-
 }

@@ -3,7 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as JMS;
 use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
 
 /**
@@ -28,7 +28,7 @@ class Vote
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $id;
 
@@ -36,7 +36,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="options", type="text")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $options;
     protected $plainOptions;
@@ -45,7 +45,7 @@ class Vote
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $createdAt;
 
@@ -53,7 +53,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="signature", type="text")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $signature;
 
@@ -61,7 +61,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="passphrase", type="text")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $passphrase;
 
@@ -69,7 +69,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="auth_type", type="string", length=255)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $authType;
 
@@ -77,7 +77,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $loginCidadaoId;
 
@@ -85,7 +85,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="nfg_cpf", type="string", length=255, nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $nfgCpf;
 
@@ -93,50 +93,45 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $voterRegistration;
 
     /**
      * @ORM\ManyToOne(targetEntity="BallotBox")
      * @ORM\JoinColumn(name="ballot_box_id", referencedColumnName="id", nullable=false)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
+     * @JMS\Type("PROCERGS\VPR\CoreBundle\Entity\BallotBox")
      */
     protected $ballotBox;
 
     /**
      * @ORM\ManyToOne(targetEntity="Corede")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id", nullable=false)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
+     * @JMS\Type("PROCERGS\VPR\CoreBundle\Entity\Corede")
      */
     protected $corede;
     protected $lastStep;
     protected $pollOption = array();
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="surveymonkey_id", type="string", length=100, nullable=true, unique=false)
-     * @Groups({"vote"})
-     */
-    protected $surveyMonkeyId;
-
-    /**
      * @ORM\Column(name="wb_treatment_vpr", type="integer", nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $treatmentVPR;
 
     /**
      * @ORM\Column(name="wb_treatment_gabinete_digital", type="integer", nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $treatmentGabineteDigital;
 
     /**
      * @ORM\ManyToOne(targetEntity="City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
+     * @JMS\Type("PROCERGS\VPR\CoreBundle\Entity\City")
      */
     protected $city;
 
@@ -480,17 +475,6 @@ class Vote
         $this->signature = $this->ballotBox->sign($this->plainOptions,
             $passphrase);
         $this->encryptVote();
-    }
-
-    public function setSurveyMonkeyId($surveyMonkeyId)
-    {
-        $this->surveyMonkeyId = $surveyMonkeyId;
-        return $this;
-    }
-
-    public function getSurveyMonkeyId()
-    {
-        return $this->surveyMonkeyId;
     }
 
     public function getTreatmentVPR()
