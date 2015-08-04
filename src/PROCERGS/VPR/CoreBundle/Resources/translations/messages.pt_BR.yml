@@ -144,7 +144,7 @@ lc.missing.required.field: 'Os seguintes campos do Login Cidadão devem ser pree
 lc.full_name: 'Nome Completo'
 'Polling places in your city.': 'Locais de votação no seu município'
 Categories: Categorias
-'Priorities Voting': 'Votação de Prioridades'
+'Priorities Voting': 'Consulta Popular'
 PPC: CPP
 COREDES: COREDES
 ONU: UNO
@@ -177,7 +177,7 @@ vote.empty.message: 'Nenhuma opção selecionada'
 'Chance to win 1 million!': 'Concorra até R$ 1 milhão!'
 'Exit voting': 'Sair da votação'
 'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!' : 'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!'
-'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.': 'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.'
+'A Consulta Popular do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.': 'A Consulta Popular do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.'
 'Quit': 'Sair'
 'Complete your data below to continue this poll': 'Complete seus dados abaixo no login cidadão para poder continuar no processo de votação.'
 'Practice more your citizenship with:': 'Pratique ainda mais sua cidadania com:'
