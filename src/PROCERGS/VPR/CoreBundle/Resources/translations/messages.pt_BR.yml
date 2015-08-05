@@ -74,9 +74,7 @@ Rectify: Corrigir
 'Join the Nota Fiscal Gaucha and compete for prizes of up to R$ 1 million. Register Now!': 'Participe da Nota Fiscal Gaúcha e concorra a prêmios de até R$ 1 milhão. Cadastre agora!'
 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Aproveite e faça agora seu cadastro no Login Cidadão, e acompanhe as propostas da sua região.'
 # 'Are you registered on Citizen Login? Register now and get personalized content on Rio Grande do Sul''s services.': 'Já se cadastrou no Login Cidadão? Acesse todos os serviços do Rio Grande do Sul com uma única conta personalizada.'
-'Answer to the World Bank''s survey on Priorities Voting and help to strengthen participation in RS!': 'Responda à pesquisa do Banco Mundial sobre a Votação de Prioridades e ajude a fortalecer a participação no RS!'
 'Register Here': 'Cadastre-se aqui'
-'Answer Survey': 'Responder Pesquisa'
 Warning!: Atenção!
 Ok: OK
 'Required fields': 'Campos de preenchimento obrigatório'
@@ -146,7 +144,7 @@ lc.missing.required.field: 'Os seguintes campos do Login Cidadão devem ser pree
 lc.full_name: 'Nome Completo'
 'Polling places in your city.': 'Locais de votação no seu município'
 Categories: Categorias
-'Priorities Voting': 'Votação de Prioridades'
+'Priorities Voting': 'Consulta Popular'
 PPC: CPP
 COREDES: COREDES
 ONU: UNO
@@ -169,25 +167,24 @@ Loading: Carregando
 form.city.select: 'Digite o município'
 'Thank you for helping Rio Grande do Sul to grow. Your participation is very important!': 'Muito obrigado por ajudar o Rio Grande do Sul a crescer. Sua participação é muito importante!'
 'Confirm your Voter Registration': 'Confirme seu título'
-'World Bank Survey': 'Responda à pesquisa!'
 'Change': 'Alterar'
 'Accepts create an account in Citizen Login service?': 'Criar meu Login Cidadão'
 'You have already chose <span class=''itens-count''>0</span> up to %max% items': 'Você já escolheu <span class=''itens-count''>0</span> de até %max% items'
 vote.voter_registration.outsider: 'Seu título de eleitor não foi encontrato no cadastro do TRE-RS, portanto seu voto não será considerado válido, mas você ainda participará da votação.'
 vote.empty.message: 'Nenhuma opção selecionada'
-'Priorities Voting<br />2015 BUDGET<br />02-04 of june': 'Votação de Prioridades<br />ORÇAMENTO 2015<br />02 a 04 de junho'
+'Priorities Voting<br />2015 BUDGET<br />02-04 of june': 'Consulta Popular<br />ORÇAMENTO 2016<br />19 de agosto'
 'Create your account': 'Crie sua conta!'
 'Chance to win 1 million!': 'Concorra até R$ 1 milhão!'
 'Exit voting': 'Sair da votação'
 'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!' : 'Sua participação foi muito importante!<br /> Responda à %link_sm% e ajude a fortalecer a participação no RS!'
-'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.': 'A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.'
+'A Consulta Popular do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.': 'A Consulta Popular do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.'
 'Quit': 'Sair'
 'Complete your data below to continue this poll': 'Complete seus dados abaixo no login cidadão para poder continuar no processo de votação.'
 'Practice more your citizenship with:': 'Pratique ainda mais sua cidadania com:'
 'You can still vote, back to home page and use a Citizen Login.': 'Você ainda pode votar, volte para página principal e utilize o login cidadao!'
 'Vote with Citizen Login': 'Vote com Login Cidadão'
 'or fill the form below': 'Ou informe os dados abaixo'
-'2015 Budget Priorities Voting': 'Votação de Prioridades do Orçamento 2015'
+'2015 Budget Priorities Voting': 'Consulta Popular para o Orçamento 2016'
 voting.session.invalid: 'Ocorreu um erro durante sua votação, por favor tente novamente.'
 voting.session.invalid.options: 'Opções inválidas. Verifique se você não selecionou mais opções que o permitido.'
 'No, thanks.': Não, obrigado.
@@ -208,3 +205,14 @@ Wait! : Aguarde
 'Percent of poll options by city': 'Percentual de demandas escolhidas por município'
 'Results for the Online Voting': 'Resultados da Votação Online'
 'Votes by demand': 'Votos por demanda'
+Admin Area: Área Administrativa
+Polls: Votações
+Steps: Etapas
+Categories: Categorias
+Ballots: Cédulas
+Ballot Boxes: Urnas
+Users: Usuários
+Logout: Sair
+'<strong>WARNING</strong>: Below you''ll find this ballot box password for it''s private key. Copy and save it to a safe place. If you don''t, it <strong>CANNOT BE RECOVERED</strong> and you''ll have to create another ballot box.': '<strong>ATENÇÃO</strong>: A seguir está a senha da chave privada dessa urna. Salve-a em um local seguro. Se você não salvá-la, ela <strong>NÃO PODERÁ SER RECUPERADA</strong> e você terá que criar uma nova urna.'
+(poll-defined): (definido pela votação)
+Show Private Key: Exibir Chave Privada

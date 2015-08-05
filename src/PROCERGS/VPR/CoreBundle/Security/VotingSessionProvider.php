@@ -13,25 +13,24 @@ use PROCERGS\VPR\CoreBundle\Entity\Person;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
-use PROCERGS\VPR\CoreBundle\Entity\WorldBank\LegacyPerson;
-use PROCERGS\VPR\CoreBundle\Entity\WorldBank\GabineteDigitalPerson;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializationContext;
 
 class VotingSessionProvider
 {
-
     private $session;
     private $em;
     private $serializer;
+    private $passphrase;
 
     public function __construct(EntityManagerInterface $entityManager,
                                 SessionInterface $session,
-                                Serializer $serializer)
+                                Serializer $serializer, $passphrase)
     {
-        $this->em = $entityManager;
-        $this->session = $session;
+        $this->em         = $entityManager;
+        $this->session    = $session;
         $this->serializer = $serializer;
+        $this->passphrase = $passphrase;
     }
 
     /**
@@ -89,7 +88,7 @@ class VotingSessionProvider
     public function checkExistingVotes(Person $person, BallotBox $ballotBox,
                                        Vote $conflictingVote = null)
     {
-        $filter = compact('ballotbox');
+        $filter   = compact('ballotbox');
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
         if ($person->getTreVoter() instanceof TREVoter) {
             $filter['voterRegistration'] = $person->getTreVoter()->getId();
@@ -142,11 +141,10 @@ class VotingSessionProvider
             }
         }
         $vote = new Vote();
-        $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO : Vote::AUTH_VOTER_REGISTRATION);
+        $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO
+                    : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
         $vote->setCorede($person->getCityOrTreCity()->getCorede());
-        $surveyMonkeyId = uniqid(hash('sha256', mt_rand() . $person->getId()), true);
-        $vote->setSurveyMonkeyId($surveyMonkeyId);
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());
         }
@@ -154,7 +152,10 @@ class VotingSessionProvider
             $vote->setLoginCidadaoId($person->getLoginCidadaoId());
         }
         $badges = $person->getBadges();
-        if (strlen($person->getFirstName()) && isset($badges['login-cidadao.valid_email']) && $badges['login-cidadao.valid_email'] && isset($badges['login-cidadao.nfg_access_lvl']) && $badges['login-cidadao.nfg_access_lvl'] >= 2 && isset($badges['login-cidadao.voter_registration']) && $badges['login-cidadao.voter_registration']) {
+        if (strlen($person->getFirstName()) && isset($badges['login-cidadao.valid_email'])
+            && $badges['login-cidadao.valid_email'] && isset($badges['login-cidadao.nfg_access_lvl'])
+            && $badges['login-cidadao.nfg_access_lvl'] >= 2 && isset($badges['login-cidadao.voter_registration'])
+            && $badges['login-cidadao.voter_registration']) {
             $vote->setNfgCpf(1);
         }
         $stepRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Step');
@@ -204,17 +205,17 @@ class VotingSessionProvider
 
     public function persistVote(Vote $vote, Person $person)
     {
-        $vote = $this->detectWorldBankTreatment($person, $vote);
-        $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-        $serializer = $this->serializer;
-        $context = SerializationContext::create()
-                ->setSerializeNull(true)
-                ->setGroups(array('vote'));
-        $options = $pollOptionRepo->getPollOption($vote);
+        $pollOptionRepo    = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+        $serializer        = $this->serializer;
+        $context           = SerializationContext::create()
+            ->setSerializeNull(true)
+            ->setGroups(array('vote'));
+        $options           = $pollOptionRepo->getPollOption($vote);
         $serializedOptions = $serializer->serialize($options, 'json', $context);
         $vote->setPlainOptions($serializedOptions);
-        $vote->close();
+        $vote->close($this->passphrase);
         $vote->setCreatedAtValue();
+
         $vote = $this->em->merge($vote);
         $this->em->persist($vote);
     }
@@ -223,30 +224,4 @@ class VotingSessionProvider
     {
         $this->session->set('vote', $vote);
     }
-
-    protected function detectWorldBankTreatment(Person $person,
-                                                Vote $vote = null)
-    {
-        if (is_null($vote)) {
-            $vote = $this->getVote();
-        }
-        $voterRegistration = $vote->getVoterRegistration();
-        if ($voterRegistration) {
-            $vprLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\LegacyPerson');
-            $legacyPerson = $vprLegacyRepo->findOneBy(compact('voterRegistration'));
-            if ($legacyPerson instanceof LegacyPerson) {
-                $vote->setTreatmentVPR($legacyPerson->getTreatment());
-            }
-        }
-        if ($person->getEmail()) {
-            $email = $person->getEmail();
-            $gdLegacyRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:WorldBank\GabineteDigitalPerson');
-            $gdPerson = $gdLegacyRepo->findOneBy(compact('email'));
-            if ($gdPerson instanceof LegacyPerson) {
-                $vote->setTreatmentGabineteDigital($gdPerson->getTreatment());
-            }
-        }
-        return $vote;
-    }
-
 }

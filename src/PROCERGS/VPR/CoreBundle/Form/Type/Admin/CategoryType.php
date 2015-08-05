@@ -1,5 +1,4 @@
 <?php
-
 namespace PROCERGS\VPR\CoreBundle\Form\Type\Admin;
 
 use Symfony\Component\Form\AbstractType;
@@ -8,19 +7,44 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CategoryType extends AbstractType
 {
-        /**
+
+    /**
+     *
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('name')
-            ->add('sorting','integer')
+        $builder->add('name')
+            ->add('sorting', 'integer')
+            ->add('titleBg')
+            ->add('iconBg')
+            ->add('optionBg')
+            ->add('iconNum', 'choice', array(
+            'choices' => array(
+                1 => 'Violão'
+                ,'Dinheiro'
+                ,'Trator'
+                ,'Boneco em Yoga'
+                ,'Boneco em festa'
+                ,'Fogo'
+                ,'Cartilha'
+                ,'Folhas de planta'
+                ,'Bola futebol'
+                ,'Predios'
+                ,'Casa'
+                ,'Diploma'
+                ,'Avião'
+                ,'Caminhão'
+                ,'Equipe'
+                ,'Calendario'
+            )
+        ));
         ;
     }
 
     /**
+     *
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -31,6 +55,7 @@ class CategoryType extends AbstractType
     }
 
     /**
+     *
      * @return string
      */
     public function getName()

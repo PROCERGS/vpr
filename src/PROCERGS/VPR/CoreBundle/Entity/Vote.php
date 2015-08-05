@@ -3,7 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as JMS;
 use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
 
 /**
@@ -19,8 +19,7 @@ use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
  */
 class Vote
 {
-
-    const AUTH_LOGIN_CIDADAO = 'lc';
+    const AUTH_LOGIN_CIDADAO      = 'lc';
     const AUTH_VOTER_REGISTRATION = 'doc';
 
     /**
@@ -29,7 +28,7 @@ class Vote
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $id;
 
@@ -37,7 +36,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="options", type="text")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $options;
     protected $plainOptions;
@@ -46,7 +45,7 @@ class Vote
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $createdAt;
 
@@ -54,7 +53,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="signature", type="text")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $signature;
 
@@ -62,7 +61,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="passphrase", type="text")
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $passphrase;
 
@@ -70,7 +69,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="auth_type", type="string", length=255)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $authType;
 
@@ -78,7 +77,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="login_cidadao_id", type="string", length=255, nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $loginCidadaoId;
 
@@ -86,7 +85,7 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="nfg_cpf", type="string", length=255, nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $nfgCpf;
 
@@ -94,52 +93,48 @@ class Vote
      * @var string
      *
      * @ORM\Column(name="voter_registration", type="string", length=12, nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $voterRegistration;
 
     /**
      * @ORM\ManyToOne(targetEntity="BallotBox")
      * @ORM\JoinColumn(name="ballot_box_id", referencedColumnName="id", nullable=false)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
+     * @JMS\Type("PROCERGS\VPR\CoreBundle\Entity\BallotBox")
      */
     protected $ballotBox;
 
     /**
      * @ORM\ManyToOne(targetEntity="Corede")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id", nullable=false)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
+     * @JMS\Type("PROCERGS\VPR\CoreBundle\Entity\Corede")
      */
     protected $corede;
     protected $lastStep;
     protected $pollOption = array();
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="surveymonkey_id", type="string", length=100, nullable=true, unique=false)
-     * @Groups({"vote"})
-     */
-    protected $surveyMonkeyId;
-
-    /**
      * @ORM\Column(name="wb_treatment_vpr", type="integer", nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $treatmentVPR;
 
     /**
      * @ORM\Column(name="wb_treatment_gabinete_digital", type="integer", nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
      */
     protected $treatmentGabineteDigital;
 
     /**
      * @ORM\ManyToOne(targetEntity="City")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
-     * @Groups({"vote"})
+     * @JMS\Groups({"vote"})
+     * @JMS\Type("PROCERGS\VPR\CoreBundle\Entity\City")
      */
     protected $city;
+
     /**
      * Get id
      *
@@ -390,17 +385,18 @@ class Vote
 
     public function encryptVote()
     {
-        $crypted = null;
+        $crypted   = null;
         $ballotBox = $this->getBallotBox();
         if (!$ballotBox) {
             return false;
         }
-        $poll = $ballotBox->getPoll();
+        $poll          = $ballotBox->getPoll();
         $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
-        $options = $this->getPlainOptions();
+        $options       = $this->getPlainOptions();
 
         $passphrases = null;
-        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey)) !== false) {
+        if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey))
+            !== false) {
             $this->setOptions(base64_encode($crypted));
             $passphrase = base64_encode(reset($passphrases));
             $this->setPassphrase($passphrase);
@@ -411,8 +407,8 @@ class Vote
 
     public function openVote($privateKey)
     {
-        $openVote = null;
-        $options = base64_decode($this->getOptions());
+        $openVote   = null;
+        $options    = base64_decode($this->getOptions());
         $passphrase = base64_decode($this->getPassphrase());
         if (openssl_open($options, $openVote, $passphrase, $privateKey) === false) {
             $message = openssl_error_string();
@@ -471,24 +467,14 @@ class Vote
         return $this->pollOption;
     }
 
-    public function close()
+    public function close($passphrase)
     {
         if (!$this->plainOptions) {
             return false;
         }
-        $this->signature = $this->ballotBox->sign($this->plainOptions);
+        $this->signature = $this->ballotBox->sign($this->plainOptions,
+            $passphrase);
         $this->encryptVote();
-    }
-
-    public function setSurveyMonkeyId($surveyMonkeyId)
-    {
-        $this->surveyMonkeyId = $surveyMonkeyId;
-        return $this;
-    }
-
-    public function getSurveyMonkeyId()
-    {
-        return $this->surveyMonkeyId;
     }
 
     public function getTreatmentVPR()
@@ -514,17 +500,16 @@ class Vote
 
         return $this;
     }
-    
+
     public function setCity($var)
     {
         $this->city = $var;
-    
+
         return $this;
     }
-    
+
     public function getCity()
     {
         return $this->city;
     }
-
 }

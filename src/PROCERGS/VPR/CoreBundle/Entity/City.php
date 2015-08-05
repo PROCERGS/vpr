@@ -19,7 +19,7 @@ class City
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "setup"})
      */
     protected $id;
 
@@ -27,6 +27,7 @@ class City
      * @var integer
      *
      * @ORM\Column(name="ibge_code", type="integer")
+     * @Groups("setup")
      */
     protected $ibgeCode;
 
@@ -34,13 +35,14 @@ class City
      * @var integer
      *
      * @ORM\Column(name="cod_sefa", type="integer")
+     * @Groups("setup")
      */
     protected $codSefa;
 
     /**
      * @var string
      *
-     * @Groups({"autocomplete"})
+     * @Groups({"autocomplete", "setup"})
      * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
@@ -49,12 +51,14 @@ class City
      * @var boolean
      *
      * @ORM\Column(name="is_capital", type="boolean")
+     * @Groups("setup")
      */
     protected $isCapital;
 
     /**
      * @ORM\ManyToOne(targetEntity="Corede", inversedBy="cities")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id")
+     * @Groups("setup")
      */
     protected $corede;
 

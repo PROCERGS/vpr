@@ -41,3 +41,4 @@ parameters:
     mailer_sender_mail: ~
     mailer_sender_name: ~
     login_cidadao_register_prefilled_path: '/register/prefilled'
+    vpr_ballotbox_passphrase: BallotBoxPassphrase

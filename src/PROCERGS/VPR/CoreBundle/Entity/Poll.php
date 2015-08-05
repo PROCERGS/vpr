@@ -21,7 +21,7 @@ class Poll
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $id;
 
@@ -29,7 +29,7 @@ class Poll
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $name;
 
@@ -37,7 +37,7 @@ class Poll
      * @var \DateTime
      *
      * @ORM\Column(name="opening_time", type="datetime", nullable=false)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $openingTime;
 
@@ -45,7 +45,7 @@ class Poll
      * @var \DateTime
      *
      * @ORM\Column(name="closing_time", type="datetime", nullable=false)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $closingTime;
 
@@ -53,7 +53,7 @@ class Poll
      * @var string
      *
      * @ORM\Column(name="description", type="text")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $description;
 
@@ -61,6 +61,7 @@ class Poll
      * @var string
      *
      * @ORM\Column(name="public_key", type="text")
+     * @Groups("setup")
      */
     protected $publicKey;
 
@@ -72,6 +73,7 @@ class Poll
     /**
      * @ORM\OneToMany(targetEntity="Step", mappedBy="poll")
      * @ORM\OrderBy({"sorting" = "asc"})
+     * @Groups("setup")
      */
     protected $steps;
 

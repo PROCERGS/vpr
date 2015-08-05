@@ -17,6 +17,13 @@
     {% endfor %}
 
     <form class="form-horizontal" role="form">
+        <h1 class="form-group">
+            <label class="col-sm-3 control-label">PIN</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.pin }}</p>
+            </div>
+        </h1>
+
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.id'|trans }}</label>
             <div class="col-sm-9">
@@ -41,37 +48,45 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.opening_time'|trans }}</label>
             <div class="col-sm-9">
-                <p class="form-control-static">{{ entity.openingTime|date('d/m/Y H:i:s') }}</p>
+                <p class="form-control-static">
+                    {% if entity.openingTime is null %}
+                        {{ entity.poll.openingTime | date('d/m/Y H:i:s') }} {{ '(poll-defined)' | trans }}
+                    {% else %}
+                        {{ entity.openingTime | date('d/m/Y H:i:s') }}
+                    {% endif %}
+                </p>
             </div>
         </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.closing_time'|trans }}</label>
             <div class="col-sm-9">
-                <p class="form-control-static">{{ entity.closingTime|date('d/m/Y H:i:s') }}</p>
+                <p class="form-control-static">
+                    {% if entity.openingTime is null %}
+                        {{ entity.poll.closingTime | date('d/m/Y H:i:s') }} {{ '(poll-defined)' | trans }}
+                    {% else %}
+                        {{ entity.closingTime | date('d/m/Y H:i:s') }}
+                    {% endif %}
+                </p>
             </div>
-        </div>            
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">{{ 'admin.secret'|trans }}</label>
-            <div class="col-sm-9">
-                <p class="form-control-static">{{ entity.secret }}</p>
-            </div>
-        </div>            
+        </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.private_key'|trans }}</label>
             <div class="col-sm-9">
-                <p class="form-control-static">{{ entity.privateKey }}</p>
+                <a class="btn btn-link" data-toggle="collapse" href="#privateKeyContent" aria-expanded="false" aria-controles="privateKeyContent">
+                    {{ 'Show Private Key' | trans }}
+                </a>
+                <pre id="privateKeyContent" class="collapse form-control-static">{{ entity.privateKey }}</pre>
             </div>
-        </div>            
+        </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.public_key'|trans }}</label>
             <div class="col-sm-9">
-                <p class="form-control-static">{{ entity.publicKey }}</p>
+                <pre class="form-control-static">{{ entity.publicKey }}</pre>
             </div>
-        </div>            
+        </div>
 
         <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.city'|trans }}</label>

@@ -20,7 +20,7 @@ class PollOption
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $id;
 
@@ -28,7 +28,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $title;
 
@@ -36,7 +36,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $description;
 
@@ -44,7 +44,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="coverage", type="text", nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $scope;
 
@@ -52,7 +52,7 @@ class PollOption
      * @var string
      *
      * @ORM\Column(name="cost", type="decimal", precision=12, scale=2, nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $cost;
 
@@ -60,7 +60,7 @@ class PollOption
      * @var integer
      *
      * @ORM\Column(name="category_sorting", type="integer")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $categorySorting;
 
@@ -81,10 +81,10 @@ class PollOption
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="pollOptions")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $category;
-    
+
     /**
      * just to have compatibiliti to migrate to system ppp, this is not used in the system
      * @var string
@@ -231,35 +231,35 @@ class PollOption
     {
         return $this->step;
     }
-    
+
     public function setCategory($var)
     {
         $this->category = $var;
         return $this;
     }
-    
+
     public function getCategory()
     {
         return $this->category;
     }
-    
+
     public function setCorede($var)
     {
         $this->corede = $var;
         return $this;
     }
-    
+
     public function getCorede()
     {
         return $this->corede;
     }
-    
+
     public function setCodDescCedula($var)
     {
         $this->codDescCedula = $var;
         return $this;
     }
-    
+
     public function getCodDescCedula()
     {
         return $this->codDescCedula;

@@ -1,26 +1,6 @@
 {% extends 'PROCERGSVPRCoreBundle::base.logout.html.twig' %}
 
 {% block body %}
-{% if skipModal == false %}
-<div class="modal fade" id="worldBankModal" tabindex="-1" role="dialog" aria-labelledby="worldBankSurveyModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="worldBankSurveyModal">{% trans %}World Bank Survey{% endtrans %}</h4>
-            </div>
-            <div class="modal-body">
-                <p>{% trans %}Answer to the World Bank's survey on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
-            </div>
-            <div class="modal-footer">
-                <a id="btn-popup-sm" data-dismiss="modal" class="btn btn-success btn-lg btn-block link-popup" role="button" data-specs="width=800,height=600" href="{{ surveyMonkeyLink }}">{{ 'Answer Survey' | trans }}</a>
-                <a data-dismiss="modal">{% trans %}No, thanks.{% endtrans %}</a>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
 <div class="row end-offer">
     <div class="col-md-12">
         <h3>{{ 'Thank you for voting'|trans }}</h3>
@@ -28,7 +8,7 @@
         <h3>{% trans %}Practice more your citizenship with:{% endtrans %}</h3>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3 col-md-offset-2">
         <div class="thumbnail">
             <a  href="{{ nfgLink }}" title="Concorra até R$ 1 milhão!" target="_blank">
           {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-NFG.png' %}
@@ -45,7 +25,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3 col-md-offset-2">
         <div class="thumbnail">
             <a href="{{ loginCidadaoLink }}" title="Crie sua conta!" target="_blank">
           {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-meuRS.png' %}
@@ -62,38 +42,9 @@
         </div>
     </div>
 
-
-    <div class="col-md-4">
-        <div class="thumbnail">
-            <a href="{{ surveyMonkeyLink }}" title="Banco Mundial Pergunta" target="_blank">
-          {% image '@PROCERGSVPRCoreBundle/Resources/public/images/banner-BancoMundialBranco.png' %}
-                <img src="{{ asset_url }}" alt="{%trans%}Banco Mundial{%endtrans%}" class="img-responsive">
-          {% endimage %}
-            </a>
-            <div class="caption">
-                <h3>{% trans %}World Bank Survey{% endtrans %}</h3>
-                <div class="text">
-                    <p>{% trans %}Answer to the World Bank's survey on Priorities Voting and help to strengthen participation in RS!{% endtrans %}</p>
-                </div>
-                <a title="Responder pesquisa" id="btn-popup-sm" class="btn btn-success btn-lg btn-block link-popup" role="button" href="{{ surveyMonkeyLink }}">{{ 'Answer Survey' | trans }}</a>
-            </div>
-        </div>
-    </div>
     <div class="col-sm-12 text-center">
         <a class="btn btn-success btn-lg" role="button" href="{{ path('procergsvpr_core_homepage') }}">{{ 'Back to home' | trans }}</a>
     </div>
 
 </div>
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-
-<script type="text/javascript">
-{% if skipModal == false %}
-    $(function() {
-        $('#worldBankModal').modal('show');
-    });
-</script>
-{% endif %}
 {% endblock %}

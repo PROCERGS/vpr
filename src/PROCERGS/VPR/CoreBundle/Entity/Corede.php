@@ -20,7 +20,7 @@ class Corede
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $id;
 
@@ -28,7 +28,7 @@ class Corede
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $name;
 

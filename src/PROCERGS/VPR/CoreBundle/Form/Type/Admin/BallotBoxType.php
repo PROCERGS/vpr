@@ -9,48 +9,55 @@ use Doctrine\ORM\EntityRepository;
 
 class BallotBoxType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $ballotBox    = $builder->getData();
+        $ballotBox->setSecret($ballotBox->generatePassphrase());
         $builder
             ->add('name')
-            ->add('secret', 'text')
-            ->add('publicKey', 'textarea')
-            ->add('privateKey', 'textarea')
-            ->add('address', 'text', array(
+            ->add('secret', 'hidden')
+            ->add('address', 'text',
+                array(
                 'required' => false
             ))
             ->add('latitude')
             ->add('longitude')
-            ->add('openingTime', 'datetime', array(
+            ->add('openingTime', 'datetime',
+                array(
                 'required' => false,
                 'date_format' => 'dd MMMM yyyy',
                 'widget' => 'choice',
                 'years' => range(date('Y'), date('Y') - 70)
             ))
-            ->add('closingTime', 'datetime', array(
+            ->add('closingTime', 'datetime',
+                array(
                 'required' => false,
                 'date_format' => 'dd MMMM yyyy',
                 'widget' => 'choice',
                 'years' => range(date('Y'), date('Y') - 70)
             ))
-            ->add('isOnline', null, array(
+            ->add('isOnline', null,
+                array(
                 'required' => false
             ))
-            ->add('poll', 'entity', array(
+            ->add('poll', 'entity',
+                array(
                 'class' => 'PROCERGSVPRCoreBundle:Poll',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('p')
                         ->orderBy('p.openingTime', 'DESC');
-                },                
+                },
                 'property' => 'name',
                 'empty_value' => '',
                 'required' => true
             ))
-            ->add('city', 'entity', array(
+            ->add('city', 'entity',
+                array(
                 'class' => 'PROCERGSVPRCoreBundle:City',
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('c')

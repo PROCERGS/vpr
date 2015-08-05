@@ -4,7 +4,7 @@
 {{ parent() }}
 
 <meta property="og:site_name" content="{% trans %}2015 Budget Priorities Voting{% endtrans %}"/>
-<meta property="og:description" content="{% trans %}A Votação de Prioridades do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.{% endtrans %}"/>
+<meta property="og:description" content="{% trans %}A Consulta Popular do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.{% endtrans %}"/>
 {% image '@PROCERGSVPRCoreBundle/Resources/public/images/facebook-image.png' %}
 <meta property="og:image" content="{{ app.request.scheme ~'://' ~ app.request.host ~ asset_url }}" />
 {% endimage %}
@@ -20,7 +20,7 @@
 
 {% block header %}
 <header class="text-center">
-    <a href="{{ path('procergsvpr_core_homepage') }}" title="Votação de Prioridades">
+    <a href="{{ path('procergsvpr_core_homepage') }}" title="Consulta Popular">
         {%trans%}Priorities Voting<br />2015 BUDGET<br />02-04 of june{%endtrans%}
     </a>
 </header>
@@ -28,7 +28,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 text-center">
-                <div class="pull-left"><a href="https://twitter.com/share" data-url="{{ path('procergsvpr_core_homepage') }}" class="twitter-share-button" data-lang="pt" data-text="Participe da Votação de Prioridades do Orçamento 2015 entre 2 a 4 de junho. #votaRS http://bit.ly/1jCmgGu">Tweet</a>
+                <div class="pull-left"><a href="https://twitter.com/share" data-url="{{ path('procergsvpr_core_homepage') }}" class="twitter-share-button" data-lang="pt" data-text="Participe da Consulta Popular do Orçamento 2015 entre 2 a 4 de junho. #votaRS http://bit.ly/1jCmgGu">Tweet</a>
                     <script>
                         !function(d, s, id) {
                             var js, fjs = d.getElementsByTagName(s)[0];
@@ -141,10 +141,10 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.2/typeahead.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-placeholder/2.0.7/jquery.placeholder.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.2/typeahead.bundle.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-placeholder/2.0.7/jquery.placeholder.min.js"></script>
 {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/*' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 

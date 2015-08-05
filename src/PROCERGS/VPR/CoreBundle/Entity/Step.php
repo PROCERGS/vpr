@@ -19,7 +19,7 @@ class Step
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $id;
 
@@ -27,7 +27,7 @@ class Step
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $name;
 
@@ -35,7 +35,7 @@ class Step
      * @var integer
      *
      * @ORM\Column(name="sorting", type="integer")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $sorting;
 
@@ -43,12 +43,13 @@ class Step
      * @var integer
      *
      * @ORM\Column(name="max_selection", type="integer")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $maxSelection;
 
     /**
      * @ORM\OneToMany(targetEntity="PollOption", mappedBy="step")
+     * @Groups({"setup"})
      */
     protected $pollOptions;
 

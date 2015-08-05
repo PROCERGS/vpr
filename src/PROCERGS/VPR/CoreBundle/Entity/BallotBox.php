@@ -4,24 +4,26 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * BallotBox
  *
  * @ORM\Table(name="ballot_box")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository")
+ * @UniqueEntity({"poll", "pin"})
  * @ORM\HasLifecycleCallbacks
  */
 class BallotBox
 {
-
     /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $id;
 
@@ -29,21 +31,28 @@ class BallotBox
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="secret", type="string", length=255)
      */
     protected $secret;
+
+    /**
+     * @var integer
+     *
+     * @Assert\Range(min = 0, max = 999999)
+     * @ORM\Column(name="pin", type="integer", nullable=false)
+     */
+    protected $pin;
 
     /**
      * @var string
      *
      * @ORM\Column(name="public_key", type="text")
+     * @Groups({"setup"})
      */
     protected $publicKey;
 
@@ -51,6 +60,7 @@ class BallotBox
      * @var string
      *
      * @ORM\Column(name="private_key", type="text")
+     * @Groups({"setup"})
      */
     protected $privateKey;
 
@@ -58,7 +68,7 @@ class BallotBox
      * @var string
      *
      * @ORM\Column(name="address", type="string", length=255, nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $address;
 
@@ -82,7 +92,7 @@ class BallotBox
      * @var \DateTime
      *
      * @ORM\Column(name="opening_time", type="datetime", nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $openingTime;
 
@@ -90,7 +100,7 @@ class BallotBox
      * @var \DateTime
      *
      * @ORM\Column(name="closing_time", type="datetime", nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $closingTime;
 
@@ -112,14 +122,14 @@ class BallotBox
     /**
      * @ORM\ManyToOne(targetEntity="Poll", inversedBy="ballotBoxes")
      * @ORM\JoinColumn(name="poll_id", referencedColumnName="id", nullable=false)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $poll;
 
     /**
      * @ORM\ManyToOne(targetEntity="City", inversedBy="ballotBoxes")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
-     * @Groups({"vote"})
+     * @Groups({"vote", "setup"})
      */
     protected $city;
 
@@ -404,6 +414,7 @@ class BallotBox
             "digest_alg" => "sha512",
             "private_key_bits" => 4096,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            "encrypt_key" => true,
         );
 
         $res = openssl_pkey_new($config);
@@ -411,7 +422,7 @@ class BallotBox
         openssl_pkey_export($res, $privKey, $this->getSecret());
 
         $details = openssl_pkey_get_details($res);
-        $pubKey = $details["key"];
+        $pubKey  = $details["key"];
 
         $this->setPrivateKey($privKey);
         $this->setPublicKey($pubKey);
@@ -455,11 +466,11 @@ class BallotBox
         return $this->city;
     }
 
-    public function sign($serializedOptions)
+    public function sign($serializedOptions, $passphrase)
     {
         $encryptedPrivate = $this->getPrivateKey();
-        $passphrase = $this->getSecret();
-        $privateKey = openssl_pkey_get_private($encryptedPrivate, $passphrase);
+        $privateKey       = openssl_pkey_get_private($encryptedPrivate,
+            $passphrase);
 
         $signature = false;
         openssl_sign($serializedOptions, $signature, $privateKey);
@@ -467,4 +478,22 @@ class BallotBox
         return base64_encode($signature);
     }
 
+    public function getPin()
+    {
+        return $this->pin;
+    }
+
+    public function setPin($pin)
+    {
+        $this->pin = $pin;
+
+        return $this;
+    }
+
+    public function generatePassphrase($length = 20)
+    {
+        $chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ';
+
+        return substr(str_shuffle($chars), 0, $length);
+    }
 }
