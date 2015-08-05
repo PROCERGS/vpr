@@ -215,7 +215,8 @@ class VotingSessionProvider
         $vote->setPlainOptions($serializedOptions);
         $vote->close($this->passphrase);
         $vote->setCreatedAtValue();
-        $vote              = $this->em->merge($vote);
+
+        $vote = $this->em->merge($vote);
         $this->em->persist($vote);
     }
 
