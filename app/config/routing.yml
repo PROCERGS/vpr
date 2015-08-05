@@ -13,7 +13,7 @@ vpr_demo:
     type:     annotation
 
 login_cidadao_login:
-    pattern: /login/check-cidadao
+    path: /login/check-cidadao
 
 hwi_oauth_security:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
