@@ -3,12 +3,16 @@
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Controller\FOSRestController;
 use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
+use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use JMS\Serializer\SerializationContext;
+use Monolog\Logger;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class APIController extends FOSRestController
 {
@@ -144,13 +148,69 @@ class APIController extends FOSRestController
     public function receiveVotesAction(Request $request, $pin)
     {
         $em         = $this->getDoctrine()->getManager();
+        $logger     = $this->getLogger();
         $votes      = $request->get('votes');
+        $hash       = $request->get('hash');
+        $total      = $request->get('total');
+        $calculated = hash('sha512', $votes);
+
+        $logger->debug($request->getClientIp());
+        $this->checkHash($hash, $calculated, $logger);
+        $logger->debug($votes);
+
         $serializer = $this->getJmsSerializer();
         $data       = $serializer->deserialize($votes,
             'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\Vote>', 'json');
 
-        var_dump($data);
+        $logger->debug(print_r($data, true));
+        foreach ($data as $vote) {
+            $this->checkVote($vote);
+        }
+        if ($total !== null) {
+            $logger->debug("Total expected votes: $total");
+            $logger->debug("Actual votes count: ".count($data));
+        }
+        return new JsonResponse(array(
+            'hash' => true,
+            'votes' => count($data)
+        ));
         die();
+    }
+
+    /**
+     *
+     * @param type $hash
+     * @param type $calculated
+     * @param Logger $logger
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     */
+    private function checkHash($hash, $calculated, Logger $logger)
+    {
+        if ($hash !== $calculated) {
+            $logger->debug("Received hash: $hash");
+            $logger->debug("Calculated hash: $calculated");
+            if ($hash !== null) {
+                throw new BadRequestHttpException("Hash didn't match! Use SHA-512 to hash the 'votes' parameter");
+            }
+        } else {
+            $logger->debug("Hash OK");
+        }
+    }
+
+    private function checkVote(Vote $vote)
+    {
+        if ($vote->getId() === null) {
+            throw new BadRequestHttpException('Missing vote id');
+        }
+        if ($vote->getOptions() === null) {
+            throw new BadRequestHttpException('Missing options');
+        }
+        if ($vote->getAuthType() === null) {
+            throw new BadRequestHttpException('Missing auth type');
+        }
+        if ($vote->getVoterRegistration() === null) {
+            throw new BadRequestHttpException('Missing voter registration');
+        }
     }
 
     /**
@@ -159,5 +219,13 @@ class APIController extends FOSRestController
     private function getJmsSerializer()
     {
         return $this->get('jms_serializer');
+    }
+
+    /**
+     * @return Logger
+     */
+    private function getLogger()
+    {
+        return $this->get('monolog.logger.api');
     }
 }
