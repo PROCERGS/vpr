@@ -23,6 +23,16 @@ framework:
     fragments:       ~
     http_method_override: true
 
+monolog:
+    channels: ["api"]
+    handlers:
+        api:
+            level: debug
+            type: stream
+            path: "%kernel.logs_dir%/api.log"
+            channels: [api]
+            formatter: monolog.multiline
+
 # Twig Configuration
 twig:
     exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'

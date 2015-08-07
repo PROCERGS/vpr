@@ -75,3 +75,6 @@ services:
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
 
+    monolog.multiline:
+        class: Monolog\Formatter\LineFormatter
+        arguments: [~, ~, true]
