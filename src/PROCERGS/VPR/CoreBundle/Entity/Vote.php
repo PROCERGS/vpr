@@ -136,6 +136,13 @@ class Vote
     protected $city;
 
     /**
+     * @ORM\Column(name="ip_address", type="string", length=46, nullable=true)
+     * @JMS\Groups({"vote"})
+     * @var string
+     */
+    protected $ipAddress;
+
+    /**
      * Get id
      *
      * @return integer
