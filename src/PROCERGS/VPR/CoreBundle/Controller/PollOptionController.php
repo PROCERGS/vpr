@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use JMS\Serializer\SerializationContext;
+use PROCERGS\VPR\CoreBundle\Form\DataTransformer\CityToNameTransformer;
 use PROCERGS\VPR\CoreBundle\Entity\StatsOptionVote;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\City;
@@ -75,10 +76,10 @@ class PollOptionController extends Controller
             $em   = $this->getDoctrine()->getManager();
             $data = $form->getData();
 
-            $name = trim($data['city']);
-            if (strlen($name) > 0) {
+            $city = $data['city'];
+            if ($city instanceof City) {
                 $url = $this->generateUrl('vpr_ballot_view',
-                    array('cityId' => $name));
+                    array('cityId' => $city->getName()));
                 return $this->redirect($url);
             }
         }
@@ -208,11 +209,20 @@ class PollOptionController extends Controller
 
     private function getCityForm()
     {
-        return $this->createFormBuilder()->add('city', 'text',
+        $em          = $this->getDoctrine()->getManager();
+        $transformer = new CityToNameTransformer($em);
+        $form        = $this->createFormBuilder()
+            ->add('city', 'text',
                 array(
                 'required' => true,
-                'label' => 'form.city.select'
-            ))->add('submit', 'submit')->getForm();
+                'label' => 'form.city.select',
+                'invalid_message' => 'City not found.'
+            ))
+            ->add('submit', 'submit')
+            ->setAction($this->generateUrl('vpr_ballotByCity'));
+        $form->get('city')->addModelTransformer($transformer);
+
+        return $form->getForm();
     }
 
     private function getCities()
