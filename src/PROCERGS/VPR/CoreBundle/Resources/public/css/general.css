@@ -45,17 +45,18 @@ header {
     vertical-align: middle;
 }
 
+header a,
+header a:active,
+header a:focus,
+header a:hover {
+    color: #4D8E28;
+    text-decoration: none;
+}
 header a {
     font-size: 18px;
     line-height: 120%;
     font-weight: 700;
-    color: #fff;
     text-shadow: 1px 1px 2px #666;
-}
-
-header a:hover {
-    text-decoration: none;
-    color: #fff;
 }
 
 header .img-responsive {
@@ -352,9 +353,6 @@ p.bg-success {
     header.text-center > a {
         font-size: 2.2em;
         line-height: 120%;
-        font-weight: 700;
-        color: #fff;
-        text-shadow: 1px 1px 2px #666;
     }
     #social-bar {
         background-color: #f6f6f6;
