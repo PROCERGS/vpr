@@ -519,4 +519,15 @@ class Vote
     {
         return $this->city;
     }
+
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
+        return $this;
+    }
 }
