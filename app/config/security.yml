@@ -45,6 +45,7 @@ security:
     access_control:
         - { path: ^/counting, role: ROLE_ADMIN }
 
+        - { path: ^/api/status, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/ballotbox, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/public, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect, roles: IS_AUTHENTICATED_ANONYMOUSLY }
