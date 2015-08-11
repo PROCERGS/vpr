@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Security;
 
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,19 +19,31 @@ use JMS\Serializer\SerializationContext;
 
 class VotingSessionProvider
 {
+    /** @var SessionInterface */
     private $session;
+
+    /** @var EntityManagerInterface */
     private $em;
+
+    /** @var Serializer */
     private $serializer;
+
+    /** @var RequestStack */
+    private $requestStack;
+
+    /** @var string */
     private $passphrase;
 
     public function __construct(EntityManagerInterface $entityManager,
                                 SessionInterface $session,
-                                Serializer $serializer, $passphrase)
+                                Serializer $serializer,
+                                RequestStack $requestStack, $passphrase)
     {
-        $this->em         = $entityManager;
-        $this->session    = $session;
-        $this->serializer = $serializer;
-        $this->passphrase = $passphrase;
+        $this->em           = $entityManager;
+        $this->session      = $session;
+        $this->serializer   = $serializer;
+        $this->passphrase   = $passphrase;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -145,6 +158,7 @@ class VotingSessionProvider
                     : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
         $vote->setCorede($person->getCityOrTreCity()->getCorede());
+        $vote->setIpAddress($this->requestStack->getMasterRequest()->getClientIp());
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());
         }

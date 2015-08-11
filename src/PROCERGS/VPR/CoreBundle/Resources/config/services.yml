@@ -32,6 +32,7 @@ services:
             - @doctrine.orm.entity_manager
             - @session
             - @jms_serializer
+            - @request_stack
             - %vpr_ballotbox_passphrase%
 
     procergs_person.registration.form.type:

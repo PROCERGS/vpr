@@ -136,6 +136,13 @@ class Vote
     protected $city;
 
     /**
+     * @ORM\Column(name="ip_address", type="string", length=46, nullable=true)
+     * @JMS\Groups({"vote"})
+     * @var string
+     */
+    protected $ipAddress;
+
+    /**
      * Get id
      *
      * @return integer
@@ -472,9 +479,10 @@ class Vote
         if (!$this->plainOptions) {
             return false;
         }
-        $this->signature = $this->ballotBox->sign($this->plainOptions,
-            $passphrase);
         $this->encryptVote();
+        $this->signature = $this->ballotBox->sign(
+            $this->getOptions(), $passphrase
+        );
     }
 
     public function getTreatmentVPR()
@@ -511,5 +519,16 @@ class Vote
     public function getCity()
     {
         return $this->city;
+    }
+
+    public function getIpAddress()
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress($ipAddress)
+    {
+        $this->ipAddress = $ipAddress;
+        return $this;
     }
 }
