@@ -179,7 +179,7 @@ class APIController extends FOSRestController
      * @REST\Get("/api/status", name="vpr_api_ping")
      * @REST\View
      */
-    public function pingAction()
+    public function statusAction()
     {
         $tests = array();
 
@@ -194,7 +194,16 @@ class APIController extends FOSRestController
         }
 
         try {
-            throw new \RuntimeException('Not implemented yet');
+            $fs       = $this->getVotesDumpFs();
+            $content  = rand(0, 99999);
+            $filename = 'status.'.rand(0, 99999);
+            $fs->write($filename, $content);
+
+            if ($fs->read($filename) != $content) {
+                throw new \RuntimeException('Unable to write votes');
+            }
+            $fs->delete($filename);
+
             $tests['filesystem'] = true;
         } catch (\Exception $e) {
             $tests['filesystem'] = $e->getMessage();
@@ -256,5 +265,13 @@ class APIController extends FOSRestController
     private function getLogger()
     {
         return $this->get('monolog.logger.api');
+    }
+
+    /**
+     * @return \Gaufrette\Filesystem
+     */
+    private function getVotesDumpFs()
+    {
+        return $this->get('knp_gaufrette.filesystem_map')->get('votes_dump_fs');
     }
 }
