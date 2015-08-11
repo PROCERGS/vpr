@@ -152,3 +152,16 @@ fos_rest:
             xml: true
         templating_formats:
             html: true
+
+# Uploader
+knp_gaufrette:
+    stream_wrapper: ~
+
+    adapters:
+        votes_dump_adapter:
+            local:
+                directory: %votes_dump_dir%
+
+    filesystems:
+        votes_dump_fs:
+            adapter:    votes_dump_adapter
