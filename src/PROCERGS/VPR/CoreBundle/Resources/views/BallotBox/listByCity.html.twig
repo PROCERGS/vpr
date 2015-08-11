@@ -2,47 +2,41 @@
 
 {% block body %}
 
-<div class="row">
-  <div class="col-md-12 text-center">
-    <h2 class="main-title search-title">
-      <span class="glyphicon glyphicon-globe"></span>
-      <span>{{ 'Polling Places' | trans }}</span>
-    </h2>
-  </div>
-</div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h2 class="main-title search-title">
+                <span class="glyphicon glyphicon-globe"></span>
+                <span>{{ 'Polling Places' | trans }}</span>
+            </h2>
+        </div>
+    </div>
 
-<div class="row">
-  <div class="col-md-12">
-      <p>Conheça os pontos de votação presencial no site do <a href="http://www.portaldaparticipacao.rs.gov.br/locais-de-votacao" target="_blank">Sistema Estadual de Participação Popular e Cidadã</a>. Informações sobre a Consulta Popular podem ser obtidas através do telefone: (51) 3288.1489.</p>
-      <p>Saiba mais aqui: <a href="http://www.portaldaparticipacao.rs.gov.br">http://www.portaldaparticipacao.rs.gov.br</a></p>
-      <p>Contato:</p>
-      <p>
-        Secretaria Estadual de Planejamento, Gestão e Participação Cidadã<br>
-        Av. Borges de Medeiros, 1.501, 9° andar. Porto Alegre – RS.<br>
-        CEP: Cep: 90119 – 900<br>
-        E-mail: participacao@seplag.rs.gov.br<br>
-        Fone: (51) 3288-1486 / 3288-1489<br>
-        Fax: (51) 3226-9722
-      </p>
-  </div>
-</div>
+    <div class="row">
+        <div class="col-md-12">
+            <p>Os Coredes e as prefeituras estão divulgando os locais onde serão instaladas as urnas presenciais. Também é possível votar diretamente no site <a href="http://www.consultapopular.rs.gov.br" target="_blank">www.consultapopular.rs.gov.br</a> das 7h às 23:59 do dia 19 de agosto.</p>
+            <p>
+                Informações no site, no email <a href="mailto:consultapopular@seplan.rs.gov.br">consultapopular@seplan.rs.gov.br</a> ou no telefone (51) 3288-1490.
+            </p>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block stylesheets %}
-{{ parent() }}
-{% stylesheets 'bundles/procergsvprcore/css/search/search.css' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %}
+    {{ parent() }}
+    {% stylesheets 'bundles/procergsvprcore/css/search/search.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
-<script>
-  var citiesList = {{ cities | raw }};
-</script>
-{% javascripts
+    {{ parent() }}
+    <script>
+        var citiesList
+        = {{ cities | raw }};
+    </script>
+    {% javascripts
   '@PROCERGSVPRCoreBundle/Resources/public/js/components/citiesTypeahead.js' %}
-  <script type="text/javascript" src="{{ asset_url }}"></script>
-  {% endjavascripts %}
-  {% endblock %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
