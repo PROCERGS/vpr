@@ -147,7 +147,6 @@ class APIController extends FOSRestController
      */
     public function receiveVotesAction(Request $request, $pin)
     {
-        $em         = $this->getDoctrine()->getManager();
         $logger     = $this->getLogger();
         $votes      = $request->get('votes');
         $hash       = $request->get('hash');
@@ -174,7 +173,6 @@ class APIController extends FOSRestController
             'hash' => true,
             'votes' => count($data)
         ));
-        die();
     }
 
     /**
