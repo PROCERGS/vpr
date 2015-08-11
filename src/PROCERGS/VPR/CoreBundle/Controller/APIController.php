@@ -147,7 +147,6 @@ class APIController extends FOSRestController
      */
     public function receiveVotesAction(Request $request, $pin)
     {
-        $em         = $this->getDoctrine()->getManager();
         $logger     = $this->getLogger();
         $votes      = $request->get('votes');
         $hash       = $request->get('hash');
@@ -174,7 +173,37 @@ class APIController extends FOSRestController
             'hash' => true,
             'votes' => count($data)
         ));
-        die();
+    }
+
+    /**
+     * @REST\Get("/api/status", name="vpr_api_ping")
+     * @REST\View
+     */
+    public function pingAction()
+    {
+        $tests = array();
+
+        try {
+            $this->getDoctrine()->getManager()
+                ->getRepository('PROCERGSVPRCoreBundle:Poll')
+                ->findLastPoll();
+
+            $tests['database'] = true;
+        } catch (\Exception $e) {
+            $tests['database'] = $e->getMessage();
+        }
+
+        try {
+            throw new \RuntimeException('Not implemented yet');
+            $tests['filesystem'] = true;
+        } catch (\Exception $e) {
+            $tests['filesystem'] = $e->getMessage();
+        }
+
+        return new JsonResponse(array(
+            'status' => $tests,
+            'timestamp' => new \DateTime()
+        ));
     }
 
     /**
