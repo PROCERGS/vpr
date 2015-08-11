@@ -13,6 +13,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use JMS\Serializer\SerializationContext;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Rhumsaa\Uuid\Uuid;
 
 class APIController extends FOSRestController
 {
@@ -165,6 +166,13 @@ class APIController extends FOSRestController
         foreach ($data as $vote) {
             $this->checkVote($vote);
         }
+
+        $fs       = $this->getVotesDumpFs();
+        $uuid     = Uuid::uuid5(Uuid::NAMESPACE_DNS, php_uname('n'));
+        $filename = "$pin.$uuid";
+        $logger->debug("Writing votes to $filename");
+        $fs->write($filename, $votes);
+
         if ($total !== null) {
             $logger->debug("Total expected votes: $total");
             $logger->debug("Actual votes count: ".count($data));
@@ -181,33 +189,10 @@ class APIController extends FOSRestController
      */
     public function statusAction()
     {
-        $tests = array();
-
-        try {
-            $this->getDoctrine()->getManager()
-                ->getRepository('PROCERGSVPRCoreBundle:Poll')
-                ->findLastPoll();
-
-            $tests['database'] = true;
-        } catch (\Exception $e) {
-            $tests['database'] = $e->getMessage();
-        }
-
-        try {
-            $fs       = $this->getVotesDumpFs();
-            $content  = rand(0, 99999);
-            $filename = 'status.'.rand(0, 99999);
-            $fs->write($filename, $content);
-
-            if ($fs->read($filename) != $content) {
-                throw new \RuntimeException('Unable to write votes');
-            }
-            $fs->delete($filename);
-
-            $tests['filesystem'] = true;
-        } catch (\Exception $e) {
-            $tests['filesystem'] = $e->getMessage();
-        }
+        $tests = array(
+            'database' => $this->checkStatusDatabase(),
+            'filesystem' => $this->checkStatusFilesystem()
+        );
 
         return new JsonResponse(array(
             'status' => $tests,
@@ -216,7 +201,6 @@ class APIController extends FOSRestController
     }
 
     /**
-     *
      * @param type $hash
      * @param type $calculated
      * @param Logger $logger
@@ -248,6 +232,38 @@ class APIController extends FOSRestController
         }
         if ($vote->getVoterRegistration() === null) {
             throw new BadRequestHttpException('Missing voter registration');
+        }
+    }
+
+    private function checkStatusDatabase()
+    {
+        try {
+            $this->getDoctrine()->getManager()
+                ->getRepository('PROCERGSVPRCoreBundle:Poll')
+                ->findLastPoll();
+
+            return true;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    private function checkStatusFilesystem()
+    {
+        try {
+            $fs       = $this->getVotesDumpFs();
+            $content  = rand(0, 99999);
+            $filename = 'status.'.rand(0, 99999);
+            $fs->write($filename, $content);
+
+            if ($fs->read($filename) != $content) {
+                throw new \RuntimeException('Unable to write votes');
+            }
+            $fs->delete($filename);
+
+            return true;
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
     }
 

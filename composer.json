@@ -30,7 +30,8 @@
         "sensio/buzz-bundle": "dev-master",
         "friendsofsymfony/rest-bundle": "1.7.*",
         "guilhermednt/buzz-proxied-curl-bundle": "dev-master",
-        "knplabs/knp-gaufrette-bundle": "*@dev"
+        "knplabs/knp-gaufrette-bundle": "*@dev",
+        "ramsey/uuid": "~2.8"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
