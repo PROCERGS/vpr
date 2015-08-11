@@ -479,9 +479,10 @@ class Vote
         if (!$this->plainOptions) {
             return false;
         }
-        $this->signature = $this->ballotBox->sign($this->plainOptions,
-            $passphrase);
         $this->encryptVote();
+        $this->signature = $this->ballotBox->sign(
+            $this->getOptions(), $passphrase
+        );
     }
 
     public function getTreatmentVPR()
