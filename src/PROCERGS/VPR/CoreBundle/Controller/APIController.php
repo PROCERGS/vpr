@@ -178,6 +178,37 @@ class APIController extends FOSRestController
     }
 
     /**
+     * @REST\Get("/api/status", name="vpr_api_ping")
+     * @REST\View
+     */
+    public function pingAction()
+    {
+        $tests = array();
+
+        try {
+            $this->getDoctrine()->getManager()
+                ->getRepository('PROCERGSVPRCoreBundle:Poll')
+                ->findLastPoll();
+
+            $tests['database'] = true;
+        } catch (\Exception $e) {
+            $tests['database'] = $e->getMessage();
+        }
+
+        try {
+            throw new \RuntimeException('Not implemented yet');
+            $tests['filesystem'] = true;
+        } catch (\Exception $e) {
+            $tests['filesystem'] = $e->getMessage();
+        }
+
+        return new JsonResponse(array(
+            'status' => $tests,
+            'timestamp' => new \DateTime()
+        ));
+    }
+
+    /**
      *
      * @param type $hash
      * @param type $calculated
