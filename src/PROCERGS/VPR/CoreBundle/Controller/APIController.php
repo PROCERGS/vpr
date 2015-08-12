@@ -189,16 +189,24 @@ class APIController extends FOSRestController
      */
     public function statusAction()
     {
-        $tests = array(
+        $status = 200;
+        $tests  = array(
             'database' => $this->checkStatusDatabase(),
             'filesystem' => $this->checkStatusFilesystem()
         );
+
+        foreach ($tests as $test => $value) {
+            if ($value !== true) {
+                $status = 500;
+                $this->getLogger()->err("$test: $value", array('API Status'));
+            }
+        }
 
         return new JsonResponse(array(
             'status' => $tests,
             'hostname' => php_uname('n'),
             'timestamp' => new \DateTime()
-        ));
+            ), $status);
     }
 
     /**
