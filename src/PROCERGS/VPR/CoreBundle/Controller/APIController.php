@@ -196,6 +196,7 @@ class APIController extends FOSRestController
 
         return new JsonResponse(array(
             'status' => $tests,
+            'hostname' => php_uname('n'),
             'timestamp' => new \DateTime()
         ));
     }
