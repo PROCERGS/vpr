@@ -101,7 +101,7 @@ class VotingSessionProvider
     public function checkExistingVotes(Person $person, BallotBox $ballotBox,
                                        Vote $conflictingVote = null)
     {
-        $filter   = compact('ballotbox');
+        $filter   = compact('ballotBox');
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
         if ($person->getTreVoter() instanceof TREVoter) {
             $filter['voterRegistration'] = $person->getTreVoter()->getId();
