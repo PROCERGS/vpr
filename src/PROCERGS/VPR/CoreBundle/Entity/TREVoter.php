@@ -17,7 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TREVoter
 {
-
     /**
      * @var integer
      * @ORM\Id
@@ -51,19 +50,18 @@ class TREVoter
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
      */
     protected $city;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Corede")
      * @ORM\JoinColumn(name="corede_id", referencedColumnName="id", nullable=true)
      */
-    protected $corede;    
+    protected $corede;
 
-    
     public function __construct(&$id = null)
     {
         $this->setId($id);
     }
-    
+
     /**
      * Set name
      *
@@ -73,10 +71,10 @@ class TREVoter
     public function setId($var)
     {
         $this->id = $var;
-    
+
         return $this;
-    }    
-    
+    }
+
     /**
      * Get id
      *
@@ -188,4 +186,11 @@ class TREVoter
         return $this->city;
     }
 
+    /**
+     * @return Corede
+     */
+    public function getCorede()
+    {
+        return $this->corede;
+    }
 }

@@ -164,7 +164,9 @@ class VotingSessionProvider
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO
                     : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
-        $corede = $person->getCityOrTreCity()->getCorede();
+        $corede = $this->em->getRepository('PROCERGSVPRCoreBundle:Corede')
+            ->find($person->getCorede()->getId());
+        $this->em->refresh($corede);
         $vote->setCorede($corede);
         $vote->setIpAddress($this->requestStack->getMasterRequest()->getClientIp());
         if ($person->getTreVoter() instanceof TREVoter) {
