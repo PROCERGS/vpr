@@ -42,7 +42,6 @@ use JMS\Serializer\Annotation\Groups;
  */
 class Person extends BaseUser implements OAuthAwareUserProviderInterface
 {
-
     /**
      * @var integer
      *
@@ -279,7 +278,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     public function getCityOrTreCity()
     {
-        $city = $this->getCity();
+        $city     = $this->getCity();
         $treVoter = $this->getTreVoter();
         if (is_null($city) && $treVoter instanceof TREVoter) {
             $city = $treVoter->getCity();
@@ -287,6 +286,9 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $city;
     }
 
+    /**
+     * @return City
+     */
     public function getCity()
     {
         return $this->city;
@@ -318,7 +320,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     public function setMobile($mobile)
     {
-        $mobile = preg_replace('/[^0-9]/', '', $mobile);
+        $mobile       = preg_replace('/[^0-9]/', '', $mobile);
         $this->mobile = $mobile;
     }
 
@@ -336,8 +338,8 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     public static function checkNamesEqual($name1, $name2)
     {
-        $name1 = explode(' ', $name1);
-        $name2 = explode(' ', $name2);
+        $name1      = explode(' ', $name1);
+        $name2      = explode(' ', $name2);
         $firstName1 = self::filter(reset($name1));
         $firstName2 = self::filter(reset($name2));
 
@@ -414,18 +416,23 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
 
     public function getCheckList()
     {
-        $badges = $this->getBadges();
-        $return['item']['full_name'] = strlen($this->getFirstName()) > 0;
-        $return['item']['email'] = isset($badges['login-cidadao.valid_email']) && $badges['login-cidadao.valid_email'];
-        $return['item']['nfg_access_lvl'] = isset($badges['login-cidadao.nfg_access_lvl']) && $badges['login-cidadao.nfg_access_lvl'] >= 2;
-        $return['item']['voter_registration'] = isset($badges['login-cidadao.voter_registration']) && $badges['login-cidadao.voter_registration'];
+        $badges                               = $this->getBadges();
+        $return['item']['full_name']          = strlen($this->getFirstName()) > 0;
+        $return['item']['email']              = isset($badges['login-cidadao.valid_email'])
+            && $badges['login-cidadao.valid_email'];
+        $return['item']['nfg_access_lvl']     = isset($badges['login-cidadao.nfg_access_lvl'])
+            && $badges['login-cidadao.nfg_access_lvl'] >= 2;
+        $return['item']['voter_registration'] = isset($badges['login-cidadao.voter_registration'])
+            && $badges['login-cidadao.voter_registration'];
         if (!is_null($this->getLoginCidadaoUpdatedAt())) {
             $return['updated_at'] = $this->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s');
         } else {
             $return['updated_at'] = null;
         }
-        $return['code'] = ($return['item']['full_name'] && $return['item']['email'] && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration']) ? 0 : 1;
-        $return['msg'] = null;
+        $return['code'] = ($return['item']['full_name'] && $return['item']['email']
+            && $return['item']['nfg_access_lvl'] && $return['item']['voter_registration'])
+                ? 0 : 1;
+        $return['msg']  = null;
         return $return;
     }
 
@@ -440,4 +447,14 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         return $this->loginCidadaoSentReminder;
     }
 
+    public function getCorede()
+    {
+        $treVoter = $this->getTreVoter();
+        if ($treVoter instanceof TREVoter) {
+            return $treVoter->getCorede();
+        } elseif ($city instanceof City) {
+            return $this->getCity()->getCorede();
+        }
+        throw new \RuntimeException('Missin city');
+    }
 }
