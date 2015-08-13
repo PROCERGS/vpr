@@ -490,7 +490,7 @@ class BallotBox
         return $this;
     }
 
-    public function generatePassphrase($length = 15)
+    public function generatePassphrase($length = 10)
     {
         $chars = 'abcdefghjkmnpqrstuvwxyz';
 
