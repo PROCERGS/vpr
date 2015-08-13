@@ -67,7 +67,9 @@ class VotingSessionProvider
      */
     public function getVote()
     {
-        return $this->session->get('vote');
+        $vote = $this->session->get('vote');
+
+        return $vote;
     }
 
     public function getActivePollOrFail()
@@ -75,17 +77,16 @@ class VotingSessionProvider
         $poll = $this->getActivePoll();
         if (!($poll instanceof Poll) || $poll->getClosingTime() < new \DateTime()) {
             throw new VotingTimeoutException();
-            //return $this->redirect($this->generateUrl('procergsvpr_core_voting_timeout'));
         }
         return $poll;
     }
 
     public function getOnlineBallotBox($poll = null)
     {
-        if (is_null($poll)) {
-            $poll = $this->getActivePollOrFail();
+        if ($poll instanceof Poll) {
+            return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
         }
-        return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
+        return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findActiveOnline();
     }
 
     /**
@@ -237,5 +238,13 @@ class VotingSessionProvider
     public function updateVote(Vote $vote = null)
     {
         $this->session->set('vote', $vote);
+    }
+
+    private function getPersonCorede(Person $person)
+    {
+        $result = $this->em->getRepository('PROCERGSVPRCoreBundle:Person')->findCoredeId($person);
+        $ids    = reset($result);
+        $id     = $ids['voter_corede_id'];
+        return $corede = $this->em->getRepository('PROCERGSVPRCoreBundle:Corede')->findOneById($id);
     }
 }

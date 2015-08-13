@@ -18,6 +18,18 @@ class BallotBoxRepository extends EntityRepository
                 ->getOneOrNullResult();
     }
 
+    public function findActiveOnline()
+    {
+        $now      = new \DateTime();
+        $isOnline = true;
+        return $this->createQueryBuilder('b')
+                ->innerJoin('b.poll', 'p')
+                ->where(':now BETWEEN p.openingTime AND p.closingTime')
+                ->andWhere('b.isOnline = :isOnline')
+                ->setParameters(compact('now', 'isOnline'))
+                ->getQuery()->getOneOrNullResult();
+    }
+
     public function generateUniquePin(Poll $poll, $length = 6)
     {
         $query = $this->createQueryBuilder('b')
