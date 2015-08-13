@@ -5,11 +5,13 @@ namespace PROCERGS\VPR\CoreBundle\Controller;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Core\Util\SecureRandom;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as REST;
 use FOS\RestBundle\Controller\FOSRestController;
 use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
+use PROCERGS\VPR\CoreBundle\Entity\PollOption;
 use JMS\Serializer\SerializationContext;
 use Monolog\Logger;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -156,24 +158,24 @@ class APIController extends FOSRestController
 
         $logger->debug($request->getClientIp());
         $this->checkHash($hash, $calculated, $logger);
-        $logger->debug($votes);
 
         $serializer = $this->getJmsSerializer();
         $data       = $serializer->deserialize($votes,
             'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\Vote>', 'json');
 
-        $logger->debug(print_r($data, true));
         foreach ($data as $vote) {
+            $logger->debug("Validating vote ".$vote->getId());
             $this->checkVote($vote);
+            $this->validateVoteOptions($vote);
         }
 
         $fs       = $this->getVotesDumpFs();
-        $uuid     = Uuid::uuid5(Uuid::NAMESPACE_DNS, php_uname('n'));
+        $uuid     = Uuid::uuid4();
         $filename = "$pin.$uuid";
         $logger->debug("Writing votes to $filename");
         $fs->write($filename, $votes);
 
-        if ($total !== null) {
+        if ($total !== null && $total != count($data)) {
             $logger->debug("Total expected votes: $total");
             $logger->debug("Actual votes count: ".count($data));
         }
@@ -241,6 +243,55 @@ class APIController extends FOSRestController
         }
         if ($vote->getVoterRegistration() === null) {
             throw new BadRequestHttpException('Missing voter registration');
+        }
+    }
+
+    private function validateVoteOptions(Vote $vote)
+    {
+        $em        = $this->getDoctrine()->getManager();
+        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+            ->find($vote->getBallotBox()->getId());
+
+        $options   = $vote->getOptions();
+        $signature = base64_decode($vote->getSignature());
+        $publicKey = openssl_pkey_get_public($ballotBox->getPublicKey());
+
+        $check = openssl_verify($options, $signature, $publicKey);
+        var_dump($vote->getSignature());
+        var_dump($check);
+        die();
+
+        if ($vote->getPassphrase() === null) {
+            $this->validateUnencryptedOptions($options);
+        }
+
+        if ($vote->getSignature() === null) {
+            $this->getLogger()->crit('DISABLE THIS IN PRODUCTION!');
+        } else {
+            if ($check !== 1) {
+                throw new BadRequestHttpException('Invalid signature!');
+            }
+        }
+
+        return true;
+    }
+
+    public function validateUnencryptedOptions($json)
+    {
+        try {
+            $serializer = $this->getJmsSerializer();
+            $options    = $serializer->deserialize($json,
+                'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\PollOption>',
+                'json');
+        } catch (\Exception $e) {
+            $message = 'Invalid options: '.$vote->getOptions();
+            throw new BadRequestHttpException($message, 400, $e);
+        }
+
+        foreach ($options as $option) {
+            if (!($option instanceof PollOption)) {
+                throw new BadRequestHttpException('Invalid poll option.');
+            }
         }
     }
 
