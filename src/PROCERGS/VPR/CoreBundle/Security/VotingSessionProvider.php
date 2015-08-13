@@ -145,6 +145,13 @@ class VotingSessionProvider
         return $this->getVote()->getLastStep();
     }
 
+    /**
+     *
+     * @param Person $person
+     * @param BallotBox $ballotBox
+     * @return Vote
+     * @throws VotingTimeoutException
+     */
     public function createVotingSession(Person $person, $ballotBox = null)
     {
         if (null === $ballotBox) {
@@ -153,11 +160,12 @@ class VotingSessionProvider
                 throw new VotingTimeoutException();
             }
         }
-        $vote = new Vote();
+        $vote   = new Vote();
         $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO
                     : Vote::AUTH_VOTER_REGISTRATION);
         $vote->setBallotBox($ballotBox);
-        $vote->setCorede($person->getCityOrTreCity()->getCorede());
+        $corede = $person->getCityOrTreCity()->getCorede();
+        $vote->setCorede($corede);
         $vote->setIpAddress($this->requestStack->getMasterRequest()->getClientIp());
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());

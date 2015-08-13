@@ -111,7 +111,6 @@ class PollOptionController extends Controller
             return $this->redirect($this->generateUrl('procergsvpr_core_homepage'));
         }
 
-
         $repository = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $poll       = $em->merge($vote->getBallotBox()->getPoll());
         $corede     = $em->merge($vote->getCorede());
