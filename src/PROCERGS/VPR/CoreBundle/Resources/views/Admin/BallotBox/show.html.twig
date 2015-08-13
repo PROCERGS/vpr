@@ -20,7 +20,7 @@
         <h1 class="form-group">
             <label class="col-sm-3 control-label">PIN</label>
             <div class="col-sm-9">
-                <p class="form-control-static">{{ entity.pin }}</p>
+                <p class="form-control-static">{{ "%04d"|format(entity.pin) }}</p>
             </div>
         </h1>
 
