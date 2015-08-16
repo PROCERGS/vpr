@@ -119,13 +119,17 @@ class APIController extends FOSRestController
      */
     public function dumpBallotBoxAction(Request $request, $pin)
     {
-        $poll = $this->getDoctrine()->getManager()
-            ->getRepository('PROCERGSVPRCoreBundle:Poll')
+        $em   = $this->getDoctrine()->getManager();
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')
             ->findLastPoll();
 
-        $ballotBox = $this->getDoctrine()->getManager()
-            ->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
             ->findByPinAndPollFilteredByCorede($poll, $pin);
+
+        if ($ballotBox->getSetupAt() instanceof \DateTime ||
+            $ballotBox->getClosedAt() instanceof \DateTime) {
+            throw new AccessDeniedHttpException("Ballot box already downloaded.");
+        }
 
         $passphrase = $request->get('passphrase', null);
         $privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
@@ -133,6 +137,10 @@ class APIController extends FOSRestController
         if ($privateKey === false) {
             throw new AccessDeniedHttpException("Invalid credentials");
         }
+
+        $ballotBox->setSetupAt(new \DateTime());
+        $em->persist($ballotBox);
+        $em->flush();
 
         $context = SerializationContext::create()
             ->setSerializeNull(true)
@@ -150,25 +158,23 @@ class APIController extends FOSRestController
      */
     public function receiveVotesAction(Request $request, $pin)
     {
-        $logger     = $this->getLogger();
-        $votes      = $request->get('votes');
-        $hash       = $request->get('hash');
-        $total      = $request->get('total');
-        
+        $em        = $this->getDoctrine()->getManager();
+        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+            ->findOneByPin($pin);
+
+        if ($ballotBox->getClosedAt() instanceof \DateTime) {
+            throw new AccessDeniedHttpException("Ballot box already closed.");
+        }
+
+        $logger = $this->getLogger();
+        $votes  = $request->get('votes');
+        $hash   = $request->get('hash');
+        $total  = $request->get('total');
+
         $a = json_decode($votes, true);
-        $em = $this->getDoctrine()->getManager();
-        $queryBuilder = $em->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('b.secret as secret')
-            			->from('PROCERGSVPRCoreBundle:BallotBox', 'b')            			
-            			->where('b.pin = :pin')
-            			->setParameter('pin', $pin)
-            			;
-            			$query = $query->getQuery();
-        
-        $BallotBox = $query->getArrayResult();
-        $secret = $BallotBox[0]['secret'];
-		$calculated = base64_encode(hash_hmac('sha256', $votes, $secret, true));
+
+        $secret     = $ballotBox->getSecret();
+        $calculated = base64_encode(hash_hmac('sha256', $votes, $secret, true));
 
         $logger->debug($request->getClientIp());
         $this->checkHash($hash, $calculated, $logger);
@@ -193,6 +199,11 @@ class APIController extends FOSRestController
             $logger->debug("Total expected votes: $total");
             $logger->debug("Actual votes count: ".count($data));
         }
+
+        $ballotBox->setClosedAt(new \DateTime());
+        $em->persist($ballotBox);
+        $em->flush();
+
         return new JsonResponse(array(
             'hash' => true,
             'votes' => count($data)
@@ -259,7 +270,7 @@ class APIController extends FOSRestController
             throw new BadRequestHttpException('Missing voter registration');
         }
         if ($vote->getBallotBox() === null) {
-        	throw new BadRequestHttpException('Missing ballot_box');
+            throw new BadRequestHttpException('Missing ballot_box');
         }
     }
 
@@ -273,15 +284,15 @@ class APIController extends FOSRestController
         if ($vote->getSignature() === null) {
             $this->getLogger()->crit('DISABLE THIS IN PRODUCTION!');
         } else {
-        	$signature = base64_decode($vote->getSignature());
-        	$publicKey = openssl_pkey_get_public($ballotBox->getPublicKey());
-        	$check = openssl_verify($options, $signature, $publicKey);
+            $signature = base64_decode($vote->getSignature());
+            $publicKey = openssl_pkey_get_public($ballotBox->getPublicKey());
+            $check     = openssl_verify($options, $signature, $publicKey);
             if ($check !== 1) {
-                throw new BadRequestHttpException('Invalid signature! ' . $vote->getSignature());
+                throw new BadRequestHttpException('Invalid signature! '.$vote->getSignature());
             }
         }
         if ($vote->getPassphrase() === null) {
-        	$this->validateUnencryptedOptions($options);
+            $this->validateUnencryptedOptions($options);
         }
         return true;
     }

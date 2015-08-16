@@ -134,6 +134,18 @@ class BallotBox
      */
     protected $city;
 
+    /**
+     * @ORM\Column(name="setup_at", type="datetime")
+     * @var \DateTime
+     */
+    protected $setupAt;
+
+    /**
+     * @ORM\Column(name="closed_at", type="datetime")
+     * @var \DateTime
+     */
+    protected $closedAt;
+
     public function __construct()
     {
         $this->setTotalInvalidVotes(0);
@@ -148,11 +160,11 @@ class BallotBox
     {
         return $this->id;
     }
-    
+
     public function setId($var)
     {
-    	$this->id = $var;
-    	return $this;
+        $this->id = $var;
+        return $this;
     }
 
     /**
@@ -426,7 +438,7 @@ class BallotBox
 
         $res = openssl_pkey_new($config);
         if (!$res) {
-        	$a = openssl_error_string();
+            $a = openssl_error_string();
         }
 
         openssl_pkey_export($res, $privKey, $this->getSecret());
@@ -505,5 +517,27 @@ class BallotBox
         $chars = 'abcdefghjkmnpqrstuvwxyz';
 
         return substr(str_shuffle($chars), 0, $length);
+    }
+
+    public function getSetupAt()
+    {
+        return $this->setupAt;
+    }
+
+    public function getClosedAt()
+    {
+        return $this->closedAt;
+    }
+
+    public function setSetupAt(\DateTime $setupAt)
+    {
+        $this->setupAt = $setupAt;
+        return $this;
+    }
+
+    public function setClosedAt(\DateTime $closedAt)
+    {
+        $this->closedAt = $closedAt;
+        return $this;
     }
 }
