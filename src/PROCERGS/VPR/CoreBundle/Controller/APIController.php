@@ -169,9 +169,6 @@ class APIController extends FOSRestController
         $logger = $this->getLogger();
         $votes  = $request->get('votes');
         $hash   = $request->get('hash');
-        $total  = $request->get('total');
-
-        $a = json_decode($votes, true);
 
         $secret     = $ballotBox->getSecret();
         $calculated = base64_encode(hash_hmac('sha256', $votes, $secret, true));
@@ -179,26 +176,11 @@ class APIController extends FOSRestController
         $logger->debug($request->getClientIp());
         $this->checkHash($hash, $calculated, $logger);
 
-        $serializer = $this->getJmsSerializer();
-        $data       = $serializer->deserialize($votes,
-            'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\Vote>', 'json');
-
-        foreach ($data as $vote) {
-            $logger->debug("Validating vote ".$vote->getId());
-            $this->checkVote($vote);
-            $this->validateVoteOptions($vote);
-        }
-
         $fs       = $this->getVotesDumpFs();
         $uuid     = Uuid::uuid4();
         $filename = "$pin.$uuid";
         $logger->debug("Writing votes to $filename");
         $fs->write($filename, $votes);
-
-        if ($total !== null && $total != count($data)) {
-            $logger->debug("Total expected votes: $total");
-            $logger->debug("Actual votes count: ".count($data));
-        }
 
         $ballotBox->setClosedAt(new \DateTime());
         $em->persist($ballotBox);
@@ -206,7 +188,6 @@ class APIController extends FOSRestController
 
         return new JsonResponse(array(
             'hash' => true,
-            'votes' => count($data)
         ));
     }
 
