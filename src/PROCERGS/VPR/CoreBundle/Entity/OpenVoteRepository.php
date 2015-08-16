@@ -6,9 +6,10 @@ use Doctrine\ORM\EntityRepository;
 
 class OpenVoteRepository extends EntityRepository
 {
+
     public function findOptionVoteByCityAndStep($city_id, $step_id)
     {
-        $em = $this->getEntityManager();
+        $em         = $this->getEntityManager();
         $connection = $em->getConnection();
 
         $statement = $connection->prepare('
@@ -29,9 +30,17 @@ class OpenVoteRepository extends EntityRepository
         return $statement->fetchAll();
     }
 
-    public function findTotalByCity($city_id)
+    public function findTotalByCity(Poll $poll, $city_id)
     {
-        $em = $this->getEntityManager();
+        return $this->createQueryBuilder('o')
+                ->select('COUNT(o.city) AS total')
+                ->join('o.ballotBox', 'b')
+                ->where('o.city = :city_id')
+                ->andWhere('b.poll = :poll')
+                ->setParameters(compact('poll', 'city_id'))
+                ->getQuery()->getSingleScalarResult();
+
+        $em         = $this->getEntityManager();
         $connection = $em->getConnection();
 
         $statement = $connection->prepare('

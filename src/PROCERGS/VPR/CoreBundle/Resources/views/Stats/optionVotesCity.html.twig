@@ -69,7 +69,7 @@
 {% if cityTotal is defined %}
 <div class="row" style="padding-top:20px;">
     <div class="col-md-6">
-        <p><strong>Total de votantes no município: </strong>{{ cityTotal.total |number_format(0, ',', '.') }}</p>
+        <p><strong>Total de votantes no município: </strong>{{ cityTotal |number_format(0, ',', '.') }}</p>
     </div>
 </div>
 {% endif %}

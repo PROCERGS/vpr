@@ -45,7 +45,8 @@ class StatsController extends Controller
             $created_at = null;
             $poll       = $pollRepo->findLastPoll();
 
-            $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($coredeId);
+            $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($poll,
+                $coredeId);
 
             $steps = $poll->getSteps();
             foreach ($steps as $step) {
@@ -94,7 +95,7 @@ class StatsController extends Controller
         $poll    = $pollRepo->findLastPoll();
 
         $city      = $em->getRepository('PROCERGSVPRCoreBundle:City')->findOneById($cityId);
-        $cityTotal = $openVoteRepo->findTotalByCity($cityId);
+        $cityTotal = $openVoteRepo->findTotalByCity($poll, $cityId);
 
         $steps = $poll->getSteps();
         foreach ($steps as $step) {
@@ -266,6 +267,8 @@ class StatsController extends Controller
     {
         $em        = $this->getDoctrine()->getManager();
         $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $pollRepo  = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        $poll      = $pollRepo->findLastPoll();
 
         $results    = $statsRepo->findTotalVotes();
         $created_at = new \DateTime();
@@ -280,7 +283,7 @@ class StatsController extends Controller
         }
 
         foreach ($results as $line) {
-            $entity = $statsRepo->findOneByCoredeId($line['corede_id']);
+            $entity = $statsRepo->findOneByCoredeId($poll, $line['corede_id']);
             if (!$entity) {
                 $entity = new StatsTotalCoredeVote();
             }

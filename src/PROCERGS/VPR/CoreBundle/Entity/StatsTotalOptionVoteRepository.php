@@ -19,7 +19,7 @@ class StatsTotalOptionVoteRepository extends EntityRepository
             ->andWhere('s.pollId = :pollId')
             ->setParameter('corede', $corede)
             ->setParameter('pollId', $poll_id)
-            ->groupBy('s.coredeId, t.id, o.id, o.categorySorting, o.title');
+            ->groupBy('s.pollId, s.coredeId, t.id, o.id, o.categorySorting, o.title');
 
         return $query->getQuery()->getResult();
     }

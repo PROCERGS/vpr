@@ -6,9 +6,10 @@ use Doctrine\ORM\EntityRepository;
 
 class StatsTotalCoredeVoteRepository extends EntityRepository
 {
+
     public function findTotalVotes()
     {
-        $em = $this->getEntityManager();
+        $em         = $this->getEntityManager();
         $connection = $em->getConnection();
 
         $statement = $connection->prepare('
@@ -26,5 +27,16 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
         $statement->execute();
 
         return $statement->fetchAll();
+    }
+
+    public function findOneByCoredeId(Poll $poll, $coredeId)
+    {
+        return $this->createQueryBuilder('s')
+                ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH',
+                    'b.id = s.ballotBoxId')
+                ->where('s.coredeId = :coredeId')
+                ->andWhere('b.poll = :poll')
+                ->setParameters(compact('poll', 'coredeId'))
+                ->getQuery()->getOneOrNullResult();
     }
 }
