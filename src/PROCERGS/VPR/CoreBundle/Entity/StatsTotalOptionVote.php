@@ -24,6 +24,13 @@ class StatsTotalOptionVote
     /**
      * @var integer
      *
+     * @ORM\Column(name="poll_id", type="integer")
+     */
+    protected $pollId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="option_id", type="integer")
      */
     protected $optionId;
@@ -268,4 +275,14 @@ class StatsTotalOptionVote
         return $this->createdAt;
     }
 
+    public function getPollId()
+    {
+        return $this->pollId;
+    }
+
+    public function setPollId($pollId)
+    {
+        $this->pollId = $pollId;
+        return $this;
+    }
 }

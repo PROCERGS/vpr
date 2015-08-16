@@ -317,7 +317,7 @@ class StatsController extends Controller
     {
         $em        = $this->getDoctrine()->getManager();
         $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
-        $poll      = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findActivePoll();
+        $poll      = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 
         $created_at = new \DateTime();
 
@@ -332,6 +332,7 @@ class StatsController extends Controller
                     $entity = new StatsTotalOptionVote();
                 }
 
+                $entity->setPollId($line['pollId']);
                 $entity->setCoredeId($line['coredeId']);
                 $entity->setOptionStepId($line['stepId']);
                 $entity->setOptionNumber($line['optionNumber']);
