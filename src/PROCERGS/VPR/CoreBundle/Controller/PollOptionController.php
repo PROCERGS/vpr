@@ -38,14 +38,15 @@ class PollOptionController extends Controller
         $pollRepo        = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll');
         $pollOptionsRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
 
-        $poll        = $pollRepo->findActivePoll();
+        $poll        = $pollRepo->findLastPoll();
         $pollOptions = $pollOptionsRepo->findByPollCorede($poll,
             $city->getCorede());
 
         foreach ($pollOptions as $option) {
             $options[$option->getStep()->getName()][$option->getCategory()->getName()][]
                 = $option;
-            $categoriesId[$option->getCategory()->getName()]                             = $option->getCategory();
+
+            $categoriesId[$option->getCategory()->getName()] = $option->getCategory();
         }
 
         $corede = $city->getCorede();
