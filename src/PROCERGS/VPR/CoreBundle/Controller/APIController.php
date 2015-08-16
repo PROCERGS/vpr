@@ -154,7 +154,21 @@ class APIController extends FOSRestController
         $votes      = $request->get('votes');
         $hash       = $request->get('hash');
         $total      = $request->get('total');
-        $calculated = hash('sha512', $votes);
+        
+        $a = json_decode($votes, true);
+        $em = $this->getDoctrine()->getManager();
+        $queryBuilder = $em->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('b.secret as secret')
+            			->from('PROCERGSVPRCoreBundle:BallotBox', 'b')            			
+            			->where('b.pin = :pin')
+            			->setParameter('pin', $pin)
+            			;
+            			$query = $query->getQuery();
+        
+        $BallotBox = $query->getArrayResult();
+        $secret = $BallotBox[0]['secret'];
+		$calculated = base64_encode(hash_hmac('sha256', $votes, $secret, true));
 
         $logger->debug($request->getClientIp());
         $this->checkHash($hash, $calculated, $logger);
@@ -244,6 +258,9 @@ class APIController extends FOSRestController
         if ($vote->getVoterRegistration() === null) {
             throw new BadRequestHttpException('Missing voter registration');
         }
+        if ($vote->getBallotBox() === null) {
+        	throw new BadRequestHttpException('Missing ballot_box');
+        }
     }
 
     private function validateVoteOptions(Vote $vote)
@@ -252,27 +269,20 @@ class APIController extends FOSRestController
         $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
             ->find($vote->getBallotBox()->getId());
 
-        $options   = $vote->getOptions();
-        $signature = base64_decode($vote->getSignature());
-        $publicKey = openssl_pkey_get_public($ballotBox->getPublicKey());
-
-        $check = openssl_verify($options, $signature, $publicKey);
-        var_dump($vote->getSignature());
-        var_dump($check);
-        die();
-
-        if ($vote->getPassphrase() === null) {
-            $this->validateUnencryptedOptions($options);
-        }
-
+        $options = $vote->getOptions();
         if ($vote->getSignature() === null) {
             $this->getLogger()->crit('DISABLE THIS IN PRODUCTION!');
         } else {
+        	$signature = base64_decode($vote->getSignature());
+        	$publicKey = openssl_pkey_get_public($ballotBox->getPublicKey());
+        	$check = openssl_verify($options, $signature, $publicKey);
             if ($check !== 1) {
-                throw new BadRequestHttpException('Invalid signature!');
+                throw new BadRequestHttpException('Invalid signature! ' . $vote->getSignature());
             }
         }
-
+        if ($vote->getPassphrase() === null) {
+        	$this->validateUnencryptedOptions($options);
+        }
         return true;
     }
 
@@ -284,8 +294,8 @@ class APIController extends FOSRestController
                 'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\PollOption>',
                 'json');
         } catch (\Exception $e) {
-            $message = 'Invalid options: '.$vote->getOptions();
-            throw new BadRequestHttpException($message, 400, $e);
+            $message = 'Invalid options: '.$json;
+            throw new BadRequestHttpException($message, $e, 400);
         }
 
         foreach ($options as $option) {

@@ -36,6 +36,7 @@ class BallotBox
     protected $name;
 
     /**
+     * @ORM\Column(name="secret", type="string", length=255)
      * @var string
      */
     protected $secret;
@@ -146,6 +147,12 @@ class BallotBox
     public function getId()
     {
         return $this->id;
+    }
+    
+    public function setId($var)
+    {
+    	$this->id = $var;
+    	return $this;
     }
 
     /**
@@ -418,6 +425,9 @@ class BallotBox
         );
 
         $res = openssl_pkey_new($config);
+        if (!$res) {
+        	$a = openssl_error_string();
+        }
 
         openssl_pkey_export($res, $privKey, $this->getSecret());
 
