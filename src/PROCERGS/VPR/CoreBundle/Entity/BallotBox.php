@@ -135,13 +135,13 @@ class BallotBox
     protected $city;
 
     /**
-     * @ORM\Column(name="setup_at", type="datetime")
+     * @ORM\Column(name="setup_at", type="datetime", nullable=true)
      * @var \DateTime
      */
     protected $setupAt;
 
     /**
-     * @ORM\Column(name="closed_at", type="datetime")
+     * @ORM\Column(name="closed_at", type="datetime", nullable=true)
      * @var \DateTime
      */
     protected $closedAt;
