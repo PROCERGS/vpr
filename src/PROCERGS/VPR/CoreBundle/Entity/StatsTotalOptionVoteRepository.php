@@ -3,26 +3,31 @@
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use PROCERGS\VPR\CoreBundle\Entity\Poll;
 
 class StatsTotalOptionVoteRepository extends EntityRepository
 {
-    public function findTotalOptionVoteByCorede($corede)
+
+    public function findTotalOptionVoteByCorede($corede, Poll $poll)
     {
         $query = $this->getEntityManager()->createQueryBuilder()
             ->select('s.coredeId, t.id as stepId, o.id AS optionId, o.categorySorting AS optionNumber, o.title AS optionTitle, COUNT(s.id) AS totalVotes')
             ->from('PROCERGSVPRCoreBundle:StatsOptionVote', 's')
-            ->join('PROCERGSVPRCoreBundle:PollOption', 'o', 'WITH','s.pollOptionId = o.id')
-            ->join('PROCERGSVPRCoreBundle:Step', 't', 'WITH','t = o.step')
+            ->join('PROCERGSVPRCoreBundle:PollOption', 'o', 'WITH',
+                's.pollOptionId = o.id')
+            ->join('PROCERGSVPRCoreBundle:Step', 't', 'WITH', 't = o.step')
             ->where('s.coredeId = :corede')
+            ->andWhere('s.poll = :poll')
             ->setParameter('corede', $corede)
+            ->setParameter('poll', $poll)
             ->groupBy('s.coredeId, t.id, o.id, o.categorySorting, o.title');
 
-         return $query->getQuery()->getResult();
+        return $query->getQuery()->getResult();
     }
 
     public function findPercentOptionVoteByCoredeAndStep($corede_id, $step_id)
     {
-        $em = $this->getEntityManager();
+        $em         = $this->getEntityManager();
         $connection = $em->getConnection();
 
         $statement = $connection->prepare('
@@ -49,7 +54,7 @@ class StatsTotalOptionVoteRepository extends EntityRepository
 
     public function findTotalOptionVoteByCoredeAndStep($corede_id, $step_id)
     {
-        $em = $this->getEntityManager();
+        $em         = $this->getEntityManager();
         $connection = $em->getConnection();
 
         $statement = $connection->prepare('
