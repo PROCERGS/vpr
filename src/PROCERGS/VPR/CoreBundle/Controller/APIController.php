@@ -369,20 +369,9 @@ class APIController extends FOSRestController
         $zipFs      = new \Gaufrette\Filesystem($zipAdapter);
 
         foreach ($keys['keys'] as $key) {
-            $origin       = $fs->get($key);
-            $originStream = $origin->createStream();
-
-            $dest       = $zipFs->createFile($origin->getKey());
-            $destStream = $dest->createStream();
-
-            $memoryLimit = $this->parseHumanBytes(ini_get('memory_limit'));
-            $step        = $memoryLimit * 0.7;
-
-            while (!$originStream->eof()) {
-                $destStream->write($originStream->read($step));
-            }
-            $originStream->close();
-            $destStream->close();
+            $origin = $fs->get($key);
+            $dest   = $zipFs->createFile($origin->getKey());
+            $dest->setContent($origin->getContent());
         }
 
         $response = new \Symfony\Component\HttpFoundation\Response();
