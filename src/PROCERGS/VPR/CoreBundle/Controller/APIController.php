@@ -178,7 +178,7 @@ class APIController extends FOSRestController
 
         $fs       = $this->getVotesDumpFs();
         $uuid     = Uuid::uuid4();
-        $filename = "$pin.$uuid";
+        $filename = "ballot_box.$pin.$uuid";
         $logger->debug("Writing votes to $filename");
         $fs->write($filename, $votes);
 
@@ -351,5 +351,65 @@ class APIController extends FOSRestController
     private function getVotesDumpFs()
     {
         return $this->get('knp_gaufrette.filesystem_map')->get('votes_dump_fs');
+    }
+
+    /**
+     * @REST\Get("/api/offline/download/{pin}", name="vpr_api_download_offline_votes", defaults={"pin" = ""})
+     * @REST\View
+     */
+    public function downloadOfflineVotesAction($pin = '')
+    {
+        $zipName     = "offline.".($pin !== '' ? "$pin." : 'all.').Uuid::uuid4().'.zip';
+        $zipFilename = realpath('../uploads').DIRECTORY_SEPARATOR.$zipName;
+
+        $fs   = $this->getVotesDumpFs();
+        $keys = $fs->listKeys('ballot_box.'.$pin);
+
+        $zipAdapter = new \Gaufrette\Adapter\Zip($zipFilename);
+        $zipFs      = new \Gaufrette\Filesystem($zipAdapter);
+
+        foreach ($keys['keys'] as $key) {
+            $origin       = $fs->get($key);
+            $originStream = $origin->createStream();
+
+            $dest       = $zipFs->createFile($origin->getKey());
+            $destStream = $dest->createStream();
+
+            $memoryLimit = $this->parseHumanBytes(ini_get('memory_limit'));
+            $step        = $memoryLimit * 0.7;
+
+            while (!$originStream->eof()) {
+                $destStream->write($originStream->read($step));
+            }
+            $originStream->close();
+            $destStream->close();
+        }
+
+        $response = new \Symfony\Component\HttpFoundation\Response();
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', mime_content_type($zipFilename));
+        $response->headers->set('Content-Disposition',
+            'attachment; filename="'.basename($zipFilename).'";');
+        $response->headers->set('Content-length', filesize($zipFilename));
+
+        $response->sendHeaders();
+
+        $response->setContent(readfile($zipFilename));
+        return $response;
+    }
+
+    private function parseHumanBytes($val)
+    {
+        $val  = trim($val);
+        $last = strtolower($val[strlen($val) - 1]);
+        switch ($last) {
+            case 'g':
+                $val *= 1024;
+            case 'm':
+                $val *= 1024;
+            case 'k':
+                $val *= 1024;
+        }
+        return $val;
     }
 }

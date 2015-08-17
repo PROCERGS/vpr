@@ -44,6 +44,7 @@ security:
 
     access_control:
         - { path: ^/counting, role: ROLE_ADMIN }
+        - { path: ^/api/offline/download, roles: ROLE_ADMIN }
 
         - { path: ^/api/status, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/ballotbox, roles: IS_AUTHENTICATED_ANONYMOUSLY }
