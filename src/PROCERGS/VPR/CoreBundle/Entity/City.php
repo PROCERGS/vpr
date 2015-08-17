@@ -9,11 +9,10 @@ use JMS\Serializer\Annotation\Groups;
  * City
  *
  * @ORM\Table(name="city")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\CityRepository")
  */
 class City
 {
-
     /**
      * @var integer
      *
@@ -199,5 +198,4 @@ class City
     {
         return $this->corede;
     }
-
 }

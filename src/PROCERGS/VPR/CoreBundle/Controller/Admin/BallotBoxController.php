@@ -2,11 +2,15 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PROCERGS\VPR\CoreBundle\Entity\Poll;
+use PROCERGS\VPR\CoreBundle\Entity\City;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxType;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
@@ -157,7 +161,7 @@ class BallotBoxController extends Controller
     /**
      * Finds and displays a BallotBox entity.
      *
-     * @Route("/{id}", name="admin_ballotbox_show")
+     * @Route("/{id}", requirements={"id": "\d+"}, name="admin_ballotbox_show")
      * @Method("GET")
      * @Template()
      */
@@ -182,7 +186,7 @@ class BallotBoxController extends Controller
     /**
      * Displays a form to edit an existing BallotBox entity.
      *
-     * @Route("/{id}/edit", name="admin_ballotbox_edit")
+     * @Route("/{id}/edit", requirements={"id": "\d+"}, name="admin_ballotbox_edit")
      * @Method("GET")
      * @Template()
      */
@@ -230,7 +234,7 @@ class BallotBoxController extends Controller
     /**
      * Edits an existing BallotBox entity.
      *
-     * @Route("/{id}", name="admin_ballotbox_update")
+     * @Route("/{id}", requirements={"id": "\d+"}, name="admin_ballotbox_update")
      * @Method("PUT")
      * @Template("PROCERGSVPRCoreBundle:Admin\BallotBox:edit.html.twig")
      */
@@ -269,7 +273,7 @@ class BallotBoxController extends Controller
     /**
      * Deletes a BallotBox entity.
      *
-     * @Route("/{id}", name="admin_ballotbox_delete")
+     * @Route("/{id}", requirements={"id": "\d+"}, name="admin_ballotbox_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -324,5 +328,114 @@ class BallotBoxController extends Controller
         $session = $this->getRequest()->getSession();
         $session->remove('ballotBox_filters');
         return $this->redirect($this->generateUrl('admin_ballotbox'));
+    }
+
+    /**
+     * @Route("/batch", name="vpr_ballotbox_batch_create")
+     * @Template
+     */
+    public function batchCreateAction(Request $request)
+    {
+        $builder = $this->createFormBuilder()
+            ->add('config', 'file');
+
+        $form = $builder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $config = $this->parseData($form->getData()['config']);
+
+            $em     = $this->getDoctrine()->getManager();
+            $pollId = $request->get('poll_id');
+            $open   = $request->get('open');
+            $close  = $request->get('close');
+
+            if ($pollId !== null) {
+                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($pollId);
+            } else {
+                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+            }
+
+            if ($open !== null) {
+                $openingTime = new \DateTime($open);
+            } else {
+                $openingTime = $poll->getOpeningTime();
+            }
+
+            if ($close !== null) {
+                $closingTime = new \DateTime($close);
+            } else {
+                $closingTime = $poll->getClosingTime();
+            }
+
+            $cities = $em->getRepository('PROCERGSVPRCoreBundle:City')
+                ->findByCityName($config['cities']);
+
+            foreach ($config['requests'] as $req) {
+                $city = $cities[strtolower($req['city'])];
+
+                var_dump("Creating Ballot Box for {$city->getName()}");
+                $ballotBox = $this->createOfflineBallotBox($em, $poll, $city,
+                    $openingTime, $closingTime);
+            }
+            //$em->flush();
+        }
+
+        return array('form' => $form->createView());
+    }
+
+    private function createOfflineBallotBox(EntityManager $em, Poll $poll,
+                                            City $city, \DateTime $openingTime,
+                                            \DateTime $closingTime)
+    {
+        $name = "Urna offline de {$city->getName()}";
+
+        $entity = new BallotBox();
+        $entity->setSecret($entity->generatePassphrase())
+            ->setCity($city)
+            ->setIsOnline(false)
+            ->setName($name)
+            ->setOpeningTime($openingTime)
+            ->setClosingTime($closingTime)
+            ->setPoll($poll);
+
+        $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+        $pin  = $repo->generateUniquePin($entity->getPoll(), 4);
+        $entity->setPin($pin);
+
+        $em->persist($entity);
+        return $entity;
+    }
+
+    private function parseData(UploadedFile $file)
+    {
+        $handle = $file->openFile();
+
+        $first  = true;
+        $config = array();
+        while (($data   = $handle->fgetcsv(';')) !== FALSE) {
+            if (count($data) < 4) {
+                break;
+            }
+            if ($first) {
+                $first = false;
+                continue;
+            }
+            $cleanData = array_map('trim', $data);
+            $city      = strtolower($cleanData[0]);
+
+            $config['cities'][] = $city;
+
+            $config['requests'][] = array(
+                'city' => $city,
+                'person' => $cleanData[1],
+                'cpf' => $cleanData[2],
+                'email' => $cleanData[3],
+                'passphrase' => @$cleanData[4],
+                'pin' => @$cleanData[5]
+            );
+        }
+
+        return $config;
     }
 }

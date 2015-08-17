@@ -1,0 +1,22 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'admin.ballotBox'|trans %}
+{% set actionName = 'admin.create'|trans %}
+
+{% block content -%}
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('admin_ballotbox') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
+    </div>
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form) }}
+    <button type="submit">Submit</button>
+    {{ form_end(form) }}
+{% endblock %}
