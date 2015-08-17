@@ -371,14 +371,37 @@ class BallotBoxController extends Controller
             $cities = $em->getRepository('PROCERGSVPRCoreBundle:City')
                 ->findByCityName($config['cities']);
 
+            $result = '';
             foreach ($config['requests'] as $req) {
-                $city = $cities[strtolower($req['city'])];
+                $index = strtolower($req['city']);
+                if (array_key_exists($index, $cities)) {
+                    $city = $cities[$index];
 
-                var_dump("Creating Ballot Box for {$city->getName()}");
-                $ballotBox = $this->createOfflineBallotBox($em, $poll, $city,
-                    $openingTime, $closingTime);
+                    $ballotBox = $this->createOfflineBallotBox($em, $poll,
+                        $city, $openingTime, $closingTime);
+
+                    $req['pin']        = $ballotBox->getPin();
+                    $req['passphrase'] = $ballotBox->getSecret();
+                }
+
+                $result .= sprintf('%s;%s;%s;%s;%s;%s', $req['city'],
+                        $req['person'], $req['cpf'], $req['email'],
+                        $req['passphrase'], $req['pin']).PHP_EOL;
             }
-            //$em->flush();
+
+            $em->flush();
+
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set('Content-Disposition',
+                'attachment; filename="offline_ballot_boxes.csv";');
+            $response->headers->set('Content-length', strlen($result));
+
+            $response->sendHeaders();
+
+            $response->setContent($result);
+            return $response;
         }
 
         return array('form' => $form->createView());
