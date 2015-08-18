@@ -20,6 +20,9 @@ class BallotBoxRepository extends EntityRepository
 
     public function generateUniquePin(Poll $poll, $length = 6)
     {
+        $lastPin = str_pad(9, $length, 9);
+        $allPins = range(1, $lastPin);
+
         $query = $this->createQueryBuilder('b')
             ->select('b.pin')
             ->where('b.poll = :poll')
@@ -28,11 +31,8 @@ class BallotBoxRepository extends EntityRepository
         $result = $query->getQuery()->getScalarResult();
         $pins   = array_map('current', $result);
 
-        do {
-            $r   = rand(0, str_repeat('9', $length));
-            $pin = str_pad($r, $length, 0, STR_PAD_LEFT);
-        } while (array_search($pin, $pins) !== false);
-
+        $available = array_diff($allPins, $pins);
+        $pin       = $available[rand(0, count($available) - 1)];
         return $pin;
     }
 

@@ -16,8 +16,20 @@
         {% endfor %}
     {% endfor %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form.config) }}
-    <button class="btn btn-success" type="submit">Submit</button>
+    {{ form_start(form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
+
+    {{ form_row(form.openingTime) }}
+
+    {{ form_row(form.closingTime) }}
+
+    {{ form_row(form.config) }}
+
+    {{ form_row(form.config) }}
+
+    <div class="form-group form-actions">
+        <div class="col-lg-10">
+            <button class="btn btn-success" type="submit">Submit</button>
+        </div>
+    </div>
     {{ form_end(form) }}
 {% endblock %}
