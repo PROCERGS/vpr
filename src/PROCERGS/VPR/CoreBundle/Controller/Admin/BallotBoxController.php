@@ -487,7 +487,7 @@ class BallotBoxController extends Controller
 
             $emails = $this->prepareEmails($config);
             foreach ($emails as $message) {
-                //$this->get('mailer')->send($message);
+                $this->get('mailer')->send($message);
             }
         }
 
