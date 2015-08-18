@@ -468,4 +468,64 @@ class BallotBoxController extends Controller
 
         return $config;
     }
+
+    /**
+     * @Route("/email", name="vpr_ballotbox_email")
+     * @Template
+     */
+    public function emailBallotBoxesAction(Request $request)
+    {
+        $builder = $this->createFormBuilder()
+            ->add('config', 'file');
+
+        $form = $builder->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $data   = $form->getData();
+            $config = $this->parseData($data['config']);
+
+            $emails = $this->prepareEmails($config);
+            foreach ($emails as $message) {
+                $this->get('mailer')->send($message);
+            }
+        }
+
+        return array('form' => $form->createView());
+    }
+
+    private function groupRequestsByEmail($config)
+    {
+        $requests = array();
+        foreach ($config['requests'] as $req) {
+            $requests[$req['email']][] = $req;
+        }
+        return $requests;
+    }
+
+    private function prepareEmails($config)
+    {
+        $emails   = array();
+        $requests = $this->groupRequestsByEmail($config);
+        foreach ($requests as $email => $reqs) {
+            $emailRegex  = "/^[^a-zA-Z0-9@.\-!#$%&'*+\/\=?^_`{|}~]*/";
+            $cleanEmail  = preg_replace($emailRegex, '', $email);
+            $destination = explode(' ', $cleanEmail)[0];
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Informações de Urna Offline')
+                ->setFrom($this->getParameter('mailer_sender_mail'),
+                    $this->getParameter('mailer_sender_name'))
+                ->setTo($destination)
+                ->setBody(
+                $this->renderView(
+                    'Emails/ballotboxes.txt.twig', array('requests' => $reqs)
+                ), 'text/plain'
+            );
+
+            $emails[] = $message;
+        }
+
+        return $emails;
+    }
 }

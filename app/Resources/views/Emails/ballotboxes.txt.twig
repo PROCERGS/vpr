@@ -1,0 +1,22 @@
+Olá,
+
+A Consulta Popular 2015 acontece a partir da manhã do dia 19 de Agosto.
+
+Certifique-se que seu aplicativo está atualizado e que seu smartphone atenda aos requisitos. A versão mais recente, no momento do envio desse email, é a v1.0.11.
+Caso tenha dificuldades em consultar a versão atual do seu aplicativo, entre em contato com a SEPLAN ou com a PROCERGS.
+
+Não esqueça de encerrar a coleta de votos a partir das 20h e proceder o encerramento da urna antes das 23:59.
+Evite imprevistos, envie com antecedência.
+
+A seguir está a lista de PINs e senhas para as urnas offline solicitadas:
+
+{% for req in requests %}
+    Responsável: {% if req.person is defined and req.person | length > 0 %}{{ req.person | convert_encoding('UTF-8', 'ISO-8859-1') }}{% else %}Não Informado{% endif %}
+
+    Cidade: {{ req.city | convert_encoding('UTF-8', 'ISO-8859-1') }}
+    PIN: {{ req.pin }}
+    Senha: {{ req.passphrase }}
+
+{% endfor %}
+
+Consulta Popular 2015
