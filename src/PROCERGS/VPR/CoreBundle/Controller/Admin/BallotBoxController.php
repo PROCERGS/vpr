@@ -489,6 +489,8 @@ class BallotBoxController extends Controller
             foreach ($emails as $message) {
                 $this->get('mailer')->send($message);
             }
+
+            return $this->redirectToRoute('vpr_ballotbox_email');
         }
 
         return array('form' => $form->createView());
