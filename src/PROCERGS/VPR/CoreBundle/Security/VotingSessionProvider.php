@@ -240,7 +240,24 @@ class VotingSessionProvider
         $vote->close($this->passphrase);
         $vote->setCreatedAtValue();
 
-        $vote = $this->em->merge($vote);
+        if ($vote->getBallotBox()) {
+            $vote->setBallotBox($this->em->merge($vote->getBallotBox()));
+            $this->em->refresh($vote->getBallotBox());
+            $this->em->refresh($vote->getBallotBox()->getPoll());
+        }
+        if ($vote->getCity()) {
+            $vote->setCity($this->em->merge($vote->getCity()));
+            $this->em->refresh($vote->getCity());
+        }
+        if ($vote->getCorede()) {
+            $vote->setCorede($this->em->merge($vote->getCorede()));
+            $this->em->refresh($vote->getCorede());
+        }
+        if ($vote->getLastStep()) {
+            $vote->setLastStep($this->em->merge($vote->getLastStep()));
+            $this->em->refresh($vote->getLastStep());
+        }
+
         $this->em->persist($vote);
     }
 
