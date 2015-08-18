@@ -158,6 +158,7 @@ class APIController extends FOSRestController
      */
     public function receiveVotesAction(Request $request, $pin)
     {
+        $this->getLogger()->info("Receiving votes from PIN $pin...");
         $em        = $this->getDoctrine()->getManager();
         $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
             ->findOneByPin($pin);
