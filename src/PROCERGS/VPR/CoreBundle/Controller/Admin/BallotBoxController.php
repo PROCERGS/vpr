@@ -336,35 +336,42 @@ class BallotBoxController extends Controller
      */
     public function batchCreateAction(Request $request)
     {
-        $builder = $this->createFormBuilder()
+        $em     = $this->getDoctrine()->getManager();
+        $pollId = $request->get('poll_id');
+
+        if ($pollId !== null) {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($pollId);
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        }
+
+
+        $default = array(
+            'openingTime' => $poll->getOpeningTime(),
+            'closingTime' => $poll->getClosingTime()
+        );
+        $builder = $this->createFormBuilder($default)
+            ->add('openingTime', 'datetime',
+                array('date_widget' => 'single_text'))
+            ->add('closingTime', 'datetime',
+                array('date_widget' => 'single_text'))
             ->add('config', 'file');
 
         $form = $builder->getForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $config = $this->parseData($form->getData()['config']);
+            $data   = $form->getData();
+            $config = $this->parseData($data['config']);
 
-            $em     = $this->getDoctrine()->getManager();
-            $pollId = $request->get('poll_id');
-            $open   = $request->get('open');
-            $close  = $request->get('close');
+            $openingTime = $data['openingTime'];
+            $closingTime = $data['closingTime'];
 
-            if ($pollId !== null) {
-                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($pollId);
-            } else {
-                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-            }
-
-            if ($open !== null) {
-                $openingTime = new \DateTime($open);
-            } else {
+            if (!($openingTime instanceof \DateTime)) {
                 $openingTime = $poll->getOpeningTime();
             }
 
-            if ($close !== null) {
-                $closingTime = new \DateTime($close);
-            } else {
+            if (!($closingTime instanceof \DateTime)) {
                 $closingTime = $poll->getClosingTime();
             }
 
