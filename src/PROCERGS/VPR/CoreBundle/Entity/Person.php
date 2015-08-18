@@ -452,7 +452,7 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         $treVoter = $this->getTreVoter();
         if ($treVoter instanceof TREVoter) {
             return $treVoter->getCorede();
-        } elseif ($city instanceof City) {
+        } elseif ($this->getCity() instanceof City) {
             return $this->getCity()->getCorede();
         }
         throw new \RuntimeException('Missin city');
