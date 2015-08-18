@@ -11,9 +11,9 @@ Evite imprevistos, envie com antecedência.
 A seguir está a lista de PINs e senhas para as urnas offline solicitadas:
 
 {% for req in requests %}
-    Responsável: {% if req.person is defined and req.person | length > 0 %}{{ req.person | convert_encoding('UTF-8', 'ISO-8859-1') }}{% else %}Não Informado{% endif %}
+    Responsável: {% if req.person is defined and req.person | length > 0 %}{{ req.person }}{% else %}Não Informado{% endif %}
 
-    Cidade: {{ req.city | convert_encoding('UTF-8', 'ISO-8859-1') }}
+    Cidade: {{ req.city }}
     PIN: {{ req.pin }}
     Senha: {{ req.passphrase }}
 
