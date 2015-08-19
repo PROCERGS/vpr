@@ -519,21 +519,27 @@ class StatsController extends Controller
 
     private function getVotesPerMinute()
     {
-        $em   = $this->getDoctrine()->getManager();
-        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-        $vpm  = $em->getRepository('PROCERGSVPRCoreBundle:Vote')
-            ->getVotesPerMinute($poll);
+        $em       = $this->getDoctrine()->getManager();
+        $poll     = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        $cacheKey = "votes_per_minute_{$poll->getId()}";
+        $data     = $this->getCached($cacheKey, 30,
+            function() use ($em, $poll) {
+            $vpm = $em->getRepository('PROCERGSVPRCoreBundle:Vote')
+                ->getVotesPerMinute($poll);
 
-        $data = array_map(function($minute) {
-            $minute['time'] = sprintf('%s-%s-%s %s:%s', $minute['year'],
-                str_pad($minute['month'], 2, '0', STR_PAD_LEFT),
-                str_pad($minute['day'], 2, '0', STR_PAD_LEFT),
-                str_pad($minute['hour'], 2, '0', STR_PAD_LEFT),
-                str_pad($minute['minute'], 2, '0', STR_PAD_LEFT));
+            $data = array_map(function($minute) {
+                $minute['time'] = sprintf('%s-%s-%s %s:%s', $minute['year'],
+                    str_pad($minute['month'], 2, '0', STR_PAD_LEFT),
+                    str_pad($minute['day'], 2, '0', STR_PAD_LEFT),
+                    str_pad($minute['hour'], 2, '0', STR_PAD_LEFT),
+                    str_pad($minute['minute'], 2, '0', STR_PAD_LEFT));
 
-            $minute['y'] = $minute['votes'];
-            return $minute;
-        }, $vpm);
+                $minute['y'] = $minute['votes'];
+                return $minute;
+            }, $vpm);
+
+            return $data;
+        });
 
         return $data;
     }
