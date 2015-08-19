@@ -58,6 +58,8 @@ security:
         - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }
         - { path: ^/stats/update_total_option_votes$, role: ROLE_ADMIN }
         - { path: ^/reports, role: ROLE_ADMIN }

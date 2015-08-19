@@ -51,4 +51,15 @@ class BallotBoxRepository extends EntityRepository
 
         return $query->getQuery()->getOneOrNullResult();
     }
+
+    public function getActivationStatistics(Poll $poll)
+    {
+        $isOnline = false;
+        return $this->createQueryBuilder('b')
+                ->select('b.id, b.pin, b.setupAt, b.closedAt')
+                ->where('b.poll = :poll')
+                ->andWhere('b.isOnline = :isOnline')
+                ->setParameters(compact('poll', 'isOnline'))
+                ->getQuery()->getScalarResult();
+    }
 }

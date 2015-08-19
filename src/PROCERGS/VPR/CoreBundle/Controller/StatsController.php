@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\VPR\CoreBundle\Helper\Utils;
 use JMS\Serializer\SerializationContext;
+use FOS\RestBundle\Controller\Annotations as REST;
 
 class StatsController extends Controller
 {
@@ -492,5 +493,89 @@ class StatsController extends Controller
         } else {
             return array('lastUpdated' => new \DateTime());
         }
+    }
+
+    /**
+     * @Route("/stats/live", name="vpr_stats_votes_per_minute_live")
+     * @Template
+     */
+    public function votesPerMinuteAction()
+    {
+        $data = $this->getVotesPerMinute();
+
+        return compact('data');
+    }
+
+    /**
+     * @REST\Get("/stats/live/data", name="vpr_stats_vpm_data")
+     * @REST\View
+     */
+    public function votesPerMinuteDataAction()
+    {
+        $data = $this->getVotesPerMinute();
+
+        return new JsonResponse($data);
+    }
+
+    private function getVotesPerMinute()
+    {
+        $em   = $this->getDoctrine()->getManager();
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        $vpm  = $em->getRepository('PROCERGSVPRCoreBundle:Vote')
+            ->getVotesPerMinute($poll);
+
+        $data = array_map(function($minute) {
+            $minute['time'] = sprintf('%s-%s-%s %s:%s', $minute['year'],
+                str_pad($minute['month'], 2, '0', STR_PAD_LEFT),
+                str_pad($minute['day'], 2, '0', STR_PAD_LEFT),
+                str_pad($minute['hour'], 2, '0', STR_PAD_LEFT),
+                str_pad($minute['minute'], 2, '0', STR_PAD_LEFT));
+
+            $minute['y'] = $minute['votes'];
+            return $minute;
+        }, $vpm);
+
+        return $data;
+    }
+
+    /**
+     * @Route("/stats/ballotboxes", name="vpr_stats_ballotboxes")
+     * @Template
+     */
+    public function ballotBoxesAction()
+    {
+        $em   = $this->getDoctrine()->getManager();
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+
+        $ballotBoxes = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+            ->getActivationStatistics($poll);
+
+        $data  = $this->groupBallotBoxes($ballotBoxes);
+        $total = count($ballotBoxes);
+
+        return compact('data', 'total');
+    }
+
+    private function groupBallotBoxes($data)
+    {
+        $result = array(
+            'idle' => array(),
+            'activated' => array(),
+            'finished' => array()
+        );
+
+        foreach ($data as $ballotBox) {
+            if ($ballotBox['setupAt'] === null) {
+                $status = 'idle';
+            } elseif ($ballotBox['closedAt'] === null) {
+                $status = 'activated';
+            } else {
+                $status = 'finished';
+            }
+
+            $result[$status][] = $ballotBox;
+        }
+
+        return $result;
     }
 }

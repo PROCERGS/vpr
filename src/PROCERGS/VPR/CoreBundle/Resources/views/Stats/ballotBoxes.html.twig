@@ -1,0 +1,88 @@
+{% extends '::base.html.twig' %}
+
+{% block header %}
+    <style>
+        body {
+            font-family: monospace;
+        }
+
+        .ballot-box {
+            display: inline-block;
+            width: 10vmax;
+            height: 10vmax;
+            float: left;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .ballot-box.finished,
+        .stats .finished {
+            background-color: #E34225;
+        }
+        .ballot-box.activated,
+        .stats .activated {
+            background-color: #039935;
+        }
+        .ballot-box.idle,
+        .stats .idle {
+            background-color: #ddd;
+        }
+        .ballot-box h1 {
+            font-size: 3vmax;
+        }
+        .ballot-box p {
+            font-size: 1vmax;
+        }
+
+        .stats {
+            width: 92vmax;
+        }
+        .stats th {
+            font-size: 1vmax;
+        }
+        .stats td {
+            width: 33vmax;
+            height: 10vmax;
+            text-align: center;
+            font-size: 3vmax;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <table class="stats">
+        <thead>
+            <tr>
+                <th class="finished">Urnas Encerradas</th>
+                <th class="activated">Urnas Ativas</th>
+                <th class="idle">Urnas Disponíveis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="finished">{{ ((data.finished | length * 100) / total) | number_format(2, '.', ',') }}%</td>
+                <td class="activated">{{ ((data.activated | length * 100) / total) | number_format(2, '.', ',') }}%</td>
+                <td class="idle">{{ ((data.idle | length * 100) / total) | number_format(2, '.', ',') }}%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="">
+        {% for box in data.finished %}
+            <div class="ballot-box finished">
+                <h1>{{ "%04d"|format(box.pin) }}</h1>
+                <p>{{ box.closedAt | date('H:i:s') }}</p>
+            </div>
+        {% endfor %}
+        {% for box in data.activated %}
+            <div class="ballot-box activated">
+                <h1>{{ "%04d"|format(box.pin) }}</h1>
+                <p>{{ box.setupAt | date('H:i:s') }}</p>
+            </div>
+        {% endfor %}
+        {% for box in data.idle %}
+            <div class="ballot-box idle">
+                <h1>{{ "%04d"|format(box.pin) }}</h1>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
