@@ -100,7 +100,7 @@
                 drawStuff(chartData);
 
                 $('.total').html(formatNumber(total));
-
+            }).always(function () {
                 setTimeout(function () {
                     updateChart();
                 }, 20000);
