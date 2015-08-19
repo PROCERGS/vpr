@@ -93,7 +93,7 @@
             <div class="ballot-box finished">
                 <h1>{{ "%04d"|format(box.pin) }}</h1>
                 <h2>{{ box.city_name }}</h2>
-                <p>{{ box.closedAt | date('H:i:s') }}</p>
+                <p>{{ box.closedAt | date('d/m H:i') }}</p>
             </div>
         {% endfor %}
         {% for box in data.activated %}
