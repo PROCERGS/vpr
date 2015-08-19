@@ -615,6 +615,7 @@ class StatsController extends Controller
                 'data' => $data
             );
             $cache->set($cacheKey, $cached, MEMCACHE_COMPRESSED);
+            $cache->set($cacheLockKey, null);
             $cache->delete($cacheLockKey);
         } else {
             $data = $cached['data'];
