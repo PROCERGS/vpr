@@ -1,16 +1,69 @@
 {% extends '::base.html.twig' %}
 
 {% block header %}
+    <style>
+        .cf:before,
+        .cf:after {
+            content: " "; /* 1 */
+            display: table; /* 2 */
+        }
 
+        .cf:after {
+            clear: both;
+        }
+
+        .summary {
+            margin: 0 auto;
+            width: 36vmax;
+        }
+
+        .summary .tile {
+            font-family: monospace;
+            width: 12vmax;
+            float: left;
+        }
+        .summary .tile h1 {
+            font-size: 2.5vmax;
+        }
+        .summary .tile h1,
+        .summary .tile p {
+            text-align: center;
+            margin: 0;
+        }
+        .summary .tile h1 small {
+            font-size: 1vmax;
+            font-weight: normal;
+            margin-left: 0.4vmax;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
+    <div class="summary cf">
+        <div class="tile">
+            <h1 class="last-minute">--:--</h1>
+            <p>Último minuto considerado</p>
+        </div>
+        <div class="tile">
+            <h1><span class="vpm">--</span><small>votos</small></h1>
+            <p>No último minuto</p>
+        </div>
+        <div class="tile">
+            <h1 class="total">---</h1>
+            <p>Votos</p>
+        </div>
+    </div>
+
     <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['bar']}]}"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <div id="top_x_div" style="width: 100%; height: 90vh;"></div>
 
     <script>
         google.setOnLoadCallback(updateChart);
+
+        function formatNumber(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
 
         function drawStuff(chartData) {
             var data = new google.visualization.arrayToDataTable(chartData);
@@ -19,7 +72,7 @@
                 title: 'Votos por Minuto',
                 width: '100%',
                 legend: {position: 'none'},
-                chart: {subtitle: 'Consulta Popular 2015'},
+                chart: {subtitle: 'Consulta Popular 2015 - 19/08/2015'},
                 bar: {groupWidth: "90%"}
             };
 
@@ -33,12 +86,20 @@
                 var chartData = [
                     ['Time', 'Votes']
                 ];
+                var total = 0;
                 for (var index = 0; index < rawData.length; ++index) {
                     var time = rawData[index].time;
                     var votes = rawData[index].votes;
                     chartData.push([new Date(time), votes]);
+                    total += votes;
+                    if (index === rawData.length - 2) {
+                        $('.last-minute').html(time.split(' ')[1]);
+                        $('.vpm').html(votes);
+                    }
                 }
                 drawStuff(chartData);
+
+                $('.total').html(formatNumber(total));
 
                 setTimeout(function () {
                     updateChart();
