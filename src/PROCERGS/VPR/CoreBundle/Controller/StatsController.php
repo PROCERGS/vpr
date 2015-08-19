@@ -547,10 +547,15 @@ class StatsController extends Controller
         $em   = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 
-        $ballotBoxes = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-            ->getActivationStatistics($poll);
+        $cacheKey = "ballotboxes_{$poll->getId()}";
 
-        $data  = $this->groupBallotBoxes($ballotBoxes);
+        $ballotBoxes = $this->getCached($cacheKey, 15,
+            function() use ($poll, $em) {
+            return $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+                    ->getActivationStatistics($poll);
+        });
+        $data = $this->groupBallotBoxes($ballotBoxes);
+
         $total = count($ballotBoxes);
 
         return compact('data', 'total');
@@ -577,5 +582,37 @@ class StatsController extends Controller
         }
 
         return $result;
+    }
+
+    /**
+     * @return \Memcache
+     */
+    private function getMemcached()
+    {
+        return $this->get('session.memcached');
+    }
+
+    private function getCached($cacheKey, $timeout, callable $fetchDataCallback)
+    {
+        $cache        = $this->getMemcached();
+        $cacheLockKey = "{$cacheKey}_lock";
+
+        $cached  = $cache->get($cacheKey);
+        $locked  = $cache->get($cacheLockKey);
+        $expired = !$cached || $cached['expires'] < time();
+        if ($expired && !$locked) {
+            $cache->set($cacheLockKey, date('Y-m-d H:i:s'));
+            $data = $fetchDataCallback();
+
+            $cached = array(
+                'expires' => time() + $timeout,
+                'data' => $data
+            );
+            $cache->set($cacheKey, $cached, MEMCACHE_COMPRESSED);
+            $cache->delete($cacheLockKey);
+        } else {
+            $data = $cached['data'];
+        }
+        return $data;
     }
 }

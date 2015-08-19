@@ -56,9 +56,11 @@ class BallotBoxRepository extends EntityRepository
     {
         $isOnline = false;
         return $this->createQueryBuilder('b')
-                ->select('b.id, b.pin, b.setupAt, b.closedAt')
+                ->select('b.id, b.pin, b.setupAt, b.closedAt, c.name AS city_name')
+                ->join('b.city', 'c')
                 ->where('b.poll = :poll')
                 ->andWhere('b.isOnline = :isOnline')
+                ->orderBy('b.closedAt, b.setupAt', 'DESC')
                 ->setParameters(compact('poll', 'isOnline'))
                 ->getQuery()->getScalarResult();
     }
