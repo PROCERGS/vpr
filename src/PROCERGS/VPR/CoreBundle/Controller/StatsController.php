@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\VPR\CoreBundle\Helper\Utils;
 use JMS\Serializer\SerializationContext;
+use Doctrine\ORM\EntityRepository;
 
 class StatsController extends Controller
 {
@@ -29,6 +30,7 @@ class StatsController extends Controller
      */
     public function reportOptionsCoredeAction($coredeId)
     {
+
         $this->updateCacheAction();
         $form   = $this->getCoredeForm();
         $params = array(
@@ -222,11 +224,46 @@ class StatsController extends Controller
 
     private function getCoredeForm()
     {
+        $em           = $this->getDoctrine()->getManager();
+        $pollRepo  = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        $p = array('poll' => $pollRepo->findLastPoll());
+
+        // return $this->createFormBuilder($p)
+        //     ->add('poll', 'entity', array(
+        //         'class' => 'PROCERGSVPRCoreBundle:Poll',
+        //         'query_builder' => function(EntityRepository $er) {
+        //             return $er->createQueryBuilder('p')
+        //                 ->orderBy('p.openingTime', 'DESC');
+        //         },
+        //         'property' => 'name',
+        //         'required' => true,
+        //         'empty_value' => 'Selecione a votação'
+        //     ))
+        //     ->add('corede', 'text',
+        //             array(
+        //             'required' => true,
+        //             'label' => 'form.corede.select'))
+        //     ->add('submit', 'submit')->getForm();
+
         return $this->createFormBuilder()->add('corede', 'text',
-                array(
-                'required' => true,
-                'label' => 'form.corede.select'
-            ))->add('submit', 'submit')->getForm();
+                    array(
+                    'required' => true,
+                    'label' => 'form.corede.select'))
+                ->add('submit', 'submit')->getForm();
+    }
+
+    private function getPollChoices()
+    {
+        $choices = array();
+        $em           = $this->getDoctrine()->getManager();
+        $polls  = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findAll();
+
+        foreach ($polls as $poll) {
+            $choices[$poll->getId()] = $poll->getName();
+        }
+
+
+        return $choices;
     }
 
     private function getCities()
@@ -250,6 +287,8 @@ class StatsController extends Controller
                     'vote'
         )));
     }
+
+
 
     /**
      * @Route("/stats", name="vpr_stats_main")

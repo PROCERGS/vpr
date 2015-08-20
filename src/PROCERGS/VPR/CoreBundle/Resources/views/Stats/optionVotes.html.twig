@@ -5,7 +5,9 @@
     <div class="col-xs-12">
         <h1>{% trans %}Results for the Online Voting{% endtrans %}</h1>
         {% if statsCorede is defined %}
-        <h2>COREDE {{ statsCorede.coredeName }}</h2>
+            {% if statsCorede.coredeName is defined %}
+            <h2>COREDE {{ statsCorede.coredeName }}</h2>
+            {% endif %}
         {% endif %}
     </div>
 </div>
