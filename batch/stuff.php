@@ -1,23 +1,22 @@
 <?php
+require_once '../vendor/autoload.php';
 
 function checkArguments($argv)
 {
-    if (!isset($argv[1], $argv[2], $argv[3])) {
+    if (!isset($argv[1])) {
         e("Missing config file, private key or passphrase");
         exit(1);
     }
 
     $config = loadConfigFromFile($argv[1]);
 
-    $privateKeyFile = realpath($argv[2]);
-    $passphrase = $argv[3];
+    $privateKeyFile = realpath($config['private_key_file']);
     if (!file_exists($privateKeyFile)) {
         e("Private key file not found!");
         exit(1);
     }
 
-    $config['privateKeyFile'] = $privateKeyFile;
-    $config['passphrase'] = $passphrase;
+    $config['private_key_file'] = $privateKeyFile;
     return $config;
 }
 
@@ -56,26 +55,27 @@ SQL;
 function getPDOConnection($config)
 {
     $db_driver = $config['database_driver'];
-    $db_host = $config['database_host'];
-    $db_name = $config['database_name'];
-    $db_user = $config['database_user'];
-    $db_pass = $config['database_password'];
-    $pdo = new PDO("$db_driver:host=$db_host;dbname=$db_name",
-            $db_user, $db_pass            
+    $db_host   = $config['database_host'];
+    $db_name   = $config['database_name'];
+    $db_user   = $config['database_user'];
+    $db_pass   = $config['database_password'];
+    $pdo       = new PDO("$db_driver:host=$db_host;dbname=$db_name", $db_user,
+        $db_pass
     );
     $pdo->query("SET NAMES 'UTF8'");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $pdo;
 }
 
 function e($message, $breakLinke = true)
 {
-    echo $message . ($breakLinke ? PHP_EOL : '');
+    echo $message.($breakLinke ? PHP_EOL : '');
 }
 
 function signVote($vote, $config)
 {
     $privateKey = $config['pollPrivateKey'];
-    $signature = false;
+    $signature  = false;
     openssl_sign(json_encode($vote), $signature, $privateKey);
 
     return base64_encode($signature);
@@ -83,7 +83,7 @@ function signVote($vote, $config)
 
 function getInsertOpenVoteQuery()
 {
-    return 'INSERT INTO open_vote (ballot_box_id, corede_id, poll_option_id, signature, auth_type, voter_registration, city_id) VALUE (:ballot_box_id, :corede_id, :poll_option_id, :signature, :auth_type, :voter_registration, :city_id)';
+    return 'INSERT INTO open_vote (ballot_box_id, corede_id, poll_option_id, signature, auth_type, voter_registration, city_id, salt) VALUES (:ballot_box_id, :corede_id, :poll_option_id, :signature, :auth_type, :voter_registration, :city_id, :salt)';
 }
 
 function getInsertOpenBallotQuery()
@@ -131,14 +131,15 @@ SQL;
 
 function createOpenVote($optionId, $coredeId, $config, $row)
 {
-    $openVote = array();
-    $openVote['ballot_box_id'] = $row['ballot_box_id'];
-    $openVote['corede_id'] = $coredeId;
-    $openVote['city_id'] = $row['city_id'];
-    $openVote['poll_option_id'] = $optionId;
-    $openVote['auth_type'] = $row['auth_type'];
-    $openVote['voter_registration'] = !empty($row['voter_registration']);
-    $openVote['signature'] = null;
-    $openVote['signature'] = signVote($openVote, $config);
+    $openVote                       = array();
+    $openVote['ballot_box_id']      = $row['ballot_box_id'];
+    $openVote['corede_id']          = $coredeId;
+    $openVote['city_id']            = $row['city_id'];
+    $openVote['poll_option_id']     = $optionId;
+    $openVote['auth_type']          = $row['auth_type'];
+    $openVote['voter_registration'] = $row['voter_registration'];
+    $openVote['signature']          = null;
+    $openVote['salt']               = Rhumsaa\Uuid\Uuid::uuid4()->toString();
+    $openVote['signature']          = signVote($openVote, $config);
     return $openVote;
 }
