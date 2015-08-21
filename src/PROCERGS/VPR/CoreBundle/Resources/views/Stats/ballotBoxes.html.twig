@@ -1,0 +1,113 @@
+{% extends '::base.html.twig' %}
+
+{% block header %}
+    <meta http-equiv="refresh" content="20">
+    <style>
+        body {
+            font-family: monospace;
+        }
+
+        .ballot-box {
+            display: inline-block;
+            width: 10vmax;
+            height: 10vmax;
+            float: left;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .ballot-box.finished,
+        .stats .finished {
+            background-color: #E34225;
+        }
+        .ballot-box.activated,
+        .stats .activated {
+            background-color: #039935;
+        }
+        .ballot-box.idle,
+        .stats .idle {
+            background-color: #ddd;
+        }
+        .ballot-box h1 {
+            font-size: 2.6vmax;
+            margin-bottom: 0;
+        }
+        .ballot-box h2 {
+            font-size: 0.8vmax;
+            font-weight: normal;
+        }
+        .ballot-box p {
+            font-size: 1vmax;
+        }
+
+        .stats {
+            width: 92vmax;
+        }
+        .stats th {
+            font-size: 1vmax;
+        }
+        .stats td {
+            width: 33vmax;
+            height: 10vmax;
+            text-align: center;
+            font-size: 3vmax;
+        }
+        .stats td p {
+            margin: 0 auto;
+        }
+
+        .stats td small {
+            font-size: 1.4vmax;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <table class="stats">
+        <thead>
+            <tr>
+                <th class="finished">Urnas Encerradas</th>
+                <th class="activated">Urnas Ativas</th>
+                <th class="idle">Urnas Disponíveis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="finished">
+                    <p>{{ ((data.finished | length * 100) / total) | number_format(2, '.', ',') }}%</p>
+                    <small>{{ data.finished | length }} de {{ total }} urnas</small>
+                </td>
+                <td class="activated">
+                    <p>{{ ((data.activated | length * 100) / total) | number_format(2, '.', ',') }}%</p>
+                    <small>{{ data.activated | length }} de {{ total }} urnas</small>
+                </td>
+                <td class="idle">
+                    <p>{{ ((data.idle | length * 100) / total) | number_format(2, '.', ',') }}%</p>
+                    <small>{{ data.idle | length }} de {{ total }} urnas</small>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="">
+        {% for box in data.finished %}
+            <div class="ballot-box finished">
+                <h1>{{ "%04d"|format(box.pin) }}</h1>
+                <h2>{{ box.city_name }}</h2>
+                <p>{{ box.closedAt | date('d/m H:i') }}</p>
+            </div>
+        {% endfor %}
+        {% for box in data.activated %}
+            <div class="ballot-box activated">
+                <h1>{{ "%04d"|format(box.pin) }}</h1>
+                <h2>{{ box.city_name }}</h2>
+                <p>{{ box.setupAt | date('d/m H:i') }}</p>
+            </div>
+        {% endfor %}
+        {% for box in data.idle %}
+            <div class="ballot-box idle">
+                <h1>{{ "%04d"|format(box.pin) }}</h1>
+                <h2>{{ box.city_name }}</h2>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
