@@ -13,7 +13,6 @@ use PROCERGS\VPR\CoreBundle\Exception\RequestTimeoutException;
 
 class DemoController extends Controller
 {
-
     /**
      * @var \Buzz\Browser
      */
@@ -29,10 +28,10 @@ class DemoController extends Controller
 
         $ballotBox = new BallotBox();
         $ballotBox->setName('Internet')
-                ->setSecret(rand(100000, 9999999))
-                ->setAddress('http://vpr.rs.gov.br/')
-                ->setIsOnline(true)
-                ->setPoll($poll);
+            ->setSecret(rand(100000, 9999999))
+            ->setAddress('http://vpr.rs.gov.br/')
+            ->setIsOnline(true)
+            ->setPoll($poll);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($ballotBox);
@@ -71,48 +70,23 @@ class DemoController extends Controller
     }
 
     /**
-     * @Route("/vote/add/{ballotBoxId}")
+     * @Route("/vote/open/{voteId}")
      * @Template()
      */
-    public function newVoteAction($ballotBoxId)
+    public function newVoteAction($voteId)
     {
         $serializer = $this->container->get('jms_serializer');
 
-        $person = $this->getUser();
+        $vote           = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Vote')->find($voteId);
+        $privateKeyFile = 'file:///home/gdnt/Documents/VPR/2015/priv_rsa';
+        $privatePollKey = openssl_pkey_get_private($privateKeyFile, 'hpufbaxsnz');
 
-        $poll = $this->getPoll(1);
-        $ballotBox = $this->getBallotBox($ballotBoxId);
+        $vote->openVote($privatePollKey);
 
-        $optionsRepo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:PollOption');
-        $options = $optionsRepo->findByPoll($poll);
+        $openOptions = $serializer->deserialize($vote->getPlainOptions(),
+            'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\PollOption>', 'json');
 
-        $serializedOptions = $serializer->serialize($options, 'json',
-                SerializationContext::create()->setSerializeNull(true)->setGroups(array('vote')));
-
-        $vote = new Vote();
-        $vote->setAuthType('lc')
-                ->setVoterRegistration($person->getVoterRegistration())
-                ->setPlainOptions($serializedOptions)
-                ->setBallotBox($ballotBox);
-
-        $signature = $ballotBox->sign($serializedOptions);
-        $vote->setSignature($signature)->encryptVote();
-        $serializedVote = $serializer->serialize($vote, 'json',
-                SerializationContext::create()->setSerializeNull(true)->setGroups(array('vote')));
-
-        $privateKeyFile = $this->container->getParameter('privateKeyFile');
-        $privatePollKey = openssl_pkey_get_private($privateKeyFile);
-
-        $openVote = $serializer->deserialize($serializedVote,
-                'PROCERGS\VPR\CoreBundle\Entity\Vote', 'json');
-        $openVote->openVote($privatePollKey);
-
-        $openOptions = $serializer->deserialize($openVote->getPlainOptions(),
-                'ArrayCollection<PROCERGS\VPR\CoreBundle\Entity\PollOption>',
-                'json');
-
-        return compact('poll', 'options', 'serializedOptions', 'signature',
-                'serializedVote', 'vote', 'openVote', 'openOptions');
+        return compact('vote', 'openOptions');
     }
 
     /**
@@ -122,7 +96,7 @@ class DemoController extends Controller
     public function longPollingAction()
     {
         $accessToken = $this->getUser()->getLoginCidadaoAccessToken();
-        $url = $this->container->getParameter('login_cidadao_base_url');
+        $url         = $this->container->getParameter('login_cidadao_base_url');
         $url .= "/api/v1/wait/person/update?access_token=$accessToken";
 
         $browser = $this->getBrowser();
@@ -132,7 +106,8 @@ class DemoController extends Controller
                 $response = $browser->get($url);
                 if ($response->getStatusCode() === 200) {
                     $receivedPerson = json_decode($response->getContent());
-                    return ($response !== false && $receivedPerson) ? $receivedPerson : false;
+                    return ($response !== false && $receivedPerson) ? $receivedPerson
+                            : false;
                 }
                 return false;
             } catch (\Exception $e) {
@@ -147,11 +122,11 @@ class DemoController extends Controller
     private function runTimeLimited($callback, $waitTime = 1)
     {
         $maxExecutionTime = 5; //ini_get('max_execution_time');
-        $limit = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
-        $startTime = time();
+        $limit            = $maxExecutionTime ? $maxExecutionTime - 2 : 60;
+        $startTime        = time();
         while ($limit > 0) {
             $result = call_user_func($callback);
-            $delta = time() - $startTime;
+            $delta  = time() - $startTime;
 
             if ($result !== false) {
                 return $result;
@@ -176,5 +151,4 @@ class DemoController extends Controller
         $this->browser = $this->get('buzz.browser');
         return $this->browser;
     }
-
 }
