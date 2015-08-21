@@ -45,6 +45,7 @@ security:
     access_control:
         - { path: ^/counting, role: ROLE_ADMIN }
         - { path: ^/api/offline/download, roles: ROLE_ADMIN }
+        - { path: ^/demo, roles: ROLE_ADMIN }
 
         - { path: ^/api/status, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/ballotbox, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -58,6 +59,8 @@ security:
         - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }
         - { path: ^/stats/update_total_option_votes$, role: ROLE_ADMIN }
         - { path: ^/reports, role: IS_AUTHENTICATED_ANONYMOUSLY }

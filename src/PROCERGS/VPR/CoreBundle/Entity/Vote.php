@@ -5,6 +5,7 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Vote
@@ -13,9 +14,12 @@ use PROCERGS\VPR\CoreBundle\Exception\OpenSSLException;
  *      @ORM\Index(name="idx_voter_registration", columns={"voter_registration"}),
  *      @ORM\Index(name="idx_login_cidadao_id", columns={"login_cidadao_id"}),
  *      @ORM\Index(name="idx_nfg_cpf", columns={"nfg_cpf"})
+ * }, uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="offline_id_unique", columns={"ballot_box_id", "offline_id"})
  * })
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\VoteRepository")
  * @ORM\HasLifecycleCallbacks
+ * @UniqueEntity(fields={"ballotBox", "offlineId"}, message="message")
  */
 class Vote
 {
@@ -141,6 +145,21 @@ class Vote
      * @var string
      */
     protected $ipAddress;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="offline_id", type="string", length=255, nullable=true, unique=true)
+     * @JMS\Groups({"vote"})
+     */
+    protected $offlineId;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_invalid", type="boolean", nullable=true)
+     */
+    protected $isInvalid;
 
     /**
      * Get id
@@ -426,6 +445,10 @@ class Vote
         return $this;
     }
 
+    /**
+     * @param type $var
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
+     */
     public function setCorede($var)
     {
         $this->corede = $var;
@@ -509,6 +532,10 @@ class Vote
         return $this;
     }
 
+    /**
+     * @param type $var
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
+     */
     public function setCity($var)
     {
         $this->city = $var;
@@ -526,9 +553,55 @@ class Vote
         return $this->ipAddress;
     }
 
+    /**
+     * @param type $ipAddress
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
+     */
     public function setIpAddress($ipAddress)
     {
         $this->ipAddress = $ipAddress;
+        return $this;
+    }
+
+    public function getOfflineId()
+    {
+        return $this->offlineId;
+    }
+
+    /**
+     * @param type $offlineId
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
+     */
+    public function setOfflineId($offlineId)
+    {
+        $this->offlineId = $offlineId;
+        return $this;
+    }
+
+    /**
+     *
+     * @param type $vote
+     * @param \PROCERGS\VPR\CoreBundle\Entity\BallotBox $ballotBox
+     * @param \PROCERGS\VPR\CoreBundle\Entity\Corede $corede
+     * @param \PROCERGS\VPR\CoreBundle\Entity\City $city
+     * @param string $serializedOptions
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
+     */
+    public function populateOfflineVote($vote, BallotBox $ballotBox,
+                                        Corede $corede, City $city,
+                                        $serializedOptions)
+    {
+        $this->setOfflineId($vote['id'])
+            ->setCreatedAt($vote['createdAt'])
+            ->setAuthType($vote['authType'])
+            ->setBallotBox($ballotBox)
+            ->setCorede($corede)
+            ->setCity($city)
+            ->setVoterRegistration($vote['voterRegistration'])
+            ->setPlainOptions($serializedOptions);
+
+        $this->close($ballotBox->getSecret());
+
         return $this;
     }
 }

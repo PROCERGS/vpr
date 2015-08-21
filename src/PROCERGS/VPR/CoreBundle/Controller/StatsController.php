@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\VPR\CoreBundle\Helper\Utils;
 use JMS\Serializer\SerializationContext;
 use Doctrine\ORM\EntityRepository;
+use FOS\RestBundle\Controller\Annotations as REST;
 
 class StatsController extends Controller
 {
@@ -30,7 +31,6 @@ class StatsController extends Controller
      */
     public function reportOptionsCoredeAction($coredeId)
     {
-
         $this->updateCacheAction();
         $form   = $this->getCoredeForm();
         $params = array(
@@ -244,10 +244,9 @@ class StatsController extends Controller
         //             'required' => true,
         //             'label' => 'form.corede.select'))
         //     ->add('submit', 'submit')->getForm();
-
         return $this->createFormBuilder()->add('corede', 'text',
-                    array(
-                    'required' => true,
+                array(
+                'required' => true,
                     'label' => 'form.corede.select'))
                 ->add('submit', 'submit')->getForm();
     }
@@ -287,8 +286,6 @@ class StatsController extends Controller
                     'vote'
         )));
     }
-
-
 
     /**
      * @Route("/stats", name="vpr_stats_main")
@@ -531,5 +528,132 @@ class StatsController extends Controller
         } else {
             return array('lastUpdated' => new \DateTime());
         }
+    }
+
+    /**
+     * @Route("/stats/live", name="vpr_stats_votes_per_minute_live")
+     * @Template
+     */
+    public function votesPerMinuteAction()
+    {
+        $data = $this->getVotesPerMinute();
+
+        return compact('data');
+    }
+
+    /**
+     * @REST\Get("/stats/live/data", name="vpr_stats_vpm_data")
+     * @REST\View
+     */
+    public function votesPerMinuteDataAction()
+    {
+        $data = $this->getVotesPerMinute();
+
+        return new JsonResponse($data);
+    }
+
+    private function getVotesPerMinute()
+    {
+        $em       = $this->getDoctrine()->getManager();
+        $poll     = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        $cacheKey = "votes_per_minute_{$poll->getId()}";
+        $data     = $this->getCached($cacheKey, 30,
+            function() use ($em, $poll) {
+            $vpm = $em->getRepository('PROCERGSVPRCoreBundle:Vote')
+                ->getVotesPerMinute($poll);
+
+            $data = array_map(function($minute) {
+                $minute['time'] = sprintf('%s-%s-%s %s:%s', $minute['year'],
+                    str_pad($minute['month'], 2, '0', STR_PAD_LEFT),
+                    str_pad($minute['day'], 2, '0', STR_PAD_LEFT),
+                    str_pad($minute['hour'], 2, '0', STR_PAD_LEFT),
+                    str_pad($minute['minute'], 2, '0', STR_PAD_LEFT));
+
+                $minute['y'] = $minute['votes'];
+                return $minute;
+            }, $vpm);
+
+            return $data;
+        });
+
+        return $data;
+    }
+
+    /**
+     * @Route("/stats/ballotboxes", name="vpr_stats_ballotboxes")
+     * @Template
+     */
+    public function ballotBoxesAction()
+    {
+        $em   = $this->getDoctrine()->getManager();
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+
+        $cacheKey = "ballotboxes_{$poll->getId()}";
+
+        $ballotBoxes = $this->getCached($cacheKey, 15,
+            function() use ($poll, $em) {
+            return $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+                    ->getActivationStatistics($poll);
+        });
+        $data = $this->groupBallotBoxes($ballotBoxes);
+
+        $total = count($ballotBoxes);
+
+        return compact('data', 'total');
+    }
+
+    private function groupBallotBoxes($data)
+    {
+        $result = array(
+            'idle' => array(),
+            'activated' => array(),
+            'finished' => array()
+        );
+
+        foreach ($data as $ballotBox) {
+            if ($ballotBox['setupAt'] === null) {
+                $status = 'idle';
+            } elseif ($ballotBox['closedAt'] === null) {
+                $status = 'activated';
+            } else {
+                $status = 'finished';
+            }
+
+            $result[$status][] = $ballotBox;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return \Memcache
+     */
+    private function getMemcached()
+    {
+        return $this->get('session.memcached');
+    }
+
+    private function getCached($cacheKey, $timeout, callable $fetchDataCallback)
+    {
+        $cache        = $this->getMemcached();
+        $cacheLockKey = "{$cacheKey}_lock";
+
+        $cached  = $cache->get($cacheKey);
+        $locked  = $cache->get($cacheLockKey);
+        $expired = !$cached || $cached['expires'] < time();
+        if ($expired && !$locked) {
+            $cache->set($cacheLockKey, date('Y-m-d H:i:s'));
+            $data = $fetchDataCallback();
+
+            $cached = array(
+                'expires' => time() + $timeout,
+                'data' => $data
+            );
+            $cache->set($cacheKey, $cached, MEMCACHE_COMPRESSED);
+            $cache->set($cacheLockKey, null);
+        } else {
+            $data = $cached['data'];
+        }
+        return $data;
     }
 }

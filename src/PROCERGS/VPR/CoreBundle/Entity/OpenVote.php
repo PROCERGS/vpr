@@ -66,6 +66,12 @@ class OpenVote
      */
     protected $city;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salt", type="string", length=255, options={"default" = ""})
+     */
+    protected $salt;
 
     /**
      * Get id
@@ -168,5 +174,16 @@ class OpenVote
     public function getCorede()
     {
         return $this->corede;
+    }
+
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+        return $this;
     }
 }
