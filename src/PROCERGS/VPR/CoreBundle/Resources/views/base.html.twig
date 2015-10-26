@@ -19,6 +19,7 @@
 {% endblock %}
 
 {% block header %}
+    {{ include('PROCERGSVPRCoreBundle::navbar.html.twig') }}
     <header class="text-center">
         <a href="{{ path('procergsvpr_core_homepage') }}" title="Consulta Popular">
             {%trans%}Priorities Voting<br />2015 BUDGET<br />02-04 of june{%endtrans%}
@@ -30,6 +31,8 @@
                 <div class="col-sm-12 text-center">
                     {% if app.user %}
                         <a href="{{ path('fos_user_security_logout') }}" class="glyphicon glyphicon-off pull-right logout-icon" title="{{ 'Exit voting' | trans }}"></a>
+                    {% else %}
+                        <a href="{{ path('hwi_oauth_service_redirect', {'service': 'loginCidadao'}) }}" class="glyphicon glyphicon-user pull-right logout-icon" title="{{ 'Login' | trans }}"></a>
                     {% endif %}
                     <a href="{{ path('procergsvpr_core_homepage') }}" class="glyphicon glyphicon-home pull-right home-icon" title="{{ 'Back to home' | trans }}"></a>
                     {# <a href="{{ path('vpr_option_vote_by_corede') }}" class="glyphicon glyphicon-stats pull-right stats-icon" title="{{ 'Check stats' | trans }}"></a> #}
