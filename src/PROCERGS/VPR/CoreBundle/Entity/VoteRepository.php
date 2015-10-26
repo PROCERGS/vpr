@@ -10,11 +10,11 @@ class VoteRepository extends EntityRepository
     public function findByPoll($poll)
     {
         return $this->getEntityManager()
-                        ->createQuery(
-                                'SELECT v FROM PROCERGSVPRCoreBundle:Vote v JOIN PROCERGSVPRCoreBundle:BallotBox b WITH v.ballotBox = b WHERE b.poll = :poll'
-                        )->setParameter('poll', $poll)->getResult();
+                ->createQuery(
+                    'SELECT v FROM PROCERGSVPRCoreBundle:Vote v JOIN PROCERGSVPRCoreBundle:BallotBox b WITH v.ballotBox = b WHERE b.poll = :poll'
+                )->setParameter('poll', $poll)->getResult();
     }
-    
+
     public function findByEspecial($filter)
     {
         $sql = 'SELECT v FROM PROCERGSVPRCoreBundle:Vote v WHERE v.ballotBox = :ballotBox ';
@@ -54,5 +54,5 @@ class VoteRepository extends EntityRepository
                 ->getQuery()->getScalarResult();
 
         return array_map('reset', $offlineIds);
-
+    }
 }
