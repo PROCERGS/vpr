@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -26,16 +27,42 @@ class PersonController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $query = $em->createQueryBuilder()
-            ->select('p')
-            ->from('PROCERGSVPRCoreBundle:Person', 'p')
-            ->orderBy('p.firstName','ASC')
+        $query = $em->getRepository('PROCERGSVPRCoreBundle:Person')
+            ->getfindLoginCidadaoQuery()
+            ->orderBy('p.firstName')
             ->getQuery();
 
-        $paginator  = $this->get('knp_paginator');
-        $entities = $paginator->paginate(
-            $query,
-            $this->get('request')->query->get('page', 1),
+        $paginator = $this->get('knp_paginator');
+        $entities  = $paginator->paginate(
+            $query, $this->get('request')->query->get('page', 1), 10
+        );
+
+        return array(
+            'entities' => $entities,
+        );
+    }
+
+    /**
+     * @Route("/search/{query}", name="admin_person_search")
+     * @Method("GET")
+     * @Template("PROCERGSVPRCoreBundle:Admin/Person:index.html.twig")
+     */
+    public function searchAction(Request $request, $query)
+    {
+        $search = $this->getPersonRepository()
+            ->getfindLoginCidadaoQuery()
+            ->join('p.treVoter', 't')
+            ->orderBy('p.firstName');
+
+        $search->andWhere(
+                $search->expr()->orX('p.firstName LIKE :name', 't.id = :query')
+            )
+            ->setParameter('name', "%$query%")
+            ->setParameter('query', $query);
+
+        $paginator = $this->get('knp_paginator');
+        $entities  = $paginator->paginate(
+            $search->getQuery(), $this->get('request')->query->get('page', 1),
             10
         );
 
@@ -64,5 +91,14 @@ class PersonController extends Controller
         return array(
             'entity' => $entity,
         );
+    }
+
+    /**
+     * @return \PROCERGS\VPR\CoreBundle\Entity\PersonRepository
+     */
+    private function getPersonRepository()
+    {
+        $em = $this->getDoctrine()->getManager();
+        return $em->getRepository('PROCERGSVPRCoreBundle:Person');
     }
 }

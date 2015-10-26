@@ -17,7 +17,7 @@ class PersonRepository extends EntityRepository
             ->andWhere('p.email IS NOT NULL')
             ->andWhere('p.loginCidadaoAcceptRegistration = TRUE')
             ->andWhere('p.firstName IS NOT NULL')
-            ->andWhere('p.loginCidadaoId IS NULL')            
+            ->andWhere('p.loginCidadaoId IS NULL')
             ->andWhere('p.loginCidadaoSentReminder is null');
 
         if ($limit !== null) {
@@ -32,4 +32,9 @@ class PersonRepository extends EntityRepository
         return $this->getPendingReminderQuery($limit)->getQuery()->getResult();
     }
 
+    public function getfindLoginCidadaoQuery()
+    {
+        return $this->createQueryBuilder('p')
+                ->where('p.loginCidadaoId IS NOT NULL');
+    }
 }
