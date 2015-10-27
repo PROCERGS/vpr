@@ -45,7 +45,7 @@ class PersonController extends Controller
         $paginator = $this->get('knp_paginator');
         $entities  = $paginator->paginate(
             $search->getQuery(), $this->get('request')->query->get('page', 1),
-            10
+            20
         );
 
         return array(

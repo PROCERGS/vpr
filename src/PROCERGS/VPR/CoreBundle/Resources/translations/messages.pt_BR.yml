@@ -230,3 +230,9 @@ admin.user.search:
     button: Pesquisar
     label: Nome ou Título de Eleitor
     placeholder: Nome ou Título de Eleitor
+admin.person.tre_info:
+    label: Informações do TRE
+    voter_registration: Título de Eleitor
+    name: Nome
+    city: Cidade
+    voting_zone: Zona de Votação

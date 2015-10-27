@@ -52,6 +52,36 @@
         </div>
     </div>
 
+    {% if entity.treVoter %}
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{ 'admin.person.tre_info.label' | trans }}</label>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.voter_registration'|trans }}</label>
+            <div class="col-sm-8">
+                <p class="form-control-static">{{ entity.treVoter.id }}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.name'|trans }}</label>
+            <div class="col-sm-8">
+                <p class="form-control-static">{{ entity.treVoter.name }}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.city'|trans }}</label>
+            <div class="col-sm-8">
+                <p class="form-control-static">{{ entity.treVoter.city.name }} ({{ entity.treVoter.corede.name }})</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.voting_zone'|trans }}</label>
+            <div class="col-sm-8">
+                <p class="form-control-static">{{ entity.treVoter.votingZone }}</p>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="form-group">
         <label class="col-sm-3 control-label">{{ 'admin.enabled'|trans }}</label>
         <div class="col-sm-9">

@@ -104,3 +104,9 @@ admin.user.search:
     button: Search
     label: Name or Voter Registration
     placeholder: Name or Voter Registration
+admin.person.tre_info:
+    label: TRE Information
+    voter_registration: Voter Registration
+    name: Name
+    city: City
+    voting_zone: Voting Zone
