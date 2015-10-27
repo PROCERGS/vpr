@@ -10,9 +10,6 @@ class SecurityHelper
     /** @var AuthorizationCheckerInterface */
     private $security;
 
-    /** @var ReflectionClass */
-    private $reflection;
-
     public function __construct(AuthorizationCheckerInterface $security)
     {
         $this->security = $security;
@@ -49,17 +46,6 @@ class SecurityHelper
     {
         $map = $this->getRoleMapping();
         return $map[$role];
-    }
-
-    /**
-     * @return \ReflectionClass
-     */
-    private function getReflection()
-    {
-        if (!($this->reflection instanceof \ReflectionClass)) {
-            $this->reflection = new \ReflectionClass(get_class());
-        }
-        return $this->reflection;
     }
 
     private function getRoleMapping()
