@@ -1,0 +1,90 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'admin_users'|trans %}
+{% set actionName = 'admin.show'|trans %}
+{% set backParams = app.request.get('query') ? { 'query': app.request.get('query') } : { } %}
+
+{% block content -%}
+    <div class="row navbar">
+        <div class="col-md-3 col-sm-12">
+            <a class="btn btn-default" href="{{ path('admin_person', backParams) }}" role="button">
+                <span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}
+            </a>
+        </div>
+        {{ include('PROCERGSVPRCoreBundle:Admin/Person:search.html.twig', { 'widget_only': true, 'class': 'col-md-9 col-sm-12' }) }}
+    </div>
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
+    {{ form_errors(form) }}
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.id'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{ entity.id }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.username'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{% if(entity.treVoter.id is defined) %}{{ entity.treVoter.id }}{% endif %}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.name'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{ entity.firstName }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.email'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{ entity.email }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.enabled'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{% if(entity.enabled) %}Sim{% else %}Não{% endif %}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.last_login'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{ entity.lastLogin|date('d/m/Y H:i:s') }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.created_at'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{ entity.createdAt|date('d/m/Y H:i:s') }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.roles) }}
+        <div class="col-sm-9">
+            {{ form_errors(form.roles) }}
+            {{ form_widget(form.roles) }}
+        </div>
+    </div>
+
+    <div class="form-group form-actions">
+        <div class="col-lg-10 col-lg-offset-2">
+            <button type="submit" class="btn btn-sm btn-primary">{{ 'admin.save'|trans }}</button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

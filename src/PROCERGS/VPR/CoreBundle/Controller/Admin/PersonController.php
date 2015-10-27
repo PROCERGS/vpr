@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PersonType;
 
 /**
  * Person controller.
@@ -17,48 +18,29 @@ class PersonController extends Controller
 {
 
     /**
-     * Lists all Person entities.
-     *
      * @Route("/", name="admin_person")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $query = $em->getRepository('PROCERGSVPRCoreBundle:Person')
-            ->getfindLoginCidadaoQuery()
-            ->orderBy('p.firstName')
-            ->getQuery();
-
-        $paginator = $this->get('knp_paginator');
-        $entities  = $paginator->paginate(
-            $query, $this->get('request')->query->get('page', 1), 10
-        );
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-
-    /**
-     * @Route("/search/{query}", name="admin_person_search")
+     * @Route("/search", name="admin_person_search")
      * @Method("GET")
      * @Template("PROCERGSVPRCoreBundle:Admin/Person:index.html.twig")
      */
-    public function searchAction(Request $request, $query)
+    public function searchAction(Request $request)
     {
+        $query  = $request->get('query');
         $search = $this->getPersonRepository()
             ->getfindLoginCidadaoQuery()
             ->join('p.treVoter', 't')
             ->orderBy('p.firstName');
 
-        $search->andWhere(
-                $search->expr()->orX('p.firstName LIKE :name', 't.id = :query')
-            )
-            ->setParameter('name', "%$query%")
-            ->setParameter('query', $query);
+        if ($query !== null) {
+            $search->andWhere(
+                    $search->expr()->orX(
+                        'LOWER(p.firstName) LIKE LOWER(:name)',
+                        'LOWER(t.name) LIKE LOWER(:name)', 't.id = :query'
+                    )
+                )
+                ->setParameter('name', "%$query%")
+                ->setParameter('query', $query);
+        }
 
         $paginator = $this->get('knp_paginator');
         $entities  = $paginator->paginate(
@@ -74,11 +56,11 @@ class PersonController extends Controller
     /**
      * Finds and displays a Person entity.
      *
-     * @Route("/{id}", name="admin_person_show")
-     * @Method("GET")
+     * @Route("/{id}/edit", name="admin_person_edit")
+     * @Method({"GET","POST"})
      * @Template()
      */
-    public function showAction($id)
+    public function editAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -88,8 +70,28 @@ class PersonController extends Controller
             throw $this->createNotFoundException('Unable to find Person entity.');
         }
 
+        $form = $this->get('form.factory')->create(
+            $this->get('vpr.form.admin.person'), $entity,
+            array('available_roles' => $this->getRoles())
+        );
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $securityHelper    = $this->get('vpr.security.helper');
+            $loggedUserLevel   = $securityHelper->getLoggedInUserLevel();
+            $targetPersonLevel = $securityHelper->getTargetPersonLevel($entity);
+
+            if ($loggedUserLevel >= $targetPersonLevel) {
+                $userManager = $this->get('fos_user.user_manager');
+                $userManager->updateUser($entity);
+            }
+
+            return $this->redirectToRoute('admin_person_edit', compact('id'));
+        }
+
         return array(
             'entity' => $entity,
+            'form' => $form->createView(),
         );
     }
 
@@ -100,5 +102,22 @@ class PersonController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         return $em->getRepository('PROCERGSVPRCoreBundle:Person');
+    }
+
+    private function getRoles()
+    {
+        $rolesHierarchy = $this->getParameter('security.role_hierarchy.roles');
+
+        $roles = array();
+        foreach ($rolesHierarchy as $role => $children) {
+            $roles[$role] = $children;
+            foreach ($children as $child) {
+                if (!array_key_exists($child, $roles)) {
+                    $roles[$child] = 0;
+                }
+            }
+        }
+
+        return array_keys($roles);
     }
 }

@@ -101,3 +101,20 @@ a.save-sorted-step{
     margin: 0 auto;
     width: 20px;
 }
+
+.search-box {
+    margin-bottom: 20px;
+}
+.search-form .form-group {
+    width: 100%;
+}
+#admin_person_search_query {
+    width: 100%;
+    max-width: 300px;
+    margin: 0;
+    display: inline-block;
+}
+
+.inline-flex {
+    display: inline-flex;
+}
