@@ -7,12 +7,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class SecurityHelper
 {
-    const ROLE_SUPER_ADMIN = 4;
-    const ROLE_ADMIN       = 3;
-    const ROLE_SUPER_USER  = 2;
-    const ROLE_DEV         = 1;
-    const ROLE_USER        = 0;
-
     /** @var AuthorizationCheckerInterface */
     private $security;
 
@@ -27,16 +21,11 @@ class SecurityHelper
     public function getLoggedInUserLevel()
     {
         $level = 0;
-        if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
-            $level = self::ROLE_SUPER_ADMIN;
-        } elseif ($this->security->isGranted('ROLE_ADMIN')) {
-            $level = self::ROLE_ADMIN;
-        } elseif ($this->security->isGranted('ROLE_SUPER')) {
-            $level = self::ROLE_SUPER_USER;
-        } elseif ($this->security->isGranted('ROLE_DEV')) {
-            $level = self::ROLE_DEV;
-        } elseif ($this->security->isGranted('ROLE_USER')) {
-            $level = self::ROLE_USER;
+        foreach ($this->getRoleMapping() as $role => $lvl) {
+            if ($this->security->isGranted($role)) {
+                $level = $lvl;
+                break;
+            }
         }
 
         return $level;
@@ -46,17 +35,11 @@ class SecurityHelper
     {
         $roles = $person->getRoles();
         $level = 0;
-
-        if (in_array('ROLE_SUPER_ADMIN', $roles)) {
-            $level = self::ROLE_SUPER_ADMIN;
-        } elseif (in_array('ROLE_ADMIN', $roles)) {
-            $level = self::ROLE_ADMIN;
-        } elseif (in_array('ROLE_SUPER', $roles)) {
-            $level = self::ROLE_SUPER_USER;
-        } elseif (in_array('ROLE_DEV', $roles)) {
-            $level = self::ROLE_DEV;
-        } elseif (in_array('ROLE_USER', $roles)) {
-            $level = self::ROLE_USER;
+        foreach ($this->getRoleMapping() as $role => $lvl) {
+            if (in_array($role, $roles)) {
+                $level = $lvl;
+                break;
+            }
         }
 
         return $level;
@@ -64,7 +47,8 @@ class SecurityHelper
 
     public function getRoleLevel($role)
     {
-        return $this->getReflection()->getConstant($role);
+        $map = $this->getRoleMapping();
+        return $map[$role];
     }
 
     /**
@@ -76,5 +60,22 @@ class SecurityHelper
             $this->reflection = new \ReflectionClass(get_class());
         }
         return $this->reflection;
+    }
+
+    private function getRoleMapping()
+    {
+        $map = array(
+            'ROLE_SUPER_ADMIN' => 8,
+            'ROLE_ADMIN' => 7,
+            'ROLE_MANAGE_USER' => 6,
+            'ROLE_CRUD_BALLOTBOX' => 5,
+            'ROLE_CRUD_POLL' => 4,
+            'ROLE_STATS' => 3,
+            'ROLE_COREDE' => 2,
+            'ROLE_COORDINATOR' => 1,
+            'ROLE_USER' => 0,
+        );
+        arsort($map);
+        return $map;
     }
 }
