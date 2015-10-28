@@ -216,3 +216,23 @@ Logout: Sair
 '<strong>WARNING</strong>: Below you''ll find this ballot box password for it''s private key. Copy and save it to a safe place. If you don''t, it <strong>CANNOT BE RECOVERED</strong> and you''ll have to create another ballot box.': '<strong>ATENÇÃO</strong>: A seguir está a senha da chave privada dessa urna. Salve-a em um local seguro. Se você não salvá-la, ela <strong>NÃO PODERÁ SER RECUPERADA</strong> e você terá que criar uma nova urna.'
 (poll-defined): (definido pela votação)
 Show Private Key: Exibir Chave Privada
+admin.person.roles.label: Permissões
+ROLE_COORDINATOR: Coordenador
+ROLE_USER: Usuário Simples
+ROLE_COREDE: COREDE
+ROLE_STATS: Estatísticas
+ROLE_CRUD_POLL: Gerente de Votações
+ROLE_CRUD_BALLOTBOX: Gerente de Urnas
+ROLE_MANAGE_USER: Gerente de Usuários
+ROLE_ADMIN: Administrador
+ROLE_SUPER_ADMIN: Super Administrador
+admin.user.search:
+    button: Pesquisar
+    label: Nome ou Título de Eleitor
+    placeholder: Nome ou Título de Eleitor
+admin.person.tre_info:
+    label: Informações do TRE
+    voter_registration: Título de Eleitor
+    name: Nome
+    city: Cidade
+    voting_zone: Zona de Votação

@@ -6,6 +6,7 @@ parameters:
     procergs.nfgws.class: PROCERGS\VPR\CoreBundle\Helper\NfgWsHelper
     form.type.voter_registration.class: PROCERGS\VPR\CoreBundle\Form\Type\VoterRegistrationType
     form.type.city.class: PROCERGS\VPR\CoreBundle\Form\Type\CityType
+    vpr.security.helper.class: PROCERGS\VPR\CoreBundle\Helper\SecurityHelper
 
 services:
     form.type.voter_registration:
@@ -79,3 +80,17 @@ services:
     monolog.multiline:
         class: Monolog\Formatter\LineFormatter
         arguments: [~, ~, true]
+
+    vpr.security.helper:
+        class: %vpr.security.helper.class%
+        arguments: [ @security.authorization_checker ]
+
+    vpr.form.admin.person:
+        class: PROCERGS\VPR\CoreBundle\Form\Type\Admin\PersonType
+        arguments: [ @vpr.security.helper ]
+        tags:
+            - { name: form.type, alias: vpr_admin_person }
+        calls:
+            - [setEntityManager, ["@doctrine.orm.entity_manager"]]
+            - [setTranslator, ["@translator"]]
+            - [setSecurity, ["@security.authorization_checker"]]

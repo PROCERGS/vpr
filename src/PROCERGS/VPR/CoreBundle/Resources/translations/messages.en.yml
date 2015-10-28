@@ -90,3 +90,23 @@ Logout: Logout
 '<strong>WARNING</strong>: Below you''ll find this ballot box password for it''s private key. Copy and save it to a safe place. If you don''t, it <strong>CANNOT BE RECOVERED</strong> and you''ll have to create another ballot box.': '<strong>WARNING</strong>: Below you''ll find this ballot box password for it''s private key. Copy and save it to a safe place. If you don''t, it <strong>CANNOT BE RECOVERED</strong> and you''ll have to create another ballot box.'
 (poll-defined): (poll-defined)
 Show Private Key: Show Private Key
+admin.person.roles.label: Roles
+ROLE_COORDINATOR: Coordinator
+ROLE_USER: Simple User
+ROLE_COREDE: COREDE
+ROLE_STATS: Statistics
+ROLE_CRUD_POLL: Poll Manager
+ROLE_CRUD_BALLOTBOX: Ballotbox Manager
+ROLE_MANAGE_USER: User Manager
+ROLE_ADMIN: Administrator
+ROLE_SUPER_ADMIN: Super Administrator
+admin.user.search:
+    button: Search
+    label: Name or Voter Registration
+    placeholder: Name or Voter Registration
+admin.person.tre_info:
+    label: TRE Information
+    voter_registration: Voter Registration
+    name: Name
+    city: City
+    voting_zone: Voting Zone
