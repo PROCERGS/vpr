@@ -26,7 +26,8 @@ class AppKernel extends Kernel
             new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
             new Donato\Http\Proxied\BuzzBundle\DonatoHttpProxiedBuzzBundle(),
             new FOS\RestBundle\FOSRestBundle(),
-            new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle()
+            new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
+			new Nelmio\CorsBundle\NelmioCorsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
