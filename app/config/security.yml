@@ -4,14 +4,14 @@ security:
         PROCERGS\VPR\CoreBundle\Entity\Voter: sha512
 
     role_hierarchy:
-        ROLE_COORDINATOR:       ROLE_USER
+        ROLE_COORDINATOR:       ROLE_USER, ROLE_ADMIN_MENU
         ROLE_COREDE:            ROLE_COORDINATOR
         ROLE_STATS:             ROLE_USER
         ROLE_CRUD_POLL:         ROLE_COORDINATOR
         ROLE_CRUD_BALLOTBOX:    ROLE_COORDINATOR
         ROLE_MANAGE_USER:       ROLE_COORDINATOR
         ROLE_ADMIN:             ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_BALLOTBOX, ROLE_MANAGE_USER
-        ROLE_SUPER_ADMIN:       ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH
+        ROLE_SUPER_ADMIN:       ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, ROLE_COREDE
 
     providers:
         fos_userbundle:
@@ -60,6 +60,11 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
+        - { path: ^/admin/step, role: ROLE_COREDE }
+        - { path: ^/admin/category, role: ROLE_ADMIN }
+        - { path: ^/admin/ballotbox, role: ROLE_CRUD_BALLOTBOX }
+        - { path: ^/admin/poll_option, role: ROLE_COREDE }
+        - { path: ^/admin/person, role: ROLE_SUPER_ADMIN }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }
