@@ -138,14 +138,14 @@ hwi_oauth:
             type:                 oauth2
             client_id:            %login_cidadao_id%
             client_secret:        %login_cidadao_secret%
-            access_token_url:     %login_cidadao_base_url%/oauth/v2/token
-            authorization_url:    %login_cidadao_base_url%/oauth/v2/auth
+            access_token_url:     %login_cidadao_base_url%/openid/connect/token
+            authorization_url:    %login_cidadao_base_url%/openid/connect/authorize
             infos_url:            %login_cidadao_base_url%/api/v1/person.json
             scope:                "full_name cpf birthdate email city public_profile voter_registration addresses"
             user_response_class:  HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
-                nickname:   username
+                nickname:   sub
                 realname:   full_name
                 email:      email
 
