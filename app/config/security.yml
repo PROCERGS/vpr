@@ -16,12 +16,26 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
-
+        daa:
+            id: vpr.soe_user_provider
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        secured_area_login:
+            pattern:    ^/admin/login_soe
+            anonymous: ~  
+        secured_area:
+            pattern:    ^/admin
+            form_login:
+                provider: daa
+                login_path: /admin/login_soe
+                check_path: /admin/login_check
+            logout:
+                path:   /admin/logout
+                target: /
+            anonymous:  ~             
+                
         main:
             pattern: ^/
             anonymous: true
@@ -43,6 +57,8 @@ security:
             logout:
                 path: /logout
                 success_handler: vpr.logout.handler
+                
+               
 
     access_control:
         - { path: ^/counting, role: ROLE_ADMIN }
@@ -59,8 +75,11 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
+        
+        - { path: ^/admin/login_soe, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/poll, role: ROLE_CRUD_POLL }        
         - { path: ^/admin/, role: ROLE_ADMIN }
+        
         - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }

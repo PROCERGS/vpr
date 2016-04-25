@@ -28,7 +28,7 @@ class PersonController extends Controller
         $query  = $request->get('query');
         $search = $this->getPersonRepository()
             ->getfindLoginCidadaoQuery()
-            ->join('p.treVoter', 't')
+            ->leftJoin('p.treVoter', 't')
             ->orderBy('p.firstName');
 
         if ($query !== null) {

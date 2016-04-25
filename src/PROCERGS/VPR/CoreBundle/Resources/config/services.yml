@@ -94,3 +94,7 @@ services:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
             - [setSecurity, ["@security.authorization_checker"]]
+            
+    vpr.soe_user_provider:
+        class: PROCERGS\VPR\CoreBundle\Soe\SoeUserProvider
+        arguments: [ "%soe_sigla_sistema%", "%soe_url_servicos%" ]

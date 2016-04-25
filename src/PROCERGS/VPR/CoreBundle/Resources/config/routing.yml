@@ -49,3 +49,8 @@ vpr_admin_poll_option:
     resource: "@PROCERGSVPRCoreBundle/Controller/Admin/PollOptionController.php"
     type:     annotation
     prefix:   /admin/poll_option
+    
+login_soe:
+    resource: "@PROCERGSVPRCoreBundle/Controller/Admin/SoeController.php"
+    type:     annotation
+    prefix:   /admin 

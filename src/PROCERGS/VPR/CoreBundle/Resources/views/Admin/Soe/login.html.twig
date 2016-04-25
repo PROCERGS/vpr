@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {% stylesheets 'bundles/procergsvprcore/css/boostrap.min.css' filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/jquery.min.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/jquery.min.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block body %}
+    {% if error %}
+        <div>{{ error.message }}</div>
+    {% endif %}
+    <form method="post" action="{{ soe_url_autenticacao }}">
+        <input type="hidden" value="s" name="executed" id="executed"/>
+        <input type="hidden" value="{{ soe_sigla_sistema }}" name="f_sistema" id="f_sistema"/>
+        <input type="hidden" value="http://vpr.localhost/app_dev.php/admin/login_check" name="f_retorno" id="f_retorno"/>
+        <div class="form-group">
+            <label >Organização</label>
+            <div >
+                <input type="text" maxlength="50" size="30" value="" name="f_organizacao" id="f_organizacao" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label >Matricula</label>
+            <div >
+                <input type="text" maxlength="50" size="30" value="" name="f_matricula" id="f_matricula" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Matricula</label>
+            <div >
+                <input type="password" maxlenght="50" size="30" value="" name="f_senha" id="f_senha"/>
+            </div>
+        </div>
+        <div class="form-group form-actions">
+            <div>
+                <input type="submit" value=" Login " name="btnEntrar" id="btnEntrar"/>
+            </div>
+        </div>
+    </form>
+{% endblock %}

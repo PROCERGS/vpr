@@ -1,7 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: memcached.yml }
+    #- { resource: memcached.yml }
 
 framework:
     #esi:             ~
@@ -53,6 +53,11 @@ twig:
         login_cidadao_app_id: %login_cidadao_id%
         login_cidadao_logout_url: %login_cidadao_base_url%%login_cidadao_logout_path%
         tre_search_link: %tre_search_link%
+        soe_sigla_sistema: %soe_sigla_sistema%
+        soe_url_autenticacao: %soe_url_autenticacao%
+        soe_url_feedback: %soe_url_feedback%
+        soe_url_trocasenha: %soe_url_trocasenha%
+        soe_url_servicos: %soe_url_servicos%
 
 # Assetic Configuration
 assetic:
