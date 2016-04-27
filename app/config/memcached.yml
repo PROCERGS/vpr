@@ -1,21 +1,21 @@
 framework:
     session:
-        handler_id: session.handler.memcached
+        handler_id: session.handler.pdo
 
-doctrine:
-    orm:
-        metadata_cache_driver:
-            type:   memcache
-            host:   %memcached_host%
-            port:   %memcached_port%
-        query_cache_driver:
-            type:   memcache
-            host:   %memcached_host%
-            port:   %memcached_port%
-        result_cache_driver:
-            type:   memcache
-            host:   %memcached_host%
-            port:   %memcached_port%
+#doctrine:
+#    orm:
+#        metadata_cache_driver:
+#            type:   memcache
+#            host:   %memcached_host%
+#            port:   %memcached_port%
+#        query_cache_driver:
+#            type:   memcache
+#            host:   %memcached_host%
+#            port:   %memcached_port%
+#        result_cache_driver:
+#            type:   memcache
+#            host:   %memcached_host%
+#            port:   %memcached_port%
 
 services:
     session.memcached:
@@ -28,3 +28,10 @@ services:
     session.handler.memcached:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcacheSessionHandler
         arguments: ["@session.memcached", { prefix: %session_prefix%, expiretime: %session_lifetime% } ]
+
+    session.handler.pdo:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        public:    false
+        arguments:
+            - 'pgsql:host=%database_host%;port=%database_port%;dbname=%database_name%'
+            - { db_username: '%database_user%', db_password: '%database_password%', db_table: sessions }
