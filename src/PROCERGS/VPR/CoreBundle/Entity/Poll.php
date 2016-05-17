@@ -66,6 +66,22 @@ class Poll
     protected $publicKey;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="apuration_time", type="datetime", nullable=false)
+     * @Groups({"vote", "setup"})
+     */
+    protected $apurationTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="apuration_done", type="datetime", nullable=false)
+     * @Groups({"vote", "setup"})
+     */
+    protected $apurationDone;
+
+    /**
      * @ORM\OneToMany(targetEntity="BallotBox", mappedBy="poll")
      */
     protected $ballotBoxes;
@@ -205,6 +221,52 @@ class Poll
     public function getPublicKey()
     {
         return $this->publicKey;
+    }
+
+    /**
+     * Set apurationTime
+     *
+     * @param \DateTime $apurationTime
+     * @return Poll
+     */
+    public function setApurationTime($apurationTime)
+    {
+        $this->apurationTime = $apurationTime;
+
+        return $this;
+    }
+
+    /**
+     * Get apurationTime
+     *
+     * @return \DateTime
+     */
+    public function getApurationTime()
+    {
+        return $this->apurationTime;
+    }
+
+    /**
+     * Set apurationDone
+     *
+     * @param \DateTime $apurationDone
+     * @return Poll
+     */
+    public function setApurationDone($apurationDone)
+    {
+        $this->apurationDone = $apurationDone;
+
+        return $this;
+    }
+
+    /**
+     * Get apurationDone
+     *
+     * @return \DateTime
+     */
+    public function getApurationDone()
+    {
+        return $this->apurationDone;
     }
 
     public function getBallotBoxes()

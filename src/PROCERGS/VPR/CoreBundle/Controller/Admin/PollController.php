@@ -158,6 +158,10 @@ class PollController extends Controller
             throw $this->createNotFoundException('Unable to find Poll entity.');
         }
 
+        if ($entity->getApurationDone()) {
+            throw $this->createNotFoundException('Closed Poll');
+        }
+
         $steps = $entity->getSteps();
 
         $editForm = $this->createEditForm($entity);

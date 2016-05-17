@@ -9,23 +9,29 @@
                 <th width="8%">{{ 'admin.actions'|trans }}</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="admin-poll-list">
             {% if(entities.items) %}
                 {% for entity in entities %}
+                    {% if loop.first %}
+                    <tr class="success">
+                    {% elseif loop.last %}
                     <tr>
+                    {% endif %}
                         <td>{{ entity.name }}</td>
                         <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{% if entity.closingTime %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
                         <td>{{ entity.description }}</td>
                         <td>
                             <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                            {% if entity.apurationDone is null %}
                             <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
             {% else %}
                     <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
-            {% endif %}                
+            {% endif %}
         </tbody>
     </table>
 </div>
