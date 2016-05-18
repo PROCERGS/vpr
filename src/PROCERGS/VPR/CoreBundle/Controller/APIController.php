@@ -203,39 +203,6 @@ class APIController extends FOSRestController
     }
     
     /**
-     * @REST\Post("/ballotbox/{pin}/dumps", name="procergsvpr_core_receive_dumps")
-     * @REST\View
-     */
-    public function receiveDumpsAction(Request $request, $pin)
-    {
-    	//2494 rwupbvqhed
-    	//8936 pgcbxskryf
-    	$em        = $this->getDoctrine()->getManager();
-    	$ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-    	->findOneByPin($pin);
-    
-    	$logger = $this->getLogger();
-    	$votes  = $request->get('votes');
-    	$hash   = $request->get('hash');
-    
-    	$secret     = $ballotBox->getSecret();
-    	$calculated = base64_encode(hash_hmac('sha256', $votes, $secret, true));
-    
-    	$logger->debug($request->getClientIp());
-    	$this->checkHash($hash, $calculated, $logger);
-    
-    	$fs       = $this->getVotesDumpFs();
-    	$uuid     = Uuid::uuid4();
-    	$filename = "dump_$pin.$uuid";
-    	$logger->debug("Writing votes to $filename");
-    	$fs->write($filename, $votes);
-    
-    	return new JsonResponse(array(
-    			'hash' => true,
-    	));
-    }
-
-    /**
      * @REST\Get("/api/status", name="vpr_api_ping")
      * @REST\View
      */
