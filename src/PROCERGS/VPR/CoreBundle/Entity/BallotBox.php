@@ -145,6 +145,13 @@ class BallotBox
      * @var \DateTime
      */
     protected $closedAt;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="csv", type="text")
+     */
+    protected $csv;
 
     public function __construct()
     {
@@ -539,5 +546,16 @@ class BallotBox
     {
         $this->closedAt = $closedAt;
         return $this;
+    }
+    
+    public function getCsv()
+    {
+    	return $this->csv;
+    }
+    
+    public function setCsv($var)
+    {
+    	$this->csv = $var;
+    	return $this;
     }
 }

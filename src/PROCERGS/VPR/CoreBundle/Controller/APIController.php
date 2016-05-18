@@ -119,29 +119,39 @@ class APIController extends FOSRestController
      */
     public function dumpBallotBoxAction(Request $request, $pin)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')
-            ->findLastPoll();
-
-        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-            ->findByPinAndPollFilteredByCorede($poll, $pin);
-
-        if ($ballotBox->getSetupAt() instanceof \DateTime ||
-            $ballotBox->getClosedAt() instanceof \DateTime) {
-            throw new AccessDeniedHttpException("Ballot box already downloaded.");
+        $em = $this->getDoctrine()->getManager();
+        if ($pin == 1) {
+        	$ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+        	->findOneByPin($pin);
+        	$passphrase = $request->get('passphrase', null);
+        	$privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
+        			$passphrase);
+        	if ($privateKey === false) {
+        		throw new AccessDeniedHttpException("Invalid credentials");
+        	}
+        } else {
+	        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')
+	            ->findLastPoll();
+	
+	        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+	            ->findByPinAndPollFilteredByCorede($poll, $pin);
+	
+	        if ($ballotBox->getSetupAt() instanceof \DateTime ||
+	            $ballotBox->getClosedAt() instanceof \DateTime) {
+	            throw new AccessDeniedHttpException("Ballot box already downloaded.");
+	        }
+	
+	        $passphrase = $request->get('passphrase', null);
+	        $privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
+	            $passphrase);
+	        if ($privateKey === false) {
+	            throw new AccessDeniedHttpException("Invalid credentials");
+	        }
+	
+	        $ballotBox->setSetupAt(new \DateTime());
+	        $em->persist($ballotBox);
+	        $em->flush();
         }
-
-        $passphrase = $request->get('passphrase', null);
-        $privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
-            $passphrase);
-        if ($privateKey === false) {
-            throw new AccessDeniedHttpException("Invalid credentials");
-        }
-
-        $ballotBox->setSetupAt(new \DateTime());
-        $em->persist($ballotBox);
-        $em->flush();
-
         $context = SerializationContext::create()
             ->setSerializeNull(true)
             ->setGroups(array('setup'));
@@ -159,6 +169,11 @@ class APIController extends FOSRestController
     public function receiveVotesAction(Request $request, $pin)
     {
         $this->getLogger()->info("Receiving votes from PIN $pin...");
+        if ($pin == 1) {
+        	return new JsonResponse(array(
+        			'hash' => true,
+        	));
+        }
         $em        = $this->getDoctrine()->getManager();
         $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
             ->findOneByPin($pin);
@@ -177,12 +192,7 @@ class APIController extends FOSRestController
         $logger->debug($request->getClientIp());
         $this->checkHash($hash, $calculated, $logger);
 
-        $fs       = $this->getVotesDumpFs();
-        $uuid     = Uuid::uuid4();
-        $filename = "ballot_box.$pin.$uuid";
-        $logger->debug("Writing votes to $filename");
-        $fs->write($filename, $votes);
-
+        $ballotBox->setCsv($votes);
         $ballotBox->setClosedAt(new \DateTime());
         $em->persist($ballotBox);
         $em->flush();
