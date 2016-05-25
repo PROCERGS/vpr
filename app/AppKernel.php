@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
 			new Nelmio\CorsBundle\NelmioCorsBundle(),
+            new Donato\OIDCBundle\DonatoOIDCBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

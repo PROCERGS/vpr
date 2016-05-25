@@ -16,6 +16,8 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
+        oidc:
+            id: oidc.user_provider
 
     firewalls:
         dev:
@@ -23,7 +25,8 @@ security:
             security: false
 
         main:
-            pattern: ^/
+            pattern: ^/(?!admin)
+            context: vpr
             anonymous: true
             form_login:
                 provider: fos_userbundle
@@ -43,8 +46,20 @@ security:
             logout:
                 path: /logout
                 success_handler: vpr.logout.handler
+        admin:
+            pattern: ^/admin
+            context: vpr
+            anonymous: ~
+            logout:
+                path:   /logout
+                target: /
+            form_login:
+                login_path: oidc_login
+                check_path: oidc_callback
 
     access_control:
+        - { path: ^/admin/oidc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - { path: ^/counting, role: ROLE_ADMIN }
         - { path: ^/api/offline/download, roles: ROLE_ADMIN }
         - { path: ^/demo, roles: ROLE_ADMIN }
