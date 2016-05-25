@@ -1,0 +1,23 @@
+parameters:
+    oidc.idp.manager.class: Donato\OIDCBundle\Entity\IdentityProviderManager
+    oidc.user_provider.class: Donato\OIDCBundle\Security\OIDCUserProvider
+
+services:
+    oidc.idp.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - Donato\OIDCBundle\Entity\IdentityProvider
+
+    oidc.idp.manager:
+        class: %oidc.idp.manager.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oidc.idp.repository"
+            - "@session"
+            - "@router"
+
+    oidc.user_provider:
+        class: %oidc.user_provider.class%
+        arguments:
+            - "@security.token_storage"
