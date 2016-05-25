@@ -94,3 +94,9 @@ services:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
             - [setSecurity, ["@security.authorization_checker"]]
+
+    vpr.user.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - PROCERGS\VPR\CoreBundle\Entity\User

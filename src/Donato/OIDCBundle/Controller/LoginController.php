@@ -8,8 +8,11 @@ use Donato\OIDCBundle\Event\FilterOIDCTokenEvent;
 use Donato\OIDCBundle\Event\FilterRequestEvent;
 use Donato\OIDCBundle\Event\FilterResponseEvent;
 use Donato\OIDCBundle\Form\IdentityProviderType;
+use Donato\OIDCBundle\Security\OIDCUserProvider;
+use PROCERGS\VPR\CoreBundle\Entity\UserRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -56,26 +59,6 @@ class LoginController extends Controller
     }
 
     /**
-     * @param string $providerUrl
-     * @param boolean $create
-     * @return \OpenIDConnectClient
-     */
-    private function getOpenIDConnectClient($providerUrl, $create = true)
-    {
-        $manager = $this->getIdPManager();
-
-        return $manager->getOpenIDConnectClient($providerUrl, $create);
-    }
-
-    /**
-     * @return \Donato\OIDCBundle\Entity\IdentityProviderManager
-     */
-    private function getIdPManager()
-    {
-        return $this->get('oidc.idp.manager');
-    }
-
-    /**
      * @Route("/callback", name="oidc_callback")
      */
     public function callbackAction(Request $request)
@@ -95,9 +78,11 @@ class LoginController extends Controller
 
         $oidc->authenticate();
         $sub = $oidc->requestUserInfo('sub');
+        $idp = $this->getIdentityProvider($providerUrl);
+        $fullSub = "{$idp->getId()}#$sub";
 
-        $user = new User($sub);
-        $user->addRole(['ROLE_SUPER_ADMIN']);
+        $user = $this->prepareUser($fullSub);
+        new User($fullSub);
         $provider = $this->getIdPManager()->getProviderByUrl($providerUrl);
         $token = $this->prepareToken($user, $provider, $oidc->getAccessToken());
 
@@ -121,6 +106,33 @@ class LoginController extends Controller
     }
 
     /**
+     * @param string $providerUrl
+     * @param boolean $create
+     * @return \OpenIDConnectClient
+     */
+    private function getOpenIDConnectClient($providerUrl, $create = true)
+    {
+        $manager = $this->getIdPManager();
+
+        return $manager->getOpenIDConnectClient($providerUrl, $create);
+    }
+
+    private function getIdentityProvider($providerUrl)
+    {
+        $manager = $this->getIdPManager();
+
+        return $manager->getProviderByUrl($providerUrl);
+    }
+
+    /**
+     * @return \Donato\OIDCBundle\Entity\IdentityProviderManager
+     */
+    private function getIdPManager()
+    {
+        return $this->get('oidc.idp.manager');
+    }
+
+    /**
      * @param User $user
      * @param IdentityProvider $provider
      * @param string $accessToken
@@ -134,5 +146,23 @@ class LoginController extends Controller
         $token->setAuthenticated(true);
 
         return $token;
+    }
+
+    private function prepareUser($sub)
+    {
+        /** @var OIDCUserProvider $userProvider */
+        $userProvider = $this->get('');
+
+        try {
+            $user = $userProvider->loadUserByUsername($sub);
+        } catch (UsernameNotFoundException $e) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $user = new User($sub);
+
+            $em->persist($user);
+            $em->flush($user);
+        }
+
+        return $user;
     }
 }

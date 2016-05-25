@@ -21,3 +21,4 @@ services:
         class: %oidc.user_provider.class%
         arguments:
             - "@security.token_storage"
+            - "@vpr.user.repository"
