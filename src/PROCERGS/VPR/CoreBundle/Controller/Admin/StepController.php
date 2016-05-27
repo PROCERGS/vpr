@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Step;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\StepType;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
 
 /**
  * Step controller.
@@ -23,19 +24,46 @@ class StepController extends Controller
      * Lists all Step entities.
      *
      * @Route("/", name="admin_step")
-     * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+
+        $poll_filters = $session->get('poll_filters');
+        $form = $this->createForm(new PollOptionFilterType());
+        $form->remove("corede");
+
+        $entities = array();
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
+            } else{
+                $form->bind($request);
+                $session->set('poll_filters', $request);
+            }
+            $selected = $form->getData();
+
+            $poll = $selected['poll'];
+
+        } else {
+            $poll = $em->createQueryBuilder()
+            ->select('p')
+            ->from('PROCERGSVPRCoreBundle:Poll', 'p')
+            ->orderBy('p.id','DESC')
+            ->setMaxResults(1)
+            ->getQuery()->getOneOrNullResult();
+        }
 
         $query = $em->createQueryBuilder()
             ->select('s')
             ->from('PROCERGSVPRCoreBundle:Step', 's')
             ->innerJoin('s.poll','p')
+            ->where('p.id = :id')
             ->orderBy('p.openingTime','DESC')
             ->addOrderBy('s.sorting','ASC')
+            ->setParameter('id', $poll->getId())
             ->getQuery();
 
         $paginator  = $this->get('knp_paginator');
@@ -48,6 +76,7 @@ class StepController extends Controller
 
         return array(
             'entities' => $entities,
+            'form' => $form->createView(),
         );
     }
 
@@ -254,7 +283,7 @@ class StepController extends Controller
 
         return $this->redirect($this->generateUrl('admin_step'));
     }
- 
+
     /**
      * Creates a form to delete a Step entity by id.
      *
@@ -304,7 +333,7 @@ class StepController extends Controller
         $response = new JsonResponse();
         $response->setData($data);
 
-        return $response;        
+        return $response;
     }
 
     /**
@@ -342,6 +371,18 @@ class StepController extends Controller
 
         return $response;
     }
-    
-  
+
+    /**
+     * Clear Filters
+     * @Method("GET")
+     * @Route("/filters/clear", name="admin_step_clear_filters")
+     */
+    public function clearFiltersAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('poll_filters');
+        return $this->redirect($this->generateUrl('admin_step'));
+    }
+
+
 }
