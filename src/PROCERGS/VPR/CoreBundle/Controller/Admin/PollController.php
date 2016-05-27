@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Poll controller.
@@ -281,5 +282,35 @@ class PollController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Load steps by poll
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/select_poll", name="admin_select_poll")
+     * @Method("POST")
+     */
+    public function selectPollAction(Request $request)
+    {
+    	$data = array();
+    	$poll_id = $request->get('poll_id');
+    	$response = new JsonResponse();
+    	try{
+    		$em = $this->getDoctrine()->getManager();
+    		if(!$poll_id){
+    			throw new \Exception('Sem id!');
+    		}
+    		$poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findOneById($poll_id);
+    		if(!$poll){
+    			throw new \Exception('Nao encontrei nada!');
+    		}
+    		$data['poll']['openingTime'] = $poll->getOpeningTime()->format('Y-m-d H:i:s');
+    		$data['poll']['closingTime'] = $poll->getClosingTime()->format('Y-m-d H:i:s');
+    		$response->setData($data);
+    	} catch (\Exception $e) {
+    		$response->setStatusCode(500);
+    		$response->setData(array('message' => $e->getMessage()));
+    	}
+    	return $response;
     }
 }

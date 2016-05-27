@@ -88,7 +88,7 @@ class BallotBoxController extends Controller
      *
      * @Route("/", name="admin_ballotbox_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:Admin\BallotBox:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\BallotBox:edit.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -96,28 +96,63 @@ class BallotBoxController extends Controller
         $form   = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-
-            $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
-            $pin  = $repo->generateUniquePin($entity->getPoll(), 4);
-            $entity->setPin($pin);
-
-            $em->persist($entity);
-            $em->flush();
-
-            $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                $translator->trans('admin.successfully_added_record'));
-
-            return $this->redirect($this->generateUrl('admin_ballotbox_show',
-                        array('id' => $entity->getId())));
+        try {
+        	if ($form->isValid()) {
+        		$em = $this->getDoctrine()->getManager();
+        	
+        		$repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+        		self::isValid1($entity);
+        		$pin = $repo->generateUniquePin($entity->getPoll(), 4);
+        		$entity->setPin($pin);
+        		$entity->setKeys();
+        		$em->persist($entity);
+        		$em->flush();
+        	
+        		$translator = $this->get('translator');
+        		$this->get('session')->getFlashBag()->add('success',
+        				$translator->trans('admin.successfully_added_record'));
+        	
+        		return $this->redirect($this->generateUrl('admin_ballotbox_show',
+        				array('id' => $entity->getId())));
+        	}
+        } catch (\Exception $e) {
+        	$this->get('session')->getFlashBag()->add('danger', $e->getMessage());
         }
-
         return array(
             'entity' => $entity,
-            'form' => $form->createView(),
+            'edit_form' => $form->createView(),
+			'delete_form' => null
         );
+    }
+    
+    private static function isValid1(&$entity)
+    {
+    	if ($entity->getIsOnline()) {
+    		$ballotBox = $this->getDoctrine()->getManager()->getRepository('PROCERGSVPRCoreBundle:BallotBox')->hasOnline($entity->getPoll());
+    		if ($ballotBox) {
+    			if ($entity->getId()) {
+    				if ($entity->getId() != $ballotBox->getId()) {
+    					throw new \Exception("Ja tem um urna online para essa votacao");
+    				}
+    			} else {
+    				throw new \Exception("Ja tem um urna online para essa votacao");
+    			}
+    		}
+    	} else {
+    		if (!$entity->getCity()) {
+    			throw new \Exception("Precisa selecionar uma cidade");
+    		}
+    		if ($entity->getOpeningTime() || $entity->getClosingTime()) {
+    			if (!($entity->getOpeningTime() && $entity->getClosingTime())) {
+    				throw new \Exception("Necessario colocar tanto a data de abertura quanto a data de fechamento");
+    			}
+    		}
+    	}
+    	if ($entity->getFone()) {
+    		if (!is_numeric($entity->getFone()) || strlen($entity->getFone()) < 8) {
+    			throw new \Exception("Colocar um numero de telefone com no minimo 8 numeros");
+    		}
+    	}
     }
 
     /**
@@ -145,16 +180,18 @@ class BallotBoxController extends Controller
      *
      * @Route("/new", name="admin_ballotbox_new")
      * @Method("GET")
-     * @Template()
+     * @Template("PROCERGSVPRCoreBundle:Admin\BallotBox:edit.html.twig")
      */
     public function newAction()
     {
         $entity = new BallotBox();
+        $entity->setSecret($entity->generatePassphrase());
         $form   = $this->createCreateForm($entity);
 
         return array(
-            'entity' => $entity,
-            'form' => $form->createView(),
+			'entity' => $entity,
+			'edit_form' => $form->createView(),
+			'delete_form' => null
         );
     }
 
@@ -252,17 +289,21 @@ class BallotBoxController extends Controller
         $editForm   = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                $translator->trans('admin.successfully_changed_record'));
-
-            return $this->redirect($this->generateUrl('admin_ballotbox_show',
-                        array('id' => $id)));
+        try {
+        	if ($editForm->isValid()) {
+        		self::isValid1($entity);
+        		$em->flush();
+        	
+        		$translator = $this->get('translator');
+        		$this->get('session')->getFlashBag()->add('success',
+        				$translator->trans('admin.successfully_changed_record'));
+        	
+        		return $this->redirect($this->generateUrl('admin_ballotbox_show',
+        				array('id' => $id)));
+        	}
+        } catch (\Exception $e) {
+        	$this->get('session')->getFlashBag()->add('danger', $e->getMessage());
         }
-
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
