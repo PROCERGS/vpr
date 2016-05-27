@@ -61,6 +61,7 @@ class PollController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->generatePrivateAndPublicKeys();
             $em->persist($entity);
             $em->flush();
 
@@ -247,12 +248,19 @@ class PollController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Poll entity.');
             }
-
-            $em->remove($entity);
-            $em->flush();
-
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
+			try {
+				$em->remove($entity);
+				$em->flush();
+				$this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
+			} catch (\Exception $e) {
+				if (strstr($e->getMessage(), 'SQLSTATE[23503]') !== false) {
+					$this->get('session')->getFlashBag()->add('danger', 'Não é possivel deletar, pois existem itens vinculados a essa votação');
+				} else {
+					$this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+				}
+				
+			}
         }
 
         return $this->redirect($this->generateUrl('admin_poll'));

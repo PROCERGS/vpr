@@ -4,7 +4,7 @@
     {{ parent() }}
 
     <meta property="og:site_name" content="{% trans %}2015 Budget Priorities Voting{% endtrans %}"/>
-    <meta property="og:description" content="{% trans %}A Consulta Popular do Orçamento 2015 para o Estado do Rio Grande do Sul ocorre nos dias 2, 3 e 4 de junho. Serão R$ 192 milhões destinados à consulta neste ano.{% endtrans %}"/>
+    <meta property="og:description" content="{{ getActiveOrLastPoll().getDescription() }}"/>
     {% image '@PROCERGSVPRCoreBundle/Resources/public/images/facebook-image.png' %}
     <meta property="og:image" content="{{ app.request.scheme ~'://' ~ app.request.host ~ asset_url }}" />
     {% endimage %}
@@ -21,8 +21,13 @@
 {% block header %}
     {{ include('PROCERGSVPRCoreBundle::navbar.html.twig') }}
     <header class="text-center">
-        <a href="{{ path('procergsvpr_core_homepage') }}" title="Consulta Popular">
-            {%trans%}Priorities Voting<br />2015 BUDGET<br />02-04 of june{%endtrans%}
+        <a href="{{ path('procergsvpr_core_homepage') }}" title="{{ getActiveOrLastPoll().getName() }}">
+            {{ getActiveOrLastPoll().getName()|nl2br }}<br/>
+            {% if getActiveOrLastPoll().isBiggerThen1Day() %}
+                De {{ getActiveOrLastPoll().getOpeningTime()|date('d/m/Y') }} até {{ getActiveOrLastPoll().getClosingTime()|date('d/m/Y') }}
+            {% else %}
+                {{ getActiveOrLastPoll().getOpeningTime()|date('d/m/Y') }}
+            {% endif %}
         </a>
     </header>
     <div id="social-bar" class="hidden-xs hidden-sm">
