@@ -43,6 +43,11 @@
                             <a href="{{ path('admin_person') }}">{{'Users'|trans}}</a>
                         </li>
                     {% endif %}
+                    {% if is_granted('ROLE_MANAGE_USER') %}
+                        <li class="{{ controller == 'admin\\poll' ? 'active' }}">
+                            <a href="{{ path('admin_stats') }}">{{'Apuração'|trans}}</a>
+                        </li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ path('fos_user_security_logout') }}">{{'Logout'|trans}}</a></li>

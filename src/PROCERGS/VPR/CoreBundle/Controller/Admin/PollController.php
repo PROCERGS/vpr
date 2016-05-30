@@ -116,7 +116,7 @@ class PollController extends Controller
     /**
      * Finds and displays a Poll entity.
      *
-     * @Route("/{id}", name="admin_poll_show")
+     * @Route("/{id}", requirements={"id" = "\d+"}, name="admin_poll_show")
      * @Method("GET")
      * @Template()
      */
@@ -273,5 +273,34 @@ class PollController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+    /**
+     * Lists poll stats.
+     *
+     * @Route("/stats", name="admin_stats")
+     * @Method("GET")
+     * @Template()
+     */
+    public function statsListAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $query = $em->createQueryBuilder()
+            ->select('p')
+            ->from('PROCERGSVPRCoreBundle:Poll', 'p')
+            ->orderBy('p.openingTime','DESC')
+            ->getQuery();
+
+        $paginator  = $this->get('knp_paginator');
+        $entities = $paginator->paginate(
+            $query,
+            $this->get('request')->query->get('page', 1),
+            10
+        );
+
+        return array(
+            'entities' => $entities,
+        );
     }
 }
