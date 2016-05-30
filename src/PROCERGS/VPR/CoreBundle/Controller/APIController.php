@@ -122,7 +122,7 @@ class APIController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         if ($pin == 1) {
         	$ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-        	->findOneByPin($pin);
+        	->findByPinAndPollFilteredByCorede($pin);
         	$passphrase = $request->get('passphrase', null);
         	$privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
         			$passphrase);
@@ -131,7 +131,7 @@ class APIController extends FOSRestController
         	}
         } else {
 	        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-        	->findOneByPin($pin);
+        	->findByPinAndPollFilteredByCorede($pin);
 	
 	        if ($ballotBox->getSetupAt() instanceof \DateTime ||
 	            $ballotBox->getClosedAt() instanceof \DateTime) {

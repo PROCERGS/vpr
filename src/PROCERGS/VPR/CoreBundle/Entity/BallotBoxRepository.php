@@ -24,7 +24,7 @@ class BallotBoxRepository extends EntityRepository
         return current($connection->query("select nextval('ballot_box_pin_seq')")->fetchAll(\PDO::FETCH_COLUMN));;
     }
 
-    public function findByPinAndPollFilteredByCorede(Poll $poll, $pin)
+    public function findByPinAndPollFilteredByCorede($pin)
     {
         $query = $this->createQueryBuilder('b')
             ->select('b, c, p, s, o')
@@ -32,10 +32,9 @@ class BallotBoxRepository extends EntityRepository
             ->join('b.poll', 'p')
             ->join('p.steps', 's')
             ->join('s.pollOptions', 'o')
-            ->where('b.poll = :poll')
-            ->andWhere('b.pin = :pin')
+            ->where('b.pin = :pin')
             ->andWhere('o.corede = c.corede')
-            ->setParameters(compact('poll', 'pin'));
+            ->setParameters(compact('pin'));
 
         return $query->getQuery()->getOneOrNullResult();
     }
