@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Poll controller.
@@ -61,6 +62,7 @@ class PollController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->generatePrivateAndPublicKeys();
             $em->persist($entity);
             $em->flush();
 
@@ -247,12 +249,19 @@ class PollController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Poll entity.');
             }
-
-            $em->remove($entity);
-            $em->flush();
-
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
+			try {
+				$em->remove($entity);
+				$em->flush();
+				$this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
+			} catch (\Exception $e) {
+				if (strstr($e->getMessage(), 'SQLSTATE[23503]') !== false) {
+					$this->get('session')->getFlashBag()->add('danger', 'Não é possivel deletar, pois existem itens vinculados a essa votação');
+				} else {
+					$this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+				}
+				
+			}
         }
 
         return $this->redirect($this->generateUrl('admin_poll'));
@@ -274,6 +283,7 @@ class PollController extends Controller
             ->getForm()
         ;
     }
+
 
     /**
      * Lists poll stats.
@@ -302,5 +312,36 @@ class PollController extends Controller
         return array(
             'entities' => $entities,
         );
+    }
+
+    
+    /**
+     * Load steps by poll
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/select_poll", name="admin_select_poll")
+     * @Method("POST")
+     */
+    public function selectPollAction(Request $request)
+    {
+    	$data = array();
+    	$poll_id = $request->get('poll_id');
+    	$response = new JsonResponse();
+    	try{
+    		$em = $this->getDoctrine()->getManager();
+    		if(!$poll_id){
+    			throw new \Exception('Sem id!');
+    		}
+    		$poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findOneById($poll_id);
+    		if(!$poll){
+    			throw new \Exception('Nao encontrei nada!');
+    		}
+    		$data['poll']['openingTime'] = $poll->getOpeningTime()->format('Y-m-d H:i:s');
+    		$data['poll']['closingTime'] = $poll->getClosingTime()->format('Y-m-d H:i:s');
+    		$response->setData($data);
+    	} catch (\Exception $e) {
+    		$response->setStatusCode(500);
+    		$response->setData(array('message' => $e->getMessage()));
+    	}
+    	return $response;
     }
 }

@@ -130,11 +130,8 @@ class APIController extends FOSRestController
         		throw new AccessDeniedHttpException("Invalid credentials");
         	}
         } else {
-	        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')
-	            ->findLastPoll();
-	
 	        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-	            ->findByPinAndPollFilteredByCorede($poll, $pin);
+        	->findOneByPin($pin);
 	
 	        if ($ballotBox->getSetupAt() instanceof \DateTime ||
 	            $ballotBox->getClosedAt() instanceof \DateTime) {

@@ -93,4 +93,9 @@ services:
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
-            - [setSecurity, ["@security.authorization_checker"]]
+            - [setSecurity, ["@security.authorization_checker"]]		
+    vpr.twig.extension:
+        class: PROCERGS\VPR\CoreBundle\Twig\VPRExtension
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: twig.extension, alias: vpr_twig_extension }

@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="ballot_box")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository")
- * @UniqueEntity({"poll", "pin"})
+ * @UniqueEntity({"pin"})
  * @ORM\HasLifecycleCallbacks
  */
 class BallotBox
@@ -152,6 +152,21 @@ class BallotBox
      * @ORM\Column(name="csv", type="text")
      */
     protected $csv;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    protected $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fone", type="string", length=15, nullable=true)
+     */
+    protected $fone;
+    
 
     public function __construct()
     {
@@ -427,9 +442,6 @@ class BallotBox
         return $this->isOnline;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function setKeys()
     {
         if (!is_null($this->getPrivateKey())) {
@@ -558,4 +570,27 @@ class BallotBox
     	$this->csv = $var;
     	return $this;
     }
+    
+    public function getFone()
+    {
+    	return $this->fone;
+    }
+    
+    public function setFone($var)
+    {
+    	$this->fone = $var;
+    	return $this;
+    }
+    
+    public function getEmail()
+    {
+    	return $this->email;
+    }
+    
+    public function setEmail($var)
+    {
+    	$this->email = $var;
+    	return $this;
+    }
+    
 }

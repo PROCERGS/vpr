@@ -236,3 +236,6 @@ admin.person.tre_info:
     name: Nome
     city: Cidade
     voting_zone: Zona de Votação
+admin.apuration_time: Data inicio apuração
+admin.apuration_done: Data conclusão apuração
+admin.fone: Telefone
