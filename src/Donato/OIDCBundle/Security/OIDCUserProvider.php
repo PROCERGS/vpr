@@ -40,16 +40,36 @@ class OIDCUserProvider implements UserProviderInterface
 
     /**
      * @param string $username
-     * @return null|object
+     * @return null|User
      * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->repository->findOneBy($username);
+        $user = $this->repository->findOneBy(compact('username'));
         if (!$user) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
         return $user;
+    }
+
+    /**
+     * @param string $email
+     * @return null|User
+     * @throws UsernameNotFoundException
+     */
+    public function loadUserByEmail($email)
+    {
+        $user = $this->repository->findOneBy(compact('email'));
+        if (!$user) {
+            throw new UsernameNotFoundException(sprintf('Email "%s" does not exist.', $email));
+        }
+
+        return $user;
+    }
+
+    public function updateUser(UserInterface $user)
+    {
+        //
     }
 }

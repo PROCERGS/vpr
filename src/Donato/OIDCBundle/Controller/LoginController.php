@@ -10,6 +10,7 @@ use Donato\OIDCBundle\Event\FilterResponseEvent;
 use Donato\OIDCBundle\Form\IdentityProviderType;
 use Donato\OIDCBundle\Security\OIDCUserProvider;
 use PROCERGS\VPR\CoreBundle\Entity\UserRepository;
+use PROCERGS\VPR\CoreBundle\Exception\OIDC\UserNotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -78,11 +79,11 @@ class LoginController extends Controller
 
         $oidc->authenticate();
         $sub = $oidc->requestUserInfo('sub');
+        $email = $oidc->requestUserInfo('email');
         $idp = $this->getIdentityProvider($providerUrl);
         $fullSub = "{$idp->getId()}#$sub";
 
-        $user = $this->prepareUser($fullSub);
-        new User($fullSub);
+        $user = $this->prepareUser($fullSub, $email);
         $provider = $this->getIdPManager()->getProviderByUrl($providerUrl);
         $token = $this->prepareToken($user, $provider, $oidc->getAccessToken());
 
@@ -148,17 +149,26 @@ class LoginController extends Controller
         return $token;
     }
 
-    private function prepareUser($sub)
+    private function prepareUser($sub, $email)
     {
         /** @var OIDCUserProvider $userProvider */
-        $userProvider = $this->get('');
+        $userProvider = $this->get('oidc.user_provider');
 
         try {
-            $user = $userProvider->loadUserByUsername($sub);
+            $user = $userProvider->loadUserByEmail($email);
+        } catch (UsernameNotFoundException $e) {
+            $accessDenied = $this->createAccessDeniedException($e->getMessage(), $e);
+            throw new UserNotFoundException(null, null, $accessDenied);
+        }
+
+        try {
+            $userBySub = $userProvider->loadUserByUsername($sub);
+            if ($user->equals($userBySub) === false) {
+                throw $this->createAccessDeniedException('This account belongs to someone else');
+            }
         } catch (UsernameNotFoundException $e) {
             $em = $this->getDoctrine()->getEntityManager();
-            $user = new User($sub);
-
+            $user->setUsername($sub);
             $em->persist($user);
             $em->flush($user);
         }

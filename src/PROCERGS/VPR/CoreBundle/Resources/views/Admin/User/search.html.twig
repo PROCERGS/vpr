@@ -1,0 +1,11 @@
+{% set widget_only = (widget_only is defined ? widget_only : false) %}
+{% set class = (class is defined ? class : 'col-md-12') %}
+{% if not widget_only %}<div class="row search-box">{% endif %}
+    <form action="{{ path('admin_person_search') }}" class="{{ class }} search-form form-inline text-right">
+        <div class="form-group">
+            <label for="admin_person_search_query" class="sr-only">{{ 'admin.user.search.label' | trans }}</label>
+            <input type="search" name="query" class="form-control" id="admin_person_search_query" placeholder="{{ 'admin.user.search.placeholder' | trans }}" value="{{ app.request.get('query') }}">
+            <button class="btn btn-default">{{ 'admin.user.search.button' | trans }}</button>
+        </div>
+    </form>
+    {% if not widget_only %}</div>{% endif %}

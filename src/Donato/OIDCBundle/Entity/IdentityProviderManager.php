@@ -47,7 +47,7 @@ class IdentityProviderManager
 
         $oidc = new \OpenIDConnectClient($providerUrl, null, null, $this->session);
         $oidc->setRedirectURL($this->getCallbackUrl());
-        $oidc->addScope('cpf');
+        $oidc->addScope('email');
         $oidc->addScope('openid');
 
         $existing = $this->getProviderByUrl($providerUrl);

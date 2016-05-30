@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class User
  * @package PROCERGS\VPR\CoreBundle\Entity
  *
- * @ORM\Table(name="user")
+ * @ORM\Table(name="oidc_user")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\UserRepository")
  */
 class User implements UserInterface, \Serializable
@@ -41,6 +41,28 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="json_array")
      */
     protected $roles;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, unique=true, nullable=true)
+     */
+    protected $email;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="confirmation_code", type="string", length=255, unique=true, nullable=true)
+     */
+    protected $confirmationCode;
+
+    /**
+     * @var IdentityProvider
+     *
+     * @ORM\ManyToOne(targetEntity="Donato\OIDCBundle\Entity\IdentityProvider")
+     * @ORM\JoinColumn(name="identity_provider_id", referencedColumnName="id")
+     */
+    protected $identityProvider;
 
     /**
      * @param string $username
@@ -84,6 +106,17 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @param $username
+     * @return UserInterface
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function eraseCredentials()
@@ -118,6 +151,82 @@ class User implements UserInterface, \Serializable
         }
 
         $this->roles = array_merge($this->roles, $role);
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     * @return User
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     * @return User
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return IdentityProvider
+     */
+    public function getIdentityProvider()
+    {
+        return $this->identityProvider;
+    }
+
+    /**
+     * @param IdentityProvider $identityProvider
+     * @return User
+     */
+    public function setIdentityProvider($identityProvider)
+    {
+        $this->identityProvider = $identityProvider;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfirmationCode()
+    {
+        return $this->confirmationCode;
+    }
+
+    /**
+     * @param string $confirmationCode
+     * @return User
+     */
+    public function setConfirmationCode($confirmationCode)
+    {
+        $this->confirmationCode = $confirmationCode;
 
         return $this;
     }

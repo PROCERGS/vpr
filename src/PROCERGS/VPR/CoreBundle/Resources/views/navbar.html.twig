@@ -39,8 +39,8 @@
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_MANAGE_USER') %}
-                        <li class="{{ controller == 'admin\\person' ? 'active' }}">
-                            <a href="{{ path('admin_person') }}">{{'Users'|trans}}</a>
+                        <li class="{{ controller == 'admin\\user' ? 'active' }}">
+                            <a href="{{ path('admin_user_list') }}">{{'Users'|trans}}</a>
                         </li>
                     {% endif %}
                 </ul>
