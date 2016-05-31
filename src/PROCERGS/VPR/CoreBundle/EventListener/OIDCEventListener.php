@@ -1,9 +1,10 @@
 <?php
 
-namespace AppBundle\EventListener;
+namespace PROCERGS\VPR\CoreBundle\EventListener;
 
 use Donato\OIDCBundle\Event\FilterResponseEvent;
 use Donato\OIDCBundle\Security\Authentication\Token\OIDCToken;
+use PROCERGS\VPR\CoreBundle\Entity\UserManager;
 use PROCERGS\VPR\CoreBundle\Exception\OIDC\AccessDeniedException;
 use PROCERGS\VPR\CoreBundle\Exception\OIDC\UserNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,36 +18,31 @@ class OIDCEventListener
     /** @var TokenStorage */
     protected $tokenStorage;
 
+    /** @var UserManager */
+    protected $userManager;
+
     /** @var RouterInterface */
     protected $router;
 
     /**
      * OIDCEventListener constructor.
      * @param TokenStorage $tokenStorage
+     * @param UserManager $userManager
      * @param RouterInterface $router
      */
     public function __construct(
         TokenStorage $tokenStorage,
+        UserManager $userManager,
         RouterInterface $router
     ) {
         $this->tokenStorage = $tokenStorage;
+        $this->userManager = $userManager;
         $this->router = $router;
     }
 
     public function onFilterResponse(FilterResponseEvent $event)
     {
-        $emailVerified = $this->isEmailVerified();
-
-        if ($emailVerified) {
-            $url = $this->router->generate('auth_index', [], RouterInterface::ABSOLUTE_URL);
-            $callback = $this->router->generate('auth_oidc_callback', compact('url'));
-            $event->setResponse(new RedirectResponse($callback));
-
-            return;
-        }
-
-        $callback = $this->router->generate('auth_oidc_callback', compact('url'), RouterInterface::ABSOLUTE_URL);
-        $event->setResponse(new RedirectResponse($callback));
+        $this->userManager->checkEmailVerified($event, $this->router);
     }
 
     public function onUserNotFound(GetResponseForExceptionEvent $event)

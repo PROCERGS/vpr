@@ -236,3 +236,4 @@ admin.person.tre_info:
     name: Nome
     city: Cidade
     voting_zone: Zona de Votação
+account.activated: Sua conta foi ativada

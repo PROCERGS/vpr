@@ -13,6 +13,7 @@ use PROCERGS\VPR\CoreBundle\Entity\UserRepository;
 use PROCERGS\VPR\CoreBundle\Exception\OIDC\UserNotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -107,6 +108,19 @@ class LoginController extends Controller
     }
 
     /**
+     * @Route("/redirect", name="oidc_redirect")
+     */
+    public function redirectAction(Request $request)
+    {
+        $url = html_entity_decode($request->get('url'));
+
+        return $this->render(
+            'DonatoOIDCBundle:Login:redirect.html.twig',
+            compact('url')
+        );
+    }
+
+    /**
      * @param string $providerUrl
      * @param boolean $create
      * @return \OpenIDConnectClient
@@ -174,5 +188,20 @@ class LoginController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * @Route("/check-email", name="oidc_check_email")
+     */
+    public function checkEmailAction(Request $request)
+    {
+        $request->getSession()->remove('email_verified');
+
+        $response = $this->redirectToRoute('admin');
+        $dispatcher = $this->get("event_dispatcher");
+        $filterResponseEvent = new FilterResponseEvent($response);
+        $dispatcher->dispatch(DonatoOIDCEvents::OIDC_FILTER_RESPONSE, $filterResponseEvent);
+
+        return $filterResponseEvent->getResponse();
     }
 }

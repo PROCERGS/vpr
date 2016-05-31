@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, \Serializable
 {
+    public static $BASE_ROLES = ['ROLE_USER', 'ROLE_OIDC_USER'];
 
     /**
      * @var integer
@@ -31,7 +32,7 @@ class User implements UserInterface, \Serializable
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=255, unique=false)
+     * @ORM\Column(type="string", length=255, unique=false, nullable=true)
      */
     protected $username;
 
@@ -67,10 +68,10 @@ class User implements UserInterface, \Serializable
     /**
      * @param string $username
      */
-    public function __construct($username)
+    public function __construct($username = null)
     {
         $this->username = $username;
-        $this->roles = ['ROLE_USER', 'ROLE_OIDC_USER'];
+        $this->roles = self::$BASE_ROLES;
     }
 
     /**
