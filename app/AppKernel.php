@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
 			new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Donato\OIDCBundle\DonatoOIDCBundle(),
+            new \Becklyn\StaticRolesBundle\BecklynStaticRolesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

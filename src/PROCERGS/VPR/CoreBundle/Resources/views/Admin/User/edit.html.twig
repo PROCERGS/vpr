@@ -25,7 +25,8 @@
     <div class="form-group">
         <label class="col-sm-3 control-label">{{ 'vpr.user.email.label'|trans }}</label>
         <div class="col-sm-9">
-            <p class="form-control-static">{{ entity.email }}</p>
+            {{ form_errors(form.email) }}
+            {{ form_widget(form.email) }}
         </div>
     </div>
 

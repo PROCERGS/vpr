@@ -12,7 +12,14 @@ class UserForm extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('roles');
+            ->add(
+                'roles',
+                'static_role',
+                [
+                    "multiple" => true,
+                    "expanded" => true,
+                ]
+            );
     }
 
     /**

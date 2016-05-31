@@ -4,9 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7f796e8d8e9e9eb805deab592278eafe",
-    "content-hash": "794ed97545ebbd509cd686aeeb72c273",
+    "hash": "2a8e129ee9213132aac71286bb2eeb2e",
+    "content-hash": "6bf83caefca39ce31f58bfb3f2c2723b",
     "packages": [
+        {
+            "name": "becklyn/static-roles-bundle",
+            "version": "1.0.0-alpha.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Becklyn/BecklynStaticRolesBundle.git",
+                "reference": "59c6c24c6d162e103541a9488fc5228207a79c55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Becklyn/BecklynStaticRolesBundle/zipball/59c6c24c6d162e103541a9488fc5228207a79c55",
+                "reference": "59c6c24c6d162e103541a9488fc5228207a79c55",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5",
+                "symfony/config": "^2.7",
+                "symfony/security-core": "^2.7"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Becklyn\\StaticRolesBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Becklyn",
+                    "homepage": "http://becklyn.com/"
+                }
+            ],
+            "description": "This bundle provides a simple way to define all available roles and their hierarchy in your configuration",
+            "homepage": "https://github.com/Becklyn/BecklynStaticRolesBundle",
+            "keywords": [
+                "security",
+                "symfony"
+            ],
+            "time": "2015-07-09 12:43:07"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.6",
@@ -3171,7 +3214,8 @@
         "guilhermednt/hwi-oauth-proxy-bundle": 20,
         "sensio/buzz-bundle": 20,
         "guilhermednt/buzz-proxied-curl-bundle": 20,
-        "knplabs/knp-gaufrette-bundle": 20
+        "knplabs/knp-gaufrette-bundle": 20,
+        "becklyn/static-roles-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
