@@ -4,7 +4,7 @@
 #procergs_vpr_corebundle_poll_closingTime select,
 #procergs_vpr_corebundle_poll_openingTime select,
 #procergs_vpr_corebundle_ballotbox_openingTime select,
-#procergs_vpr_corebundle_ballotbox_closingTime select, 
+#procergs_vpr_corebundle_ballotbox_closingTime select,
 #procergs_vpr_corebundle_poll_apurationTime select
 {
     margin-right: 6px;
@@ -21,7 +21,7 @@
 #procergs_vpr_corebundle_poll_closingTime_date,
 #procergs_vpr_corebundle_ballotbox_openingTime_date,
 #procergs_vpr_corebundle_ballotbox_closingTime_date,
-#procergs_vpr_corebundle_poll_apurationTime_date 
+#procergs_vpr_corebundle_poll_apurationTime_date
 {
     float: left;
     margin-right: 20px;
@@ -123,4 +123,9 @@ a.save-sorted-step{
 
 .inline-flex {
     display: inline-flex;
+}
+
+.ballot-check {
+    height: 18px;
+    width: 18px;
 }

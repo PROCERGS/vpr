@@ -240,6 +240,10 @@ admin.apuration_time: Data inicio apuração
 admin.apuration_done: Data conclusão apuração
 admin.fone: Telefone
 admin.votes_online: Votos Online
-admin.votes_offline: Votos Online
+admin.votes_offline: Votos Offline
 admin.voters_online: Votantes Online
 admin.voters_offline: Votantes Offline
+admin.type: Tipo
+admin.pin: Pin
+admin.phone: Fone
+admin.status: Status

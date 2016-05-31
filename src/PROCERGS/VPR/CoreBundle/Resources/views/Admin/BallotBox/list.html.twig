@@ -1,22 +1,54 @@
 <div class="table-responsive">
+
+    <div style="margin-bottom: 20px;">
+        <button class="btn btn-success" data-toggle="modal" data-target="#myModal">Solicitar transmissão</button>
+        <button class="btn btn-info" data-toggle="modal" data-target="#myModal">Enviar senha</button>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Selecione o tipo de envio</h4>
+            </div>
+            <div class="modal-body">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Enviar para a seleção</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Enviar para todos da pesquisa</button>
+            </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <table class="table table-striped table-bordered table-hover records_list">
         <thead>
             <tr>
-                <th width="20%">{{ 'admin.poll'|trans }}</th>
-                <th width="15%">{{ 'admin.city'|trans }}</th>
-                <th width="30%">{{ 'admin.address'|trans }}</th>
-                <th width="5%">{{ 'admin.is_online'|trans }}?</th>
-                <th width="8%">{{ 'admin.actions'|trans }}</th>
+                <th><input type="checkbox" name="ballotbox" class="ballot-check" id="check-all"></input></th>
+                <th>{{ 'admin.pin'|trans }}</th>
+                <th>{{ 'admin.email'|trans }}</th>
+                <th>{{ 'admin.phone'|trans }}</th>
+                <th>{{ 'admin.city'|trans }}</th>
+                <th>{{ 'admin.status'|trans }}</th>
+                <th>{{ 'admin.actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
             {% if(entities.items) %}
                 {% for entity in entities %}
                     <tr>
-                        <td>{% if (entity.poll) %}{{ entity.poll.name }}{% endif %}</td>
+                        <td><input type="checkbox" name="ballotbox" class="ballot-check"></input></td>
+                        <td>{{ entity.pin }}</td>
+                        <td>{{ entity.email }}</td>
+                        <td>{{ entity.fone }}</td>
                         <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
-                        <td>{{ entity.address }}</td>
-                        <td class="text-center">{% if entity.isOnline %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
+                        <td>
+                            {% if (entity.setupAt == null) %}
+                                Disponível
+                            {% elseif (entity.closedAt == null) %}
+                                Ativa
+                            {% else %}
+                                Encerrada
+                            {% endif %}
+                        </td>
                         <td class="text-center">
                             <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
                             <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>

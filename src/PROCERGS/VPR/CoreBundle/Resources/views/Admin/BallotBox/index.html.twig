@@ -27,7 +27,7 @@
                 {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
             </div>
             <div class="form-group">
-                <label>{{ 'admin.is_online'|trans }}</label>
+                <label>{{ 'admin.type'|trans }}</label>
                 {{ form_widget(form.is_online, {'attr': {'class': 'form-control'}}) }}
             </div>
             <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
@@ -36,4 +36,18 @@
     </div>
 
     {% include 'PROCERGSVPRCoreBundle:Admin/BallotBox:list.html.twig' with {'entities': entities} %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $("#check-all").on("click", function() {
+            if ($(this).prop("checked")) {
+                $(".ballot-check").not(this).prop("checked", true);
+            } else {
+                $(".ballot-check").not(this).prop("checked", false);
+            }
+
+        })
+    </script>
 {% endblock %}

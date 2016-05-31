@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
 
 /**
  * Poll controller.
@@ -292,15 +293,34 @@ class PollController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function statsListAction()
+    public function statsListAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
-        // $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        $session = $this->getRequest()->getSession();
 
         $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
         $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
-        $votes    = $statsRepo->findTotalVotesByPoll(4);
+
+        $poll_filters = $session->get('poll_filters');
+
+        $form = $this->createForm(new PollOptionFilterType());
+        $form->remove("corede");
+
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
+            } else{
+                $form->bind($request);
+                $session->set('poll_filters', $request);
+            }
+            $selected = $form->getData();
+
+            $poll = $selected['poll'];
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        }
+
+        $votes = $statsRepo->findTotalVotesByPoll($poll->getId());
 
         foreach ($votes as $vote) {
             $corede = $coredeRepo->find($vote['corede_id']);
@@ -320,6 +340,7 @@ class PollController extends Controller
 
         return array(
             'coredes' => $coredes,
+            'form' => $form->createView()
         );
     }
 

@@ -48,12 +48,7 @@ class StepController extends Controller
             $poll = $selected['poll'];
 
         } else {
-            $poll = $em->createQueryBuilder()
-            ->select('p')
-            ->from('PROCERGSVPRCoreBundle:Poll', 'p')
-            ->orderBy('p.id','DESC')
-            ->setMaxResults(1)
-            ->getQuery()->getOneOrNullResult();
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
         }
 
         $query = $em->createQueryBuilder()

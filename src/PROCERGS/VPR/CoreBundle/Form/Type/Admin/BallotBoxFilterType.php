@@ -20,7 +20,7 @@ class BallotBoxFilterType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('p')
                         ->orderBy('p.openingTime', 'DESC');
-                },                
+                },
                 'property' => 'name',
                 'empty_value' => 'Todos',
                 'required' => false
@@ -36,9 +36,10 @@ class BallotBoxFilterType extends AbstractType
                 'required' => false
             ))
             ->add('is_online', 'choice', array(
-                'choices' => array(true => 'Sim', false => 'Não'),
-                'empty_value' => 'Todos',
-                'required' => false
+                'choices' => array(true => 'Online', false => 'Offline'),
+                'empty_value' => false,
+                'required' => false,
+                'data' => false
             ));
         ;
     }

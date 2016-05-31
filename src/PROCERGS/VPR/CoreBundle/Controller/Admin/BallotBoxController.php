@@ -60,6 +60,11 @@ class BallotBoxController extends Controller
         if (isset($filters['poll'])) {
             $queryBuilder->andWhere('b.poll = :poll');
             $queryBuilder->setParameter('poll', $filters['poll']);
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+            $queryBuilder->andWhere('b.poll = :poll');
+            $queryBuilder->setParameter('poll', $poll->getId());
+            $form->get('poll')->setData($poll);
         }
 
         if (isset($filters['city'])) {
@@ -70,6 +75,9 @@ class BallotBoxController extends Controller
         if (!is_null($filters['is_online'])) {
             $queryBuilder->andWhere('b.isOnline = :online');
             $queryBuilder->setParameter('online', $filters['is_online']);
+        } else {
+            $queryBuilder->andWhere('b.isOnline = :online');
+            $queryBuilder->setParameter('online', false);
         }
 
         $query = $queryBuilder->getQuery();
@@ -99,7 +107,7 @@ class BallotBoxController extends Controller
         try {
         	if ($form->isValid()) {
         		$em = $this->getDoctrine()->getManager();
-        	
+
         		$repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
         		self::isValid1($entity);
         		$pin = $repo->generateUniquePin($entity->getPoll(), 4);
@@ -107,11 +115,11 @@ class BallotBoxController extends Controller
         		$entity->setKeys();
         		$em->persist($entity);
         		$em->flush();
-        	
+
         		$translator = $this->get('translator');
         		$this->get('session')->getFlashBag()->add('success',
         				$translator->trans('admin.successfully_added_record'));
-        	
+
         		return $this->redirect($this->generateUrl('admin_ballotbox_show',
         				array('id' => $entity->getId())));
         	}
@@ -124,7 +132,7 @@ class BallotBoxController extends Controller
 			'delete_form' => null
         );
     }
-    
+
     private static function isValid1(&$entity)
     {
     	if ($entity->getIsOnline()) {
@@ -293,11 +301,11 @@ class BallotBoxController extends Controller
         	if ($editForm->isValid()) {
         		self::isValid1($entity);
         		$em->flush();
-        	
+
         		$translator = $this->get('translator');
         		$this->get('session')->getFlashBag()->add('success',
         				$translator->trans('admin.successfully_changed_record'));
-        	
+
         		return $this->redirect($this->generateUrl('admin_ballotbox_show',
         				array('id' => $id)));
         	}
