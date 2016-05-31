@@ -239,3 +239,7 @@ admin.person.tre_info:
 admin.apuration_time: Data inicio apuração
 admin.apuration_done: Data conclusão apuração
 admin.fone: Telefone
+admin.votes_online: Votos Online
+admin.votes_offline: Votos Online
+admin.voters_online: Votantes Online
+admin.voters_offline: Votantes Offline

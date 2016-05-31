@@ -260,7 +260,7 @@ class PollController extends Controller
 				} else {
 					$this->get('session')->getFlashBag()->add('danger', $e->getMessage());
 				}
-				
+
 			}
         }
 
@@ -296,25 +296,34 @@ class PollController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $query = $em->createQueryBuilder()
-            ->select('p')
-            ->from('PROCERGSVPRCoreBundle:Poll', 'p')
-            ->orderBy('p.openingTime','DESC')
-            ->getQuery();
+        // $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 
-        $paginator  = $this->get('knp_paginator');
-        $entities = $paginator->paginate(
-            $query,
-            $this->get('request')->query->get('page', 1),
-            10
-        );
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        $votes    = $statsRepo->findTotalVotesByPoll(4);
+
+        foreach ($votes as $vote) {
+            $corede = $coredeRepo->find($vote['corede_id']);
+            $coredeId = $corede->getId();
+
+            $coredes[$coredeId]['corede'] = $corede->getName();
+            $coredes[$coredeId]['votes_online'] = $vote['votes_online'];
+            $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
+        }
+
+        $voters    = $statsRepo->findTotalVotersByPoll(4);
+        foreach ($voters as $vote) {
+            $coredeId = $vote['corede_id'];
+            $coredes[$coredeId]['voters_online'] = $vote['voters_online'];
+            $coredes[$coredeId]['voters_offline'] = $vote['voters_offline'];
+        }
 
         return array(
-            'entities' => $entities,
+            'coredes' => $coredes,
         );
     }
 
-    
+
     /**
      * Load steps by poll
      * @param \Symfony\Component\HttpFoundation\Request $request

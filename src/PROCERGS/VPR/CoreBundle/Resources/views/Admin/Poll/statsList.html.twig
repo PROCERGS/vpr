@@ -20,27 +20,21 @@
             <thead>
                 <tr>
                     <th width="30%">{{ 'admin.corede'|trans }}</th>
-                    <th width="15%">{{ 'admin.votes'|trans }}</th>
-                    <th width="15%">{{ 'admin.voters'|trans }}</th>
+                    <th width="15%">{{ 'admin.votes_online'|trans }}</th>
+                    <th width="15%">{{ 'admin.votes_offline'|trans }}</th>
+                    <th width="15%">{{ 'admin.voters_online'|trans }}</th>
+                    <th width="15%">{{ 'admin.voters_offline'|trans }}</th>
                 </tr>
             </thead>
             <tbody id="admin-poll-list">
-                {% if(entities.items) %}
-                    {% for entity in entities %}
-                        {% if loop.first %}
-                        <tr class="success">
-                        {% elseif loop.last %}
+                {% if(coredes) %}
+                    {% for corede in coredes %}
                         <tr>
-                        {% endif %}
-                            <td>{{ entity.name }}</td>
-                            <td>{% if entity.closingTime %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
-                            <td>{{ entity.description }}</td>
-                            <td>
-                                <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                {% if entity.apurationDone is null %}
-                                <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                                {% endif %}
-                            </td>
+                            <td>{{ corede.corede }}</td>
+                            <td>{{ corede.votes_online }}</td>
+                            <td>{{ corede.votes_offline }}</td>
+                            <td>{{ corede.voters_online }}</td>
+                            <td>{{ corede.voters_offline }}</td>
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -50,8 +44,4 @@
         </table>
     </div>
 
-
-    <div class="row text-center">
-        {{ knp_pagination_render(entities) }}
-    </div>
 {% endblock %}
