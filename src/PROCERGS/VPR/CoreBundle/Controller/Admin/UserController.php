@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\UserForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -20,12 +21,19 @@ class UserController extends Controller
     /**
      * @Route("/", name="admin_user_list")
      * @Route("/search", name="admin_user_search")
-     * @Method("GET")
+     * @Method({"GET","POST"})
      * @Template("PROCERGSVPRCoreBundle:Admin/User:index.html.twig")
      */
     public function searchAction(Request $request)
     {
-        return [];
+        $repo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:User');
+        if ($request->isMethod(Request::METHOD_POST)) {
+            $users = $repo->findBy(['email' => $request->get('query')]);
+        } else {
+            $users = $repo->findAll();
+        }
+
+        return compact('users');
     }
 
     /**
@@ -45,22 +53,10 @@ class UserController extends Controller
             throw $this->createNotFoundException('Unable to find User.');
         }
 
-        $form = $this->get('form.factory')->create(
-            $this->get('vpr.form.admin.user'),
-            $entity,
-            array('available_roles' => $this->getRoles())
-        );
+        $form = $this->createForm(new UserForm(), $entity);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $securityHelper = $this->get('vpr.security.helper');
-            $loggedUserLevel = $securityHelper->getLoggedInUserLevel();
-            $targetPersonLevel = $securityHelper->getTargetPersonLevel($entity);
-
-            if ($loggedUserLevel >= $targetPersonLevel) {
-                // TODO: persist changes
-            }
-
             return $this->redirectToRoute('admin_user_edit', compact('id'));
         }
 

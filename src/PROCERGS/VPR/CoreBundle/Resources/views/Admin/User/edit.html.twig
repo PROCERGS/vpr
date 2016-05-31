@@ -10,89 +10,22 @@
                 <span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}
             </a>
         </div>
-        {{ include('PROCERGSVPRCoreBundle:Admin/Person:search.html.twig', { 'widget_only': true, 'class': 'col-md-9 col-sm-12' }) }}
+        {{ include('PROCERGSVPRCoreBundle:Admin/User:search.html.twig', { 'widget_only': true, 'class': 'col-md-9 col-sm-12' }) }}
     </div>
-
-    {% for type, messages in app.session.flashbag.all() %}
-        {% for message in messages %}
-            <div class="alert alert-{{type}} alert-dismissable">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
 
     {{ form_start(form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
     {{ form_errors(form) }}
     <div class="form-group">
-        <label class="col-sm-3 control-label">{{ 'admin.id'|trans }}</label>
+        <label class="col-sm-3 control-label">{{ 'vpr.user.username.label'|trans }}</label>
         <div class="col-sm-9">
-            <p class="form-control-static">{{ entity.id }}</p>
+            <p class="form-control-static">{{ entity.username }}</p>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="col-sm-3 control-label">{{ 'admin.username'|trans }}</label>
-        <div class="col-sm-9">
-            <p class="form-control-static">{% if(entity.treVoter.id is defined) %}{{ entity.treVoter.id }}{% endif %}</p>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{ 'admin.name'|trans }}</label>
-        <div class="col-sm-9">
-            <p class="form-control-static">{{ entity.firstName }}</p>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{ 'admin.email'|trans }}</label>
+        <label class="col-sm-3 control-label">{{ 'vpr.user.email.label'|trans }}</label>
         <div class="col-sm-9">
             <p class="form-control-static">{{ entity.email }}</p>
-        </div>
-    </div>
-
-    {% if entity.treVoter %}
-        <div class="form-group">
-            <label class="col-sm-3 control-label">{{ 'admin.person.tre_info.label' | trans }}</label>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.voter_registration'|trans }}</label>
-            <div class="col-sm-8">
-                <p class="form-control-static">{{ entity.treVoter.id }}</p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.name'|trans }}</label>
-            <div class="col-sm-8">
-                <p class="form-control-static">{{ entity.treVoter.name }}</p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.city'|trans }}</label>
-            <div class="col-sm-8">
-                <p class="form-control-static">{{ entity.treVoter.city.name }} ({{ entity.treVoter.corede.name }})</p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-4 control-label">{{ 'admin.person.tre_info.voting_zone'|trans }}</label>
-            <div class="col-sm-8">
-                <p class="form-control-static">{{ entity.treVoter.votingZone }}</p>
-            </div>
-        </div>
-    {% endif %}
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{ 'admin.enabled'|trans }}</label>
-        <div class="col-sm-9">
-            <p class="form-control-static">{% if(entity.enabled) %}Sim{% else %}Não{% endif %}</p>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{{ 'admin.last_login'|trans }}</label>
-        <div class="col-sm-9">
-            <p class="form-control-static">{{ entity.lastLogin|date('d/m/Y H:i:s') }}</p>
         </div>
     </div>
 

@@ -5,14 +5,14 @@
 {% block content -%}
     {% for type, messages in app.session.flashbag.all() %}
         {% for message in messages %}
-            <div class="alert alert-{{type}} alert-dismissable">
+            <div class="alert alert-{{ type }} alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message }}
             </div>
         {% endfor %}
     {% endfor %}
 
-    {{ include('PROCERGSVPRCoreBundle:Admin/Person:search.html.twig') }}
+    {{ include('PROCERGSVPRCoreBundle:Admin/User:search.html.twig') }}
 
     <div class="row">
         <div class="col-md-12">
@@ -20,24 +20,27 @@
                 <table class="table table-striped table-bordered table-hover records_list">
                     <thead>
                         <tr>
-                            <th width="20%">{{ 'admin.username'|trans }}</th>
-                            <th width="30%">{{ 'admin.firstname'|trans }}</th>
-                            <th width="20%">{{ 'admin.email'|trans }}</th>
-                            <th width="5%">{{ 'admin.enabled'|trans }}</th>
-                            <th width="20%">{{ 'admin.created_at'|trans }}</th>
+                            <th width="20%">{{ 'vpr.user.username.label'|trans }}</th>
+                            <th width="20%">{{ 'vpr.user.email.label'|trans }}</th>
+                            <th width="20%">{{ 'vpr.user.created_at.label'|trans }}</th>
                             <th width="5%">{{ 'admin.actions'|trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for entity in entities %}
+                        {% for entity in users %}
                             <tr>
-                                <td><a title="{{ 'admin.show'|trans }}" href="{{ path('admin_person_edit', { 'id': entity.id, 'query': app.request.get('query') }) }}">{{ (entity.treVoter) ? entity.treVoter.id : entity.id }}</a></td>
-                                <td>{% if entity.treVoter %}<span class="label label-success">TRE</span>{% endif %} {{ (entity.treVoter ? entity.treVoter.name : entity.firstName) | title }}</td>
+                                <td>
+                                    <a title="{{ 'admin.show'|trans }}"
+                                       href="{{ path('admin_user_edit', { 'id': entity.id, 'query': app.request.get('query') }) }}">
+                                        {{ entity.username }}
+                                    </a>
+                                </td>
                                 <td>{{ entity.email }}</td>
-                                <td>{{ (entity.enabled ? 'admin.yes' : 'admin.no') | trans }}</td>
                                 <td>{{ entity.createdAt ? entity.createdAt|date('d/m/Y H:i:s') : '' }}</td>
                                 <td class="text-center">
-                                    <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_person_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-edit"></span></a>
+                                    <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
+                                       href="{{ path('admin_user_edit', { 'id': entity.id }) }}"><span
+                                                class="glyphicon glyphicon-edit"></span></a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -45,9 +48,5 @@
                 </table>
             </div>
         </div>
-    </div>
-
-    <div class="row text-center">
-        {{ knp_pagination_render(entities) }}
     </div>
 {% endblock %}
