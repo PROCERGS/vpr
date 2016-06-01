@@ -33,8 +33,7 @@ class UserForm extends AbstractType
                 [
                     "multiple" => true,
                     "expanded" => true,
-                    'label_attr' => array('class' => 'col-sm-3 control-label'),
-                    "roles_with_tags" => []
+                    'label_attr' => array('class' => 'col-sm-3 control-label')
                 ]
             );
     }
