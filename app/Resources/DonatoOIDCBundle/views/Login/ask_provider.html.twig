@@ -1,0 +1,30 @@
+{{ form_start(form, {'action': path('oidc_login'), 'method': 'POST'}) }}
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            {{ form_row(form.providerUrl, {
+                'label': 'Digite o endereço do seu Provedor de Identidade:',
+                'attr': {
+                    'placeholder': 'https://meu.rs.gov.br',
+                    'class': 'form-control col-md-12'
+                },
+                'label_attr': {
+                    'class': 'control-label'
+                }
+            }) }}
+            <div class="help-block">
+                Informe o endereço que você usa para fazer login.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="form-group">
+            {{ form_row(form.submit, {'label': 'Acessar', 'attr': {'class': 'btn center-block'}}) }}
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}
+{{ form(form) }}

@@ -21,20 +21,10 @@ class UserController extends Controller
         $user = $this->getUser();
 
         if (!($user instanceof User)) {
-            /** @var IdentityProviderManager $idpManager */
-            $idpManager = $this->get('oidc.idp.manager');
-            $defaultIdP = $idpManager->getDefault();
-            if ($defaultIdP) {
-                $providerId = $idpManager->getDefault()->getId();
-                $response = $this->redirectToRoute('oidc_login', compact('providerId'));
-            } else {
-                $response = $this->redirectToRoute('oidc_login');
-            }
-
             $key = '_security.main.target_path';
             $request->getSession()->set($key, $request->getRequestUri());
 
-            return $response;
+            return $this->redirectToRoute('admin_login');
         }
 
         if ($user->getConfirmationCode() === $code) {
