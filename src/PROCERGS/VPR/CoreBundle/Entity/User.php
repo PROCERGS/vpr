@@ -47,6 +47,21 @@ class User implements UserInterface, \Serializable
     /**
      * @var string
      *
+     * @ORM\Column(type="string", length=255, unique=false, nullable=false)
+     */
+    protected $name;
+
+    /**
+     * @var City
+     *
+     * @ORM\ManyToOne(targetEntity="City")
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     */
+    protected $city;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="string", length=255, unique=true, nullable=true)
      */
     protected $email;
@@ -92,10 +107,49 @@ class User implements UserInterface, \Serializable
 
     /**
      * @param array|null $roles
+     * @return User
      */
     public function setRoles(array $roles = null)
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return User
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return City
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param City $city
+     * @return User
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
 
         return $this;
     }

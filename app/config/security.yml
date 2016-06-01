@@ -3,22 +3,28 @@ becklyn_static_roles:
         ROLE_ADMIN:
             title: "Administrador Geral"
             included_roles: [ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_BALLOTBOX, ROLE_MANAGE_USER]
+            tags: [admin, superadmin]
         ROLE_SUPER_ADMIN:
             title: "Super Admin"
             included_roles: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, ROLE_COREDE]
+            tags: [superadmin]
 
         ROLE_COORDINATOR:
             title: "Coordenador"
             included_roles: [ROLE_USER, ROLE_ADMIN_MENU]
+            tags: [admin, superadmin]
         ROLE_COREDE:
             title: "Corede"
             included_roles: [ROLE_COORDINATOR]
+            tags: [admin, superadmin]
         ROLE_CRUD_POLL:
             title: "Admin de Votação"
             included_roles: [ROLE_COORDINATOR]
+            tags: [admin, superadmin]
         ROLE_CRUD_BALLOTBOX:
             title: "Admin de Urnas"
             included_roles: [ROLE_COORDINATOR]
+            tags: [admin, superadmin]
         ROLE_MANAGE_USER:
             title: "Admin de Usuários"
             included_roles: [ROLE_COORDINATOR]
@@ -26,9 +32,11 @@ becklyn_static_roles:
         ROLE_STATS:
             title: "Estatísticas"
             included_roles: [ROLE_USER]
+            tags: [admin, superadmin]
         ROLE_USER:
             title: "User"
             description: "The default frontend user"
+            tags: [admin, superadmin]
 
         ROLE_ALLOWED_TO_SWITCH:
             title: ""

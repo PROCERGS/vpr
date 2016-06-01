@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
+use PROCERGS\VPR\CoreBundle\Entity\User;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\UserForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -41,7 +42,7 @@ class UserController extends Controller
      *
      * @Route("/{id}/edit", name="admin_user_edit")
      * @Method({"GET","POST"})
-     * @Template()
+     * @Template("PROCERGSVPRCoreBundle:Admin/User:form.html.twig")
      */
     public function editAction(Request $request, $id)
     {
@@ -57,7 +58,6 @@ class UserController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush($entity);
 
@@ -70,20 +70,31 @@ class UserController extends Controller
         );
     }
 
-    private function getRoles()
+    /**
+     * Finds and displays an User entity.
+     *
+     * @Route("/new", name="admin_user_new")
+     * @Method({"GET","POST"})
+     * @Template("PROCERGSVPRCoreBundle:Admin/User:form.html.twig")
+     */
+    public function newAction(Request $request)
     {
-        $rolesHierarchy = $this->getParameter('security.role_hierarchy.roles');
+        $entity = new User();
 
-        $roles = array();
-        foreach ($rolesHierarchy as $role => $children) {
-            $roles[$role] = $children;
-            foreach ($children as $child) {
-                if (!array_key_exists($child, $roles)) {
-                    $roles[$child] = 0;
-                }
-            }
+        $form = $this->createForm(new UserForm(), $entity);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush($entity);
+
+            return $this->redirectToRoute('admin_user_edit', ['id' => $entity->getId()]);
         }
 
-        return array_keys($roles);
+        return array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+        );
     }
 }

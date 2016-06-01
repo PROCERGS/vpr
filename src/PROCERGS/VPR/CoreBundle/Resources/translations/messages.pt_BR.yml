@@ -238,6 +238,11 @@ admin.person.tre_info:
     voting_zone: Zona de Votação
 account.activated: Sua conta foi ativada
 vpr.user:
+    admin.action:
+        new: Novo
+        edit: Editar
+    name.label: Nome
+    city.label: Município
     username.label: Código de Usuário
     email.label: Email
     created_at.label: Data de Criação

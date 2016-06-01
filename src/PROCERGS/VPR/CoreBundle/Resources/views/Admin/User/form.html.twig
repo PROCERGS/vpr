@@ -1,6 +1,6 @@
 {% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
 {% set contentName = 'admin_users'|trans %}
-{% set actionName = 'admin.show'|trans %}
+{% set actionName = ('vpr.user.admin.action.' ~ (entity.id != null ? 'edit' : 'new')) | trans %}
 {% set backParams = app.request.get('query') ? { 'query': app.request.get('query') } : { } %}
 
 {% block content -%}
@@ -15,10 +15,12 @@
 
     {{ form_start(form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
     {{ form_errors(form) }}
+
     <div class="form-group">
-        <label class="col-sm-3 control-label">{{ 'vpr.user.username.label'|trans }}</label>
+        <label class="col-sm-3 control-label">{{ 'vpr.user.name.label'|trans }}</label>
         <div class="col-sm-9">
-            <p class="form-control-static">{{ entity.username }}</p>
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
 
@@ -26,9 +28,26 @@
         <label class="col-sm-3 control-label">{{ 'vpr.user.email.label'|trans }}</label>
         <div class="col-sm-9">
             {{ form_errors(form.email) }}
-            {{ form_widget(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'vpr.user.city.label'|trans }}</label>
+        <div class="col-sm-9">
+            {{ form_errors(form.city) }}
+            {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+
+    {% if entity.id != null %}
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{ 'vpr.user.username.label'|trans }}</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.username }}</p>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="form-group">
         <label class="col-sm-3 control-label">{{ 'admin.created_at'|trans }}</label>
