@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PersonType;
 
 /**
  * User controller.
@@ -27,7 +26,8 @@ class UserController extends Controller
     public function searchAction(Request $request)
     {
         $repo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:User');
-        if ($request->isMethod(Request::METHOD_POST)) {
+        $query = $request->get('query', null);
+        if ($request->isMethod(Request::METHOD_POST) || $query !== null) {
             $users = $repo->findBy(['email' => $request->get('query')]);
         } else {
             $users = $repo->findAll();
@@ -57,6 +57,10 @@ class UserController extends Controller
 
         $form->handleRequest($request);
         if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity);
+            $em->flush($entity);
+
             return $this->redirectToRoute('admin_user_edit', compact('id'));
         }
 

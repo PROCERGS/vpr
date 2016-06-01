@@ -118,3 +118,17 @@ a.save-sorted-step{
 .inline-flex {
     display: inline-flex;
 }
+
+/* User Form */
+form .user-roles {
+    margin-top: 8px;
+}
+form .user-roles input {
+    display: inline-block;
+    float: left;
+    clear: both;
+}
+form .user-roles label {
+    display: inline-block;
+    float: left;
+}

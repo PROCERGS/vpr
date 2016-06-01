@@ -91,6 +91,16 @@ class User implements UserInterface, \Serializable
     }
 
     /**
+     * @param array|null $roles
+     */
+    public function setRoles(array $roles = null)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getPassword()
