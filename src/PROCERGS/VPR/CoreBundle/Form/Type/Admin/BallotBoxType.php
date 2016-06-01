@@ -64,7 +64,7 @@ class BallotBoxType extends AbstractType
                 'property' => 'name',
                 'required' => false
             ))
-            ->add('email', 'email', array('max_length' => 15, 'required' => false))
+            ->add('email', 'email', array('max_length' => 255, 'required' => false))
             ->add('fone', 'text', array('max_length' => 255, 'pattern'=>"\d*{8,}", 'required' => false))
         ;
     }

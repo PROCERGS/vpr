@@ -106,70 +106,79 @@ class BallotBoxController extends Controller
 
         $params = $request->request->all();
 
-        if ($params['selected'] == 1 && isset($params['ballotbox'])) {
-            $queryBuilder = $em->createQueryBuilder();
-            $queryBuilder
-                ->select('b')
-                ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
-                ->where("b.id IN(:ballotboxes)");
-            $queryBuilder->setParameter('ballotboxes', $params['ballotbox']);
-            $query = $queryBuilder->getQuery();
-            $result = $query->getResult();
+        if ($params['selected'] == 1) {
+            foreach ($params['ballotboxes'] as $ballot) {
+                if (!is_numeric($ballot)) {
+                    die();
+                }
+            }
+            $ballotboxes = implode(", ", $params['ballotboxes']);
+            $extra = "where b.id in (" . $ballotboxes . ")";
         } else {
             $session = $session->get('ballotBox_filters');
             $filters = $session->request->get('procergs_vpr_corebundle_ballotbox_filter');
 
-            $queryBuilder = $em->createQueryBuilder();
-            $queryBuilder
-                ->select('b')
-                ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
-                ->where('1=1')
-                ->leftJoin('b.city', 'c')
-                ->innerJoin('b.poll', 'p')
-                ->orderBy('p.openingTime', 'DESC')
-                ->addOrderBy('c.name', 'ASC')
-                ->addOrderBy('b.address', 'ASC');
+            $extra = " left join city c on c.id = b.city_id ";
+            $extra .= " inner join poll p on p.id = b.poll_id ";
+            $extra .= " where email is not null ";
+
 
             if (isset($filters['poll'])) {
-                $queryBuilder->andWhere('b.poll = :poll');
-                $queryBuilder->setParameter('poll', $filters['poll']);
+                $extra .= " and b.poll_id = " . $filters['poll'];
             } else {
                 $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-                $queryBuilder->andWhere('b.poll = :poll');
-                $queryBuilder->setParameter('poll', $poll->getId());
-                $form->get('poll')->setData($poll);
+                $extra .= " and b.poll_id = " . $poll->getId();
             }
 
             if (isset($filters['city'])) {
-                $queryBuilder->andWhere('b.city = :city');
-                $queryBuilder->setParameter('city', $filters['city']);
+                $extra .= " and b.city_id = " . $filters['city'];
             }
 
-            if (!is_null($filters['is_online'])) {
-                $queryBuilder->andWhere('b.isOnline = :online');
-                $queryBuilder->setParameter('online', $filters['is_online']);
+            if ($filters['is_online']) {
+                $extra .= " and b.is_online = true";
             } else {
-                $queryBuilder->andWhere('b.isOnline = :online');
-                $queryBuilder->setParameter('online', false);
+                $extra .= " and b.is_online = false";
             }
-
-            $query = $queryBuilder->getQuery();
-            $result = $query->getResult();
         }
+
+        $connection = $em->getConnection();
 
         if ($params['form_type'] == 1) {
-            $this->sendBallotRequest($result);
+            $sql = "select b.email, string_agg('Pin: ' || b.pin::text, E'\\n') as content from ballot_box b ";
+            $sql .= $extra;
+            $sql .= " group by email ";
         } else {
-            $this->sendBallotData($result);
+            $sql = " select b.email, string_agg('Pin: ' || b.pin::text || ' - senha: ' || b.secret, E'\\n') as content from ballot_box b ";
+            $sql .= $extra;
+            $sql .= " group by email ";
         }
-    }
+        $statement = $connection->prepare($sql);
+        $statement->execute();
+        $results = $statement->fetchAll();
 
-    private function sendBallotRequest($result) {
-        die("send request");
-    }
+        foreach ($results as $result) {
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Informações de Urna Offline')
+                ->setFrom($this->getParameter('mailer_sender_mail'),
+                    $this->getParameter('mailer_sender_name'))
+                ->setTo($result['email']);
 
-    private function sendBallotData($result) {
-        die("send data");
+            if ($params['form_type'] == 1) {
+                $message->setBody(
+                    $this->renderView(
+                        'Emails/ballotboxesRequest.txt.twig', array('content' => $result['content'])
+                    ), 'text/plain');
+            } else {
+                $message->setBody(
+                    $this->renderView(
+                        'Emails/ballotboxesSecret.txt.twig', array('content' => $result['content'])
+                    ), 'text/plain');
+            }
+
+            $this->get('mailer')->send($message);
+        }
+
+        return $this->redirectToRoute('admin_ballotbox');
     }
 
     /**

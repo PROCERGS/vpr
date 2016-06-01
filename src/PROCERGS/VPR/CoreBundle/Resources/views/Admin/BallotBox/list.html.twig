@@ -40,7 +40,7 @@
                 {% if(entities.items) %}
                     {% for entity in entities %}
                         <tr>
-                            <td><input type="checkbox" name="ballotbox[]" value="{{entity.id}}" class="ballot-check"></input></td>
+                            <td><input type="checkbox" name="ballotboxes[]" value="{{entity.id}}" class="ballot-check"></input></td>
                             <td>{{ entity.pin }}</td>
                             <td>{{ entity.email }}</td>
                             <td>{{ entity.fone }}</td>
