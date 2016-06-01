@@ -47,7 +47,11 @@
             } else {
                 $(".ballot-check").not(this).prop("checked", false);
             }
+        });
 
+        $(".btn-form-type").on("click", function() {
+            var data = $(this).data("type");
+            $("#form-type").val(data);
         })
     </script>
 {% endblock %}

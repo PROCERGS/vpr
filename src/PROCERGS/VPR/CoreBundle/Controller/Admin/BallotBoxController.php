@@ -83,12 +83,93 @@ class BallotBoxController extends Controller
         $query = $queryBuilder->getQuery();
 
         $page     = $this->get('request')->query->get('page', 1);
+
+        ;
+
         $entities = $paginator->paginate($query, $page, 20);
 
         return array(
             'entities' => $entities,
             'form' => $form->createView()
         );
+    }
+
+    /**
+     * BallotBox send.
+     *
+     * @Route("/send", name="admin_ballotbox_send")
+     * @Template()
+     */
+    public function sendAction(Request $request) {
+        $em        = $this->getDoctrine()->getManager();
+        $session   = $this->getRequest()->getSession();
+
+        $params = $request->request->all();
+
+        if ($params['selected'] == 1 && isset($params['ballotbox'])) {
+            $queryBuilder = $em->createQueryBuilder();
+            $queryBuilder
+                ->select('b')
+                ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
+                ->where("b.id IN(:ballotboxes)");
+            $queryBuilder->setParameter('ballotboxes', $params['ballotbox']);
+            $query = $queryBuilder->getQuery();
+            $result = $query->getResult();
+        } else {
+            $session = $session->get('ballotBox_filters');
+            $filters = $session->request->get('procergs_vpr_corebundle_ballotbox_filter');
+
+            $queryBuilder = $em->createQueryBuilder();
+            $queryBuilder
+                ->select('b')
+                ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
+                ->where('1=1')
+                ->leftJoin('b.city', 'c')
+                ->innerJoin('b.poll', 'p')
+                ->orderBy('p.openingTime', 'DESC')
+                ->addOrderBy('c.name', 'ASC')
+                ->addOrderBy('b.address', 'ASC');
+
+            if (isset($filters['poll'])) {
+                $queryBuilder->andWhere('b.poll = :poll');
+                $queryBuilder->setParameter('poll', $filters['poll']);
+            } else {
+                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+                $queryBuilder->andWhere('b.poll = :poll');
+                $queryBuilder->setParameter('poll', $poll->getId());
+                $form->get('poll')->setData($poll);
+            }
+
+            if (isset($filters['city'])) {
+                $queryBuilder->andWhere('b.city = :city');
+                $queryBuilder->setParameter('city', $filters['city']);
+            }
+
+            if (!is_null($filters['is_online'])) {
+                $queryBuilder->andWhere('b.isOnline = :online');
+                $queryBuilder->setParameter('online', $filters['is_online']);
+            } else {
+                $queryBuilder->andWhere('b.isOnline = :online');
+                $queryBuilder->setParameter('online', false);
+            }
+
+            $query = $queryBuilder->getQuery();
+            $result = $query->getResult();
+        }
+
+        if ($params['form_type'] == 1) {
+            $this->sendBallotRequest($result);
+        } else {
+            $this->sendBallotData($result);
+        }
+    }
+
+    private function sendBallotRequest($result) {
+        die("send request");
+    }
+
+    private function sendBallotData($result) {
+        die("send data");
     }
 
     /**
