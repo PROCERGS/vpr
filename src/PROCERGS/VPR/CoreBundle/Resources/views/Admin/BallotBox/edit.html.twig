@@ -116,6 +116,11 @@
     </div>
 
     <div class="form-group ballotbox-offline-itens">
+        <label class="col-sm-2 control-label">{{ 'admin.ddd'|trans }}</label>
+        <div class="col-sm-4">
+            {{ form_errors(edit_form.ddd) }}
+            {{ form_widget(edit_form.ddd, {'attr': {'class': 'form-control'}}) }}
+        </div>
         <label class="col-sm-2 control-label">{{ 'admin.fone'|trans }}</label>
         <div class="col-sm-4">
             {{ form_errors(edit_form.fone) }}

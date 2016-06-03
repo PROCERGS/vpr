@@ -12,4 +12,44 @@ use Doctrine\ORM\EntityRepository;
  */
 class SentMessageRepository extends EntityRepository
 {
+    private static $__save1 = NULL;
+    private static $__save2 = NULL;
+    private static $__save3 = NULL;
+    
+    public function save(SentMessage &$obj)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        if (null === self::$__save1) {
+            $sql = "insert into sent_message (ballot_box_id, destination, sms_code, sent_date, sent_message_type_id, sent_message_mode_id, last_type, last_mode, success) values (?,?,?,?,?,?,?,?,?)";
+            self::$__save1 = $conn->prepare($sql);
+            $sql = "update sent_message set last_type = false where ballot_box_id = ? and sent_message_type_id = ?";
+            self::$__save2 = $conn->prepare($sql);
+            $sql = "update sent_message set last_mode = false where ballot_box_id = ? and sent_message_mode_id = ?";
+            self::$__save3 = $conn->prepare($sql);
+        }
+        $result = self::$__save2->execute(array(
+            $obj->getBallotBoxId(),
+            $obj->getSentMessageTypeId()
+        ));
+        $result = self::$__save3->execute(array(
+            $obj->getBallotBoxId(),
+            $obj->getSentMessageModeId()
+        ));
+        $obj->setSentDate(new \DateTime());
+        $obj->setLastMode(true);
+        $obj->setLastType(true);
+        $result = self::$__save1->execute(array(
+            $obj->getBallotBoxId(),
+            $obj->getDestinationToDb(),
+            $obj->getSmsCodeToDb(),
+            $obj->getSentDateToDb(),
+            $obj->getSentMessageTypeId(),
+            $obj->getSentMessageModeId(),
+            $obj->getLastTypeToDb(),
+            $obj->getLastModeToDb(),
+            $obj->getSuccessToDb()
+        ));
+        return $result;
+    }
+    
 }

@@ -14,6 +14,7 @@ use PROCERGS\VPR\CoreBundle\Entity\City;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxType;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
+use PROCERGS\VPR\CoreBundle\Entity\SentMessage;
 
 /**
  * BallotBox controller.
@@ -101,85 +102,149 @@ class BallotBoxController extends Controller
      * @Template()
      */
     public function sendAction(Request $request) {
-        $em        = $this->getDoctrine()->getManager();
-        $session   = $this->getRequest()->getSession();
-
-        $params = $request->request->all();
-
-        if ($params['selected'] == 1) {
-            foreach ($params['ballotboxes'] as $ballot) {
-                if (!is_numeric($ballot)) {
-                    die();
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        try {
+            $params = $request->request->all();
+    
+            if ($params['selection_type'] == 1) {
+                foreach ($params['ballotboxes'] as $ballot) {
+                    if (!is_numeric($ballot)) {
+                        throw new \Exception("Urna deve ser numerico");
+                    }
+                }
+                $ballotboxes = implode(", ", $params['ballotboxes']);
+                $extra = "where b.id in (" . $ballotboxes . ")";
+            } else {
+                $session = $session->get('ballotBox_filters');
+                $filters = $session->request->get('procergs_vpr_corebundle_ballotbox_filter');
+    
+                $extra = " left join city c on c.id = b.city_id ";
+                $extra .= " where email is not null ";
+    
+    
+                if (isset($filters['poll'])) {
+                    $extra .= " and b.poll_id = " . $filters['poll'];
+                } else {
+                    $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+                    $extra .= " and b.poll_id = " . $poll->getId();
+                }
+    
+                if (isset($filters['city'])) {
+                    $extra .= " and b.city_id = " . $filters['city'];
+                }
+    
+                if ($filters['is_online']) {
+                    $extra .= " and b.is_online = true";
+                } else {
+                    $extra .= " and b.is_online = false";
                 }
             }
-            $ballotboxes = implode(", ", $params['ballotboxes']);
-            $extra = "where b.id in (" . $ballotboxes . ")";
-        } else {
-            $session = $session->get('ballotBox_filters');
-            $filters = $session->request->get('procergs_vpr_corebundle_ballotbox_filter');
+    
+            $connection = $em->getConnection();
+            $connection->beginTransaction();
+    
+    		$sql = " select to_char(p.apuration_time, 'DD/MM/YYYY HH24:MI:SS') apuration_time, b.email, string_agg('PIN:' || b.pin::text || ' - senha:' || b.secret || ' - Dt. Fechamento:' ||  to_char(coalesce(b.closing_time, p.closing_time), 'DD/MM/YYYY HH24:MI:SS') , E'\\n') as content, string_agg(b.id::text, ','::text) as ids from ballot_box b ";
+    		$sql .= " inner join poll p on p.id = b.poll_id ";
+    		$sql .= $extra;
+    		$sql .= " and b.email is not null ";
+    		$sql .= " group by p.apuration_time, email ";
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+            $statement->setFetchMode(\PDO::FETCH_ASSOC);
+            $msg2 = "
+<p>Você foi autorizado a utilizar um urna offline do sistema <a href='https://vota.rs.gov.br'>Consulta Popular<a></p>
+<p>A seguir está a lista de PINs, senhas e horários para as urnas offline autorizadas que devem ser devolvidas até <strong>%s</strong></p>
+<p>PIN;SENHA</p>
+%s
+<p>Certifique-se que seu aplicativo está atualizado e que seu smartphone atenda aos requisitos, descritos na loja do respectivo aparelho.</p>
+<p>Caso tenha dificuldades em consultar a versão atual do seu aplicativo, entre em contato com a SEPLAN ou com a PROCERGS.</p>
+<p>Evite imprevistos, envie com antecedência.</p>
+";
 
-            $extra = " left join city c on c.id = b.city_id ";
-            $extra .= " inner join poll p on p.id = b.poll_id ";
-            $extra .= " where email is not null ";
-
-
-            if (isset($filters['poll'])) {
-                $extra .= " and b.poll_id = " . $filters['poll'];
-            } else {
-                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-                $extra .= " and b.poll_id = " . $poll->getId();
+            $msg1 = "
+<p>Você foi requisitado a transmitr um urna offline do sistema <a href='https://vota.rs.gov.br'>Consulta Popular<a></p>
+<p>A seguir está a lista de PINs que você deve transmitir até <strong>%s</strong></p>
+%s
+<p>Certifique-se que seu aplicativo está atualizado e que seu smartphone atenda aos requisitos, descritos na loja do respectivo aparelho.</p>
+<p>Caso tenha dificuldades em consultar a versão atual do seu aplicativo, entre em contato com a SEPLAN ou com a PROCERGS.</p>
+";
+            $repoSentMessage = $em->getRepository('PROCERGSVPRCoreBundle:SentMessage');
+    		while ($result = $statement->fetch()) {    		    
+    		    try {
+    		        $success = true;
+    		        $message = \Swift_Message::newInstance();
+    		        $message->setFrom($this->getParameter('mailer_sender_mail'), $this->getParameter('mailer_sender_name'));
+    		        $message->setTo($result['email']);
+    		        if ($params['message_type'] == SentMessage::TYPE_REQUISICAO) {
+    		            $message->setSubject('Autorizacao para urna offline');
+    		            $message->setBody(sprintf($msg2, $result['apuration_time'], $result['content']), 'text/plain');
+    		        } else {
+    		            $message->setSubject('Urgente! Retorno de urna offline');
+    		            $message->setBody(sprintf($msg1, $result['apuration_time'], $result['content']), 'text/plain');
+    		        }
+    		        $this->get('mailer')->send($message);
+    		    } catch (\Exception $e) {
+    		        $success = false;
+    		    }
+    		    $ids = explode(',', $result['ids']);
+    		    foreach ($ids as $id) {
+    		        $log = new SentMessage();
+    		        $log->setBallotBoxId($id);
+    		        $log->setSentMessageTypeId($params['message_type']);
+    		        $log->setSentMessageModeId(SentMessage::MODE_EMAIL);
+    		        $log->setDestination($result['email']);
+    		        $log->setSuccess($success);
+    		        $repoSentMessage->save($log);
+    		    }
+    		}
+    		$sql = " select to_char(p.apuration_time, 'DD/MM/YYYY HH24:MI:SS') apuration_time, b.ddd, b.fone, b.pin, b.secret, to_char(coalesce(b.closing_time, p.closing_time), 'DD/MM/YYYY HH24:MI:SS') as closing_time, b.id from ballot_box b ";
+    		$sql .= " inner join poll p on p.id = b.poll_id ";
+    		$sql .= $extra;
+    		$sql .= " and b.fone is not null and b.ddd is not null ";
+    		$statement = $connection->prepare($sql);
+    		$statement->execute();
+    		$statement->setFetchMode(\PDO::FETCH_ASSOC);        
+    		$msg2 = "Autorizacao urna offline da consulta popular. PIN: %s SENHA: %s ENCERRAMENTO: %s";
+            $msg1 = "Urgente! Transmita urna offline consulta popular de PIN %s ate %s";
+            
+            $smsHelper = $this->get('vpr.smshelper');        
+            $smsHelper->setAplicacao('votação de prioridades');
+            $smsHelper->setRemetente('PROCERGS');
+            while ($result = $statement->fetch()) {
+                try {
+                    $success = true;
+                    $protocolo = null;
+                    $smsHelper->setDdd($result['ddd']);
+                    $smsHelper->setTelefone($result['fone']);
+                    if ($params['message_type'] == SentMessage::TYPE_REQUISICAO) {
+                        $smsHelper->setMensagem(sprintf($msg2, $result['pin'], $result['secret'], $result['closing_time']));
+                    } else {
+                        $smsHelper->setMensagem(sprintf($msg1, $result['pin'], $result['apuration_time']));
+                    }
+                    $protocolo = $smsHelper->send();
+                } catch (\Exception $e) {
+                    $success = false;
+                }
+                $log = new SentMessage();
+                $log->setBallotBoxId($result['id']);
+                $log->setSentMessageTypeId($params['message_type']);
+                $log->setSentMessageModeId(SentMessage::MODE_SMS);
+                $log->setDestination($result['ddd'].$result['fone']);
+                $log->setSmsCode($protocolo);
+                $log->setSuccess($success);
+                $repoSentMessage->save($log);
             }
-
-            if (isset($filters['city'])) {
-                $extra .= " and b.city_id = " . $filters['city'];
-            }
-
-            if ($filters['is_online']) {
-                $extra .= " and b.is_online = true";
-            } else {
-                $extra .= " and b.is_online = false";
-            }
+            $this->get('session')->getFlashBag()->add('success', 'Mensagens enviadas com sucesso');
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollback();
+            $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
         }
-
-        $connection = $em->getConnection();
-
-        if ($params['form_type'] == 1) {
-            $sql = "select b.email, string_agg('Pin: ' || b.pin::text, E'\\n') as content from ballot_box b ";
-            $sql .= $extra;
-            $sql .= " group by email ";
-        } else {
-            $sql = " select b.email, string_agg('Pin: ' || b.pin::text || ' - senha: ' || b.secret, E'\\n') as content from ballot_box b ";
-            $sql .= $extra;
-            $sql .= " group by email ";
-        }
-        $statement = $connection->prepare($sql);
-        $statement->execute();
-        $results = $statement->fetchAll();
-
-        foreach ($results as $result) {
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Informações de Urna Offline')
-                ->setFrom($this->getParameter('mailer_sender_mail'),
-                    $this->getParameter('mailer_sender_name'))
-                ->setTo($result['email']);
-
-            if ($params['form_type'] == 1) {
-                $message->setBody(
-                    $this->renderView(
-                        'Emails/ballotboxesRequest.txt.twig', array('content' => $result['content'])
-                    ), 'text/plain');
-            } else {
-                $message->setBody(
-                    $this->renderView(
-                        'Emails/ballotboxesSecret.txt.twig', array('content' => $result['content'])
-                    ), 'text/plain');
-            }
-
-            $this->get('mailer')->send($message);
-        }
-
         return $this->redirectToRoute('admin_ballotbox');
     }
+    
+    
 
     /**
      * Creates a new BallotBox entity.
@@ -245,6 +310,16 @@ class BallotBoxController extends Controller
     				throw new \Exception("Necessario colocar tanto a data de abertura quanto a data de fechamento");
     			}
     		}
+    	}
+    	if ($entity->getFone() || $entity->getDdd()) {
+    	    if (!$entity->getFone() || !$entity->getDdd()) {
+    	        throw new \Exception("Colocar ddd e fone");
+    	    }
+    	}
+    	if ($entity->getDdd()) {
+    	    if (!is_numeric($entity->getDdd()) || strlen($entity->getDdd()) !=2) {
+    	        throw new \Exception("Colocar um ddd com 2 numeros");
+    	    }
     	}
     	if ($entity->getFone()) {
     		if (!is_numeric($entity->getFone()) || strlen($entity->getFone()) < 8) {

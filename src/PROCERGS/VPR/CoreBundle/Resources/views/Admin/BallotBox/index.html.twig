@@ -49,9 +49,20 @@
             }
         });
 
-        $(".btn-form-type").on("click", function() {
+        $(".btn-form-type").on("click", function() {            
             var data = $(this).data("type");
-            $("#form-type").val(data);
-        })
+            $("#message-type").val(data);
+        });
+        $(".btn-selection-type").click(function(e){
+            if ($(this).val() == 1) {
+                if (!$('#ballotbox-items-form input.ballot-check:checked').length) {
+                    $('#myModal').modal('hide');
+                    alert('Por favor, selecione alguma urna');
+                    return;
+                }
+            }
+            $("#selection-type").val($(this).val());
+            $('#ballotbox-items-form').submit();            
+        });
     </script>
 {% endblock %}

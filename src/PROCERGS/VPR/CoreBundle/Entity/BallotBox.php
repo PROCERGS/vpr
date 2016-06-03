@@ -163,10 +163,15 @@ class BallotBox
     /**
      * @var string
      *
-     * @ORM\Column(name="fone", type="string", length=15, nullable=true)
+     * @ORM\Column(name="fone", type="string", length=9, nullable=true)
      */
     protected $fone;
-    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ddd", type="string", length=2, nullable=true)
+     */
+    protected $ddd;
 
     public function __construct()
     {
@@ -591,6 +596,17 @@ class BallotBox
     {
     	$this->email = $var;
     	return $this;
+    }
+    
+    public function getDdd()
+    {
+        return $this->ddd;
+    }
+    
+    public function setDdd($var)
+    {
+        $this->ddd = $var;
+        return $this;
     }
     
 }
