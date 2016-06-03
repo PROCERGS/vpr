@@ -609,4 +609,26 @@ class BallotBox
         return $this;
     }
     
+    protected static $allowedStatus1 = array(1=> 'Disponível', 2=> 'Ativa', 3=> 'Encerrada');
+    public static function getAllowedStatus1($var = null)
+    {
+        if (null === $var) {
+            return self::$allowedStatus1;
+        } else {
+            return self::$allowedStatus1[$var];
+        }
+    }
+    
+    public function getStatus1Label()
+    {
+        if ( null === $this->setupAt) {
+            return self::$allowedStatus1[1];
+        } else if ( null === $this->closedAt) {
+            return self::$allowedStatus1[2];
+        } else {
+            return self::$allowedStatus1[3];
+        }
+    }
+    
+        
 }

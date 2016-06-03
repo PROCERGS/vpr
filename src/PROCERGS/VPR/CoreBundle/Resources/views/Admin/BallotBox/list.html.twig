@@ -46,14 +46,7 @@
                             <td>{{ entity.email }}</td>
                             <td>{{ entity.fone }}</td>
                             <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
-                            <td>
-                                {% if (entity.setupAt == null) %}
-                                    Disponível
-                                {% elseif (entity.closedAt == null) %}
-                                    Ativa
-                                {% else %}
-                                    Encerrada
-                                {% endif %}
+                            <td>{{ entity.getStatus1Label() }}</td>
                             </td>
                             <td class="text-center">
                                 <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>

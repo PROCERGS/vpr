@@ -80,6 +80,21 @@ class BallotBoxController extends Controller
             $queryBuilder->andWhere('b.isOnline = :online');
             $queryBuilder->setParameter('online', false);
         }
+        switch ($filters['status1']) {
+            case 1:
+                $queryBuilder->andWhere('b.setupAt is null');
+            break;
+            case 2:
+                $queryBuilder->andWhere('b.setupAt is not null and b.closedAt is null');
+            break;
+            case 3:
+                $queryBuilder->andWhere('b.setupAt is not null and b.closedAt is not null');
+            break;
+        }
+        if ($filters['pin']) {
+            $queryBuilder->andWhere('b.pin = :pin');
+            $queryBuilder->setParameter('pin', $filters['pin']);
+        }
 
         $query = $queryBuilder->getQuery();
 
@@ -123,21 +138,34 @@ class BallotBoxController extends Controller
                 $extra .= " where email is not null ";
     
     
-                if (isset($filters['poll'])) {
+                if (isset($filters['poll']) && $filters['poll']) {
                     $extra .= " and b.poll_id = " . $filters['poll'];
-                } else {
-                    $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-                    $extra .= " and b.poll_id = " . $poll->getId();
                 }
-    
-                if (isset($filters['city'])) {
+                if (isset($filters['city']) && $filters['city']) {
                     $extra .= " and b.city_id = " . $filters['city'];
                 }
-    
-                if ($filters['is_online']) {
-                    $extra .= " and b.is_online = true";
-                } else {
-                    $extra .= " and b.is_online = false";
+                if (isset($filters['is_online'])) {
+                    if ($filters['is_online']) {
+                        $extra .= " and b.is_online = true";
+                    } else {
+                        $extra .= " and b.is_online = false";
+                    }
+                }
+                if (isset($filters['status1'])) {
+                    switch ($filters['status1']) {
+                        case 1:
+                            $extra .= " and b.setup_at is null";
+                            break;
+                        case 2:
+                            $extra .= " and (b.setup_at is not null and b.closed_at is null)";
+                            break;
+                        case 3:
+                            $extra .= " and (b.setup_at is not null and b.closed_at is not null)";
+                            break;
+                    }
+                }
+                if (isset($filters['pin']) && $filters['pin']) {
+                    $extra .= " and b.pin = " .$filters['pin'];
                 }
             }
     
