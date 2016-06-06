@@ -4,9 +4,52 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "664306637efbf3698e1695aef7bcf5e4",
-    "content-hash": "3a256699f236af8088ca9cc099330c88",
+    "hash": "2a8e129ee9213132aac71286bb2eeb2e",
+    "content-hash": "6bf83caefca39ce31f58bfb3f2c2723b",
     "packages": [
+        {
+            "name": "becklyn/static-roles-bundle",
+            "version": "1.0.0-alpha.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Becklyn/BecklynStaticRolesBundle.git",
+                "reference": "59c6c24c6d162e103541a9488fc5228207a79c55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Becklyn/BecklynStaticRolesBundle/zipball/59c6c24c6d162e103541a9488fc5228207a79c55",
+                "reference": "59c6c24c6d162e103541a9488fc5228207a79c55",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5",
+                "symfony/config": "^2.7",
+                "symfony/security-core": "^2.7"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Becklyn\\StaticRolesBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Becklyn",
+                    "homepage": "http://becklyn.com/"
+                }
+            ],
+            "description": "This bundle provides a simple way to define all available roles and their hierarchy in your configuration",
+            "homepage": "https://github.com/Becklyn/BecklynStaticRolesBundle",
+            "keywords": [
+                "security",
+                "symfony"
+            ],
+            "time": "2015-07-09 12:43:07"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.6",
@@ -851,7 +894,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/16b04c49af05dd3fb381e4abe04f0e5e231ac76d",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3906465fbaa9d71de3404b8c3667e451d07f9984",
                 "reference": "3906465fbaa9d71de3404b8c3667e451d07f9984",
                 "shasum": ""
             },
@@ -1007,7 +1050,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/1239889d504b151e120625d744aa6fbbcf6b6d16",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/2b934a2029905f22e8fd7478c9e463e8fea0af13",
                 "reference": "2b934a2029905f22e8fd7478c9e463e8fea0af13",
                 "shasum": ""
             },
@@ -1435,6 +1478,38 @@
                 "xml"
             ],
             "time": "2015-06-23 19:27:08"
+        },
+        {
+            "name": "jumbojett/openid-connect-php",
+            "version": "v0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guilhermednt/OpenID-Connect-PHP.git",
+                "reference": "7c0a137e254a566e14388d68798ad766ebe3b481"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guilhermednt/OpenID-Connect-PHP/zipball/7c0a137e254a566e14388d68798ad766ebe3b481",
+                "reference": "7c0a137e254a566e14388d68798ad766ebe3b481",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.2",
+                "phpseclib/phpseclib": "~0.3.10"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "OpenIDConnectClient.php"
+                ]
+            },
+            "description": "Bare-bones OpenID Connect client",
+            "support": {
+                "source": "https://github.com/guilhermednt/OpenID-Connect-PHP/tree/v0.3.0"
+            },
+            "time": "2016-03-31 19:47:22"
         },
         {
             "name": "knplabs/gaufrette",
@@ -2116,6 +2191,104 @@
                 "type"
             ],
             "time": "2014-01-09 22:37:17"
+        },
+        {
+            "name": "phpseclib/phpseclib",
+            "version": "0.3.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpseclib/phpseclib.git",
+                "reference": "d15bba1edcc7c89e09cc74c5d961317a8b947bf4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/d15bba1edcc7c89e09cc74c5d961317a8b947bf4",
+                "reference": "d15bba1edcc7c89e09cc74c5d961317a8b947bf4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.0.0"
+            },
+            "require-dev": {
+                "phing/phing": "~2.7",
+                "phpunit/phpunit": "~4.0",
+                "sami/sami": "~2.0",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "suggest": {
+                "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
+                "ext-mcrypt": "Install the Mcrypt extension in order to speed up a wide variety of cryptographic operations.",
+                "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 4.3.3."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Crypt": "phpseclib/",
+                    "File": "phpseclib/",
+                    "Math": "phpseclib/",
+                    "Net": "phpseclib/",
+                    "System": "phpseclib/"
+                },
+                "files": [
+                    "phpseclib/Crypt/Random.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "phpseclib/"
+            ],
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Wigginton",
+                    "email": "terrafrost@php.net",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Patrick Monnerat",
+                    "email": "pm@datasphere.ch",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Andreas Fischer",
+                    "email": "bantu@phpbb.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Hans-Jürgen Petrich",
+                    "email": "petrich@tronic-media.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Secure Communications Library - Pure-PHP implementations of RSA, AES, SSH2, SFTP, X.509 etc.",
+            "homepage": "http://phpseclib.sourceforge.net",
+            "keywords": [
+                "BigInteger",
+                "aes",
+                "asn.1",
+                "asn1",
+                "blowfish",
+                "crypto",
+                "cryptography",
+                "encryption",
+                "rsa",
+                "security",
+                "sftp",
+                "signature",
+                "signing",
+                "ssh",
+                "twofish",
+                "x.509",
+                "x509"
+            ],
+            "time": "2015-01-28 21:50:33"
         },
         {
             "name": "psr/log",
@@ -3041,7 +3214,8 @@
         "guilhermednt/hwi-oauth-proxy-bundle": 20,
         "sensio/buzz-bundle": 20,
         "guilhermednt/buzz-proxied-curl-bundle": 20,
-        "knplabs/knp-gaufrette-bundle": 20
+        "knplabs/knp-gaufrette-bundle": 20,
+        "becklyn/static-roles-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

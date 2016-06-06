@@ -15,6 +15,11 @@ vpr_api:
     prefix:   /
 
 #Admin
+vpr_user:
+    prefix:   /
+    resource: "@PROCERGSVPRCoreBundle/Controller/Admin/UserController.php"
+    type:     annotation
+
 vpr_admin:
     resource: "@PROCERGSVPRCoreBundle/Controller/Admin/DefaultController.php"
     type:     annotation

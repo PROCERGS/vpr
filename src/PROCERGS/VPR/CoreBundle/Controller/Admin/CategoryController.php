@@ -27,6 +27,7 @@ class CategoryController extends Controller
      */
     public function indexAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_CATEGORY_READ');
         $em = $this->getDoctrine()->getManager();
         
         $query = $em->createQueryBuilder()
@@ -55,6 +56,7 @@ class CategoryController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_CATEGORY_CREATE');
         $entity = new Category();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -104,6 +106,7 @@ class CategoryController extends Controller
      */
     public function newAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_CATEGORY_CREATE');
         $entity = new Category();
         $form   = $this->createCreateForm($entity);
 
@@ -122,6 +125,7 @@ class CategoryController extends Controller
      */
     public function showAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_CATEGORY_READ');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Category')->find($id);
@@ -147,6 +151,7 @@ class CategoryController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_CATEGORY_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Category')->find($id);
@@ -192,6 +197,7 @@ class CategoryController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_CATEGORY_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Category')->find($id);
@@ -228,6 +234,7 @@ class CategoryController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_CATEGORY_DELETE');
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 

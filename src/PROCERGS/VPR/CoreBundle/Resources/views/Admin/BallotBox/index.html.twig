@@ -4,7 +4,10 @@
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('admin_ballotbox_new') }}" role="button"><span class="glyphicon glyphicon-file"></span> {%trans%}admin.add{%endtrans%}</a>
+        {% if is_granted('ROLE_BALLOTBOX_CREATE') %}
+            <a class="btn btn-default" href="{{ path('admin_ballotbox_new') }}" role="button"><span
+                        class="glyphicon glyphicon-file"></span> {% trans %}admin.add{% endtrans %}</a>
+        {% endif %}
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
@@ -55,7 +58,8 @@
         <div class="row">
             <div class="form-group col-md-12 text-right">
                 <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-                <a href="{{ path('admin_ballotbox_clear_filters') }}" class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
+                <a href="{{ path('admin_ballotbox_clear_filters') }}"
+                   class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
             </div>
         </div>
         {{ form_end(form) }}
@@ -67,7 +71,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-        $("#check-all").on("click", function() {
+        $("#check-all").on("click", function () {
             if ($(this).prop("checked")) {
                 $(".ballot-check").not(this).prop("checked", true);
             } else {
@@ -79,7 +83,7 @@
             var data = $(this).data("type");
             $("#message-type").val(data);
         });
-        $(".btn-selection-type").click(function(e){
+        $(".btn-selection-type").click(function (e) {
             $('#myModal').modal('hide');
             if ($(this).val() == 1) {
                 if (!$('#ballotbox-items-form input.ballot-check:checked').length) {

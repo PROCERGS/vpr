@@ -6,11 +6,11 @@
 
 {% block stylesheets %}
     {% stylesheets 'bundles/procergsvprcore/css/boostrap.min.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 
     {% stylesheets 'bundles/procergsvprcore/css/admin/*.css' filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
+    <link rel="stylesheet" href="{{ asset_url }}"/>
     {% endstylesheets %}
 {% endblock %}
 
@@ -33,6 +33,14 @@
 {% endblock %}
 
 {% block body %}
+
+    {% for type, flash_messages in app.session.flashBag.all %}
+        {% for flash_message in flash_messages %}
+            <div class="alert alert-{{ type }}" role="alert">
+                {{ flash_message | trans }}
+            </div>
+        {% endfor %}
+    {% endfor %}
     <div class="page-header">
         <h1>
             {{ contentName }}
@@ -42,6 +50,6 @@
             {% endif %}
         </h1>
     </div>
-{% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 {% endblock %}
 {% block footer %}{% endblock %}

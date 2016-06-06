@@ -4,12 +4,13 @@
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('admin_poll_option') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span>  {% trans %}admin.back_to_list{% endtrans %}</a>
+        <a class="btn btn-default" href="{{ path('admin_poll_option') }}" role="button"><span
+                    class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
         {% for message in messages %}
-            <div class="alert alert-{{type}} alert-dismissable">
+            <div class="alert alert-{{ type }} alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message }}
             </div>
@@ -17,95 +18,98 @@
     {% endfor %}
 
     {{ form_start(edit_form, {'attr': {'role':'form', 'class':'form-horizontal poll-option'}}) }}
-        {{ form_errors(edit_form) }}
+    {{ form_errors(edit_form) }}
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.poll'|trans }}</label>
-            <div class="col-sm-5">
-                <select class="form-control" required="required" name="poll_select" id="poll_select">
-                    <option value=""></option>
-                    {% if(polls) %}
-                        {% for poll in polls %}
-                            <option {{ (entity.step.poll.id == poll.id)?'selected="selected"' }} value="{{ poll.id }}">{{ poll.name }}</option>
-                        {% endfor %}
-                    {% endif %}
-                </select>
-            </div>
-        </div>    
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.step'|trans }}</label>
-            <div class="col-sm-10">
-                {{ form_errors(edit_form.step) }}
-                {{ form_widget(edit_form.step, {'attr': {'class': 'form-control'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.poll'|trans }}</label>
+        <div class="col-sm-5">
+            <select class="form-control" required="required" name="poll_select" id="poll_select">
+                <option value=""></option>
+                {% if(polls) %}
+                    {% for poll in polls %}
+                        <option {{ (entity.step.poll.id == poll.id)?'selected="selected"' }}
+                                value="{{ poll.id }}">{{ poll.name }}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.category'|trans }}</label>
-            <div class="col-sm-6">
-                {{ form_errors(edit_form.category) }}
-                {{ form_widget(edit_form.category, {'attr': {'class': 'form-control'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.step'|trans }}</label>
+        <div class="col-sm-10">
+            {{ form_errors(edit_form.step) }}
+            {{ form_widget(edit_form.step, {'attr': {'class': 'form-control'}}) }}
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.corede'|trans }}</label>
-            <div class="col-sm-6">
-                {{ form_errors(edit_form.corede) }}
-                {{ form_widget(edit_form.corede, {'attr': {'class': 'form-control'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.category'|trans }}</label>
+        <div class="col-sm-6">
+            {{ form_errors(edit_form.category) }}
+            {{ form_widget(edit_form.category, {'attr': {'class': 'form-control'}}) }}
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.title'|trans }}</label>
-            <div class="col-sm-7">
-                {{ form_errors(edit_form.title) }}
-                {{ form_widget(edit_form.title, {'attr': {'class': 'form-control'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.corede'|trans }}</label>
+        <div class="col-sm-6">
+            {{ form_errors(edit_form.corede) }}
+            {{ form_widget(edit_form.corede, {'attr': {'class': 'form-control'}}) }}
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.description'|trans }}</label>
-            <div class="col-sm-7">
-                {{ form_errors(edit_form.description) }}
-                {{ form_widget(edit_form.description, {'attr': {'class': 'form-control'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.title'|trans }}</label>
+        <div class="col-sm-7">
+            {{ form_errors(edit_form.title) }}
+            {{ form_widget(edit_form.title, {'attr': {'class': 'form-control'}}) }}
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.scope'|trans }}</label>
-            <div class="col-sm-7">
-                {{ form_errors(edit_form.scope) }}
-                {{ form_widget(edit_form.scope, {'attr': {'class': 'form-control'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.description'|trans }}</label>
+        <div class="col-sm-7">
+            {{ form_errors(edit_form.description) }}
+            {{ form_widget(edit_form.description, {'attr': {'class': 'form-control'}}) }}
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.cost'|trans }}</label>
-            <div class="col-sm-7">
-                {{ form_errors(edit_form.cost) }}
-                {{ form_widget(edit_form.cost, {'attr': {'class': 'form-control money'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.scope'|trans }}</label>
+        <div class="col-sm-7">
+            {{ form_errors(edit_form.scope) }}
+            {{ form_widget(edit_form.scope, {'attr': {'class': 'form-control'}}) }}
         </div>
+    </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.sorting'|trans }}</label>
-            <div class="col-sm-7">
-                {{ form_errors(edit_form.categorySorting) }}
-                {{ form_widget(edit_form.categorySorting, {'attr': {'class': 'form-control'}}) }}
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.cost'|trans }}</label>
+        <div class="col-sm-7">
+            {{ form_errors(edit_form.cost) }}
+            {{ form_widget(edit_form.cost, {'attr': {'class': 'form-control money'}}) }}
         </div>
+    </div>
 
-        <div class="form-group form-actions">
-            <div class="col-lg-10 col-lg-offset-2">
-                {{ form_widget(edit_form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'admin.save'|trans}) }}
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.sorting'|trans }}</label>
+        <div class="col-sm-7">
+            {{ form_errors(edit_form.categorySorting) }}
+            {{ form_widget(edit_form.categorySorting, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
 
-    {{ form_end(edit_form) }}
+    <div class="form-group form-actions">
+        <div class="col-lg-10 col-lg-offset-2">
+            {{ form_widget(edit_form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'admin.save'|trans}) }}
 
+            {{ form_end(edit_form) }}
+
+            {% if is_granted('ROLE_BALLOT_DELETE') %}
                 {{ form_start(delete_form) }}
                 {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
                 {{ form_end(delete_form) }}
-            </div>
+            {% endif %}
         </div>
+    </div>
 {% endblock %}

@@ -110,3 +110,4 @@ admin.person.tre_info:
     name: Name
     city: City
     voting_zone: Voting Zone
+account.activated: Your account was activated
