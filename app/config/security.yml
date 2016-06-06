@@ -40,34 +40,96 @@ becklyn_static_roles:
         ROLE_CRUD_POLL:
             title: "CRUD de Votação"
             included_roles: [ROLE_POLL_CREATE, ROLE_POLL_READ, ROLE_POLL_UPDATE, ROLE_POLL_DELETE]
+        ROLE_POLL:
+            title: ""
+            hidden: true
         ROLE_POLL_CREATE:
             title: "Criar Votações"
+            included_roles: [ROLE_POLL]
             hidden: true
         ROLE_POLL_READ:
             title: "Consultar Votações"
+            included_roles: [ROLE_POLL]
             hidden: true
         ROLE_POLL_UPDATE:
             title: "Atualizar Votações"
+            included_roles: [ROLE_POLL]
             hidden: true
         ROLE_POLL_DELETE:
             title: "Deletar Votações"
+            included_roles: [ROLE_POLL]
+            hidden: true
+
+        # Step roles
+        ROLE_CRUD_STEP:
+            title: "CRUD de Etapas"
+            included_roles: [ROLE_STEP_CREATE, ROLE_STEP_READ, ROLE_STEP_UPDATE, ROLE_STEP_DELETE]
+        ROLE_STEP:
+            title: ""
+            hidden: true
+        ROLE_STEP_CREATE:
+            title: "Criar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+        ROLE_STEP_READ:
+            title: "Consultar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+        ROLE_STEP_UPDATE:
+            title: "Atualizar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+        ROLE_STEP_DELETE:
+            title: "Deletar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+
+        # Category roles
+        ROLE_CRUD_CATEGORY:
+            title: "CRUD de Categorias"
+            included_roles: [ROLE_CATEGORY_CREATE, ROLE_CATEGORY_READ, ROLE_CATEGORY_UPDATE, ROLE_CATEGORY_DELETE]
+        ROLE_CATEGORY:
+            title: ""
+            hidden: true
+        ROLE_CATEGORY_CREATE:
+            title: "Criar Categorias"
+            included_roles: [ROLE_CATEGORY]
+            hidden: true
+        ROLE_CATEGORY_READ:
+            title: "Consultar Categorias"
+            included_roles: [ROLE_CATEGORY]
+            hidden: true
+        ROLE_CATEGORY_UPDATE:
+            title: "Atualizar Categorias"
+            included_roles: [ROLE_CATEGORY]
+            hidden: true
+        ROLE_CATEGORY_DELETE:
+            title: "Deletar Categorias"
+            included_roles: [ROLE_CATEGORY]
             hidden: true
 
         # Ballot roles
         ROLE_CRUD_BALLOT:
             title: "CRUD de Cédulas"
             included_roles: [ROLE_BALLOT_CREATE, ROLE_BALLOT_READ, ROLE_BALLOT_UPDATE, ROLE_BALLOT_DELETE]
+        ROLE_BALLOT:
+            title: ""
+            hidden: true
         ROLE_BALLOT_CREATE:
             title: "Criar Opções"
+            included_roles: [ROLE_BALLOT]
             hidden: true
         ROLE_BALLOT_READ:
             title: "Consultar Opções"
+            included_roles: [ROLE_BALLOT]
             hidden: true
         ROLE_BALLOT_UPDATE:
             title: "Atualizar Opções"
+            included_roles: [ROLE_BALLOT]
             hidden: true
         ROLE_BALLOT_DELETE:
             title: "Deletar Opções"
+            included_roles: [ROLE_BALLOT]
             hidden: true
 
         # Ballotboxes roles
@@ -75,23 +137,32 @@ becklyn_static_roles:
             title: "CRUD de Urnas"
             included_roles: [ROLE_BALLOTBOX_CREATE, ROLE_BALLOTBOX_READ, ROLE_BALLOTBOX_UPDATE, ROLE_BALLOTBOX_DELETE]
             hidden: true
+        ROLE_BALLOTBOXES:
+            title: ""
+            hidden: true
         ROLE_BALLOTBOX_CREATE:
             title: "Criar Urnas"
+            included_roles: [ROLE_BALLOTBOXES]
             hidden: true
         ROLE_BALLOTBOX_READ:
             title: "Consultar Urnas"
+            included_roles: [ROLE_BALLOTBOXES]
             hidden: true
         ROLE_BALLOTBOX_UPDATE:
             title: "Atualizar Urnas"
+            included_roles: [ROLE_BALLOTBOXES]
             hidden: true
         ROLE_BALLOTBOX_DELETE:
             title: "Deletar Urnas"
+            included_roles: [ROLE_BALLOTBOXES]
             hidden: true
         ROLE_BALLOTBOXES_SEND_EMAIL:
             title: "Enviar emails das urnas"
+            included_roles: [ROLE_BALLOTBOXES]
             hidden: true
         ROLE_BALLOTBOXES_SEND_SMS:
             title: "Enviar SMS das urnas"
+            included_roles: [ROLE_BALLOTBOXES]
             hidden: true
 
         # User roles
@@ -99,17 +170,24 @@ becklyn_static_roles:
             title: "CRUD de Usuários"
             included_roles: [ROLE_USER_CREATE, ROLE_USER_READ, ROLE_USER_UPDATE, ROLE_USER_DELETE]
             hidden: true
+        ROLE_USER:
+            title: ""
+            hidden: true
         ROLE_USER_CREATE:
             title: "Criar Urnas"
+            included_roles: [ROLE_USER]
             hidden: true
         ROLE_USER_READ:
             title: "Consultar Urnas"
+            included_roles: [ROLE_USER]
             hidden: true
         ROLE_USER_UPDATE:
             title: "Atualizar Urnas"
+            included_roles: [ROLE_USER]
             hidden: true
         ROLE_USER_DELETE:
             title: "Deletar Urnas"
+            included_roles: [ROLE_USER]
             hidden: true
 
 security:
