@@ -1,0 +1,3 @@
+donato_oidc:
+    resource:   "@DonatoOIDCBundle/Controller/"
+    type:       annotation

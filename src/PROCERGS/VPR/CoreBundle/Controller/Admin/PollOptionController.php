@@ -28,6 +28,7 @@ class PollOptionController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_READ');
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
         
@@ -74,6 +75,7 @@ class PollOptionController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_CREATE');
         $poll_selected_id = $request->get('poll_select');
 
         $entity = new PollOption();
@@ -133,6 +135,7 @@ class PollOptionController extends Controller
      */
     public function newAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_CREATE');
         $entity = new PollOption();
         $form   = $this->createCreateForm($entity);
 
@@ -155,6 +158,7 @@ class PollOptionController extends Controller
      */
     public function showAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_READ');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:PollOption')->find($id);
@@ -180,6 +184,7 @@ class PollOptionController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:PollOption')->find($id);
@@ -231,6 +236,7 @@ class PollOptionController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:PollOption')->find($id);
@@ -268,6 +274,7 @@ class PollOptionController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_DELETE');
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -337,6 +344,7 @@ class PollOptionController extends Controller
      */
     public function saveSortingAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_UPDATE');
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get('translator');
         $ids = $request->get('ids');
@@ -372,6 +380,7 @@ class PollOptionController extends Controller
      */
     public function clearFiltersAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOT_READ');
         $session = $this->getRequest()->getSession();
         $session->remove('poll_filters');
         return $this->redirect($this->generateUrl('admin_poll_option'));

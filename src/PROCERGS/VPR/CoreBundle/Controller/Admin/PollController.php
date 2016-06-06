@@ -29,6 +29,7 @@ class PollController extends Controller
      */
     public function indexAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_READ');
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
@@ -57,6 +58,7 @@ class PollController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_CREATE');
         $entity = new Poll();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -107,6 +109,7 @@ class PollController extends Controller
      */
     public function newAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_CREATE');
         $entity = new Poll();
         $form   = $this->createCreateForm($entity);
 
@@ -125,6 +128,7 @@ class PollController extends Controller
      */
     public function showAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_READ');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
@@ -153,6 +157,7 @@ class PollController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
@@ -205,6 +210,7 @@ class PollController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
@@ -240,6 +246,7 @@ class PollController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_DELETE');
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 

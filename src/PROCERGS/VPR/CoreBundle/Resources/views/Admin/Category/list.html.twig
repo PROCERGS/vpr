@@ -12,17 +12,29 @@
             {% if(entities.items) %}
                 {% for entity in entities %}
                     <tr>
-                        <td><div class="category-color" style="background-color: {{ entity.titleBg}}"></div></td>
+                        <td>
+                            <div class="category-color" style="background-color: {{ entity.titleBg }}"></div>
+                        </td>
                         <td>{{ entity.name }}</td>
                         <td>{{ entity.sorting }}</td>
                         <td>
-                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_category_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_category_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                            {% if is_granted('ROLE_CATEGORY_READ') %}
+                                <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm"
+                                   href="{{ path('admin_category_show', { 'id': entity.id }) }}"><span
+                                            class="glyphicon glyphicon-eye-open"></span></a>
+                            {% endif %}
+                            {% if is_granted('ROLE_CATEGORY_UPDATE') %}
+                                <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
+                                   href="{{ path('admin_category_edit', { 'id': entity.id }) }}"><span
+                                            class="glyphicon glyphicon-pencil"></span></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
             {% else %}
-                    <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
+                <tr>
+                    <td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td>
+                </tr>
             {% endif %}
         </tbody>
     </table>

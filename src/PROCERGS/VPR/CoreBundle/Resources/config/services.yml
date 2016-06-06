@@ -46,7 +46,12 @@ services:
         class: %kernel.listener.logged_in_user_listener.class%
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-        arguments: [ "@security.context", "@router", "@session" ]
+        arguments:
+            - "@security.token_storage"
+            - "@security.authorization_checker"
+            - "@router"
+            - "@session"
+            - "@vpr.user.manager"
 
     procergs.nfgws:
         class: %procergs.nfgws.class%
@@ -93,12 +98,14 @@ services:
         calls:
             - [setEntityManager, ["@doctrine.orm.entity_manager"]]
             - [setTranslator, ["@translator"]]
-            - [setSecurity, ["@security.authorization_checker"]]		
+            - [setSecurity, ["@security.authorization_checker"]]
+
     vpr.twig.extension:
         class: PROCERGS\VPR\CoreBundle\Twig\VPRExtension
         arguments: ["@doctrine.orm.entity_manager"]
         tags:
             - { name: twig.extension, alias: vpr_twig_extension }
+
     vpr.smshelper:
         class: PROCERGS\VPR\CoreBundle\Helper\SMSHelper        
         calls:
@@ -106,3 +113,25 @@ services:
             - [setSistema, [%smshelper_sistema%]]
             - [setOrdemServico, [%smshelper_ordem_servico%]]
             - [setSenha, [%smshelper_senha%]]
+
+    vpr.user.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - PROCERGS\VPR\CoreBundle\Entity\User
+
+    vpr.user.manager:
+            class: PROCERGS\VPR\CoreBundle\Entity\UserManager
+            arguments:
+                - "@oidc.idp.manager"
+                - "@security.token_storage"
+                - "@session"
+
+    oidc.listener:
+        class: PROCERGS\VPR\CoreBundle\EventListener\OIDCEventListener
+        arguments:
+            - "@security.token_storage"
+            - "@vpr.user.manager"
+            - "@router"
+        tags:
+            - { name: kernel.event_listener, event: donato.oidc.event.filter_response, method: onFilterResponse }
