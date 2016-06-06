@@ -208,10 +208,10 @@ class BallotBoxController extends Controller
     		        $message->setTo($result['email']);
     		        if ($params['message_type'] == SentMessage::TYPE_REQUISICAO) {
     		            $message->setSubject('Autorizacao para urna offline');
-    		            $message->setBody(sprintf($msg2, $result['apuration_time'], $result['content']), 'text/plain');
+    		            $message->setBody(sprintf($msg2, $result['apuration_time'], $result['content']), 'text/html');
     		        } else {
     		            $message->setSubject('Urgente! Retorno de urna offline');
-    		            $message->setBody(sprintf($msg1, $result['apuration_time'], $result['content']), 'text/plain');
+    		            $message->setBody(sprintf($msg1, $result['apuration_time'], $result['content']), 'text/html');
     		        }
     		        $this->get('mailer')->send($message);
     		    } catch (\Exception $e) {
