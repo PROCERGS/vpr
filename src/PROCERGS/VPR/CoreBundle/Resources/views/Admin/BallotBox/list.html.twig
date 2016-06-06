@@ -9,7 +9,6 @@
 
     <form action="send" method="post" id="ballotbox-items-form">
         <input type="hidden" name="message_type" value="1" id="message-type"></input>
-        <input type="hidden" name="selection_type" value="" id="selection-type"></input>
 
         <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
           <div class="modal-dialog">
@@ -18,8 +17,20 @@
                     <h4 class="modal-title" id="exampleModalLabel">Selecione o tipo de envio</h4>
                 </div>
                 <div class="modal-body">
-                    <button type="button" class="btn btn-primary btn-selection-type" value="1">Enviar para a seleção</button>
-                    <button type="button" class="btn btn-primary btn-selection-type" value="2">Enviar para todos da pesquisa</button>
+                    <div class="row">
+                        <label class="col-1">Tipo:</label>
+                        <div class="col-3">                
+                            <select class="form-control" name="selection_type" id="selection-type">
+                                <option value="1">Enviar para a seleção</option>
+                                <option value="2">Enviar para todos da pesquisa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-4 pull-right">
+                            <button type="button" class="btn btn-primary btn-selection-type" value="1">Enviar</button>
+                        </div>
+                    </div>
                 </div>
             </div><!-- /.modal-content -->
           </div><!-- /.modal-dialog -->
@@ -34,7 +45,9 @@
                     <th>{{ 'admin.phone'|trans }}</th>
                     <th>{{ 'admin.city'|trans }}</th>
                     <th>{{ 'admin.status'|trans }}</th>
-                    <th>{{ 'admin.actions'|trans }}</th>
+                    <th width="8%">{{ 'admin.sentMessage1'|trans }}</th>
+                    <th width="8%">{{ 'admin.sentMessage2'|trans }}</th>
+                    <th width="5%">{{ 'admin.actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,6 +60,8 @@
                             <td>{{ entity.fone }}</td>
                             <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
                             <td>{{ entity.getStatus1Label() }}</td>
+                            <td>{% if (entity.sentMessage1 is not empty) %}{{ entity.sentMessage1.sentDate | date('d/m/Y H:i:s') }}{% endif %}</td>
+                            <td>{% if (entity.sentMessage2 is not empty) %}{{ entity.sentMessage2.sentDate | date('d/m/Y H:i:s')}}{% endif %}</td>
                             </td>
                             <td class="text-center">
                                 <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>

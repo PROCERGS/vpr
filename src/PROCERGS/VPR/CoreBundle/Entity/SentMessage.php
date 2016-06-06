@@ -52,16 +52,6 @@ class SentMessage
     private $sentDate;
     
     /**
-    * @ORM\Column(name="last_type", type="boolean", nullable=false)     
-    */
-    private $lastType;
-    
-    /**
-     * @ORM\Column(name="last_mode", type="boolean", nullable=false)
-     */
-    private $lastMode;
-    
-    /**
      * @ORM\Column(name="sent_message_type_id", type="integer", nullable=false)
      */
     private $sentMessageTypeId;
@@ -176,21 +166,9 @@ class SentMessage
         return $this;
     }
     
-    public function setLastMode($var)
+    public function setId($var)
     {
-        $this->lastMode = $var;
-    }
-    public function getLastMode()
-    {
-        return $this->lastMode;
-    }
-    public function setLastType($var)
-    {
-        $this->lastType = $var;
-    }
-    public function getLastType()
-    {
-        return $this->lastType;
+        $this->id = $var;
     }
     public function setSuccess($var)
     {
@@ -230,29 +208,6 @@ class SentMessage
     {
         if (null !== $this->sentDate && $this->sentDate instanceof \DateTime) {
             return $this->sentDate->format('Y-m-d H:i:s');
-        }
-        return null;
-    }
-    public function getLastModeToDb()
-    {
-        if (null !== $this->lastMode) {
-            if ($this->lastMode) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-        return null;
-    }
-    
-    public function getLastTypeToDb()
-    {
-        if (null !== $this->lastType) {
-            if ($this->lastType) {
-                return 1;
-            } else {
-                return 0;
-            }
         }
         return null;
     }

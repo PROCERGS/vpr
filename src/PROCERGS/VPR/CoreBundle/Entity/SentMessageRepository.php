@@ -15,29 +15,22 @@ class SentMessageRepository extends EntityRepository
     private static $__save1 = NULL;
     private static $__save2 = NULL;
     private static $__save3 = NULL;
+    private static $__save4 = NULL;
     
     public function save(SentMessage &$obj)
     {
         $conn = $this->getEntityManager()->getConnection();
         if (null === self::$__save1) {
-            $sql = "insert into sent_message (ballot_box_id, destination, sms_code, sent_date, sent_message_type_id, sent_message_mode_id, last_type, last_mode, success) values (?,?,?,?,?,?,?,?,?)";
+            $sql = "insert into sent_message (ballot_box_id, destination, sms_code, sent_date, sent_message_type_id, sent_message_mode_id, success) values (?,?,?,?,?,?,?)";
             self::$__save1 = $conn->prepare($sql);
-            $sql = "update sent_message set last_type = false where ballot_box_id = ? and sent_message_type_id = ?";
+            $sql = "update ballot_box set sent_message1_id = ? where id = ?";
             self::$__save2 = $conn->prepare($sql);
-            $sql = "update sent_message set last_mode = false where ballot_box_id = ? and sent_message_mode_id = ?";
+            $sql = "update ballot_box set sent_message2_id = ? where id = ?";
             self::$__save3 = $conn->prepare($sql);
+            $sql = "select max(id) id from  sent_message";
+            self::$__save4 = $conn->prepare($sql);
         }
-        $result = self::$__save2->execute(array(
-            $obj->getBallotBoxId(),
-            $obj->getSentMessageTypeId()
-        ));
-        $result = self::$__save3->execute(array(
-            $obj->getBallotBoxId(),
-            $obj->getSentMessageModeId()
-        ));
         $obj->setSentDate(new \DateTime());
-        $obj->setLastMode(true);
-        $obj->setLastType(true);
         $result = self::$__save1->execute(array(
             $obj->getBallotBoxId(),
             $obj->getDestinationToDb(),
@@ -45,10 +38,21 @@ class SentMessageRepository extends EntityRepository
             $obj->getSentDateToDb(),
             $obj->getSentMessageTypeId(),
             $obj->getSentMessageModeId(),
-            $obj->getLastTypeToDb(),
-            $obj->getLastModeToDb(),
             $obj->getSuccessToDb()
         ));
+        self::$__save4->execute();
+        $obj->setId(current(self::$__save4->fetchAll(\PDO::FETCH_COLUMN)));
+        if ($obj->getSentMessageTypeId() == SentMessage::TYPE_SENHA) {            
+            $result = self::$__save2->execute(array(
+                $obj->getSuccessToDb() ? $obj->getId() : null,
+                $obj->getBallotBoxId()
+            ));
+        } else {
+            $result = self::$__save3->execute(array(
+                $obj->getSuccessToDb() ? $obj->getId() : null,
+                $obj->getBallotBoxId()
+            ));
+        }
         return $result;
     }
     

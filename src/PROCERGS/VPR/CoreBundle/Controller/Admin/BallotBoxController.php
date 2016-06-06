@@ -49,11 +49,13 @@ class BallotBoxController extends Controller
 
         $queryBuilder = $em->createQueryBuilder();
         $queryBuilder
-            ->select('b')
+            ->select('b, sm1, sm2, c')
             ->from('PROCERGSVPRCoreBundle:BallotBox', 'b')
             ->where('1=1')
             ->leftJoin('b.city', 'c')
             ->innerJoin('b.poll', 'p')
+            ->leftJoin('b.sentMessage1', 'sm1')
+            ->leftJoin('b.sentMessage2', 'sm2')
             ->orderBy('p.openingTime', 'DESC')
             ->addOrderBy('c.name', 'ASC')
             ->addOrderBy('b.address', 'ASC');
@@ -481,7 +483,7 @@ class BallotBoxController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
-
+        $entityOld = clone $entity; 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find BallotBox entity.');
         }
@@ -493,6 +495,10 @@ class BallotBoxController extends Controller
         try {
         	if ($editForm->isValid()) {
         		self::isValid1($entity);
+        		if ($entityOld->getEmail() != $entity->getEmail() || $entityOld->getDdd() != $entity->getDdd() || $entityOld->getFone() != $entity->getFone()) {
+        		    $entity->setSentMessage1Id(null);
+        		    $entity->setSentMessage2Id(null);
+        		}
         		$em->flush();
 
         		$translator = $this->get('translator');
