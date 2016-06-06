@@ -58,6 +58,7 @@ class UserController extends Controller
         }
 
         $form = $this->createForm(new UserForm(), $entity);
+        $deleteForm = $this->createDeleteForm($id);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
@@ -70,6 +71,7 @@ class UserController extends Controller
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
+            'deleteForm' => $deleteForm->createView(),
         );
     }
 
@@ -100,5 +102,53 @@ class UserController extends Controller
             'entity' => $entity,
             'form' => $form->createView(),
         );
+    }
+
+    /**
+     * Deletes an User entity.
+     *
+     * @Route("/{id}", name="admin_user_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER_DELETE');
+        $form = $this->createDeleteForm($id);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('PROCERGSVPRCoreBundle:User')->find($id);
+
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find Category entity.');
+            }
+
+            $em->remove($entity);
+            $em->flush();
+
+            $translator = $this->get('translator');
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $translator->trans('admin.successfully_removed_record')
+            );
+        }
+
+        return $this->redirect($this->generateUrl('admin_user_list'));
+    }
+
+    /**
+     * Creates a form to delete a User entity by id.
+     *
+     * @param mixed $id the entity id
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('admin_user_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->getForm();
     }
 }

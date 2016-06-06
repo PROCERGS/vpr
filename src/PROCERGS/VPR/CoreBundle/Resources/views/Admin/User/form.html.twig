@@ -69,7 +69,13 @@
     <div class="form-group form-actions">
         <div class="col-lg-10 col-lg-offset-2">
             <button type="submit" class="btn btn-sm btn-primary">{{ 'admin.save'|trans }}</button>
+            {{ form_end(form) }}
+
+            {% if is_granted('ROLE_USER_DELETE') and deleteForm is defined and deleteForm is not null %}
+                {{ form_start(deleteForm) }}
+                {{ form_widget(deleteForm.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
+                {{ form_end(deleteForm) }}
+            {% endif %}
         </div>
     </div>
-    {{ form_end(form) }}
 {% endblock %}

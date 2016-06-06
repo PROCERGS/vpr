@@ -3,6 +3,13 @@
 {% set actionName = 'admin.list'|trans %}
 
 {% block content -%}
+    <div class="navbar">
+        {% if is_granted('ROLE_USER_CREATE') %}
+            <a class="btn btn-default" href="{{ path('admin_user_new') }}" role="button"><span
+                        class="glyphicon glyphicon-file"></span> {% trans %}admin.add{% endtrans %}</a>
+        {% endif %}
+    </div>
+
     {% for type, messages in app.session.flashbag.all() %}
         {% for message in messages %}
             <div class="alert alert-{{ type }} alert-dismissable">
