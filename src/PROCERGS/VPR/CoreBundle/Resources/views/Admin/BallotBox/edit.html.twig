@@ -3,23 +3,24 @@
 {% set actionName = 'admin.edit'|trans %}
 
 {% block content -%}
-{% if entity.openingTime is not empty or entity.closingTime is not empty %}
-    {% set isDtDiffPoll = true %}
-{% else %}
-    {% set isDtDiffPoll = false %}
-{% endif %}
+    {% if entity.openingTime is not empty or entity.closingTime is not empty %}
+        {% set isDtDiffPoll = true %}
+    {% else %}
+        {% set isDtDiffPoll = false %}
+    {% endif %}
     <style>
-    .ballotbox-offline-itens{
-    display:none;
-    }
+        .ballotbox-offline-itens {
+            display: none;
+        }
     </style>
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('admin_ballotbox') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
+        <a class="btn btn-default" href="{{ path('admin_ballotbox') }}" role="button"><span
+                    class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
         {% for message in messages %}
-            <div class="alert alert-{{type}} alert-dismissable">
+            <div class="alert alert-{{ type }} alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message }}
             </div>
@@ -44,7 +45,7 @@
             {{ form_widget(edit_form.poll, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
-    
+
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
@@ -54,17 +55,19 @@
                 </label>
             </div>
         </div>
-    </div> 
-    
+    </div>
+
     <div class="form-group ballotbox-offline-itens">
         <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
                 <label>
-                    <input {{ isDtDiffPoll ? 'checked="checked"' : '' }} type="checkbox" value="1" name="chkDtDiffPoll" id="chkDtDiffPoll">Deseja usar horarios diferentes da votação?
+                    <input {{ isDtDiffPoll ? 'checked="checked"' : '' }} type="checkbox" value="1" name="chkDtDiffPoll"
+                                                                         id="chkDtDiffPoll">Deseja usar horarios
+                    diferentes da votação?
                 </label>
             </div>
         </div>
-    </div>    
+    </div>
 
     <div class="form-inline form-group ballotbox-offline-itens ballotbox-offline-time-itens">
         <label class="col-sm-2 control-label">{{ 'admin.opening_time'|trans }}</label>
@@ -81,7 +84,7 @@
             {{ form_widget(edit_form.closingTime, {'attr': {'class': ''}}) }}
         </div>
     </div>
-    
+
     <div class="form-group ballotbox-offline-itens">
         <label class="col-sm-2 control-label">{{ 'admin.city'|trans }}</label>
         <div class="col-sm-5">
@@ -126,7 +129,7 @@
             {{ form_widget(edit_form.fone, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
-    
+
     <div class="form-group ballotbox-offline-itens">
         <label class="col-sm-2 control-label">{{ 'admin.email'|trans }}</label>
         <div class="col-sm-4">
@@ -134,15 +137,17 @@
             {{ form_widget(edit_form.email, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
-    
-{% if entity.id is empty %}
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2 text-center passphrase-box bg-danger">
-            <p>{% trans %}<strong>WARNING</strong>: Below you'll find this ballot box password for it's private key. Copy and save it to a safe place. If you don't, it <strong>CANNOT BE RECOVERED</strong> and you'll have to create another ballot box.{% endtrans %}</p>
-            <p class="passphrase">{{ entity.secret }}</p>
+
+    {% if entity.id is empty %}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 text-center passphrase-box bg-danger">
+                <p>{% trans %}<strong>WARNING</strong>: Below you'll find this ballot box password for it's private key.
+                    Copy and save it to a safe place. If you don't, it <strong>CANNOT BE RECOVERED</strong> and you'll
+                    have to create another ballot box.{% endtrans %}</p>
+                <p class="passphrase">{{ entity.secret }}</p>
+            </div>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
 
     <div class="form-group form-actions">
         <div class="col-lg-10 col-lg-offset-2">
@@ -168,4 +173,3 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock %}
-
