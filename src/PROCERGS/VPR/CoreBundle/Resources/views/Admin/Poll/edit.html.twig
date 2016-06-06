@@ -4,14 +4,17 @@
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('admin_poll') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span>  {% trans %}admin.back_to_list{% endtrans %}</a>
+        <a class="btn btn-default" href="{{ path('admin_poll') }}" role="button"><span
+                    class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-tabs" style="margin-bottom: 40px;">
                 <li class="active"><a href="#poll" data-toggle="tab">{{ 'admin.poll'|trans }}</a></li>
-                <li><a href="#step" data-toggle="tab" href="#">{{ 'admin.steps'|trans }}</a></li>
+                {% if is_granted('ROLE_STEP') %}
+                    <li><a href="#step" data-toggle="tab" href="#">{{ 'admin.steps'|trans }}</a></li>
+                {% endif %}
             </ul>
 
             <div class="tab-content">
@@ -19,67 +22,70 @@
 
                     {% for type, messages in app.session.flashbag.all() %}
                         {% for message in messages %}
-                            <div class="alert alert-{{type}} alert-dismissable">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <div class="alert alert-{{ type }} alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert"
+                                        aria-hidden="true">&times;</button>
                                 {{ message }}
                             </div>
                         {% endfor %}
                     {% endfor %}
 
                     {{ form_start(edit_form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
-                        {{ form_errors(edit_form) }}
+                    {{ form_errors(edit_form) }}
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ 'admin.name'|trans }}</label>
-                            <div class="col-sm-10">
-                                {{ form_errors(edit_form.name) }}
-                                {{ form_widget(edit_form.name, {'attr': {'class': 'form-control'}}) }}
-                            </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'admin.name'|trans }}</label>
+                        <div class="col-sm-10">
+                            {{ form_errors(edit_form.name) }}
+                            {{ form_widget(edit_form.name, {'attr': {'class': 'form-control'}}) }}
                         </div>
+                    </div>
 
-                        <div class="form-inline form-group">
-                            <label class="col-sm-2 control-label">{{ 'admin.opening_time'|trans }}</label>
-                            <div class="col-sm-10">
-                                {{ form_errors(edit_form.openingTime) }}
-                                {{ form_widget(edit_form.openingTime, {'attr': {'class': ''}}) }}
-                            </div>
+                    <div class="form-inline form-group">
+                        <label class="col-sm-2 control-label">{{ 'admin.opening_time'|trans }}</label>
+                        <div class="col-sm-10">
+                            {{ form_errors(edit_form.openingTime) }}
+                            {{ form_widget(edit_form.openingTime, {'attr': {'class': ''}}) }}
                         </div>
+                    </div>
 
-                        <div class="form-inline form-group">
-                            <label class="col-sm-2 control-label">{{ 'admin.closing_time'|trans }}</label>
-                            <div class="col-sm-10">
-                                {{ form_errors(edit_form.closingTime) }}
-                                {{ form_widget(edit_form.closingTime, {'attr': {'class': ''}}) }}
-                            </div>
+                    <div class="form-inline form-group">
+                        <label class="col-sm-2 control-label">{{ 'admin.closing_time'|trans }}</label>
+                        <div class="col-sm-10">
+                            {{ form_errors(edit_form.closingTime) }}
+                            {{ form_widget(edit_form.closingTime, {'attr': {'class': ''}}) }}
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ 'admin.description'|trans }}</label>
-                            <div class="col-sm-10">
-                                {{ form_errors(edit_form.description) }}
-                                {{ form_widget(edit_form.description, {'attr': {'class': 'form-control'}}) }}
-                            </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'admin.description'|trans }}</label>
+                        <div class="col-sm-10">
+                            {{ form_errors(edit_form.description) }}
+                            {{ form_widget(edit_form.description, {'attr': {'class': 'form-control'}}) }}
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ 'admin.public_key'|trans }}</label>
-                            <div class="col-sm-7">
-                                {{ form_errors(edit_form.publicKey) }}
-                                {{ form_widget(edit_form.publicKey, {'attr': {'class': 'form-control'}}) }}
-                            </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'admin.public_key'|trans }}</label>
+                        <div class="col-sm-7">
+                            {{ form_errors(edit_form.publicKey) }}
+                            {{ form_widget(edit_form.publicKey, {'attr': {'class': 'form-control'}}) }}
                         </div>
+                    </div>
 
-                        <div class="form-group form-actions">
-                            <div class="col-lg-10 col-lg-offset-2">
-                                {{ form_widget(edit_form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'admin.save'|trans}) }}
+                    <div class="form-group form-actions">
+                        <div class="col-lg-10 col-lg-offset-2">
+                            {{ form_widget(edit_form.submit, {'attr': {'class': 'btn btn-success btn-sm btn-save'},'label':'admin.save'|trans}) }}
 
-                    {{ form_end(edit_form) }}
+                            {{ form_end(edit_form) }}
 
+                            {% if is_granted('ROLE_POLL_DELETE') %}
                                 {{ form_start(delete_form) }}
                                 {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
                                 {{ form_end(delete_form) }}
-                            </div>
+                            {% endif %}
                         </div>
+                    </div>
                 </div>
 
                 <div class="tab-pane" id="step">
