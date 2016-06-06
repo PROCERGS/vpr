@@ -4,6 +4,7 @@ namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
 use PROCERGS\VPR\CoreBundle\Entity\User;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\UserForm;
+use Rhumsaa\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -92,8 +93,26 @@ class UserController extends Controller
         $form->handleRequest($request);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $entity->setConfirmationCode(Uuid::uuid4());
             $em->persist($entity);
             $em->flush($entity);
+
+            $email = \Swift_Message::newInstance()
+                ->setSubject('Novo cadastro na Consulta Popular')
+                ->setFrom($this->getParameter('mailer_sender_mail'))
+                ->setTo($entity->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'PROCERGSVPRCoreBundle:Emails:registration.txt.twig',
+                        array(
+                            'name' => $entity->getName(),
+                            'code' => $entity->getConfirmationCode(),
+                        )
+                    ),
+                    'text/plain'
+                );
+            $this->get('mailer')->send($email);
 
             return $this->redirectToRoute('admin_user_edit', ['id' => $entity->getId()]);
         }

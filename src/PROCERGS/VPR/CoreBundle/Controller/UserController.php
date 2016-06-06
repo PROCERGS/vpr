@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 class UserController extends Controller
 {
     /**
-     * @Route("/confirm/{code}")
+     * @Route("/confirm/{code}", name="user_confirm")
      * @Template()
      */
     public function confirmAction(Request $request, $code)
@@ -33,12 +33,12 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush($user);
-        }
 
-        if ($user->getConfirmationCode() === null) {
-            $this->addFlash('success', 'account.activated');
+            if ($user->getConfirmationCode() === null) {
+                $this->addFlash('success', 'account.activated');
 
-            return $this->redirectToRoute('admin');
+                return $this->redirectToRoute('admin');
+            }
         }
 
         throw $this->createAccessDeniedException('Invalid code');

@@ -264,3 +264,10 @@ vpr.user:
         label: Email
         placeholder: Email
         button: Pesquisar
+    emails:
+        registration:
+            greet: Olá, %name%
+            created: Seu cadastro no sistema da Consulta Popular foi criado mas não está ativo.
+            need_activation: Para ativá-lo, acesse o endereço a seguir.
+            help: Se precisar de ajuda, entre em contato com a SEPLAN.
+            sign: Consulta Popular
