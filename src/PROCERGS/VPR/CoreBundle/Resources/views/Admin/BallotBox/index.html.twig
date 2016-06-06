@@ -4,7 +4,10 @@
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('admin_ballotbox_new') }}" role="button"><span class="glyphicon glyphicon-file"></span> {%trans%}admin.add{%endtrans%}</a>
+        {% if is_granted('ROLE_BALLOTBOX_CREATE') %}
+            <a class="btn btn-default" href="{{ path('admin_ballotbox_new') }}" role="button"><span
+                        class="glyphicon glyphicon-file"></span> {% trans %}admin.add{% endtrans %}</a>
+        {% endif %}
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
@@ -18,20 +21,21 @@
 
     <div class="jumbotron">
         {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
-            <div class="form-group">
-                <label>{{ 'admin.poll'|trans }}</label>
-                {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                <label>{{ 'admin.city'|trans }}</label>
-                {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <div class="form-group">
-                <label>{{ 'admin.is_online'|trans }}</label>
-                {{ form_widget(form.is_online, {'attr': {'class': 'form-control'}}) }}
-            </div>
-            <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-            <a href="{{ path('admin_ballotbox_clear_filters') }}" class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
+        <div class="form-group">
+            <label>{{ 'admin.poll'|trans }}</label>
+            {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            <label>{{ 'admin.city'|trans }}</label>
+            {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="form-group">
+            <label>{{ 'admin.is_online'|trans }}</label>
+            {{ form_widget(form.is_online, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+        <a href="{{ path('admin_ballotbox_clear_filters') }}"
+           class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
         {{ form_end(form) }}
     </div>
 
