@@ -24,10 +24,10 @@ use PROCERGS\VPR\CoreBundle\Entity\SentMessage;
 class BallotBoxController extends Controller
 {
 
-    private static function isValid1(&$entity)
+    private static function isValid1(&$entity, EntityManager $em)
     {
         if ($entity->getIsOnline()) {
-            $ballotBox = $this->getDoctrine()->getManager()->getRepository(
+            $ballotBox = $em->getRepository(
                 'PROCERGSVPRCoreBundle:BallotBox'
             )->hasOnline($entity->getPoll());
             if ($ballotBox) {
@@ -343,7 +343,7 @@ class BallotBoxController extends Controller
                 $em = $this->getDoctrine()->getManager();
 
                 $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
-                self::isValid1($entity);
+                self::isValid1($entity, $em);
                 $pin = $repo->generateUniquePin($entity->getPoll(), 4);
                 $entity->setPin($pin);
                 $entity->setKeys();
@@ -472,7 +472,7 @@ class BallotBoxController extends Controller
 
         try {
             if ($editForm->isValid()) {
-                self::isValid1($entity);
+                self::isValid1($entity, $em);
                 if ($entityOld->getEmail() != $entity->getEmail() || $entityOld->getDdd() != $entity->getDdd(
                     ) || $entityOld->getFone() != $entity->getFone()
                 ) {
