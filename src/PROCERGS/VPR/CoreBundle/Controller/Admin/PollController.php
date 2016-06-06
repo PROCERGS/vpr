@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollType;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
 
 /**
  * Poll controller.
@@ -63,6 +65,7 @@ class PollController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->generatePrivateAndPublicKeys();
             $em->persist($entity);
             $em->flush();
 
@@ -119,7 +122,7 @@ class PollController extends Controller
     /**
      * Finds and displays a Poll entity.
      *
-     * @Route("/{id}", name="admin_poll_show")
+     * @Route("/{id}", requirements={"id" = "\d+"}, name="admin_poll_show")
      * @Method("GET")
      * @Template()
      */
@@ -254,12 +257,19 @@ class PollController extends Controller
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Poll entity.');
             }
-
-            $em->remove($entity);
-            $em->flush();
-
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
+			try {
+				$em->remove($entity);
+				$em->flush();
+				$this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
+			} catch (\Exception $e) {
+				if (strstr($e->getMessage(), 'SQLSTATE[23503]') !== false) {
+					$this->get('session')->getFlashBag()->add('danger', 'Não é possivel deletar, pois existem itens vinculados a essa votação');
+				} else {
+					$this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+				}
+
+			}
         }
 
         return $this->redirect($this->generateUrl('admin_poll'));
@@ -280,5 +290,95 @@ class PollController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+
+
+    /**
+     * Lists poll stats.
+     *
+     * @Route("/stats", name="admin_stats")
+     * @Method("GET")
+     * @Template()
+     */
+    public function statsListAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+
+        $poll_filters = $session->get('poll_filters');
+
+        $form = $this->createForm(new PollOptionFilterType());
+        $form->remove("corede");
+
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
+            } else{
+                $form->bind($request);
+                $session->set('poll_filters', $request);
+            }
+            $selected = $form->getData();
+
+            $poll = $selected['poll'];
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        }
+
+        $votes = $statsRepo->findTotalVotesByPoll($poll->getId());
+
+        foreach ($votes as $vote) {
+            $corede = $coredeRepo->find($vote['corede_id']);
+            $coredeId = $corede->getId();
+
+            $coredes[$coredeId]['corede'] = $corede->getName();
+            $coredes[$coredeId]['votes_online'] = $vote['votes_online'];
+            $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
+        }
+
+        $voters    = $statsRepo->findTotalVotersByPoll(4);
+        foreach ($voters as $vote) {
+            $coredeId = $vote['corede_id'];
+            $coredes[$coredeId]['voters_online'] = $vote['voters_online'];
+            $coredes[$coredeId]['voters_offline'] = $vote['voters_offline'];
+        }
+
+        return array(
+            'coredes' => $coredes,
+            'form' => $form->createView()
+        );
+    }
+
+
+    /**
+     * Load steps by poll
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @Route("/select_poll", name="admin_select_poll")
+     * @Method("POST")
+     */
+    public function selectPollAction(Request $request)
+    {
+    	$data = array();
+    	$poll_id = $request->get('poll_id');
+    	$response = new JsonResponse();
+    	try{
+    		$em = $this->getDoctrine()->getManager();
+    		if(!$poll_id){
+    			throw new \Exception('Sem id!');
+    		}
+    		$poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findOneById($poll_id);
+    		if(!$poll){
+    			throw new \Exception('Nao encontrei nada!');
+    		}
+    		$data['poll']['openingTime'] = $poll->getOpeningTime()->format('Y-m-d H:i:s');
+    		$data['poll']['closingTime'] = $poll->getClosingTime()->format('Y-m-d H:i:s');
+    		$response->setData($data);
+    	} catch (\Exception $e) {
+    		$response->setStatusCode(500);
+    		$response->setData(array('message' => $e->getMessage()));
+    	}
+    	return $response;
     }
 }

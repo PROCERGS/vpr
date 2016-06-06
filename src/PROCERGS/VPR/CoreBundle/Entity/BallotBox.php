@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="ballot_box")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository")
- * @UniqueEntity({"poll", "pin"})
+ * @UniqueEntity({"pin"})
  * @ORM\HasLifecycleCallbacks
  */
 class BallotBox
@@ -152,7 +152,51 @@ class BallotBox
      * @ORM\Column(name="csv", type="text")
      */
     protected $csv;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    protected $email;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fone", type="string", length=9, nullable=true)
+     */
+    protected $fone;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ddd", type="string", length=2, nullable=true)
+     */
+    protected $ddd;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sent_message1_id", type="integer", nullable=true)
+     */
+    protected $sentMessage1Id;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="sent_message2_id", type="integer", nullable=true)
+     */
+    protected $sentMessage2Id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="SentMessage")
+     * @ORM\JoinColumn(name="sent_message1_id", referencedColumnName="id", nullable=true)
+     */
+    protected $sentMessage1;
+    /**
+     * @ORM\ManyToOne(targetEntity="SentMessage")
+     * @ORM\JoinColumn(name="sent_message2_id", referencedColumnName="id", nullable=true)
+     */
+    protected $sentMessage2;
+    
     public function __construct()
     {
         $this->setTotalInvalidVotes(0);
@@ -427,9 +471,6 @@ class BallotBox
         return $this->isOnline;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function setKeys()
     {
         if (!is_null($this->getPrivateKey())) {
@@ -558,4 +599,98 @@ class BallotBox
     	$this->csv = $var;
     	return $this;
     }
+    
+    public function getFone()
+    {
+    	return $this->fone;
+    }
+    
+    public function setFone($var)
+    {
+    	$this->fone = $var;
+    	return $this;
+    }
+    
+    public function getEmail()
+    {
+    	return $this->email;
+    }
+    
+    public function setEmail($var)
+    {
+    	$this->email = $var;
+    	return $this;
+    }
+    
+    public function getDdd()
+    {
+        return $this->ddd;
+    }
+    
+    public function setDdd($var)
+    {
+        $this->ddd = $var;
+        return $this;
+    }
+    
+    public function getSentMessage1Id()
+    {
+        return $this->sentMessage1Id;
+    }
+    
+    public function setSentMessage1Id($var)
+    {
+        $this->sentMessage1Id = $var;
+    }
+    public function getSentMessage2Id()
+    {
+        return $this->sentMessage2Id;
+    }
+    
+    public function setSentMessage2Id($var)
+    {
+        $this->sentMessage2Id = $var;
+    }
+    
+    public function getSentMessage1()
+    {
+        return $this->sentMessage1;
+    }
+    
+    public function setSentMessage1($var)
+    {
+        $this->sentMessage1 = $var;
+    }
+    public function getSentMessage2()
+    {
+        return $this->sentMessage2;
+    }
+    
+    public function setSentMessage2($var)
+    {
+        $this->sentMessage2 = $var;
+    }
+    
+    protected static $allowedStatus1 = array(1=> 'Disponível', 2=> 'Ativa', 3=> 'Encerrada');
+    public static function getAllowedStatus1($var = null)
+    {
+        if (null === $var) {
+            return self::$allowedStatus1;
+        } else {
+            return self::$allowedStatus1[$var];
+        }
+    }
+    
+    public function getStatus1Label()
+    {
+        if ( null === $this->setupAt) {
+            return self::$allowedStatus1[1];
+        } else if ( null === $this->closedAt) {
+            return self::$allowedStatus1[2];
+        } else {
+            return self::$allowedStatus1[3];
+        }
+    }
+    
+        
 }

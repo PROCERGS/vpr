@@ -1,43 +1,80 @@
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover records_list">
-        <thead>
-            <tr>
-                <th width="20%">{{ 'admin.poll'|trans }}</th>
-                <th width="15%">{{ 'admin.city'|trans }}</th>
-                <th width="30%">{{ 'admin.address'|trans }}</th>
-                <th width="5%">{{ 'admin.is_online'|trans }}?</th>
-                <th width="8%">{{ 'admin.actions'|trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% if(entities.items) %}
-                {% for entity in entities %}
-                    <tr>
-                        <td>{% if (entity.poll) %}{{ entity.poll.name }}{% endif %}</td>
-                        <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
-                        <td>{{ entity.address }}</td>
-                        <td class="text-center">{% if entity.isOnline %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</td>
-                        <td class="text-center">
-                            {% if is_granted('ROLE_BALLOTBOX_READ') %}
-                                <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm"
-                                   href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span
-                                            class="glyphicon glyphicon-eye-open"></span></a>
-                            {% endif %}
-                            {% if is_granted('ROLE_BALLOTBOX_UPDATE') %}
-                                <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
-                                   href="{{ path('admin_ballotbox_edit', { 'id': entity.id }) }}"><span
-                                            class="glyphicon glyphicon-pencil"></span></a>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% else %}
+
+    <div style="margin-bottom: 20px;">
+        <button class="btn btn-success btn-form-type" data-type="1" data-toggle="modal" data-target="#myModal">Solicitar transmissão</button>
+        <button class="btn btn-info btn-form-type" data-type="2" data-toggle="modal" data-target="#myModal">Enviar senha</button>
+    </div>
+
+
+
+    <form action="send" method="post" id="ballotbox-items-form">
+        <input type="hidden" name="message_type" value="1" id="message-type"></input>
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">Selecione o tipo de envio</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tipo:</label>
+                        <select class="form-control" name="selection_type" id="selection-type">
+                            <option value="1">Enviar para a seleção</option>
+                            <option value="2">Enviar para todos da pesquisa</option>
+                        </select>
+                    </div>
+                    <div class="form-group text-right">
+                        <button type="button" class="btn btn-primary btn-selection-type" value="1">Enviar</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <table class="table table-striped table-bordered table-hover records_list">
+            <thead>
                 <tr>
-                    <td colspan="5" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td>
+                    <th><input type="checkbox" id="check-all"></input></th>
+                    <th>{{ 'admin.pin'|trans }}</th>
+                    <th>{{ 'admin.email'|trans }}</th>
+                    <th>{{ 'admin.phone'|trans }}</th>
+                    <th>{{ 'admin.city'|trans }}</th>
+                    <th>{{ 'admin.status'|trans }}</th>
+                    <th width="8%">{{ 'admin.sentMessage1'|trans }}</th>
+                    <th width="8%">{{ 'admin.sentMessage2'|trans }}</th>
+                    <th width="5%">{{ 'admin.actions'|trans }}</th>
                 </tr>
-            {% endif %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% if(entities.items) %}
+                    {% for entity in entities %}
+                        <tr>
+                            <td><input type="checkbox" name="ballotboxes[]" value="{{entity.id}}" class="ballot-check"></input></td>
+                            <td>{{ entity.pin }}</td>
+                            <td>{{ entity.email }}</td>
+                            <td>{{ entity.fone }}</td>
+                            <td>{% if (entity.city) %}{{ entity.city.name }}{% endif %}</td>
+                            <td>{{ entity.getStatus1Label() }}</td>
+                            <td>{% if (entity.sentMessage1 is not empty) %}{{ entity.sentMessage1.sentDate | date('d/m/Y H:i:s') }}{% endif %}</td>
+                            <td>{% if (entity.sentMessage2 is not empty) %}{{ entity.sentMessage2.sentDate | date('d/m/Y H:i:s')}}{% endif %}</td>
+                            </td>
+                            <td class="text-center">
+{% if is_granted('ROLE_BALLOTBOX_READ') %}
+                                <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+{% endif %}
+{% if is_granted('ROLE_BALLOTBOX_UPDATE') %}
+                                <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_ballotbox_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                        <tr><td colspan="5" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </form>
 </div>
 
 <div class="row text-center">

@@ -100,6 +100,20 @@ services:
             - [setTranslator, ["@translator"]]
             - [setSecurity, ["@security.authorization_checker"]]
 
+    vpr.twig.extension:
+        class: PROCERGS\VPR\CoreBundle\Twig\VPRExtension
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: twig.extension, alias: vpr_twig_extension }
+
+    vpr.smshelper:
+        class: PROCERGS\VPR\CoreBundle\Helper\SMSHelper        
+        calls:
+            - [setUrl, [%smshelper_url%]]
+            - [setSistema, [%smshelper_sistema%]]
+            - [setOrdemServico, [%smshelper_ordem_servico%]]
+            - [setSenha, [%smshelper_senha%]]
+
     vpr.user.repository:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]

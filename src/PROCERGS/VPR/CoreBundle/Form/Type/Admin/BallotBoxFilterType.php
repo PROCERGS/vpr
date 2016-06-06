@@ -5,6 +5,7 @@ namespace PROCERGS\VPR\CoreBundle\Form\Type\Admin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Doctrine\ORM\EntityRepository;
+use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 
 class BallotBoxFilterType extends AbstractType
 {
@@ -20,7 +21,7 @@ class BallotBoxFilterType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('p')
                         ->orderBy('p.openingTime', 'DESC');
-                },                
+                },
                 'property' => 'name',
                 'empty_value' => 'Todos',
                 'required' => false
@@ -36,10 +37,23 @@ class BallotBoxFilterType extends AbstractType
                 'required' => false
             ))
             ->add('is_online', 'choice', array(
-                'choices' => array(true => 'Sim', false => 'Não'),
-                'empty_value' => 'Todos',
-                'required' => false
-            ));
+                'choices' => array(true => 'Online', false => 'Offline'),
+                'empty_value' => false,
+                'required' => false,
+                'data' => false
+            ))
+            ->add('pin', 'text', array(
+                'required' => false,
+                'data' => false
+            ))
+            ->add('status1', 'choice', array(
+                'choices' => BallotBox::getAllowedStatus1(),
+                'empty_value' => 'Selecione',
+                'empty_data' => null,
+                'required' => false,
+                'data' => false
+            ))
+            ;
         ;
     }
 

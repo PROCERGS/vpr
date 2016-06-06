@@ -16,8 +16,6 @@ class BallotBoxType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $ballotBox    = $builder->getData();
-        $ballotBox->setSecret($ballotBox->generatePassphrase());
         $builder
             ->add('name')
             ->add('secret', 'hidden')
@@ -66,6 +64,9 @@ class BallotBoxType extends AbstractType
                 'property' => 'name',
                 'required' => false
             ))
+            ->add('email', 'email', array('max_length' => 255, 'required' => false))
+            ->add('fone', 'text', array('max_length' => 9, 'pattern'=>"\d*{8,}", 'required' => false))
+            ->add('ddd', 'text', array('max_length' => 2, 'pattern'=>"\d*{8,}", 'required' => false))
         ;
     }
 

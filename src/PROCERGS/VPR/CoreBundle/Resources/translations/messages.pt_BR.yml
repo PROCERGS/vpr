@@ -236,6 +236,20 @@ admin.person.tre_info:
     name: Nome
     city: Cidade
     voting_zone: Zona de Votação
+admin.apuration_time: Data inicio apuração
+admin.apuration_done: Data conclusão apuração
+admin.fone: Telefone
+admin.votes_online: Votos Online
+admin.votes_offline: Votos Offline
+admin.voters_online: Votantes Online
+admin.voters_offline: Votantes Offline
+admin.type: Tipo
+admin.pin: Pin
+admin.phone: Fone
+admin.status: Status
+admin.ddd: DDD
+admin.sentMessage1: Ult. Alerta Transmissão
+admin.sentMessage2: Ult. Envio Senha
 account.activated: Sua conta foi ativada
 vpr.user:
     admin.action:

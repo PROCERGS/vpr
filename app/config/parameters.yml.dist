@@ -43,3 +43,8 @@ parameters:
     login_cidadao_register_prefilled_path: '/register/prefilled'
     vpr_ballotbox_passphrase: BallotBoxPassphrase
     votes_dump_dir: '%kernel.root_dir%/../uploads'
+    
+    smshelper_url: ~
+    smshelper_sistema: ~
+    smshelper_ordem_servico: ~
+    smshelper_senha: ~

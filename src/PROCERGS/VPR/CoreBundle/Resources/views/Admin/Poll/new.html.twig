@@ -33,20 +33,18 @@
                 {{ form_widget(form.closingTime, {'attr': {'class': ''}}) }}
             </div>
         </div>
-
+        <div class="form-inline form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.apuration_time'|trans }}</label>
+            <div class="col-sm-10">
+                {{ form_errors(form.apurationTime) }}
+                {{ form_widget(form.apurationTime, {'attr': {'class': ''}}) }}
+            </div>
+        </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">{{ 'admin.description'|trans }}</label>
             <div class="col-sm-10">
                 {{ form_errors(form.description) }}
                 {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.public_key'|trans }}</label>
-            <div class="col-sm-7">
-                {{ form_errors(form.publicKey) }}
-                {{ form_widget(form.publicKey, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
 

@@ -21,23 +21,77 @@
 
     <div class="jumbotron">
         {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
-        <div class="form-group">
-            <label>{{ 'admin.poll'|trans }}</label>
-            {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+         <div class="row">
+            <div class="form-group col-4">
+                <label class="col-1">{{ 'admin.poll'|trans }}</label>
+                <div class="col-3">
+                {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group col-4">
+                <label class="col-1">{{ 'admin.city'|trans }}</label>
+                <div class="col-3">
+                {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group col-4">
+                <label class="col-1">{{ 'admin.type'|trans }}</label>
+                <div class="col-3">
+                {{ form_widget(form.is_online, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>{{ 'admin.city'|trans }}</label>
-            {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+        <div class="row">
+            <div class="form-group col-4">
+                <label class="col-1">{{ 'admin.pin'|trans }}</label>
+                <div class="col-3">
+                {{ form_widget(form.pin, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group col-4">
+                <label class="col-1">{{ 'admin.status'|trans }}</label>
+                <div class="col-3">
+                {{ form_widget(form.status1, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>{{ 'admin.is_online'|trans }}</label>
-            {{ form_widget(form.is_online, {'attr': {'class': 'form-control'}}) }}
+        <div class="row">
+            <div class="form-group col-4 pull-right">
+                <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+                <a href="{{ path('admin_ballotbox_clear_filters') }}" class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-        <a href="{{ path('admin_ballotbox_clear_filters') }}"
-           class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
         {{ form_end(form) }}
     </div>
 
     {% include 'PROCERGSVPRCoreBundle:Admin/BallotBox:list.html.twig' with {'entities': entities} %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $("#check-all").on("click", function() {
+            if ($(this).prop("checked")) {
+                $(".ballot-check").not(this).prop("checked", true);
+            } else {
+                $(".ballot-check").not(this).prop("checked", false);
+            }
+        });
+
+        $(".btn-form-type").on("click", function() {            
+            var data = $(this).data("type");
+            $("#message-type").val(data);
+        });
+        $(".btn-selection-type").click(function(e){
+            $('#myModal').modal('hide');
+            if ($(this).val() == 1) {
+                if (!$('#ballotbox-items-form input.ballot-check:checked').length) {
+                    alert('Por favor, selecione alguma urna');
+                    return;
+                }
+            }
+            $("#selection-type").val($(this).val());
+            $('#ballotbox-items-form').submit();            
+        });
+    </script>
 {% endblock %}

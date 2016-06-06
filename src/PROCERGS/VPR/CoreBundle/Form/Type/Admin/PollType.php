@@ -15,22 +15,26 @@ class PollType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('name', 'textarea', array('max_length' => 255))
             ->add('openingTime', 'datetime',array(
-                'required' => false,
+                'required' => true,
                 'date_format' => 'dd MMMM yyyy',
                 'widget' => 'choice',
                 'years' => range(date('Y'), date('Y') - 70)
             ))
             ->add('closingTime', 'datetime',array(
-                'required' => false,
+                'required' => true,
                 'date_format' => 'dd MMMM yyyy',
                 'widget' => 'choice',
                 'years' => range(date('Y'), date('Y') - 70)
             ))
-
-            ->add('description')
-            ->add('publicKey', 'textarea')
+            ->add('apurationTime', 'datetime',array(
+            		'required' => true,
+            		'date_format' => 'dd MMMM yyyy',
+            		'widget' => 'choice',
+            		'years' => range(date('Y'), date('Y') - 70)
+            ))
+            ->add('description', 'textarea')
         ;
     }
 

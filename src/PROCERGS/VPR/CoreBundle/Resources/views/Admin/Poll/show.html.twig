@@ -58,6 +58,19 @@
                                 <p class="form-control-static">{{ entity.closingTime|date('d/m/Y H:i:s') }}</p>
                             </div>
                         </div>
+                       <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ 'admin.apuration_time'|trans }}</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{ entity.apurationTime|date('d/m/Y H:i:s') }}</p>
+                            </div>
+                        </div>
+                        
+                       <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ 'admin.apuration_done'|trans }}</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{ entity.apurationDone is empty ? "" : entity.apurationDone|date('d/m/Y H:i:s') }}</p>
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="col-sm-2 control-label">{{ 'admin.description'|trans }}</label>
@@ -66,12 +79,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">{{ 'admin.public_key'|trans }}</label>
-                            <div class="col-sm-10">
-                                <p class="form-control-static">{{ entity.publicKey }}</p>
-                            </div>
-                        </div>
                     </form>
 
                     <div class="form-group form-actions">
