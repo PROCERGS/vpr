@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * User controller.
@@ -26,6 +27,7 @@ class UserController extends Controller
      */
     public function searchAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER_READ');
         $repo = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:User');
         $query = $request->get('query', null);
         if ($request->isMethod(Request::METHOD_POST) || $query !== null) {
@@ -46,6 +48,7 @@ class UserController extends Controller
      */
     public function editAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:User')->find($id);
@@ -79,6 +82,7 @@ class UserController extends Controller
      */
     public function newAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_USER_CREATE');
         $entity = new User();
 
         $form = $this->createForm(new UserForm(), $entity);

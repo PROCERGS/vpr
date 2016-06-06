@@ -28,7 +28,7 @@
                             <a href="{{ path('admin_category') }}">{{'Categories'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_COREDE') %}
+                    {% if is_granted('ROLE_CRUD_BALLOT') %}
                         <li class="{{ controller == 'admin\\polloption' ? 'active' }}">
                             <a href="{{ path('admin_poll_option') }}">{{'Ballots'|trans}}</a>
                         </li>
@@ -38,7 +38,7 @@
                             <a href="{{ path('admin_ballotbox') }}">{{'Ballot Boxes'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_MANAGE_USER') %}
+                    {% if is_granted('ROLE_CRUD_USER') %}
                         <li class="{{ controller == 'admin\\user' ? 'active' }}">
                             <a href="{{ path('admin_user_list') }}">{{'Users'|trans}}</a>
                         </li>

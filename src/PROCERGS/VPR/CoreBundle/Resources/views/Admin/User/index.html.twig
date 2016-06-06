@@ -31,18 +31,24 @@
                         {% for entity in users %}
                             <tr>
                                 <td>
-                                    <a title="{{ 'admin.show'|trans }}"
-                                       href="{{ path('admin_user_edit', { 'id': entity.id, 'query': app.request.get('query') }) }}">
+                                    {% if is_granted('ROLE_USER_UPDATE') %}
+                                        <a title="{{ 'admin.show'|trans }}"
+                                           href="{{ path('admin_user_edit', { 'id': entity.id, 'query': app.request.get('query') }) }}">
+                                            {{ entity.name }}
+                                        </a>
+                                    {% else %}
                                         {{ entity.name }}
-                                    </a>
+                                    {% endif %}
                                 </td>
                                 <td>{{ entity.email }}</td>
                                 <td>{{ entity.city.name | default('') }}</td>
                                 <td>{{ entity.createdAt ? entity.createdAt|date('d/m/Y H:i:s') : '' }}</td>
                                 <td class="text-center">
-                                    <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
-                                       href="{{ path('admin_user_edit', { 'id': entity.id }) }}"><span
-                                                class="glyphicon glyphicon-edit"></span></a>
+                                    {% if is_granted('ROLE_USER_UPDATE') %}
+                                        <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
+                                           href="{{ path('admin_user_edit', { 'id': entity.id }) }}"><span
+                                                    class="glyphicon glyphicon-edit"></span></a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
