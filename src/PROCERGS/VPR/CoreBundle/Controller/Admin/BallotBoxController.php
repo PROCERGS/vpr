@@ -31,17 +31,20 @@ class BallotBoxController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em        = $this->getDoctrine()->getManager();
-        $session   = $this->getRequest()->getSession();
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_READ');
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
         $paginator = $this->get('knp_paginator');
-        $form      = $this->createForm(new BallotBoxFilterType());
+        $form = $this->createForm(new BallotBoxFilterType());
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
             $session->set('ballotBox_filters', $request);
         } else {
             $request = $session->get('ballotBox_filters');
-            if ($request) $form->handleRequest($request);
+            if ($request) {
+                $form->handleRequest($request);
+            }
         }
 
         $filters = $form->getData();
@@ -74,12 +77,12 @@ class BallotBoxController extends Controller
 
         $query = $queryBuilder->getQuery();
 
-        $page     = $this->get('request')->query->get('page', 1);
+        $page = $this->get('request')->query->get('page', 1);
         $entities = $paginator->paginate($query, $page, 20);
 
         return array(
             'entities' => $entities,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         );
     }
 
@@ -92,52 +95,39 @@ class BallotBoxController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_CREATE');
         $entity = new BallotBox();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
             $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
-            $pin  = $repo->generateUniquePin($entity->getPoll(), 4);
+            $pin = $repo->generateUniquePin($entity->getPoll(), 4);
             $entity->setPin($pin);
 
             $em->persist($entity);
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                $translator->trans('admin.successfully_added_record'));
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $translator->trans('admin.successfully_added_record')
+            );
 
-            return $this->redirect($this->generateUrl('admin_ballotbox_show',
-                        array('id' => $entity->getId())));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_ballotbox_show',
+                    array('id' => $entity->getId())
+                )
+            );
         }
 
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
         );
-    }
-
-    /**
-     * Creates a form to create a BallotBox entity.
-     *
-     * @param BallotBox $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(BallotBox $entity)
-    {
-        $form = $this->createForm(new BallotBoxType(), $entity,
-            array(
-            'action' => $this->generateUrl('admin_ballotbox_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
     }
 
     /**
@@ -149,8 +139,9 @@ class BallotBoxController extends Controller
      */
     public function newAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_CREATE');
         $entity = new BallotBox();
-        $form   = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
@@ -167,6 +158,7 @@ class BallotBoxController extends Controller
      */
     public function showAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_READ');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
@@ -192,6 +184,7 @@ class BallotBoxController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
@@ -200,7 +193,7 @@ class BallotBoxController extends Controller
             throw $this->createNotFoundException('Unable to find BallotBox entity.');
         }
 
-        $editForm   = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -208,27 +201,6 @@ class BallotBoxController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
-    }
-
-    /**
-     * Creates a form to edit a BallotBox entity.
-     *
-     * @param BallotBox $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createEditForm(BallotBox $entity)
-    {
-        $form = $this->createForm(new BallotBoxType(), $entity,
-            array(
-            'action' => $this->generateUrl('admin_ballotbox_update',
-                array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
     }
 
     /**
@@ -240,6 +212,7 @@ class BallotBoxController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
@@ -249,18 +222,24 @@ class BallotBoxController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm   = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                $translator->trans('admin.successfully_changed_record'));
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $translator->trans('admin.successfully_changed_record')
+            );
 
-            return $this->redirect($this->generateUrl('admin_ballotbox_show',
-                        array('id' => $id)));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_ballotbox_show',
+                    array('id' => $id)
+                )
+            );
         }
 
         return array(
@@ -278,11 +257,12 @@ class BallotBoxController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_DELETE');
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em     = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->find($id);
 
             if (!$entity) {
@@ -293,29 +273,13 @@ class BallotBoxController extends Controller
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success',
-                $translator->trans('admin.successfully_removed_record'));
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $translator->trans('admin.successfully_removed_record')
+            );
         }
 
         return $this->redirect($this->generateUrl('admin_ballotbox'));
-    }
-
-    /**
-     * Creates a form to delete a BallotBox entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-                ->setAction($this->generateUrl('admin_ballotbox_delete',
-                        array('id' => $id)))
-                ->setMethod('DELETE')
-                ->add('submit', 'submit', array('label' => 'Delete'))
-                ->getForm()
-        ;
     }
 
     /**
@@ -325,8 +289,10 @@ class BallotBoxController extends Controller
      */
     public function clearFiltersAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_READ');
         $session = $this->getRequest()->getSession();
         $session->remove('ballotBox_filters');
+
         return $this->redirect($this->generateUrl('admin_ballotbox'));
     }
 
@@ -336,7 +302,7 @@ class BallotBoxController extends Controller
      */
     public function batchCreateAction(Request $request)
     {
-        $em     = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $pollId = $request->get('poll_id');
 
         if ($pollId !== null) {
@@ -348,20 +314,26 @@ class BallotBoxController extends Controller
 
         $default = array(
             'openingTime' => $poll->getOpeningTime(),
-            'closingTime' => $poll->getClosingTime()
+            'closingTime' => $poll->getClosingTime(),
         );
         $builder = $this->createFormBuilder($default)
-            ->add('openingTime', 'datetime',
-                array('date_widget' => 'single_text'))
-            ->add('closingTime', 'datetime',
-                array('date_widget' => 'single_text'))
+            ->add(
+                'openingTime',
+                'datetime',
+                array('date_widget' => 'single_text')
+            )
+            ->add(
+                'closingTime',
+                'datetime',
+                array('date_widget' => 'single_text')
+            )
             ->add('config', 'file');
 
         $form = $builder->getForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $data   = $form->getData();
+            $data = $form->getData();
             $config = $this->parseData($data['config']);
 
             $openingTime = $data['openingTime'];
@@ -384,16 +356,27 @@ class BallotBoxController extends Controller
                 if (array_key_exists($index, $cities)) {
                     $city = $cities[$index];
 
-                    $ballotBox = $this->createOfflineBallotBox($em, $poll,
-                        $city, $openingTime, $closingTime);
+                    $ballotBox = $this->createOfflineBallotBox(
+                        $em,
+                        $poll,
+                        $city,
+                        $openingTime,
+                        $closingTime
+                    );
 
-                    $req['pin']        = $ballotBox->getPin();
+                    $req['pin'] = $ballotBox->getPin();
                     $req['passphrase'] = $ballotBox->getSecret();
                 }
 
-                $result .= sprintf('%s;%s;%s;%s;%s;%s', $req['city'],
-                        $req['person'], $req['cpf'], $req['email'],
-                        $req['passphrase'], $req['pin']).PHP_EOL;
+                $result .= sprintf(
+                        '%s;%s;%s;%s;%s;%s',
+                        $req['city'],
+                        $req['person'],
+                        $req['cpf'],
+                        $req['email'],
+                        $req['passphrase'],
+                        $req['pin']
+                    ).PHP_EOL;
             }
 
             $em->flush();
@@ -401,72 +384,20 @@ class BallotBoxController extends Controller
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
-            $response->headers->set('Content-Disposition',
-                'attachment; filename="offline_ballot_boxes.csv";');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="offline_ballot_boxes.csv";'
+            );
             $response->headers->set('Content-length', strlen($result));
 
             $response->sendHeaders();
 
             $response->setContent($result);
+
             return $response;
         }
 
         return array('form' => $form->createView());
-    }
-
-    private function createOfflineBallotBox(EntityManager $em, Poll $poll,
-                                            City $city, \DateTime $openingTime,
-                                            \DateTime $closingTime)
-    {
-        $name = "Urna offline de {$city->getName()}";
-
-        $entity = new BallotBox();
-        $entity->setSecret($entity->generatePassphrase())
-            ->setCity($city)
-            ->setIsOnline(false)
-            ->setName($name)
-            ->setOpeningTime($openingTime)
-            ->setClosingTime($closingTime)
-            ->setPoll($poll);
-
-        $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
-        $pin  = $repo->generateUniquePin($entity->getPoll(), 4);
-        $entity->setPin($pin);
-
-        $em->persist($entity);
-        return $entity;
-    }
-
-    private function parseData(UploadedFile $file)
-    {
-        $handle = $file->openFile();
-
-        $first  = true;
-        $config = array();
-        while (($data   = $handle->fgetcsv(';')) !== FALSE) {
-            if (count($data) < 4) {
-                break;
-            }
-            if ($first) {
-                $first = false;
-                continue;
-            }
-            $cleanData = array_map('trim', $data);
-            $city      = strtolower($cleanData[0]);
-
-            $config['cities'][] = $city;
-
-            $config['requests'][] = array(
-                'city' => $city,
-                'person' => $cleanData[1],
-                'cpf' => $cleanData[2],
-                'email' => $cleanData[3],
-                'passphrase' => @$cleanData[4],
-                'pin' => @$cleanData[5]
-            );
-        }
-
-        return $config;
     }
 
     /**
@@ -475,6 +406,7 @@ class BallotBoxController extends Controller
      */
     public function emailBallotBoxesAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_SEND_EMAIL');
         $builder = $this->createFormBuilder()
             ->add('config', 'file');
 
@@ -482,7 +414,7 @@ class BallotBoxController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $data   = $form->getData();
+            $data = $form->getData();
             $config = $this->parseData($data['config']);
 
             $emails = $this->prepareEmails($config);
@@ -496,34 +428,168 @@ class BallotBoxController extends Controller
         return array('form' => $form->createView());
     }
 
+    /**
+     * Creates a form to create a BallotBox entity.
+     *
+     * @param BallotBox $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createCreateForm(BallotBox $entity)
+    {
+        $form = $this->createForm(
+            new BallotBoxType(),
+            $entity,
+            array(
+                'action' => $this->generateUrl('admin_ballotbox_create'),
+                'method' => 'POST',
+            )
+        );
+
+        $form->add('submit', 'submit', array('label' => 'Create'));
+
+        return $form;
+    }
+
+    /**
+     * Creates a form to edit a BallotBox entity.
+     *
+     * @param BallotBox $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createEditForm(BallotBox $entity)
+    {
+        $form = $this->createForm(
+            new BallotBoxType(),
+            $entity,
+            array(
+                'action' => $this->generateUrl(
+                    'admin_ballotbox_update',
+                    array('id' => $entity->getId())
+                ),
+                'method' => 'PUT',
+            )
+        );
+
+        $form->add('submit', 'submit', array('label' => 'Update'));
+
+        return $form;
+    }
+
+    /**
+     * Creates a form to delete a BallotBox entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+            ->setAction(
+                $this->generateUrl(
+                    'admin_ballotbox_delete',
+                    array('id' => $id)
+                )
+            )
+            ->setMethod('DELETE')
+            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->getForm();
+    }
+
+    private function createOfflineBallotBox(
+        EntityManager $em,
+        Poll $poll,
+        City $city,
+        \DateTime $openingTime,
+        \DateTime $closingTime
+    ) {
+        $name = "Urna offline de {$city->getName()}";
+
+        $entity = new BallotBox();
+        $entity->setSecret($entity->generatePassphrase())
+            ->setCity($city)
+            ->setIsOnline(false)
+            ->setName($name)
+            ->setOpeningTime($openingTime)
+            ->setClosingTime($closingTime)
+            ->setPoll($poll);
+
+        $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+        $pin = $repo->generateUniquePin($entity->getPoll(), 4);
+        $entity->setPin($pin);
+
+        $em->persist($entity);
+
+        return $entity;
+    }
+
+    private function parseData(UploadedFile $file)
+    {
+        $handle = $file->openFile();
+
+        $first = true;
+        $config = array();
+        while (($data = $handle->fgetcsv(';')) !== false) {
+            if (count($data) < 4) {
+                break;
+            }
+            if ($first) {
+                $first = false;
+                continue;
+            }
+            $cleanData = array_map('trim', $data);
+            $city = strtolower($cleanData[0]);
+
+            $config['cities'][] = $city;
+
+            $config['requests'][] = array(
+                'city' => $city,
+                'person' => $cleanData[1],
+                'cpf' => $cleanData[2],
+                'email' => $cleanData[3],
+                'passphrase' => @$cleanData[4],
+                'pin' => @$cleanData[5],
+            );
+        }
+
+        return $config;
+    }
+
     private function groupRequestsByEmail($config)
     {
         $requests = array();
         foreach ($config['requests'] as $req) {
             $requests[$req['email']][] = $req;
         }
+
         return $requests;
     }
 
     private function prepareEmails($config)
     {
-        $emails   = array();
+        $emails = array();
         $requests = $this->groupRequestsByEmail($config);
         foreach ($requests as $email => $reqs) {
-            $emailRegex  = "/^[^a-zA-Z0-9@.\-!#$%&'*+\/\=?^_`{|}~]*/";
-            $cleanEmail  = preg_replace($emailRegex, '', $email);
+            $emailRegex = "/^[^a-zA-Z0-9@.\-!#$%&'*+\/\=?^_`{|}~]*/";
+            $cleanEmail = preg_replace($emailRegex, '', $email);
             $destination = explode(' ', $cleanEmail)[0];
 
             $message = \Swift_Message::newInstance()
                 ->setSubject('Informações de Urna Offline')
-                ->setFrom($this->getParameter('mailer_sender_mail'),
-                    $this->getParameter('mailer_sender_name'))
+                ->setFrom(
+                    $this->getParameter('mailer_sender_mail'),
+                    $this->getParameter('mailer_sender_name')
+                )
                 ->setTo($destination)
                 ->setBody(
-                $this->renderView(
-                    'Emails/ballotboxes.txt.twig', array('requests' => $reqs)
-                ), 'text/plain'
-            );
+                    $this->renderView(
+                        'Emails/ballotboxes.txt.twig',
+                        array('requests' => $reqs)
+                    ),
+                    'text/plain'
+                );
 
             $emails[] = $message;
         }

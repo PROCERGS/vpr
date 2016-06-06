@@ -25,6 +25,7 @@ class EmailController extends Controller
      */
     public function sendReminderAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_BALLOTBOXES_SEND_EMAIL');
         $iterationsLimit = 2;
         $queryLimit = 10;
         $mailer = $this->get('mailer');

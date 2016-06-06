@@ -2,7 +2,7 @@ becklyn_static_roles:
     roles:
         ROLE_ADMIN:
             title: "Administrador Geral"
-            included_roles: [ROLE_ADMIN_MENU, ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_BALLOT, ROLE_CRUD_BALLOTBOX, ROLE_CRUD_USER]
+            included_roles: [ROLE_ADMIN_MENU, ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_STEP, ROLE_CRUD_CATEGORY, ROLE_CRUD_BALLOT, ROLE_CRUD_BALLOTBOX, ROLE_CRUD_USER]
         ROLE_SUPER_ADMIN:
             title: "Super Admin"
             included_roles: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
@@ -137,32 +137,32 @@ becklyn_static_roles:
             title: "CRUD de Urnas"
             included_roles: [ROLE_BALLOTBOX_CREATE, ROLE_BALLOTBOX_READ, ROLE_BALLOTBOX_UPDATE, ROLE_BALLOTBOX_DELETE]
             hidden: true
-        ROLE_BALLOTBOXES:
+        ROLE_BALLOTBOX:
             title: ""
             hidden: true
         ROLE_BALLOTBOX_CREATE:
             title: "Criar Urnas"
-            included_roles: [ROLE_BALLOTBOXES]
+            included_roles: [ROLE_BALLOTBOX]
             hidden: true
         ROLE_BALLOTBOX_READ:
             title: "Consultar Urnas"
-            included_roles: [ROLE_BALLOTBOXES]
+            included_roles: [ROLE_BALLOTBOX]
             hidden: true
         ROLE_BALLOTBOX_UPDATE:
             title: "Atualizar Urnas"
-            included_roles: [ROLE_BALLOTBOXES]
+            included_roles: [ROLE_BALLOTBOX]
             hidden: true
         ROLE_BALLOTBOX_DELETE:
             title: "Deletar Urnas"
-            included_roles: [ROLE_BALLOTBOXES]
+            included_roles: [ROLE_BALLOTBOX]
             hidden: true
         ROLE_BALLOTBOXES_SEND_EMAIL:
             title: "Enviar emails das urnas"
-            included_roles: [ROLE_BALLOTBOXES]
+            included_roles: [ROLE_BALLOTBOX]
             hidden: true
         ROLE_BALLOTBOXES_SEND_SMS:
             title: "Enviar SMS das urnas"
-            included_roles: [ROLE_BALLOTBOXES]
+            included_roles: [ROLE_BALLOTBOX]
             hidden: true
 
         # User roles
@@ -268,12 +268,12 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
-        - { path: ^/admin/step, role: ROLE_COREDE }
-        - { path: ^/admin/category, role: ROLE_ADMIN }
-        - { path: ^/admin/ballotbox, role: ROLE_CRUD_BALLOTBOX }
-        - { path: ^/admin/poll_option, role: ROLE_COREDE }
-        - { path: ^/admin/person, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/poll, role: ROLE_POLL }
+        - { path: ^/admin/step, role: ROLE_STEP }
+        - { path: ^/admin/category, role: ROLE_CATEGORY }
+        - { path: ^/admin/ballotbox, role: ROLE_BALLOTBOX }
+        - { path: ^/admin/poll_option, role: ROLE_BALLOT }
+        - { path: ^/admin/person, role: ROLE_USER }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }
