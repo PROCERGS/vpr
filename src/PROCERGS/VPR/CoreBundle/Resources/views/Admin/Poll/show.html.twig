@@ -4,14 +4,17 @@
 
 {% block content -%}
     <div class="navbar">
-        <a class="btn btn-default" href="{{ path('admin_poll') }}" role="button"><span class="glyphicon glyphicon-arrow-left"></span>  {% trans %}admin.back_to_list{% endtrans %}</a>
+        <a class="btn btn-default" href="{{ path('admin_poll') }}" role="button"><span
+                    class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
     </div>
 
     <div class="row">
         <div class="col-md-12">
             <ul class="nav nav-tabs" style="margin-bottom: 40px;">
                 <li class="active"><a href="#poll" data-toggle="tab">{{ 'admin.poll'|trans }}</a></li>
-                <li><a href="#step" data-toggle="tab" href="#">{{ 'admin.steps'|trans }}</a></li>
+                {% if is_granted('ROLE_STEP') %}
+                    <li><a href="#step" data-toggle="tab" href="#">{{ 'admin.steps'|trans }}</a></li>
+                {% endif %}
             </ul>
 
             <div class="tab-content">
@@ -19,8 +22,9 @@
 
                     {% for type, messages in app.session.flashbag.all() %}
                         {% for message in messages %}
-                            <div class="alert alert-{{type}} alert-dismissable">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <div class="alert alert-{{ type }} alert-dismissable">
+                                <button type="button" class="close" data-dismiss="alert"
+                                        aria-hidden="true">&times;</button>
                                 {{ message }}
                             </div>
                         {% endfor %}
@@ -71,23 +75,34 @@
                     </form>
 
                     <div class="form-group form-actions">
-                        <div class="col-lg-10 col-lg-offset-2">            
-                            <a class="btn btn-default btn-sm" href="{{ path('admin_poll_new') }}" role="button"><span class="glyphicon glyphicon-file"></span> {%trans%}admin.add{%endtrans%}</a>
-                            <a href="{{ path('admin_poll_edit', { 'id': entity.id }) }}" class="btn btn-sm btn-primary group-action">{{ 'admin.edit'|trans }}</a>
+                        <div class="col-lg-10 col-lg-offset-2">
+                            {% if is_granted('ROLE_POLL_CREATE') %}
+                                <a class="btn btn-default btn-sm" href="{{ path('admin_poll_new') }}"
+                                   role="button">
+                                    <span class="glyphicon glyphicon-file"></span> {% trans %}admin.add{% endtrans %}
+                                </a>
+                            {% endif %}
 
-                            {{ form_start(delete_form) }}
-                            {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
-                            {{ form_end(delete_form) }}
+                            {% if is_granted('ROLE_POLL_UPDATE') %}
+                                <a href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"
+                                   class="btn btn-sm btn-primary group-action">{{ 'admin.edit'|trans }}</a>
+                            {% endif %}
+
+                            {% if is_granted('ROLE_POLL_DELETE') %}
+                                {{ form_start(delete_form) }}
+                                {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
+                                {{ form_end(delete_form) }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                    
+
                 <div class="tab-pane" id="step">
                     {% include 'PROCERGSVPRCoreBundle:Admin/Step:list.html.twig' with {'entities': steps} %}
                 </div>
 
             </div>
         </div>
-    </div>                    
+    </div>
 
 {% endblock %}
