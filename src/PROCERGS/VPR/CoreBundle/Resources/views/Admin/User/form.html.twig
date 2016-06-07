@@ -1,0 +1,81 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'admin_users'|trans %}
+{% set actionName = ('vpr.user.admin.action.' ~ (entity.id != null ? 'edit' : 'new')) | trans %}
+{% set backParams = app.request.get('query') ? { 'query': app.request.get('query') } : { } %}
+
+{% block content -%}
+    <div class="row navbar">
+        <div class="col-md-3 col-sm-12">
+            <a class="btn btn-default" href="{{ path('admin_user_list', backParams) }}" role="button">
+                <span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}
+            </a>
+        </div>
+        {{ include('PROCERGSVPRCoreBundle:Admin/User:search.html.twig', { 'widget_only': true, 'class': 'col-md-9 col-sm-12' }) }}
+    </div>
+
+    {{ form_start(form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
+    {{ form_errors(form) }}
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'vpr.user.name.label'|trans }}</label>
+        <div class="col-sm-9">
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'vpr.user.email.label'|trans }}</label>
+        <div class="col-sm-9">
+            {{ form_errors(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'vpr.user.city.label'|trans }}</label>
+        <div class="col-sm-9">
+            {{ form_errors(form.city) }}
+            {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+
+    {% if entity.id != null %}
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{ 'vpr.user.username.label'|trans }}</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{ entity.username }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{{ 'admin.created_at'|trans }}</label>
+        <div class="col-sm-9">
+            <p class="form-control-static">{{ entity.createdAt|date('d/m/Y H:i:s') }}</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.roles) }}
+        <div class="col-sm-9">
+            {{ form_errors(form.roles) }}
+            <div class="user-roles">
+                {{ form_widget(form.roles) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group form-actions">
+        <div class="col-lg-10 col-lg-offset-2">
+            <button type="submit" class="btn btn-sm btn-primary">{{ 'admin.save'|trans }}</button>
+            {{ form_end(form) }}
+
+            {% if is_granted('ROLE_USER_DELETE') and deleteForm is defined and deleteForm is not null %}
+                {{ form_start(deleteForm) }}
+                {{ form_widget(deleteForm.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
+                {{ form_end(deleteForm) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

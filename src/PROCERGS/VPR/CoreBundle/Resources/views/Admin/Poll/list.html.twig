@@ -13,24 +13,35 @@
             {% if(entities.items) %}
                 {% for entity in entities %}
                     {% if loop.first %}
-                    <tr class="success">
+                        <tr class="success">
                     {% elseif loop.last %}
-                    <tr>
+                        <tr>
                     {% endif %}
-                        <td>{{ entity.name }}</td>
-                        <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
-                        <td>{% if entity.closingTime %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
-                        <td>{{ entity.description }}</td>
-                        <td>
-                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
+                    <td>{{ entity.name }}</td>
+                    <td>{% if entity.openingTime %}{{ entity.openingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
+                    <td>{% if entity.closingTime %}{{ entity.closingTime|date('d/m/Y H:i:s') }}{% endif %}</td>
+                    <td>{{ entity.description }}</td>
+                    <td>
+                        {% if is_granted('ROLE_POLL_READ') %}
+                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm"
+                               href="{{ path('admin_poll_show', { 'id': entity.id }) }}"><span
+                                        class="glyphicon glyphicon-eye-open"></span></a>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_POLL_UPDATE') %}
                             {% if entity.apurationDone is null %}
-                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
+                                   href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"><span
+                                            class="glyphicon glyphicon-pencil"></span></a>
                             {% endif %}
-                        </td>
+                        {% endif %}
+                    </td>
                     </tr>
                 {% endfor %}
             {% else %}
-                    <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
+                <tr>
+                    <td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td>
+                </tr>
             {% endif %}
         </tbody>
     </table>

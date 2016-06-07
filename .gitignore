@@ -18,4 +18,5 @@
 /.buildpath
 /app/check.php
 /batch/config.ini
+.idea/
 

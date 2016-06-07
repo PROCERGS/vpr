@@ -1,11 +1,13 @@
 {% if(sorted is defined) and (sorted) %}
-    <a class="btn btn-success save-sorted save-sorted-step" data-table="records_list" href="#" role="button" data-loading-text="{{'admin.saving'|trans}}">
-        <span class="glyphicon glyphicon-floppy-disk"></span> {%trans%}admin.save_sorted{%endtrans%}
+    <a class="btn btn-success save-sorted save-sorted-step" data-table="records_list" href="#" role="button"
+       data-loading-text="{{ 'admin.saving'|trans }}">
+        <span class="glyphicon glyphicon-floppy-disk"></span> {% trans %}admin.save_sorted{% endtrans %}
     </a>
 {% endif %}
 
 <div class="table-responsive">
-    <table id="records_list" data-type="step" class="table table-striped table-bordered table-hover records_list {{ (sorted is defined) and (sorted) ? 'sorted_table' }}">
+    <table id="records_list" data-type="step"
+           class="table table-striped table-bordered table-hover records_list {{ (sorted is defined) and (sorted) ? 'sorted_table' }}">
         <thead>
             <tr>
                 <th width="10%">{{ 'admin.sorting'|trans }}</th>
@@ -18,7 +20,7 @@
         <tbody>
             {% if(entities is defined) %}
                 {% for entity in entities %}
-                    <tr data-id="{{entity.id}}">
+                    <tr data-id="{{ entity.id }}">
                         <td class="text-center">
                             <span class="order">{{ entity.sorting }}</span>
                         </td>
@@ -26,13 +28,23 @@
                         <td>{% if entity.poll.name is defined %}{{ entity.poll.name }}{% endif %}</td>
                         <td>{{ entity.maxSelection }}</td>
                         <td class="text-center">
-                            <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_step_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                            <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_step_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                        </td>                            
+                            {% if is_granted('ROLE_STEP_READ') %}
+                                <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm"
+                                   href="{{ path('admin_step_show', { 'id': entity.id }) }}"><span
+                                            class="glyphicon glyphicon-eye-open"></span></a>
+                            {% endif %}
+                            {% if is_granted('ROLE_STEP_UPDATE') and entity.poll.apurationDone is null %}
+                                <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
+                                   href="{{ path('admin_step_edit', { 'id': entity.id }) }}"><span
+                                            class="glyphicon glyphicon-pencil"></span></a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             {% else %}
-                    <tr><td colspan="8" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
+                <tr>
+                    <td colspan="8" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td>
+                </tr>
             {% endif %}
         </tbody>
     </table>

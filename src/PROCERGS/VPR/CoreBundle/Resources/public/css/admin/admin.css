@@ -62,7 +62,7 @@ a.save-sorted-step{
     padding: 20px 35px;
 }
 .container .jumbotron form div.form-group{
-    margin-right: 30px
+    /*margin-right: 30px*/
 }
 .poll-option-step {
     border: 1px solid #DDDDDD;
@@ -128,4 +128,18 @@ a.save-sorted-step{
 .ballot-check {
     height: 18px;
     width: 18px;
+}
+
+/* User Form */
+form .user-roles {
+    margin-top: 8px;
+}
+form .user-roles input {
+    display: inline-block;
+    float: left;
+    clear: both;
+}
+form .user-roles label {
+    display: inline-block;
+    float: left;
 }

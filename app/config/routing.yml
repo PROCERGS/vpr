@@ -1,3 +1,7 @@
+donato_oidc:
+    resource: "@DonatoOIDCBundle/Resources/config/routing.yml"
+    prefix:   /admin/oidc
+
 procergsvpr_counting:
     resource: "@PROCERGSVPRCountingBundle/Controller/"
     type:     annotation

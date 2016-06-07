@@ -13,37 +13,37 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
                     {% set controller = "app.request.attributes.get('_template').get('controller')|lower" %}
-                    {% if is_granted('ROLE_CRUD_POLL') %}
+                    {% if is_granted('ROLE_POLL') %}
                         <li class="{{ controller == 'admin\\poll' ? 'active' }}">
                             <a href="{{ path('admin_poll') }}">{{'Polls'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_CRUD_POLL') %}
+                    {% if is_granted('ROLE_STEP') %}
                         <li class="{{ controller == 'admin\\step' ? 'active' }}">
                             <a href="{{ path('admin_step') }}">{{'Steps'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_CRUD_POLL') %}
+                    {% if is_granted('ROLE_CATEGORY') %}
                         <li class="{{ controller == 'admin\\category' ? 'active' }}">
                             <a href="{{ path('admin_category') }}">{{'Categories'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_COREDE') %}
+                    {% if is_granted('ROLE_BALLOT') %}
                         <li class="{{ controller == 'admin\\polloption' ? 'active' }}">
                             <a href="{{ path('admin_poll_option') }}">{{'Ballots'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_CRUD_BALLOTBOX') %}
+                    {% if is_granted('ROLE_BALLOTBOX') %}
                         <li class="{{ controller == 'admin\\ballotbox' ? 'active' }}">
                             <a href="{{ path('admin_ballotbox') }}">{{'Ballot Boxes'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_MANAGE_USER') %}
-                        <li class="{{ controller == 'admin\\person' ? 'active' }}">
-                            <a href="{{ path('admin_person') }}">{{'Users'|trans}}</a>
+                    {% if is_granted('ROLE_USER') %}
+                        <li class="{{ controller == 'admin\\user' ? 'active' }}">
+                            <a href="{{ path('admin_user_list') }}">{{'Users'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_MANAGE_USER') %}
+                    {% if is_granted('ROLE_RESULTS') %}
                         <li class="{{ controller == 'admin\\poll' ? 'active' }}">
                             <a href="{{ path('admin_stats') }}">{{'Apuração'|trans}}</a>
                         </li>

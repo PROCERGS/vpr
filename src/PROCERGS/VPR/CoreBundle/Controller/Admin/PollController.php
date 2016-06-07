@@ -29,6 +29,7 @@ class PollController extends Controller
      */
     public function indexAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_READ');
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
@@ -57,6 +58,7 @@ class PollController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_CREATE');
         $entity = new Poll();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -107,6 +109,7 @@ class PollController extends Controller
      */
     public function newAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_CREATE');
         $entity = new Poll();
         $form   = $this->createCreateForm($entity);
 
@@ -125,6 +128,7 @@ class PollController extends Controller
      */
     public function showAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_READ');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
@@ -153,6 +157,7 @@ class PollController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
@@ -205,6 +210,7 @@ class PollController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
@@ -240,6 +246,7 @@ class PollController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_POLL_DELETE');
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -290,7 +297,6 @@ class PollController extends Controller
      * Lists poll stats.
      *
      * @Route("/stats", name="admin_stats")
-     * @Method("GET")
      * @Template()
      */
     public function statsListAction(Request $request)
@@ -305,6 +311,7 @@ class PollController extends Controller
 
         $form = $this->createForm(new PollOptionFilterType());
         $form->remove("corede");
+
 
         if ($request->isMethod('POST') || $poll_filters) {
             if(!$request->isMethod('POST') && $poll_filters){
@@ -322,6 +329,7 @@ class PollController extends Controller
 
         $votes = $statsRepo->findTotalVotesByPoll($poll->getId());
 
+        $coredes = null;
         foreach ($votes as $vote) {
             $corede = $coredeRepo->find($vote['corede_id']);
             $coredeId = $corede->getId();
@@ -331,7 +339,7 @@ class PollController extends Controller
             $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
         }
 
-        $voters    = $statsRepo->findTotalVotersByPoll(4);
+        $voters    = $statsRepo->findTotalVotersByPoll($poll->getId());
         foreach ($voters as $vote) {
             $coredeId = $vote['corede_id'];
             $coredes[$coredeId]['voters_online'] = $vote['voters_online'];

@@ -250,3 +250,24 @@ admin.status: Status
 admin.ddd: DDD
 admin.sentMessage1: Ult. Alerta Transmissão
 admin.sentMessage2: Ult. Envio Senha
+account.activated: Sua conta foi ativada
+vpr.user:
+    admin.action:
+        new: Novo
+        edit: Editar
+    name.label: Nome
+    city.label: Município
+    username.label: Código de Usuário
+    email.label: Email
+    created_at.label: Data de Criação
+    search:
+        label: Email
+        placeholder: Email
+        button: Pesquisar
+    emails:
+        registration:
+            greet: Olá, %name%
+            created: Seu cadastro no sistema da Consulta Popular foi criado mas não está ativo.
+            need_activation: Para ativá-lo, acesse o endereço a seguir.
+            help: Se precisar de ajuda, entre em contato com a SEPLAN.
+            sign: Consulta Popular

@@ -1,0 +1,126 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        /* Loading Spinner */
+        .spinner {
+            margin: 0;
+            width: 70px;
+            height: 18px;
+            margin: -35px 0 0 -9px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center
+        }
+
+        .spinner > div {
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+            animation: bouncedelay 1.4s infinite ease-in-out;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both
+        }
+
+        .spinner .bounce1 {
+            -webkit-animation-delay: -.32s;
+            animation-delay: -.32s
+        }
+
+        .spinner .bounce2 {
+            -webkit-animation-delay: -.16s;
+            animation-delay: -.16s
+        }
+
+        @-webkit-keyframes bouncedelay {
+            0%, 80%, 100% {
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        @keyframes bouncedelay {
+            0%, 80%, 100% {
+                transform: scale(0.0);
+                -webkit-transform: scale(0.0)
+            }
+            40% {
+                transform: scale(1.0);
+                -webkit-transform: scale(1.0)
+            }
+        }
+
+        .vertical-center {
+            min-height: 100%;
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+        }
+
+        .btn[data-target="#otherProvider"] {
+            margin-top: 30px !important;
+            color: #666 !important;
+        }
+    </style>
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    <div class="spinner" style="display: none;">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+
+    <div class="vertical-center">
+        <div class="login-form center-block">
+            <h1>Área Administrativa</h1>
+
+            <a href="{{ path('oidc_login', {'providerId': defaultProvider.id}) }}"
+               class="btn btn-primary btn-block default-provider">
+                Entrar com Login Cidadão do RS
+            </a>
+
+            {% if defaultProvider is not null %}
+                <button class="btn btn-sm btn-link btn-block" type="button" data-toggle="collapse"
+                        data-target="#otherProvider"
+                        aria-expanded="false" aria-controls="collapseExample">
+                    Utilizar outro Provedor de Identidade
+                </button>
+            {% endif %}
+
+            <div class="collapse" id="otherProvider">
+                <div class="well">
+                    {{ render(controller('DonatoOIDCBundle:Login:askProvider')) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function showSpinner() {
+            $('.spinner').fadeIn();
+            $('.vertical-center').fadeOut();
+        }
+
+        $(document).ready(function(){
+            $('form').on('submit', function() {
+                showSpinner();
+            });
+
+            $('.default-provider').on('click', function() {
+                showSpinner();
+            });
+        });
+    </script>
+{% endblock %}

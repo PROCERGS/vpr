@@ -1,21 +1,215 @@
+becklyn_static_roles:
+    roles:
+        ROLE_ADMIN:
+            title: "Administrador Geral"
+            included_roles: [ROLE_ADMIN_MENU, ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_STEP, ROLE_CRUD_CATEGORY, ROLE_CRUD_BALLOT, ROLE_CRUD_BALLOTBOX, ROLE_CRUD_USER]
+        ROLE_SUPER_ADMIN:
+            title: "Super Admin"
+            included_roles: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+        ROLE_RESULTS:
+            title: "Acesso aos resultados"
+            included_roles: [ROLE_USER]
+
+        ROLE_ADMIN_BALLOTBOXES:
+            title: "Administrador de Urnas"
+            included_roles: [ROLE_USER, ROLE_CRUD_BALLOTBOX, ROLE_BALLOTBOXES_SEND_EMAIL, ROLE_BALLOTBOXES_SEND_SMS]
+
+        ROLE_APPROVE_RESULT:
+            title: "Homologador de Resultados"
+            included_roles: [ROLE_USER]
+
+        ROLE_COORDINATOR:
+            title: "Coordenador"
+            included_roles: [ROLE_USER, ROLE_ADMIN_MENU]
+        ROLE_STATS:
+            title: "Estatísticas"
+            included_roles: [ROLE_USER]
+        ROLE_USER:
+            title: "User"
+            description: "The default frontend user"
+
+        ROLE_ALLOWED_TO_SWITCH:
+            title: ""
+            hidden: true
+        ROLE_ADMIN_MENU:
+            title: ""
+            hidden: true
+
+        # Poll roles
+        ROLE_CRUD_POLL:
+            title: "CRUD de Votação"
+            included_roles: [ROLE_POLL_CREATE, ROLE_POLL_READ, ROLE_POLL_UPDATE, ROLE_POLL_DELETE]
+        ROLE_POLL:
+            title: ""
+            hidden: true
+        ROLE_POLL_CREATE:
+            title: "Criar Votações"
+            included_roles: [ROLE_POLL]
+            hidden: true
+        ROLE_POLL_READ:
+            title: "Consultar Votações"
+            included_roles: [ROLE_POLL]
+            hidden: true
+        ROLE_POLL_UPDATE:
+            title: "Atualizar Votações"
+            included_roles: [ROLE_POLL]
+            hidden: true
+        ROLE_POLL_DELETE:
+            title: "Deletar Votações"
+            included_roles: [ROLE_POLL]
+            hidden: true
+
+        # Step roles
+        ROLE_CRUD_STEP:
+            title: "CRUD de Etapas"
+            included_roles: [ROLE_STEP_CREATE, ROLE_STEP_READ, ROLE_STEP_UPDATE, ROLE_STEP_DELETE]
+        ROLE_STEP:
+            title: ""
+            hidden: true
+        ROLE_STEP_CREATE:
+            title: "Criar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+        ROLE_STEP_READ:
+            title: "Consultar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+        ROLE_STEP_UPDATE:
+            title: "Atualizar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+        ROLE_STEP_DELETE:
+            title: "Deletar Etapas"
+            included_roles: [ROLE_STEP]
+            hidden: true
+
+        # Category roles
+        ROLE_CRUD_CATEGORY:
+            title: "CRUD de Categorias"
+            included_roles: [ROLE_CATEGORY_CREATE, ROLE_CATEGORY_READ, ROLE_CATEGORY_UPDATE, ROLE_CATEGORY_DELETE]
+        ROLE_CATEGORY:
+            title: ""
+            hidden: true
+        ROLE_CATEGORY_CREATE:
+            title: "Criar Categorias"
+            included_roles: [ROLE_CATEGORY]
+            hidden: true
+        ROLE_CATEGORY_READ:
+            title: "Consultar Categorias"
+            included_roles: [ROLE_CATEGORY]
+            hidden: true
+        ROLE_CATEGORY_UPDATE:
+            title: "Atualizar Categorias"
+            included_roles: [ROLE_CATEGORY]
+            hidden: true
+        ROLE_CATEGORY_DELETE:
+            title: "Deletar Categorias"
+            included_roles: [ROLE_CATEGORY]
+            hidden: true
+
+        # Ballot roles
+        ROLE_CRUD_BALLOT:
+            title: "CRUD de Cédulas"
+            included_roles: [ROLE_BALLOT_CREATE, ROLE_BALLOT_READ, ROLE_BALLOT_UPDATE, ROLE_BALLOT_DELETE]
+        ROLE_BALLOT:
+            title: ""
+            hidden: true
+        ROLE_BALLOT_CREATE:
+            title: "Criar Opções"
+            included_roles: [ROLE_BALLOT]
+            hidden: true
+        ROLE_BALLOT_READ:
+            title: "Consultar Opções"
+            included_roles: [ROLE_BALLOT]
+            hidden: true
+        ROLE_BALLOT_UPDATE:
+            title: "Atualizar Opções"
+            included_roles: [ROLE_BALLOT]
+            hidden: true
+        ROLE_BALLOT_DELETE:
+            title: "Deletar Opções"
+            included_roles: [ROLE_BALLOT]
+            hidden: true
+
+        # Ballotboxes roles
+        ROLE_CRUD_BALLOTBOX:
+            title: "CRUD de Urnas"
+            included_roles: [ROLE_BALLOTBOX_CREATE, ROLE_BALLOTBOX_READ, ROLE_BALLOTBOX_UPDATE, ROLE_BALLOTBOX_DELETE]
+            hidden: true
+        ROLE_BALLOTBOX:
+            title: ""
+            hidden: true
+        ROLE_BALLOTBOX_CREATE:
+            title: "Criar Urnas"
+            included_roles: [ROLE_BALLOTBOX]
+            hidden: true
+        ROLE_BALLOTBOX_READ:
+            title: "Consultar Urnas"
+            included_roles: [ROLE_BALLOTBOX]
+            hidden: true
+        ROLE_BALLOTBOX_UPDATE:
+            title: "Atualizar Urnas"
+            included_roles: [ROLE_BALLOTBOX]
+            hidden: true
+        ROLE_BALLOTBOX_DELETE:
+            title: "Deletar Urnas"
+            included_roles: [ROLE_BALLOTBOX]
+            hidden: true
+        ROLE_BALLOTBOXES_SEND_EMAIL:
+            title: "Enviar emails das urnas"
+            included_roles: [ROLE_BALLOTBOX]
+            hidden: true
+        ROLE_BALLOTBOXES_SEND_SMS:
+            title: "Enviar SMS das urnas"
+            included_roles: [ROLE_BALLOTBOX]
+            hidden: true
+
+        # User roles
+        ROLE_CRUD_USER:
+            title: "CRUD de Usuários"
+            included_roles: [ROLE_USER_CREATE, ROLE_USER_READ, ROLE_USER_UPDATE, ROLE_USER_DELETE]
+            hidden: true
+        ROLE_USER:
+            title: ""
+            hidden: true
+        ROLE_USER_CREATE:
+            title: "Criar Urnas"
+            included_roles: [ROLE_USER]
+            hidden: true
+        ROLE_USER_READ:
+            title: "Consultar Urnas"
+            included_roles: [ROLE_USER]
+            hidden: true
+        ROLE_USER_UPDATE:
+            title: "Atualizar Urnas"
+            included_roles: [ROLE_USER]
+            hidden: true
+        ROLE_USER_DELETE:
+            title: "Deletar Urnas"
+            included_roles: [ROLE_USER]
+            hidden: true
+
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface: sha512
         PROCERGS\VPR\CoreBundle\Entity\Voter: sha512
 
-    role_hierarchy:
-        ROLE_COORDINATOR:       ROLE_USER, ROLE_ADMIN_MENU
-        ROLE_COREDE:            ROLE_COORDINATOR
-        ROLE_STATS:             ROLE_USER
-        ROLE_CRUD_POLL:         ROLE_COORDINATOR
-        ROLE_CRUD_BALLOTBOX:    ROLE_COORDINATOR
-        ROLE_MANAGE_USER:       ROLE_COORDINATOR
-        ROLE_ADMIN:             ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_BALLOTBOX, ROLE_MANAGE_USER
-        ROLE_SUPER_ADMIN:       ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, ROLE_COREDE
+#    role_hierarchy:
+#        ROLE_COORDINATOR:       ROLE_USER, ROLE_ADMIN_MENU
+#        ROLE_COREDE:            ROLE_COORDINATOR
+#        ROLE_STATS:             ROLE_USER
+#        ROLE_CRUD_POLL:         ROLE_COORDINATOR
+#        ROLE_CRUD_BALLOTBOX:    ROLE_COORDINATOR
+#        ROLE_MANAGE_USER:       ROLE_COORDINATOR
+#        ROLE_ADMIN:             ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_BALLOTBOX, ROLE_MANAGE_USER
+#        ROLE_SUPER_ADMIN:       ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, ROLE_COREDE
 
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
+        oidc:
+            id: oidc.user_provider
 
     firewalls:
         dev:
@@ -23,7 +217,8 @@ security:
             security: false
 
         main:
-            pattern: ^/
+            pattern: ^/(?!admin)
+            context: vpr
             anonymous: true
             form_login:
                 provider: fos_userbundle
@@ -43,8 +238,22 @@ security:
             logout:
                 path: /logout
                 success_handler: vpr.logout.handler
+        admin:
+            pattern: ^/admin
+            context: vpr
+            anonymous: ~
+            logout:
+                path:   /logout
+                target: /
+            form_login:
+                login_path: admin_login
+                check_path: oidc_callback
 
     access_control:
+        - { path: ^/admin/oidc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/confirm, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
         - { path: ^/counting, role: ROLE_ADMIN }
         - { path: ^/api/offline/download, roles: ROLE_ADMIN }
         - { path: ^/demo, roles: ROLE_ADMIN }
@@ -59,12 +268,12 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/poll, role: ROLE_CRUD_POLL }
-        - { path: ^/admin/step, role: ROLE_COREDE }
-        - { path: ^/admin/category, role: ROLE_ADMIN }
-        - { path: ^/admin/ballotbox, role: ROLE_CRUD_BALLOTBOX }
-        - { path: ^/admin/poll_option, role: ROLE_COREDE }
-        - { path: ^/admin/person, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/poll, role: ROLE_POLL }
+        - { path: ^/admin/step, role: ROLE_STEP }
+        - { path: ^/admin/category, role: ROLE_CATEGORY }
+        - { path: ^/admin/ballotbox, role: ROLE_BALLOTBOX }
+        - { path: ^/admin/poll_option, role: ROLE_BALLOT }
+        - { path: ^/admin/person, role: ROLE_USER }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }

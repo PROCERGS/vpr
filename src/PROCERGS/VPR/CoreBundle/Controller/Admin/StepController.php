@@ -28,6 +28,7 @@ class StepController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_READ');
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
 
@@ -84,6 +85,7 @@ class StepController extends Controller
      */
     public function createAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_CREATE');
         $entity = new Step();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
@@ -133,6 +135,7 @@ class StepController extends Controller
      */
     public function newAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_CREATE');
         $entity = new Step();
         $form   = $this->createCreateForm($entity);
 
@@ -151,6 +154,7 @@ class StepController extends Controller
      */
     public function showAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_READ');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Step')->find($id);
@@ -176,12 +180,17 @@ class StepController extends Controller
      */
     public function editAction($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Step')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Step entity.');
+        }
+
+        if ($entity->getPoll()->getApurationDone()) {
+            throw new \Exception('Unable to edit!');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -222,12 +231,17 @@ class StepController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_UPDATE');
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:Step')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Step entity.');
+        }
+
+        if ($entity->getPoll()->getApurationDone()) {
+            throw new \Exception('Unable to edit!');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -258,6 +272,7 @@ class StepController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_DELETE');
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
 
@@ -267,6 +282,10 @@ class StepController extends Controller
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Step entity.');
+            }
+
+            if ($entity->getPoll()->getApurationDone()) {
+                throw new \Exception('Unable to delete!');
             }
 
             $em->remove($entity);
@@ -303,6 +322,7 @@ class StepController extends Controller
      */
     public function saveSortingAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_UPDATE');
         $em = $this->getDoctrine()->getManager();
         $translator = $this->get('translator');
         $ids = $request->get('ids');
@@ -339,6 +359,7 @@ class StepController extends Controller
      */
     public function selectStepsAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_STEP_READ');
         $data = array();
         $poll_id = $request->get('poll_id');
         try{

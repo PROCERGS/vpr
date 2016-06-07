@@ -4,23 +4,27 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="poll-option-step">
-                    <p class="step"><strong>{{'admin.step'|trans}}</strong>: {{ currStep }}</p>    
+                    <p class="step"><strong>{{ 'admin.step'|trans }}</strong>: {{ currStep }}</p>
 
                     {% for category,pollOptions in categories %}
                         {% set indexCategory = loop.index %}
                         <div class="row">
                             <div class="col-md-11 col-md-offset-1">
-                                <p class="category"><strong>{{'admin.category'|trans}}</strong>: {{ category }}</p>
+                                <p class="category"><strong>{{ 'admin.category'|trans }}</strong>: {{ category }}</p>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-10 col-md-offset-2">
-                                <a class="btn btn-success btn-xs save-sorted" data-table="records_list_{{ indexStep }}_{{ indexCategory }}" href="#" role="button" data-loading-text="{{'admin.saving'|trans}}">
-                                    <span class="glyphicon glyphicon-floppy-disk"></span> {%trans%}admin.save_sorted{%endtrans%}
+                                <a class="btn btn-success btn-xs save-sorted"
+                                   data-table="records_list_{{ indexStep }}_{{ indexCategory }}" href="#" role="button"
+                                   data-loading-text="{{ 'admin.saving'|trans }}">
+                                    <span class="glyphicon glyphicon-floppy-disk"></span> {% trans %}
+                                    admin.save_sorted{% endtrans %}
                                 </a>
                                 <div class="table-responsive">
-                                    <table id="records_list_{{ indexStep }}_{{ indexCategory }}" data-type="pollOption" class="table table-hover table-bordered records_list_{{ loop.index }} sorted_table">
+                                    <table id="records_list_{{ indexStep }}_{{ indexCategory }}" data-type="pollOption"
+                                           class="table table-hover table-bordered records_list_{{ loop.index }} sorted_table">
                                         <thead>
                                             <tr>
                                                 <th width="10%">{{ 'admin.sorting'|trans }}</th>
@@ -30,14 +34,24 @@
                                         </thead>
                                         <tbody>
                                             {% for option in pollOptions %}
-                                                <tr data-id="{{option.id}}">
+                                                <tr data-id="{{ option.id }}">
                                                     <td class="text-center">
                                                         <span class="order">{{ option.categorySorting }}</span>
                                                     </td>
                                                     <td>{{ option.title }}</td>
                                                     <td class="text-center">
-                                                        <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_option_show', { 'id': option.id }) }}"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                                        <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('admin_poll_option_edit', { 'id': option.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                                                        {% if is_granted('ROLE_BALLOT_READ') %}
+                                                            <a title="{{ 'admin.show'|trans }}"
+                                                               class="btn btn-default btn-sm"
+                                                               href="{{ path('admin_poll_option_show', { 'id': option.id }) }}"><span
+                                                                        class="glyphicon glyphicon-eye-open"></span></a>
+                                                        {% endif %}
+                                                        {% if is_granted('ROLE_BALLOT_UPDATE') %}
+                                                            <a title="{{ 'admin.edit'|trans }}"
+                                                               class="btn btn-default btn-sm"
+                                                               href="{{ path('admin_poll_option_edit', { 'id': option.id }) }}"><span
+                                                                        class="glyphicon glyphicon-pencil"></span></a>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -56,7 +70,9 @@
     <div class="row">
         <div class="col-md-12">
             <div class="poll-option-step">
-                <p><center>{% trans %}admin.no_record_found{% endtrans %}</center></p>
+                <p>
+                <center>{% trans %}admin.no_record_found{% endtrans %}</center>
+                </p>
             </div>
         </div>
     </div>
