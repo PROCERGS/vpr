@@ -1,28 +1,22 @@
 becklyn_static_roles:
     roles:
-        ROLE_ADMIN:
-            title: "Administrador Geral"
-            included_roles: [ROLE_ADMIN_MENU, ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_STEP, ROLE_CRUD_CATEGORY, ROLE_CRUD_BALLOT, ROLE_CRUD_BALLOTBOX, ROLE_CRUD_USER]
         ROLE_SUPER_ADMIN:
             title: "Super Admin"
             included_roles: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
             hidden: true
 
-        ROLE_RESULTS:
-            title: "Acesso aos resultados"
-            included_roles: [ROLE_USER]
-
+        ROLE_ADMIN:
+            title: "Administrador Geral"
+            included_roles: [ROLE_ADMIN_MENU, ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_STEP, ROLE_CRUD_CATEGORY, ROLE_CRUD_BALLOT, ROLE_CRUD_BALLOTBOX, ROLE_CRUD_USER]
         ROLE_ADMIN_BALLOTBOXES:
             title: "Administrador de Urnas"
             included_roles: [ROLE_USER, ROLE_CRUD_BALLOTBOX, ROLE_BALLOTBOXES_SEND_EMAIL, ROLE_BALLOTBOXES_SEND_SMS]
-
         ROLE_APPROVE_RESULT:
             title: "Homologador de Resultados"
             included_roles: [ROLE_USER]
-
-        ROLE_COORDINATOR:
-            title: "Coordenador"
-            included_roles: [ROLE_USER, ROLE_ADMIN_MENU]
+        ROLE_RESULTS:
+            title: "Acesso aos resultados"
+            included_roles: [ROLE_USER]
         ROLE_STATS:
             title: "Estatísticas"
             included_roles: [ROLE_USER]

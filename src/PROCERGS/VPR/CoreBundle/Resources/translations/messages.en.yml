@@ -91,7 +91,6 @@ Logout: Logout
 (poll-defined): (poll-defined)
 Show Private Key: Show Private Key
 admin.person.roles.label: Roles
-ROLE_COORDINATOR: Coordinator
 ROLE_USER: Simple User
 ROLE_COREDE: COREDE
 ROLE_STATS: Statistics

@@ -217,7 +217,6 @@ Logout: Sair
 (poll-defined): (definido pela votação)
 Show Private Key: Exibir Chave Privada
 admin.person.roles.label: Permissões
-ROLE_COORDINATOR: Coordenador
 ROLE_USER: Usuário Simples
 ROLE_COREDE: COREDE
 ROLE_STATS: Estatísticas
