@@ -55,6 +55,7 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
    INNER JOIN open_vote ov ON ov.ballot_box_id = b.id
    INNER JOIN corede c on c.id = ov.corede_id
    WHERE b.poll_id = :poll
+   AND ov.poll_option_id IS NOT NULL
    GROUP BY ov.corede_id, c.name
    ORDER BY c.name
 

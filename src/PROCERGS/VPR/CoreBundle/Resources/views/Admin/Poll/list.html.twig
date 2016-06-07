@@ -29,7 +29,7 @@
                         {% endif %}
 
                         {% if is_granted('ROLE_POLL_UPDATE') %}
-                            {% if entity.apurationDone is null %}
+                            {% if entity.apurationDone is null and entity.blocked != true %}
                                 <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
                                    href="{{ path('admin_poll_edit', { 'id': entity.id }) }}"><span
                                             class="glyphicon glyphicon-pencil"></span></a>

@@ -107,7 +107,7 @@ services:
             - { name: twig.extension, alias: vpr_twig_extension }
 
     vpr.smshelper:
-        class: PROCERGS\VPR\CoreBundle\Helper\SMSHelper        
+        class: PROCERGS\VPR\CoreBundle\Helper\SMSHelper
         calls:
             - [setUrl, [%smshelper_url%]]
             - [setSistema, [%smshelper_sistema%]]
@@ -135,3 +135,8 @@ services:
             - "@router"
         tags:
             - { name: kernel.event_listener, event: donato.oidc.event.filter_response, method: onFilterResponse }
+
+    vpr.checkpoll.helper:
+        class: PROCERGS\VPR\CoreBundle\Helper\CheckPollHelper
+        arguments:
+            entityManager: "@doctrine.orm.entity_manager"

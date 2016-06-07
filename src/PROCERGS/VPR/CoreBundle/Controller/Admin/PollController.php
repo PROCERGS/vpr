@@ -45,6 +45,14 @@ class PollController extends Controller
             10
         );
 
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        foreach ($entities as $e) {
+            $status = $checkPoll->checkPollStatus($e->getId());
+            if ($status['downloaded'] || ($status['voted'])) {
+                $e->setBlocked(true);
+            }
+        }
+
         return array(
             'entities' => $entities,
         );
