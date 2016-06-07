@@ -189,6 +189,10 @@ class StepController extends Controller
             throw $this->createNotFoundException('Unable to find Step entity.');
         }
 
+        if ($entity->getPoll()->getApurationDone()) {
+            throw new \Exception('Unable to edit!');
+        }
+
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -236,6 +240,10 @@ class StepController extends Controller
             throw $this->createNotFoundException('Unable to find Step entity.');
         }
 
+        if ($entity->getPoll()->getApurationDone()) {
+            throw new \Exception('Unable to edit!');
+        }
+
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
@@ -274,6 +282,10 @@ class StepController extends Controller
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Step entity.');
+            }
+
+            if ($entity->getPoll()->getApurationDone()) {
+                throw new \Exception('Unable to delete!');
             }
 
             $em->remove($entity);

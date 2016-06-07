@@ -60,12 +60,12 @@
                 <a class="btn btn-default btn-sm" href="{{ path('admin_step_new') }}" role="button"><span
                             class="glyphicon glyphicon-file"></span> {% trans %}admin.add{% endtrans %}</a>
             {% endif %}
-            {% if is_granted('ROLE_STEP_UPDATE') %}
+            {% if is_granted('ROLE_STEP_UPDATE')  and entity.poll.apurationDone is null %}
                 <a href="{{ path('admin_step_edit', { 'id': entity.id }) }}"
                    class="btn btn-sm btn-primary group-action">{{ 'admin.edit'|trans }}</a>
             {% endif %}
 
-            {% if is_granted('ROLE_STEP_DELETE') %}
+            {% if is_granted('ROLE_STEP_DELETE') and entity.poll.apurationDone is null %}
                 {{ form_start(delete_form) }}
                 {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
                 {{ form_end(delete_form) }}

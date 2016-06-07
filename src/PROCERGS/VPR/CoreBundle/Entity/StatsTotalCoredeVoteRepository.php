@@ -49,12 +49,14 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
              SELECT
   COUNT(CASE WHEN b.is_online IS TRUE THEN 1 END) AS votes_online,
         COUNT(CASE WHEN b.is_online IS FALSE THEN 1 END) AS votes_offline,
-        ov.corede_id
+        ov.corede_id,
+        c.name
    FROM ballot_box b
    INNER JOIN open_vote ov ON ov.ballot_box_id = b.id
+   INNER JOIN corede c on c.id = ov.corede_id
    WHERE b.poll_id = :poll
-   GROUP BY ov.corede_id
-   ORDER BY ov.corede_id
+   GROUP BY ov.corede_id, c.name
+   ORDER BY c.name
 
         ');
 
@@ -73,13 +75,15 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
              SELECT
   COUNT(CASE WHEN b.is_online IS TRUE THEN 1 END) AS voters_online,
         COUNT(CASE WHEN b.is_online IS FALSE THEN 1 END) AS voters_offline,
-        v.corede_id
+        v.corede_id,
+        c.name
    FROM ballot_box b
    INNER JOIN vote v ON v.ballot_box_id = b.id
+   INNER JOIN corede c on c.id = v.corede_id
    WHERE b.poll_id = :poll
    AND v.is_invalid IS NOT TRUE
-   GROUP BY v.corede_id
-   ORDER BY v.corede_id
+   GROUP BY v.corede_id, c.name
+   ORDER BY c.name
 
         ');
 

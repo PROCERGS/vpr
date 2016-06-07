@@ -43,7 +43,7 @@
                             <a href="{{ path('admin_user_list') }}">{{'Users'|trans}}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_MANAGE_USER') %}
+                    {% if is_granted('ROLE_RESULTS') %}
                         <li class="{{ controller == 'admin\\poll' ? 'active' }}">
                             <a href="{{ path('admin_stats') }}">{{'Apuração'|trans}}</a>
                         </li>
