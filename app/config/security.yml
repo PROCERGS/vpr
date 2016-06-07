@@ -6,6 +6,7 @@ becklyn_static_roles:
         ROLE_SUPER_ADMIN:
             title: "Super Admin"
             included_roles: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+            hidden: true
 
         ROLE_RESULTS:
             title: "Acesso aos resultados"
@@ -40,6 +41,7 @@ becklyn_static_roles:
         ROLE_CRUD_POLL:
             title: "CRUD de Votação"
             included_roles: [ROLE_POLL_CREATE, ROLE_POLL_READ, ROLE_POLL_UPDATE, ROLE_POLL_DELETE]
+            hidden: true
         ROLE_POLL:
             title: ""
             hidden: true
@@ -64,6 +66,7 @@ becklyn_static_roles:
         ROLE_CRUD_STEP:
             title: "CRUD de Etapas"
             included_roles: [ROLE_STEP_CREATE, ROLE_STEP_READ, ROLE_STEP_UPDATE, ROLE_STEP_DELETE]
+            hidden: true
         ROLE_STEP:
             title: ""
             hidden: true
@@ -88,6 +91,7 @@ becklyn_static_roles:
         ROLE_CRUD_CATEGORY:
             title: "CRUD de Categorias"
             included_roles: [ROLE_CATEGORY_CREATE, ROLE_CATEGORY_READ, ROLE_CATEGORY_UPDATE, ROLE_CATEGORY_DELETE]
+            hidden: true
         ROLE_CATEGORY:
             title: ""
             hidden: true
@@ -112,6 +116,7 @@ becklyn_static_roles:
         ROLE_CRUD_BALLOT:
             title: "CRUD de Cédulas"
             included_roles: [ROLE_BALLOT_CREATE, ROLE_BALLOT_READ, ROLE_BALLOT_UPDATE, ROLE_BALLOT_DELETE]
+            hidden: true
         ROLE_BALLOT:
             title: ""
             hidden: true
