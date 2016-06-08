@@ -48,6 +48,7 @@ class PollController extends Controller
         $checkPoll = $this->get('vpr.checkpoll.helper');
         foreach ($entities as $e) {
             $status = $checkPoll->checkBlocked($e->getId());
+
             if ($status) {
                 $e->setBlocked(true);
             }
