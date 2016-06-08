@@ -70,6 +70,14 @@ class StepController extends Controller
             array('distinct' => true)
         );
 
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        foreach ($entities as $e) {
+            $status = $checkPoll->checkBlocked($e->getPoll()->getId());
+            if ($status) {
+                $e->getPoll()->setBlocked(true);
+            }
+        }
+
         return array(
             'entities' => $entities,
             'form' => $form->createView(),
@@ -189,7 +197,13 @@ class StepController extends Controller
             throw $this->createNotFoundException('Unable to find Step entity.');
         }
 
-        if ($entity->getPoll()->getApurationDone()) {
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
+        if ($status) {
+            $entity->getPoll()->setBlocked(true);
+        }
+
+        if ($entity->getPoll()->getBlocked() || $entity->getPoll()->getApurationDone()) {
             throw new \Exception('Unable to edit!');
         }
 
@@ -240,7 +254,13 @@ class StepController extends Controller
             throw $this->createNotFoundException('Unable to find Step entity.');
         }
 
-        if ($entity->getPoll()->getApurationDone()) {
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
+        if ($status) {
+            $entity->getPoll()->setBlocked(true);
+        }
+
+        if ($entity->getPoll()->getBlocked() || $entity->getPoll()->getApurationDone()) {
             throw new \Exception('Unable to edit!');
         }
 

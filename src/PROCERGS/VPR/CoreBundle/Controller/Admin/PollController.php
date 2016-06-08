@@ -47,8 +47,8 @@ class PollController extends Controller
 
         $checkPoll = $this->get('vpr.checkpoll.helper');
         foreach ($entities as $e) {
-            $status = $checkPoll->checkPollStatus($e->getId());
-            if ($status['downloaded'] || ($status['voted'])) {
+            $status = $checkPoll->checkBlocked($e->getId());
+            if ($status) {
                 $e->setBlocked(true);
             }
         }
@@ -174,7 +174,13 @@ class PollController extends Controller
             throw $this->createNotFoundException('Unable to find Poll entity.');
         }
 
-        if ($entity->getApurationDone()) {
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getId());
+        if ($status) {
+            $entity->setBlocked(true);
+        }
+
+        if ($entity->getBlocked() || $entity->getApurationDone()) {
             throw $this->createNotFoundException('Closed Poll');
         }
 

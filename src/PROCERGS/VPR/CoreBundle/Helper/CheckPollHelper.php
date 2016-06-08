@@ -12,7 +12,7 @@ class CheckPollHelper
         $this->em = $em;
     }
 
-    public function checkPollStatus($poll)
+    public function checkBlocked($poll)
     {
         $connection = $this->em->getConnection();
 
@@ -25,7 +25,13 @@ class CheckPollHelper
         $statement->bindParam('poll', $poll);
         $statement->execute();
 
-        return $statement->fetch();
+        $result = $statement->fetch();
+
+        if ($result["downloaded"] || $result["voted"]) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
