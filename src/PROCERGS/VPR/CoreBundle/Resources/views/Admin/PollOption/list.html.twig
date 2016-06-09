@@ -46,7 +46,7 @@
                                                                href="{{ path('admin_poll_option_show', { 'id': option.id }) }}"><span
                                                                         class="glyphicon glyphicon-eye-open"></span></a>
                                                         {% endif %}
-                                                        {% if is_granted('ROLE_BALLOT_UPDATE') %}
+                                                        {% if is_granted('ROLE_BALLOT_UPDATE') and poll.blocked != true %}
                                                             <a title="{{ 'admin.edit'|trans }}"
                                                                class="btn btn-default btn-sm"
                                                                href="{{ path('admin_poll_option_edit', { 'id': option.id }) }}"><span

@@ -144,6 +144,12 @@ class CategoryController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getId(), "category");
+        if ($status) {
+            $entity->setBlocked(true);
+        }
+
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
