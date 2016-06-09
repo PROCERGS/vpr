@@ -22,13 +22,13 @@
     <div class="jumbotron">
         {{ form_start(form, {'method':'POST', 'attr': {'role':'form'}}) }}
          <div class="row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
                 <label>{{ 'admin.poll'|trans }}</label>
                 <div>
                 {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
                 <label>{{ 'admin.city'|trans }}</label>
                 <div>
                 {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
