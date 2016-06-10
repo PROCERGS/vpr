@@ -251,9 +251,13 @@ admin.sentMessage1: Ult. Alerta Transmissão
 admin.sentMessage2: Ult. Envio Senha
 account.activated: Sua conta foi ativada
 vpr.user:
-    admin.action:
-        new: Novo
-        edit: Editar
+    admin:
+        action:
+            new: Novo
+            edit: Editar
+        error:
+            email_not_found: Nenhum usuário encontrado para o email cadastrado.
+            belongs_to_someone_else: Acesso negado. O identificador fornecido pelo seu Provedor de Identidade não foi reconhecido.
     name.label: Nome
     city.label: Município
     username.label: Código de Usuário

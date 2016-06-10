@@ -172,13 +172,13 @@ class LoginController extends Controller
             $user = $userProvider->loadUserByEmail($email);
         } catch (UsernameNotFoundException $e) {
             $accessDenied = $this->createAccessDeniedException($e->getMessage(), $e);
-            throw new UserNotFoundException(null, null, $accessDenied);
+            throw new UserNotFoundException('vpr.user.admin.error.email_not_found', null, $accessDenied);
         }
 
         try {
             $userBySub = $userProvider->loadUserByUsername($sub);
             if ($user->equals($userBySub) === false) {
-                throw $this->createAccessDeniedException('This account belongs to someone else');
+                throw $this->createAccessDeniedException('vpr.user.admin.error.belongs_to_someone_else');
             }
         } catch (UsernameNotFoundException $e) {
             $em = $this->getDoctrine()->getEntityManager();
