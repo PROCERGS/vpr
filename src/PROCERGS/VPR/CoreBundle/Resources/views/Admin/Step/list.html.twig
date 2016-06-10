@@ -33,7 +33,7 @@
                                    href="{{ path('admin_step_show', { 'id': entity.id }) }}"><span
                                             class="glyphicon glyphicon-eye-open"></span></a>
                             {% endif %}
-                            {% if is_granted('ROLE_STEP_UPDATE') and entity.poll.apurationDone is null %}
+                            {% if is_granted('ROLE_STEP_UPDATE') and entity.poll.apurationDone is null and entity.poll.blocked != true %}
                                 <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
                                    href="{{ path('admin_step_edit', { 'id': entity.id }) }}"><span
                                             class="glyphicon glyphicon-pencil"></span></a>

@@ -77,6 +77,8 @@ class Category
      */
     protected $optionBg;
 
+    protected $blocked;
+
     /**
      * Get id
      *
@@ -223,6 +225,14 @@ class Category
     public function getOptionBg()
     {
         return $this->optionBg;
+    }
+
+    public function setBlocked($var) {
+        $this->blocked = $var;
+    }
+
+    public function getBlocked() {
+        return $this->blocked;
     }
 
 }

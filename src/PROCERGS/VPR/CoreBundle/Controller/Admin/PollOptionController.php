@@ -31,15 +31,16 @@ class PollOptionController extends Controller
         $this->denyAccessUnlessGranted('ROLE_BALLOT_READ');
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-        
+
         $poll_filters = $session->get('poll_filters');
         $form = $this->createForm(new PollOptionFilterType());
 
         $entities = array();
+        $poll = null;
         if ($request->isMethod('POST') || $poll_filters) {
             if(!$request->isMethod('POST') && $poll_filters){
                 $form->bind($poll_filters);
-                
+
             }else{
                 $form->bind($request);
                 $session->set('poll_filters', $request);
@@ -49,6 +50,12 @@ class PollOptionController extends Controller
             $corede = $selected['corede'];
             $poll = $selected['poll'];
             $steps = isset($poll) ? $poll->getSteps() : array();
+
+            $checkPoll = $this->get('vpr.checkpoll.helper');
+            $status = $checkPoll->checkBlocked($poll->getId());
+            if ($status) {
+                $poll->setBlocked(true);
+            }
 
             $pollOptionRepos = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
             foreach($steps as $step){
@@ -60,8 +67,11 @@ class PollOptionController extends Controller
             }
         }
 
+
+
         return array(
             'entities' => $entities,
+            'poll' => $poll,
             'form' => $form->createView(),
         );
     }
@@ -84,7 +94,7 @@ class PollOptionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $polls = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findAll();
-        
+
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -125,7 +135,7 @@ class PollOptionController extends Controller
 
         return $form;
     }
-    
+
     /**
      * Displays a form to create a new PollOption entity.
      *
@@ -141,7 +151,7 @@ class PollOptionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $polls = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findAll();
-        
+
         return array(
             'entity' => $entity,
             'polls' => $polls,
@@ -167,6 +177,11 @@ class PollOptionController extends Controller
             throw $this->createNotFoundException('Unable to find PollOption entity.');
         }
 
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $poll = $entity->getStep()->getPoll();
+        $status = $checkPoll->checkBlocked($poll->getId());
+        $entity->getStep()->getPoll()->setBlocked($status);
+
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -189,9 +204,17 @@ class PollOptionController extends Controller
 
         $entity = $em->getRepository('PROCERGSVPRCoreBundle:PollOption')->find($id);
         $polls = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findAll();
-        
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find PollOption entity.');
+        }
+
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $poll = $entity->getStep()->getPoll();
+        $status = $checkPoll->checkBlocked($poll->getId());
+
+        if ($status) {
+            throw $this->createNotFoundException('Closed Poll');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -290,7 +313,7 @@ class PollOptionController extends Controller
             $em->flush();
 
             $translator = $this->get('translator');
-            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));            
+            $this->get('session')->getFlashBag()->add('success', $translator->trans('admin.successfully_removed_record'));
         }
 
         return $this->redirect($this->generateUrl('admin_poll_option'));
@@ -333,7 +356,7 @@ class PollOptionController extends Controller
             'required' => true
         );
         $stepOptions['disabled'] = $steps ? false : true;
-        
+
         return $stepOptions;
     }
 
@@ -370,7 +393,7 @@ class PollOptionController extends Controller
         $response = new JsonResponse();
         $response->setData($data);
 
-        return $response;        
+        return $response;
     }
 
     /**

@@ -29,7 +29,7 @@ class CategoryController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_CATEGORY_READ');
         $em = $this->getDoctrine()->getManager();
-        
+
         $query = $em->createQueryBuilder()
             ->select('c')
             ->from('PROCERGSVPRCoreBundle:Category', 'c')
@@ -42,6 +42,14 @@ class CategoryController extends Controller
             $this->get('request')->query->get('page', 1),
             10
         );
+
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        foreach ($entities as $e) {
+            $status = $checkPoll->checkBlocked($e->getId(), "category");
+            if ($status) {
+                $e->setBlocked(true);
+            }
+        }
 
         return array(
             'entities' => $entities,
@@ -136,6 +144,12 @@ class CategoryController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getId(), "category");
+        if ($status) {
+            $entity->setBlocked(true);
+        }
+
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
@@ -158,6 +172,16 @@ class CategoryController extends Controller
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
+        }
+
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getId(), "category");
+        if ($status) {
+            $entity->setBlocked(true);
+        }
+
+        if ($entity->getBlocked()) {
+            throw $this->createNotFoundException('Unable to edit. Closed Poll');
         }
 
         $editForm = $this->createEditForm($entity);

@@ -95,12 +95,12 @@
                 <a class="btn btn-default btn-sm" href="{{ path('admin_poll_option_new') }}" role="button"><span
                             class="glyphicon glyphicon-file"></span> {% trans %}admin.add_poll_option{% endtrans %}</a>
             {% endif %}
-            {% if is_granted('ROLE_BALLOT_UPDATE') %}
+            {% if is_granted('ROLE_BALLOT_UPDATE') and entity.step.poll.blocked != true  %}
                 <a href="{{ path('admin_poll_option_edit', { 'id': entity.id }) }}"
                    class="btn btn-sm btn-primary group-action">{{ 'admin.edit'|trans }}</a>
             {% endif %}
 
-            {% if is_granted('ROLE_BALLOT_DELETE') %}
+            {% if is_granted('ROLE_BALLOT_DELETE') and entity.step.poll.blocked != true %}
                 {{ form_start(delete_form) }}
                 {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
                 {{ form_end(delete_form) }}

@@ -64,14 +64,14 @@ class Poll
      * @Groups("setup")
      */
     protected $publicKey;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="private_key", type="text")
      */
     protected $privateKey;
-    
+
     /**
      * @ORM\Column(name="secret", type="string", length=255)
      * @var string
@@ -105,6 +105,8 @@ class Poll
      * @Groups("setup")
      */
     protected $steps;
+
+    protected $blocked;
 
     public function __construct()
     {
@@ -291,27 +293,27 @@ class Poll
     {
         return $this->steps;
     }
-    
+
     public function setSecret($var)
     {
     	$this->secret = $var;
     }
-    
+
     public function getSecret()
     {
     	return $this->secret;
     }
-    
+
     public function setPrivateKey($var)
     {
     	$this->privateKey = $var;
     }
-    
+
     public function getPrivateKey()
     {
     	return $this->privateKey;
     }
-    
+
     public function generatePrivateAndPublicKeys()
     {
     	if (null === $this->id) {
@@ -321,26 +323,26 @@ class Poll
 	    			"private_key_type" => OPENSSL_KEYTYPE_RSA,
 	    			"encrypt_key" => true,
 	    	);
-	    
+
 	    	$res = openssl_pkey_new($config);
 	    	if (!$res) {
 	    		$a = openssl_error_string();
 	    	}
-	    	
+
     		$chars = 'abcdefghjkmnpqrstuvwxyz';
     		$secret = substr(str_shuffle($chars), 0, 10);
-	    		
+
 	    	openssl_pkey_export($res, $privKey, $secret);
-	    
+
 	    	$details = openssl_pkey_get_details($res);
 	    	$pubKey  = $details["key"];
-	    
+
 	    	$this->setPrivateKey($privKey);
 	    	$this->setPublicKey($pubKey);
 	    	$this->setSecret($secret);
     	}
     }
-    
+
     public function isBiggerThen1Day()
     {
     	if ($this->openingTime->format('Y-m-d') != $this->closingTime->format('Y-m-d')) {
@@ -348,5 +350,13 @@ class Poll
     	} else {
     		return false;
     	}
+    }
+
+    public function setBlocked($var) {
+        $this->blocked = $var;
+    }
+
+    public function getBlocked() {
+        return $this->blocked;
     }
 }
