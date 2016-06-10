@@ -7,14 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * OpenVote
  *
- * @ORM\Table(name="open_vote",indexes={
- *     @Index(name="cbidx", columns={"ballot_box_id", "corede_id"}),
- *     @Index(name="coredeidx", columns={"corede_id"}),
- *     @Index(name="ballotidx", columns={"ballot_box_id"}),
- *     @Index(name="polloptionidx", columns={"poll_option_id"}),
- *     @Index(name="cityidx", columns={"city_id"}),
- *   }
- * )
+ * @ORM\Table(name="open_vote")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\OpenVoteRepository")
  */
 class OpenVote
