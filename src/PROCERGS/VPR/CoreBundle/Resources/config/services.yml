@@ -133,8 +133,10 @@ services:
             - "@security.token_storage"
             - "@vpr.user.manager"
             - "@router"
+            - "@session"
         tags:
             - { name: kernel.event_listener, event: donato.oidc.event.filter_response, method: onFilterResponse }
+            - { name: kernel.event_subscriber }
 
     vpr.checkpoll.helper:
         class: PROCERGS\VPR\CoreBundle\Helper\CheckPollHelper
