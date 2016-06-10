@@ -19,12 +19,12 @@ class BallotBoxType extends AbstractType
         $builder
             ->add('name')
             ->add('secret', 'hidden')
-            ->add('address', 'text',
-                array(
-                'required' => false
-            ))
-            ->add('latitude')
-            ->add('longitude')
+            // ->add('address', 'text',
+            //     array(
+            //     'required' => false
+            // ))
+            // ->add('latitude')
+            // ->add('longitude')
             ->add('openingTime', 'datetime',
                 array(
                 'required' => false,

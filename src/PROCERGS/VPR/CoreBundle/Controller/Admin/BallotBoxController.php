@@ -30,6 +30,7 @@ class BallotBoxController extends Controller
             $ballotBox = $em->getRepository(
                 'PROCERGSVPRCoreBundle:BallotBox'
             )->hasOnline($entity->getPoll());
+
             if ($ballotBox) {
                 if ($entity->getId()) {
                     if ($entity->getId() != $ballotBox->getId()) {
@@ -365,11 +366,9 @@ class BallotBoxController extends Controller
                 );
 
                 return $this->redirect(
-                    $this->generateUrl(
-                        'admin_ballotbox_show',
-                        array('id' => $entity->getId())
-                    )
+                    $this->generateUrl('admin_ballotbox_new')
                 );
+
             }
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
@@ -394,12 +393,23 @@ class BallotBoxController extends Controller
         $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_CREATE');
         $entity = new BallotBox();
         $entity->setSecret($entity->generatePassphrase());
+
+        $em = $this->getDoctrine()->getManager();
+        $lastBallotbox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findLastBallotBox();
+        $entity->setName($lastBallotbox->getName());
+        $entity->setPoll($lastBallotbox->getPoll());
+        $entity->setCity($lastBallotbox->getCity());
+        $entity->setIsOnline($lastBallotbox->getIsOnline());
+        $entity->setOpeningTime($lastBallotbox->getOpeningTime());
+        $entity->setClosingTime($lastBallotbox->getClosingTime());
+
         $form = $this->createCreateForm($entity);
+
 
         return array(
             'entity' => $entity,
             'edit_form' => $form->createView(),
-            'delete_form' => null,
+            'delete_form' => null
         );
     }
 
