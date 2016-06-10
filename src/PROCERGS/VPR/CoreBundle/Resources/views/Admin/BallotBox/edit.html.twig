@@ -1,6 +1,11 @@
 {% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
 {% set contentName = 'admin.ballotBox'|trans %}
-{% set actionName = 'admin.edit'|trans %}
+
+{% if entity.id %}
+    {% set actionName = 'admin.edit'|trans %}
+{% else %}
+    {% set actionName = 'admin.ballobox.new'|trans %}
+{% endif %}
 
 {% block content -%}
     {% if entity.openingTime is not empty or entity.closingTime is not empty %}
@@ -93,7 +98,7 @@
         </div>
     </div>
 
-    <div class="form-group ballotbox-offline-itens">
+    {# <div class="form-group ballotbox-offline-itens">
         <label class="col-sm-2 control-label">{{ 'admin.address'|trans }}</label>
         <div class="col-sm-10">
             {{ form_errors(edit_form.address) }}
@@ -115,7 +120,7 @@
             {{ form_errors(edit_form.longitude) }}
             {{ form_widget(edit_form.longitude, {'attr': {'class': 'form-control'}}) }}
         </div>
-    </div>
+    </div> #}
 
     <div class="form-group ballotbox-offline-itens">
         <label class="col-sm-2 control-label">{{ 'admin.ddd'|trans }}</label>
@@ -138,7 +143,7 @@
         </div>
     </div>
 
-    {% if entity.id is empty %}
+    {# {% if entity.id is empty %}
         <div class="row">
             <div class="col-md-8 col-md-offset-2 text-center passphrase-box bg-danger">
                 <p>{% trans %}<strong>WARNING</strong>: Below you'll find this ballot box password for it's private key.
@@ -147,7 +152,7 @@
                 <p class="passphrase">{{ entity.secret }}</p>
             </div>
         </div>
-    {% endif %}
+    {% endif %} #}
 
     <div class="form-group form-actions">
         <div class="col-lg-10 col-lg-offset-2">

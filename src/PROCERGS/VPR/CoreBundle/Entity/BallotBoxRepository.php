@@ -51,15 +51,23 @@ class BallotBoxRepository extends EntityRepository
                 ->setParameters(compact('poll', 'isOnline'))
                 ->getQuery()->getScalarResult();
     }
-    
+
     public function hasOnline(Poll $poll)
     {
     		return $this->createQueryBuilder('b')
     	->select('b')
-    	->where('b.isOnline = t and b.poll = :poll')
-    	->andWhere('b.isOnline = t')
+    	->where('b.isOnline = true and b.poll = :poll')
+    	->andWhere('b.isOnline = true')
     	->setParameters(array('poll' => $poll))
     	->getQuery()->getOneOrNullResult();
     }
-    
+
+    public function findLastBallotBox()
+    {
+        return $this->getEntityManager()
+                        ->createQuery(
+                                'SELECT b FROM PROCERGSVPRCoreBundle:BallotBox b ORDER BY b.id DESC'
+                        )->setMaxResults(1)->getOneOrNullResult();
+    }
+
 }
