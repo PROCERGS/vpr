@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
+use PROCERGS\VPR\CoreBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -31,6 +32,10 @@ class DefaultController extends Controller
         $votingSession = $this->get('vpr_voting_session_provider');
 
         try {
+            if ($person instanceof User) {
+                $this->addFlash('info', 'Você não pode votar como um usuário administrativo');
+                return $this->redirectToRoute('admin');
+            }
             $vote = $votingSession->enforceVotingSession($person);
         } catch (VotingTimeoutException $e) {
             return $this->redirect($this->generateUrl('procergsvpr_core_voting_timeout'));
