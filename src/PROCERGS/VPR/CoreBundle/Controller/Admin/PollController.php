@@ -316,6 +316,7 @@ class PollController extends Controller
      */
     public function statsListAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
 
