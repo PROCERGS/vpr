@@ -150,6 +150,12 @@ class PollController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getId());
+        if ($status) {
+            $entity->setBlocked(true);
+        }
+
         return array(
             'entity'      => $entity,
             'steps'       => $steps,
@@ -316,6 +322,8 @@ class PollController extends Controller
      */
     public function statsListAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
+
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
 
