@@ -173,6 +173,12 @@ class StepController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
 
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
+        if ($status) {
+            $entity->getPoll()->setBlocked(true);
+        }
+
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),

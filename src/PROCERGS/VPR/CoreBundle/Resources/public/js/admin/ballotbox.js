@@ -1,4 +1,33 @@
 $(function() {
+    $("#btn-load-ballotbox").click(function() {
+        $("form input[data-val], form select[data-val]").each(function() {
+            var val = $(this).data("val");
+            $(this).val(val);
+        });
+
+        var openingTime = $(".opening-time");
+        var closingTime = $(".closing-time");
+
+        if (openingTime.data("day") || closingTime.data("day")) {
+            $("form .opening-time select[id$='date_day']").val(openingTime.data("day"));
+            $("form .opening-time select[id$='date_month']").val(openingTime.data("month"));
+            $("form .opening-time select[id$='date_year']").val(openingTime.data("year"));
+            $("form .opening-time select[id$='time_hour']").val(parseInt(openingTime.data("hour")));
+            $("form .opening-time select[id$='time_minute']").val(parseInt(openingTime.data("minute")));
+
+            $("form .closing-time select[id$='date_day']").val(closingTime.data("day"));
+            $("form .closing-time select[id$='date_month']").val(closingTime.data("month"));
+            $("form .closing-time select[id$='date_year']").val(closingTime.data("year"));
+            $("form .closing-time select[id$='time_hour']").val(parseInt(closingTime.data("hour")));
+            $("form .closing-time select[id$='time_minute']").val(parseInt(closingTime.data("minute")));
+
+            $("#chkDtDiffPoll").prop('checked', true);
+            $('.ballotbox-offline-time-itens').show();
+        }
+
+
+    })
+
     $('#procergs_vpr_corebundle_ballotbox_isOnline').change(function(){
         if ($(this).prop('checked')) {
         	$('.ballotbox-offline-itens').hide();
@@ -14,13 +43,13 @@ $(function() {
         	$('.ballotbox-offline-time-itens').hide();
         	$('.ballotbox-offline-time-itens select').val('');
         	$('.ballotbox-offline-time-itens select').prop('selectedIndex', '');
-        } else {        	
+        } else {
         	if ($('.ballotbox-offline-time-itens select').val() == '') {
         		if (!$('#procergs_vpr_corebundle_ballotbox_poll').val()) {
         			alert('Selecione um votação primeiro');
         			self.prop('checked', false);
         			return;
-        		} 
+        		}
         		$.ajax({
                     url: admin_select_poll,
                     type: 'POST',
@@ -32,7 +61,7 @@ $(function() {
                         if(result.poll){
                         	var openingTime = result.poll.openingTime.split(/[^0-9]/);
                         	var closingTime = result.poll.closingTime.split(/[^0-9]/);
-                        	
+
                         	$('#procergs_vpr_corebundle_ballotbox_openingTime_date_day').val(openingTime[2]*1);
                         	$('#procergs_vpr_corebundle_ballotbox_openingTime_date_month').val(openingTime[1]*1);
                         	$('#procergs_vpr_corebundle_ballotbox_openingTime_date_year').val(openingTime[0]*1);
@@ -55,8 +84,8 @@ $(function() {
         	}
         }
     });
-    
+
     $('#procergs_vpr_corebundle_ballotbox_isOnline').trigger('change');
     $('#chkDtDiffPoll').trigger('change');
-    
+
 });

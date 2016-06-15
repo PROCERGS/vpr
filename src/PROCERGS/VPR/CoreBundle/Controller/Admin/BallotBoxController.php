@@ -374,10 +374,14 @@ class BallotBoxController extends Controller
             $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $lastBallotbox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findLastBallotBox();
+
         return array(
             'entity' => $entity,
             'edit_form' => $form->createView(),
             'delete_form' => null,
+            'lastBallotbox' => $lastBallotbox
         );
     }
 
@@ -396,12 +400,6 @@ class BallotBoxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $lastBallotbox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findLastBallotBox();
-        $entity->setName($lastBallotbox->getName());
-        $entity->setPoll($lastBallotbox->getPoll());
-        $entity->setCity($lastBallotbox->getCity());
-        $entity->setIsOnline($lastBallotbox->getIsOnline());
-        $entity->setOpeningTime($lastBallotbox->getOpeningTime());
-        $entity->setClosingTime($lastBallotbox->getClosingTime());
 
         $form = $this->createCreateForm($entity);
 
@@ -409,7 +407,8 @@ class BallotBoxController extends Controller
         return array(
             'entity' => $entity,
             'edit_form' => $form->createView(),
-            'delete_form' => null
+            'delete_form' => null,
+            'lastBallotbox' => $lastBallotbox
         );
     }
 
