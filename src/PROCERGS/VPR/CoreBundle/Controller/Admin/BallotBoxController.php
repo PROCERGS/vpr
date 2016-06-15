@@ -106,10 +106,11 @@ class BallotBoxController extends Controller
             ->addOrderBy('c.name', 'ASC')
             ->addOrderBy('b.address', 'ASC');
 
+
         if (isset($filters['poll'])) {
             $queryBuilder->andWhere('b.poll = :poll');
             $queryBuilder->setParameter('poll', $filters['poll']);
-        } else {
+        } else if (!isset($filters)) {
             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
             $queryBuilder->andWhere('b.poll = :poll');
             $queryBuilder->setParameter('poll', $poll->getId());
@@ -142,6 +143,16 @@ class BallotBoxController extends Controller
         if ($filters['pin']) {
             $queryBuilder->andWhere('b.pin = :pin');
             $queryBuilder->setParameter('pin', $filters['pin']);
+        }
+
+        if ($filters['email']) {
+            $queryBuilder->andWhere('b.email = :email');
+            $queryBuilder->setParameter('email', $filters['email']);
+        }
+
+        if ($filters['name']) {
+            $queryBuilder->andWhere('lower(b.name) LIKE lower(:name)');
+            $queryBuilder->setParameter('name', '%'.$filters['name'].'%');
         }
 
         $query = $queryBuilder->getQuery();
