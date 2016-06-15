@@ -365,9 +365,8 @@ class BallotBoxController extends Controller
                     $translator->trans('admin.successfully_added_record')
                 );
 
-                return $this->redirect(
-                    $this->generateUrl('admin_ballotbox_new')
-                );
+                return $this->redirect($this->generateUrl('admin_ballotbox_show',
+                        array('id' => $entity->getId())));
 
             }
         } catch (\Exception $e) {
