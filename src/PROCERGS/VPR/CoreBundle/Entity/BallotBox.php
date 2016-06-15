@@ -145,14 +145,14 @@ class BallotBox
      * @var \DateTime
      */
     protected $closedAt;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="csv", type="text")
      */
     protected $csv;
-    
+
     /**
      * @var string
      *
@@ -172,7 +172,7 @@ class BallotBox
      * @ORM\Column(name="ddd", type="string", length=2, nullable=true)
      */
     protected $ddd;
-    
+
     /**
      * @var string
      *
@@ -185,7 +185,7 @@ class BallotBox
      * @ORM\Column(name="sent_message2_id", type="integer", nullable=true)
      */
     protected $sentMessage2Id;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="SentMessage")
      * @ORM\JoinColumn(name="sent_message1_id", referencedColumnName="id", nullable=true)
@@ -196,7 +196,8 @@ class BallotBox
      * @ORM\JoinColumn(name="sent_message2_id", referencedColumnName="id", nullable=true)
      */
     protected $sentMessage2;
-    
+    protected $blocked;
+
     public function __construct()
     {
         $this->setTotalInvalidVotes(0);
@@ -588,56 +589,56 @@ class BallotBox
         $this->closedAt = $closedAt;
         return $this;
     }
-    
+
     public function getCsv()
     {
     	return $this->csv;
     }
-    
+
     public function setCsv($var)
     {
     	$this->csv = $var;
     	return $this;
     }
-    
+
     public function getFone()
     {
     	return $this->fone;
     }
-    
+
     public function setFone($var)
     {
     	$this->fone = $var;
     	return $this;
     }
-    
+
     public function getEmail()
     {
     	return $this->email;
     }
-    
+
     public function setEmail($var)
     {
     	$this->email = $var;
     	return $this;
     }
-    
+
     public function getDdd()
     {
         return $this->ddd;
     }
-    
+
     public function setDdd($var)
     {
         $this->ddd = $var;
         return $this;
     }
-    
+
     public function getSentMessage1Id()
     {
         return $this->sentMessage1Id;
     }
-    
+
     public function setSentMessage1Id($var)
     {
         $this->sentMessage1Id = $var;
@@ -646,17 +647,17 @@ class BallotBox
     {
         return $this->sentMessage2Id;
     }
-    
+
     public function setSentMessage2Id($var)
     {
         $this->sentMessage2Id = $var;
     }
-    
+
     public function getSentMessage1()
     {
         return $this->sentMessage1;
     }
-    
+
     public function setSentMessage1($var)
     {
         $this->sentMessage1 = $var;
@@ -665,12 +666,12 @@ class BallotBox
     {
         return $this->sentMessage2;
     }
-    
+
     public function setSentMessage2($var)
     {
         $this->sentMessage2 = $var;
     }
-    
+
     protected static $allowedStatus1 = array(1=> 'Disponível', 2=> 'Ativa', 3=> 'Encerrada');
     public static function getAllowedStatus1($var = null)
     {
@@ -680,7 +681,7 @@ class BallotBox
             return self::$allowedStatus1[$var];
         }
     }
-    
+
     public function getStatus1Label()
     {
         if ( null === $this->setupAt) {
@@ -691,6 +692,14 @@ class BallotBox
             return self::$allowedStatus1[3];
         }
     }
-    
-        
+
+    public function setBlocked($var) {
+        $this->blocked = $var;
+    }
+
+    public function getBlocked() {
+        return $this->blocked;
+    }
+
+
 }

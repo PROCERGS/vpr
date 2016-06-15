@@ -69,7 +69,7 @@
                                        href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span
                                                 class="glyphicon glyphicon-eye-open"></span></a>
                                 {% endif %}
-                                {% if is_granted('ROLE_BALLOTBOX_UPDATE') and entity.poll.blocked != true %}
+                                {% if is_granted('ROLE_BALLOTBOX_UPDATE') and entity.blocked != true %}
                                     <a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm"
                                        href="{{ path('admin_ballotbox_edit', { 'id': entity.id }) }}"><span
                                                 class="glyphicon glyphicon-pencil"></span></a>

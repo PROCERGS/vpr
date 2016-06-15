@@ -152,9 +152,9 @@ class BallotBoxController extends Controller
 
         $checkPoll = $this->get('vpr.checkpoll.helper');
         foreach ($entities as $e) {
-            $status = $checkPoll->checkBlocked($e->getPoll()->getId());
+            $status = $checkPoll->checkBlocked($e->getId(), "ballotbox");
             if ($status) {
-                $e->getPoll()->setBlocked(true);
+                $e->setBlocked(true);
             }
         }
 
@@ -434,9 +434,10 @@ class BallotBoxController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         $checkPoll = $this->get('vpr.checkpoll.helper');
-        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
+
+        $status = $checkPoll->checkBlocked($entity->getId(), "ballotbox");
         if ($status) {
-            $entity->getPoll()->setBlocked(true);
+            $entity->setBlocked(true);
         }
 
         return array(
@@ -464,11 +465,7 @@ class BallotBoxController extends Controller
         }
 
         $checkPoll = $this->get('vpr.checkpoll.helper');
-        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
-        if ($status) {
-            $entity->getPoll()->setBlocked(true);
-        }
-
+        $status = $checkPoll->checkBlocked($entity->getId(), "ballotbox");
         if ($status) {
             throw new \Exception('Unable to edit!');
         }
