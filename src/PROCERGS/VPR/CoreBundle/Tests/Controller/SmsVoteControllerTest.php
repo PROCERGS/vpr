@@ -4,13 +4,13 @@ namespace PROCERGS\VPR\CoreBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class UserControllerTest extends WebTestCase
+class SmsVoteControllerTest extends WebTestCase
 {
-    public function testLock()
+    public function testReceive()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/lock');
+        $crawler = $client->request('GET', '/receive');
     }
 
 }

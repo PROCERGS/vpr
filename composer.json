@@ -41,7 +41,8 @@
         "oro/doctrine-extensions": "^1.0",
         "nelmio/cors-bundle": "^1.4",
         "jumbojett/openid-connect-php": "^0.3.0",
-        "becklyn/static-roles-bundle": "@dev"
+        "becklyn/static-roles-bundle": "@dev",
+        "phpunit/phpunit": "^4.8"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
