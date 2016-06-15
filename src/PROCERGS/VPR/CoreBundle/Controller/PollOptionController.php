@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
+use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -150,6 +151,7 @@ class PollOptionController extends Controller
     private function handleStep(Request $request, $votingSession, $em,
                                 Vote $vote)
     {
+        /** @var PollOptionRepository $pollOptionRepo */
         $pollOptionRepo = $em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $stepRepo       = $em->getRepository('PROCERGSVPRCoreBundle:Step');
         $poll           = $em->merge($vote->getBallotBox()->getPoll());

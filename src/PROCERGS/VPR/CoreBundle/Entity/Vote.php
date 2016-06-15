@@ -554,7 +554,7 @@ class Vote
     }
 
     /**
-     * @param type $ipAddress
+     * @param string $ipAddress
      * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
      */
     public function setIpAddress($ipAddress)

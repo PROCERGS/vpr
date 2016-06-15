@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Security;
 
+use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -229,6 +230,7 @@ class VotingSessionProvider
 
     public function persistVote(Vote $vote, Person $person)
     {
+        /** @var PollOptionRepository $pollOptionRepo */
         $pollOptionRepo    = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
         $serializer        = $this->serializer;
         $context           = SerializationContext::create()
