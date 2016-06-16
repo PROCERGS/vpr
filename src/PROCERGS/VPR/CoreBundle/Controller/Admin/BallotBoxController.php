@@ -482,10 +482,13 @@ class BallotBoxController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
+        $lastBallotbox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findLastBallotBox();
+
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'lastBallotbox' => $lastBallotbox
         );
     }
 
