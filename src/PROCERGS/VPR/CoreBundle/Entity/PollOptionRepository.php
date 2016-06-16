@@ -53,6 +53,10 @@ class PollOptionRepository extends EntityRepository
         return isset($count['total']) && $count['total'] == count($options);
     }
 
+    /**
+     * @param Vote $vote
+     * @return array
+     */
     public function getPollOption($vote)
     {
         $ids = $vote->getPollOption();

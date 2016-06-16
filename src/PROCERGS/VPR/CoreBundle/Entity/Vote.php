@@ -23,7 +23,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Vote
 {
-    const AUTH_LOGIN_CIDADAO      = 'lc';
+    const AUTH_LOGIN_CIDADAO = 'lc';
     const AUTH_VOTER_REGISTRATION = 'doc';
 
     /**
@@ -411,18 +411,19 @@ class Vote
 
     public function encryptVote()
     {
-        $crypted   = null;
+        $crypted = null;
         $ballotBox = $this->getBallotBox();
         if (!$ballotBox) {
             return false;
         }
-        $poll          = $ballotBox->getPoll();
+        $poll = $ballotBox->getPoll();
         $pollPublicKey = openssl_get_publickey($poll->getPublicKey());
-        $options       = $this->getPlainOptions();
+        $options = $this->getPlainOptions();
 
         $passphrases = null;
         if (openssl_seal($options, $crypted, $passphrases, array($pollPublicKey))
-            !== false) {
+            !== false
+        ) {
             $this->setOptions(base64_encode($crypted));
             $passphrase = base64_encode(reset($passphrases));
             $this->setPassphrase($passphrase);
@@ -433,8 +434,8 @@ class Vote
 
     public function openVote($privateKey)
     {
-        $openVote   = null;
-        $options    = base64_decode($this->getOptions());
+        $openVote = null;
+        $options = base64_decode($this->getOptions());
         $passphrase = base64_decode($this->getPassphrase());
         if (openssl_open($options, $openVote, $passphrase, $privateKey) === false) {
             $message = openssl_error_string();
@@ -473,25 +474,27 @@ class Vote
         return $this->lastStep;
     }
 
-    public function addPollOption($var)
+    public function addPollOption(array $options = [])
     {
         if (!$this->pollOption) {
-            $this->pollOption = $var;
+            $this->pollOption = $options;
         } else {
-            if (!$var) {
-                $var = array();
-            }
-            $this->pollOption = array_merge($this->pollOption, $var);
+            $this->pollOption = array_merge($this->pollOption, $options);
         }
+
         return $this;
     }
 
     public function setPollOption($var)
     {
         $this->pollOption = $var;
+
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getPollOption()
     {
         return $this->pollOption;
@@ -504,7 +507,8 @@ class Vote
         }
         $this->encryptVote();
         $this->signature = $this->ballotBox->sign(
-            $this->getOptions(), $passphrase
+            $this->getOptions(),
+            $passphrase
         );
     }
 
@@ -560,6 +564,7 @@ class Vote
     public function setIpAddress($ipAddress)
     {
         $this->ipAddress = $ipAddress;
+
         return $this;
     }
 
@@ -575,6 +580,7 @@ class Vote
     public function setOfflineId($offlineId)
     {
         $this->offlineId = $offlineId;
+
         return $this;
     }
 
@@ -587,10 +593,13 @@ class Vote
      * @param string $serializedOptions
      * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
      */
-    public function populateOfflineVote($vote, BallotBox $ballotBox,
-                                        Corede $corede, City $city,
-                                        $serializedOptions)
-    {
+    public function populateOfflineVote(
+        $vote,
+        BallotBox $ballotBox,
+        Corede $corede,
+        City $city,
+        $serializedOptions
+    ) {
         $this->setOfflineId($vote['id'])
             ->setCreatedAt($vote['createdAt'])
             ->setAuthType($vote['authType'])
