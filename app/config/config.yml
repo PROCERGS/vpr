@@ -223,6 +223,7 @@ circle_rest_client:
     curl:
         defaults:
             CURLOPT_HTTPHEADER:
+                - "Content-Type: application/json"
                 - "sistema: %tpd_system_id%"
                 - "chave: %tpd_system_key%"
             CURLOPT_CONNECTTIMEOUT: 10

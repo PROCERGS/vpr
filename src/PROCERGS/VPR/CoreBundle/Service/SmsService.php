@@ -33,13 +33,9 @@ class SmsService
     {
         $this->restClient = $restClient;
 
-        if (array_key_exists('url', $options)) {
-            $this->url = $options['url'];
-        }
-
-        if (array_key_exists('service_order', $options)) {
-            $this->serviceOrder = $options['service_order'];
-        }
+        $this->url = $options['url'];
+        $this->systemId = $options['system_id'];
+        $this->serviceOrder = $options['service_order'];
 
         if (array_key_exists('authentication', $options)) {
             $auth = $options['authentication'];
@@ -67,7 +63,7 @@ class SmsService
                 'aplicacao' => $this->systemId,
                 'ordemServico' => $this->serviceOrder,
                 'remetente' => $sms->getFrom(),
-                'text' => $sms->getMessage(),
+                'texto' => $sms->getMessage(),
                 'ddd' => $sms->getTo()->getAreaCode(),
                 'numero' => $sms->getTo()->getSubscriberNumber(),
             ]
@@ -78,7 +74,11 @@ class SmsService
         if ($response->isOk() && property_exists($json, 'protocolo')) {
             return $json->protocolo;
         } else {
-            throw new SmsServiceException($json);
+            if (is_array($json)) {
+                throw new SmsServiceException($json);
+            } else {
+                throw new SmsServiceException($response->getContent());
+            }
         }
     }
 }

@@ -30,7 +30,6 @@ class SmsServiceTest extends KernelAwareTest
         $response = $smsService->send($sms);
         $this->assertNotNull($response);
         $this->assertNotFalse($response);
-        var_dump($response);
         $this->assertTrue(is_string($response));
     }
 }

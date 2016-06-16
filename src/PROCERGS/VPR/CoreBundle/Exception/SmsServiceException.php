@@ -8,14 +8,16 @@ class SmsServiceException extends \Exception
     /** @var array */
     protected $errorResponse;
 
-    public function __construct(array $errorResponse)
+    public function __construct($errorResponse)
     {
         $this->errorResponse = $errorResponse;
-        if (count($errorResponse) === 1) {
+        if (is_array($errorResponse) && count($errorResponse) === 1) {
             $error = reset($errorResponse);
             $message = property_exists($error, 'message') ? $error->message : 'Unknown error';
             $details = property_exists($error, 'detail') ? $error->detail : 'No details informed';
             $this->message = sprintf("%s: %s", $message, $details);
+        } else {
+            $this->message = $errorResponse;
         }
     }
 
