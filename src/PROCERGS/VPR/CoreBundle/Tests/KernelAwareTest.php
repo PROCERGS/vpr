@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Component\DependencyInjection\Container;
 
-class KernelAwareTest extends \PHPUnit_Framework_TestCase
+abstract class KernelAwareTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \AppKernel */
     protected $kernel;
