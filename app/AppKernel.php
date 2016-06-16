@@ -30,6 +30,7 @@ class AppKernel extends Kernel
 			new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Donato\OIDCBundle\DonatoOIDCBundle(),
             new \Becklyn\StaticRolesBundle\BecklynStaticRolesBundle(),
+            new Circle\RestClientBundle\CircleRestClientBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

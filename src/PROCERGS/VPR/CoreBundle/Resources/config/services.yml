@@ -145,3 +145,9 @@ services:
 
     sms.vote_handler:
         class: PROCERGS\VPR\CoreBundle\Security\SmsVoteHandler
+
+    sms.service:
+        class: PROCERGS\VPR\CoreBundle\Service\SmsService
+        arguments:
+            - "@circle.restclient"
+            - { url: %tpd_url%, service_order: %tpd_service_order% }

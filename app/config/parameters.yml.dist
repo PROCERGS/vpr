@@ -48,3 +48,8 @@ parameters:
     smshelper_sistema: ~
     smshelper_ordem_servico: ~
     smshelper_senha: ~
+
+    tpd_url: http://some.url.com
+    tpd_service_order: 0000
+    tpd_system_id: SYS
+    tpd_system_key: TDPKeyHere

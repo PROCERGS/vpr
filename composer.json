@@ -42,7 +42,8 @@
         "nelmio/cors-bundle": "^1.4",
         "jumbojett/openid-connect-php": "^0.3.0",
         "becklyn/static-roles-bundle": "@dev",
-        "phpunit/phpunit": "^4.8"
+        "phpunit/phpunit": "^4.8",
+        "ci/restclientbundle": "^2.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
