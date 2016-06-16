@@ -6,7 +6,10 @@ namespace PROCERGS\VPR\CoreBundle\Security;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\SmsVote;
+use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
+use PROCERGS\VPR\CoreBundle\Entity\TREVoterRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
+use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
 
 class SmsVoteHandler
 {
@@ -28,16 +31,32 @@ class SmsVoteHandler
         $this->smsRegex = '/([A-Za-z]*)\W+(\d+)\W+(.+)/';
     }
 
-    public function registerSmsVote(SmsVote $smsVote, BallotBox $ballotBox)
+    public function getVoteFromSmsVote(SmsVote $smsVote, BallotBox $ballotBox, TREVoterRepository $treVoterRepository)
     {
         $parsed = $this->parseMessage($smsVote);
+        $voterRegistration = $parsed[self::MESSAGE_VOTER_REGISTRATION];
+
+        /** @var TREVoter $treVoter */
+        $treVoter = $treVoterRepository->findOneBy(
+            [
+                'id' => (int)$voterRegistration,
+            ]
+        );
+
+        if (!($treVoter instanceof TREVoter)) {
+            throw new TREVoterException('Voter Registration not found');
+        }
 
         $vote = new Vote();
         $vote
             ->setAuthType(Vote::AUTH_VOTER_REGISTRATION)
             ->setBallotBox($ballotBox)
             ->setIpAddress($smsVote->getSender())
-            ->setVoterRegistration($parsed[self::MESSAGE_VOTER_REGISTRATION]);
+            ->setVoterRegistration($voterRegistration)
+            ->addPollOption($parsed[self::MESSAGE_OPTIONS])
+            ->setCorede($treVoter->getCorede());
+
+        return $vote;
     }
 
     public function parseMessage(SmsVote $smsVote)
@@ -51,17 +70,5 @@ class SmsVoteHandler
             self::MESSAGE_VOTER_REGISTRATION => $m[2],
             self::MESSAGE_OPTIONS => $options,
         ];
-    }
-
-    /**
-     * @param PollOptionRepository $pollOptionRepository
-     * @return array PollOption ids grouped by step
-     */
-    protected function getOptionsIds(PollOptionRepository $pollOptionRepository)
-    {
-        $ids = $this->getMessage();
-        $options = $pollOptionRepository->findBy();
-
-        return [0];
     }
 }
