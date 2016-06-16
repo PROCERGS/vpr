@@ -89,7 +89,7 @@ class Poll
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="apuration_done", type="datetime", nullable=false)
+     * @ORM\Column(name="apuration_done", type="datetime", nullable=true)
      * @Groups({"vote", "setup"})
      */
     protected $apurationDone;
