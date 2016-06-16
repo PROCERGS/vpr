@@ -17,9 +17,9 @@ class SmsServiceTest extends KernelAwareTest
 
         $to = new PhoneNumber();
         $to
-            ->setCountryCode(55)
-            ->setAreaCode(51)
-            ->setSubscriberNumber(99674527);
+            ->setCountryCode($this->container->getParameter('test.tpd.to_phone.country_code'))
+            ->setAreaCode($this->container->getParameter('test.tpd.to_phone.area_code'))
+            ->setSubscriberNumber($this->container->getParameter('test.tpd.to_phone.subscriber'));
 
         $sms = new Sms();
         $sms

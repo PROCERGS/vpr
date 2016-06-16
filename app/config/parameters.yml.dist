@@ -53,3 +53,7 @@ parameters:
     tpd_service_order: 0000
     tpd_system_id: SYS
     tpd_system_key: TDPKeyHere
+
+    test.tpd.to_phone.country_code: 55
+    test.tpd.to_phone.area_code: 51
+    test.tpd.to_phone.subscriber: 99999999
