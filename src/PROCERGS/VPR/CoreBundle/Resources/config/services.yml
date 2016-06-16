@@ -142,3 +142,6 @@ services:
         class: PROCERGS\VPR\CoreBundle\Helper\CheckPollHelper
         arguments:
             entityManager: "@doctrine.orm.entity_manager"
+
+    sms.vote_handler:
+        class: PROCERGS\VPR\CoreBundle\Security\SmsVoteHandler
