@@ -65,4 +65,9 @@ class PhoneNumber
 
         return $this;
     }
+
+    public function toE164()
+    {
+        return sprintf('+%s%s%s', $this->getCountryCode(), $this->getAreaCode(), $this->getSubscriberNumber());
+    }
 }
