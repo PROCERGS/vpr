@@ -145,14 +145,14 @@ class BallotBox
      * @var \DateTime
      */
     protected $closedAt;
-    
+
     /**
      * @var string
      *
-     * @ORM\Column(name="csv", type="text")
+     * @ORM\Column(name="csv", type="text", nullable=true)
      */
     protected $csv;
-    
+
     /**
      * @var string
      *
@@ -172,7 +172,7 @@ class BallotBox
      * @ORM\Column(name="ddd", type="string", length=2, nullable=true)
      */
     protected $ddd;
-    
+
     /**
      * @var string
      *
@@ -185,7 +185,7 @@ class BallotBox
      * @ORM\Column(name="sent_message2_id", type="integer", nullable=true)
      */
     protected $sentMessage2Id;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="SentMessage")
      * @ORM\JoinColumn(name="sent_message1_id", referencedColumnName="id", nullable=true)
@@ -196,10 +196,19 @@ class BallotBox
      * @ORM\JoinColumn(name="sent_message2_id", referencedColumnName="id", nullable=true)
      */
     protected $sentMessage2;
-    
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_sms", type="boolean")
+     * @Groups({"vote"})
+     */
+    protected $isSms;
+
     public function __construct()
     {
         $this->setTotalInvalidVotes(0);
+        $this->isSms = false;
     }
 
     /**
@@ -215,6 +224,7 @@ class BallotBox
     public function setId($var)
     {
         $this->id = $var;
+
         return $this;
     }
 
@@ -492,7 +502,7 @@ class BallotBox
         openssl_pkey_export($res, $privKey, $this->getSecret());
 
         $details = openssl_pkey_get_details($res);
-        $pubKey  = $details["key"];
+        $pubKey = $details["key"];
 
         $this->setPrivateKey($privKey);
         $this->setPublicKey($pubKey);
@@ -539,8 +549,10 @@ class BallotBox
     public function sign($serializedOptions, $passphrase)
     {
         $encryptedPrivate = $this->getPrivateKey();
-        $privateKey       = openssl_pkey_get_private($encryptedPrivate,
-            $passphrase);
+        $privateKey = openssl_pkey_get_private(
+            $encryptedPrivate,
+            $passphrase
+        );
 
         $signature = false;
         openssl_sign($serializedOptions, $signature, $privateKey);
@@ -580,98 +592,107 @@ class BallotBox
     public function setSetupAt(\DateTime $setupAt)
     {
         $this->setupAt = $setupAt;
+
         return $this;
     }
 
     public function setClosedAt(\DateTime $closedAt)
     {
         $this->closedAt = $closedAt;
+
         return $this;
     }
-    
+
     public function getCsv()
     {
-    	return $this->csv;
+        return $this->csv;
     }
-    
+
     public function setCsv($var)
     {
-    	$this->csv = $var;
-    	return $this;
+        $this->csv = $var;
+
+        return $this;
     }
-    
+
     public function getFone()
     {
-    	return $this->fone;
+        return $this->fone;
     }
-    
+
     public function setFone($var)
     {
-    	$this->fone = $var;
-    	return $this;
+        $this->fone = $var;
+
+        return $this;
     }
-    
+
     public function getEmail()
     {
-    	return $this->email;
+        return $this->email;
     }
-    
+
     public function setEmail($var)
     {
-    	$this->email = $var;
-    	return $this;
+        $this->email = $var;
+
+        return $this;
     }
-    
+
     public function getDdd()
     {
         return $this->ddd;
     }
-    
+
     public function setDdd($var)
     {
         $this->ddd = $var;
+
         return $this;
     }
-    
+
     public function getSentMessage1Id()
     {
         return $this->sentMessage1Id;
     }
-    
+
     public function setSentMessage1Id($var)
     {
         $this->sentMessage1Id = $var;
     }
+
     public function getSentMessage2Id()
     {
         return $this->sentMessage2Id;
     }
-    
+
     public function setSentMessage2Id($var)
     {
         $this->sentMessage2Id = $var;
     }
-    
+
     public function getSentMessage1()
     {
         return $this->sentMessage1;
     }
-    
+
     public function setSentMessage1($var)
     {
         $this->sentMessage1 = $var;
     }
+
     public function getSentMessage2()
     {
         return $this->sentMessage2;
     }
-    
+
     public function setSentMessage2($var)
     {
         $this->sentMessage2 = $var;
     }
-    
-    protected static $allowedStatus1 = array(1=> 'Disponível', 2=> 'Ativa', 3=> 'Encerrada');
+
+    protected static $allowedStatus1 = array(1 => 'Disponível', 2 => 'Ativa', 3 => 'Encerrada');
+
     public static function getAllowedStatus1($var = null)
     {
         if (null === $var) {
@@ -680,17 +701,36 @@ class BallotBox
             return self::$allowedStatus1[$var];
         }
     }
-    
+
     public function getStatus1Label()
     {
-        if ( null === $this->setupAt) {
+        if (null === $this->setupAt) {
             return self::$allowedStatus1[1];
-        } else if ( null === $this->closedAt) {
-            return self::$allowedStatus1[2];
         } else {
-            return self::$allowedStatus1[3];
+            if (null === $this->closedAt) {
+                return self::$allowedStatus1[2];
+            } else {
+                return self::$allowedStatus1[3];
+            }
         }
     }
-    
-        
+
+    /**
+     * @return boolean
+     */
+    public function isSms()
+    {
+        return $this->isSms;
+    }
+
+    /**
+     * @param boolean $isSms
+     * @return BallotBox
+     */
+    public function setIsSms($isSms)
+    {
+        $this->isSms = $isSms;
+
+        return $this;
+    }
 }
