@@ -26,4 +26,35 @@ class PhoneNumberTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('+5545678901234', $phone->toE164());
         $this->assertLessThanOrEqual(16, strlen($phone->toE164()));
     }
+
+    public function testE164toPhoneNumber()
+    {
+        $options = ['country_code' => 55];
+        $phone1 = PhoneNumber::createFromE164('+555112345678', $options);
+        $phone2 = PhoneNumber::createFromE164('+5551123456789', $options);
+
+        $this->assertPhoneNumber($phone1, 55, 51, 12345678);
+        $this->assertPhoneNumber($phone2, 55, 51, 123456789);
+    }
+
+    /**
+     * @param PhoneNumber $phone
+     * @param int $countryCode
+     * @param int $areaCode
+     * @param int $subscriber
+     */
+    private function assertPhoneNumber($phone, $countryCode = null, $areaCode = null, $subscriber = null)
+    {
+        $this->assertInstanceOf('PROCERGS\VPR\CoreBundle\Entity\Sms\PhoneNumber', $phone);
+
+        if ($countryCode !== null) {
+            $this->assertEquals($countryCode, $phone->getCountryCode());
+        }
+        if ($areaCode !== null) {
+            $this->assertEquals($areaCode, $phone->getAreaCode());
+        }
+        if ($subscriber !== null) {
+            $this->assertEquals($subscriber, $phone->getSubscriberNumber());
+        }
+    }
 }

@@ -50,10 +50,18 @@ parameters:
     smshelper_senha: ~
 
     tpd_url: http://some.url.com
+    tpd_base_url: http://some.url.com
+    tpd_post_endpoint: %tpd_base_url%
+    tpd_get_endpoint: %tpd_base_url%/received
+    tpd_status_endpoint: %tpd_base_url%/status
     tpd_service_order: 0000
     tpd_system_id: SYS
     tpd_system_key: TDPKeyHere
+    tpd_sms_tag: VOTE
 
+    test.tpd.sms_tag: %tpd_sms_tag%_TEST
     test.tpd.to_phone.country_code: 55
     test.tpd.to_phone.area_code: 51
     test.tpd.to_phone.subscriber: 99999999
+    test.tpd.from_phone.area_code: 99
+    test.tpd.from_phone.subscriber: 999

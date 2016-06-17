@@ -2,7 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
-use PROCERGS\VPR\CoreBundle\Entity\Sms\PhoneNumber;
+use PROCERGS\VPR\CoreBundle\Entity\Sms\BrazilianPhoneNumberFactory;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\Sms;
 use PROCERGS\VPR\CoreBundle\Security\SmsVoteHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,10 +21,7 @@ class SmsVoteController extends Controller
         /** @var SmsVoteHandler $smsVoteHandler */
         $smsVoteHandler = $this->get('sms.vote_handler');
 
-        $from = new PhoneNumber();
-        $from->setCountryCode($request->get('from_country', 55))
-            ->setAreaCode($request->get('from_area'))
-            ->setSubscriberNumber($request->get('from_subscriber'));
+        $from = BrazilianPhoneNumberFactory::createFromE164($request->get('de'));
 
         $sms = new Sms();
         $sms
@@ -33,5 +30,4 @@ class SmsVoteController extends Controller
 
         return array();
     }
-
 }

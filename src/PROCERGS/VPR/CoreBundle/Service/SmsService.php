@@ -6,6 +6,7 @@ namespace PROCERGS\VPR\CoreBundle\Service;
 use Circle\RestClientBundle\Services\RestClient;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\Sms;
 use PROCERGS\VPR\CoreBundle\Exception\SmsServiceException;
+use Symfony\Component\HttpFoundation\Response;
 
 class SmsService
 {
@@ -13,7 +14,10 @@ class SmsService
     protected $restClient;
 
     /** @var string */
-    protected $url;
+    protected $sendUrl;
+
+    /** @var string */
+    protected $receiveUrl;
 
     /** @var string */
     protected $serviceOrder;
@@ -33,7 +37,8 @@ class SmsService
     {
         $this->restClient = $restClient;
 
-        $this->url = $options['url'];
+        $this->sendUrl = $options['send_url'];
+        $this->receiveUrl = $options['receive_url'];
         $this->systemId = $options['system_id'];
         $this->serviceOrder = $options['service_order'];
 
@@ -69,16 +74,48 @@ class SmsService
             ]
         );
 
-        $response = $client->post($this->url, $payload);
+        $response = $client->post($this->sendUrl, $payload);
         $json = json_decode($response->getContent());
         if ($response->isOk() && property_exists($json, 'protocolo')) {
             return $json->protocolo;
         } else {
-            if (is_array($json)) {
-                throw new SmsServiceException($json);
-            } else {
-                throw new SmsServiceException($response->getContent());
-            }
+            $this->handleException($response, $json);
+        }
+    }
+
+    /**
+     * Force fetch pending SMS messages
+     * @param $tag string "tag" to be fetched
+     * @return array
+     * @throws SmsServiceException
+     */
+    public function forceReceive($tag)
+    {
+        $client = $this->restClient;
+
+        $response = $client->get($this->receiveUrl."?tag=".urlencode($tag));
+        $json = json_decode($response->getContent());
+        if ($response->isOk() && $json !== null && is_array($json)) {
+            return $json;
+        } else {
+            $this->handleException($response, $json);
+        }
+    }
+
+    /**
+     * @param Response $response
+     * @param mixed $json
+     * @throws SmsServiceException
+     */
+    private function handleException(Response $response, $json = null)
+    {
+        if ($json === null) {
+            $json = json_decode($response->getContent());
+        }
+        if (is_array($json)) {
+            throw new SmsServiceException($json);
+        } else {
+            throw new SmsServiceException($response->getContent());
         }
     }
 }

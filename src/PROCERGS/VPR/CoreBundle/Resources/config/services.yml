@@ -150,4 +150,4 @@ services:
         class: PROCERGS\VPR\CoreBundle\Service\SmsService
         arguments:
             - "@circle.restclient"
-            - { url: %tpd_url%, system_id: %tpd_system_id%, service_order: %tpd_service_order% }
+            - { send_url: %tpd_post_endpoint%, receive_url: %tpd_get_endpoint%, system_id: %tpd_system_id%, service_order: %tpd_service_order% }
