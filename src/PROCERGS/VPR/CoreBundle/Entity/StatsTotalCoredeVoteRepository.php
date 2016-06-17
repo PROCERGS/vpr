@@ -47,16 +47,14 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
 
         $statement = $connection->prepare('
              SELECT
-  COUNT(CASE WHEN b.is_online IS TRUE THEN 1 END) AS votes_online,
-        COUNT(CASE WHEN b.is_online IS FALSE THEN 1 END) AS votes_offline,
-        ov.corede_id,
+  sum(b.tot_votes_online) AS votes_online,
+        sum(b.tot_votes_offline) AS votes_offline,
+        b.corede_id,
         c.name
-   FROM ballot_box b
-   INNER JOIN open_vote ov ON ov.ballot_box_id = b.id
-   INNER JOIN corede c on c.id = ov.corede_id
-   WHERE b.poll_id = :poll
-   AND ov.poll_option_id IS NOT NULL
-   GROUP BY ov.corede_id, c.name
+   FROM stats_prev_ppp b
+   INNER JOIN corede c on c.id = b.corede_id
+   WHERE b.poll_id = :poll   
+   GROUP BY b.corede_id, c.name
    ORDER BY c.name
 
         ');
@@ -74,18 +72,15 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
 
         $statement = $connection->prepare('
              SELECT
-  COUNT(CASE WHEN b.is_online IS TRUE THEN 1 END) AS voters_online,
-        COUNT(CASE WHEN b.is_online IS FALSE THEN 1 END) AS voters_offline,
-        v.corede_id,
+  sum(b.tot_voters_online ) AS voters_online,
+        sum(b.tot_voters_offline) AS voters_offline,
+        b.corede_id,
         c.name
-   FROM ballot_box b
-   INNER JOIN vote v ON v.ballot_box_id = b.id
-   INNER JOIN corede c on c.id = v.corede_id
-   WHERE b.poll_id = :poll
-   AND v.is_invalid IS NOT TRUE
-   GROUP BY v.corede_id, c.name
+   FROM stats_prev_ppp b   
+   INNER JOIN corede c on c.id = b.corede_id
+   WHERE b.poll_id = :poll   
+   GROUP BY b.corede_id, c.name
    ORDER BY c.name
-
         ');
 
         $statement->bindParam('poll', $poll);

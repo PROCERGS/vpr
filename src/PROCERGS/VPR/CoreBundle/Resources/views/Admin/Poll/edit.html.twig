@@ -1,6 +1,16 @@
 {% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
 {% set contentName = 'admin.poll'|trans %}
-{% set actionName = 'admin.edit'|trans %}
+{% if entity.id %}
+    {% set actionName = 'admin.edit'|trans %}
+{% else %}
+    {% set actionName = 'admin.add'|trans %}
+{% endif %}
+
+{% if entity.transferYear is not empty %}
+    {% set isTranferable = true %}
+{% else %}
+    {% set isTranferable = false %}
+{% endif %}
 
 {% block content -%}
     <div class="navbar">
@@ -12,7 +22,7 @@
         <div class="col-md-12">
             <ul class="nav nav-tabs" style="margin-bottom: 40px;">
                 <li class="active"><a href="#poll" data-toggle="tab">{{ 'admin.poll'|trans }}</a></li>
-                {% if is_granted('ROLE_STEP') %}
+                {% if is_granted('ROLE_STEP') and entity.id %}
                     <li><a href="#step" data-toggle="tab" href="#">{{ 'admin.steps'|trans }}</a></li>
                 {% endif %}
             </ul>
@@ -72,6 +82,16 @@
                             {{ form_widget(edit_form.description, {'attr': {'class': 'form-control'}}) }}
                         </div>
                     </div>
+                    
+                    <div class="form-group ballotbox-offline-itens">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input {{ isTranferable ? 'checked="checked"' : '' }} type="checkbox" value="1" name="chkSyncPPP" id="chkSyncPPP">Deseja habilitar a sincronização dessa urna para o PPP?
+                                </label>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-group form-actions">
                         <div class="col-lg-10 col-lg-offset-2">
@@ -79,7 +99,7 @@
 
                             {{ form_end(edit_form) }}
 
-                            {% if is_granted('ROLE_POLL_DELETE') %}
+                            {% if is_granted('ROLE_POLL_DELETE') and delete_form is not empty %}
                                 {{ form_start(delete_form) }}
                                 {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
                                 {{ form_end(delete_form) }}
@@ -87,12 +107,20 @@
                         </div>
                     </div>
                 </div>
-
+                {% if entity.id %}
                 <div class="tab-pane" id="step">
                     {% include 'PROCERGSVPRCoreBundle:Admin/Step:list.html.twig' with {'entities': steps, 'sorted':true} %}
                 </div>
+                {% endif %}
 
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/poll.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

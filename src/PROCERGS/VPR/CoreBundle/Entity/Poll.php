@@ -5,12 +5,17 @@ namespace PROCERGS\VPR\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Poll
  *
  * @ORM\Table(name="poll")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\PollRepository")
+* @UniqueEntity(
+ *     fields={"transferYear"},
+ *     message="ja existe uma votacao sincronizando com o mesmo ano da Data de fechamento"
+ * )
  */
 class Poll
 {
@@ -81,16 +86,14 @@ class Poll
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="apuration_time", type="datetime", nullable=false)
-     * @Groups({"vote", "setup"})
+     * @ORM\Column(name="apuration_time", type="datetime", nullable=false)     
      */
     protected $apurationTime;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="apuration_done", type="datetime", nullable=false)
-     * @Groups({"vote", "setup"})
+     * @ORM\Column(name="apuration_done", type="datetime", nullable=true)     
      */
     protected $apurationDone;
 
@@ -107,6 +110,26 @@ class Poll
     protected $steps;
 
     protected $blocked;
+    
+    /**
+     * @ORM\Column(name="transfer_pool_option_status", type="integer", nullable=false)     
+     */
+    protected $transferPoolOptionStatus = 0;
+    
+    /**
+     * @ORM\Column(name="transfer_open_vote_status", type="integer", nullable=false)
+     */
+    protected $transferOpenVoteStatus = 0;
+    
+    /**
+     * @ORM\Column(name="apuration_status", type="integer", nullable=false)
+     */
+    protected $apurationStatus = 0;
+    
+    /**
+     * @ORM\Column(name="transfer_year", type="integer", nullable=true)
+     */
+    protected $transferYear;
 
     public function __construct()
     {
@@ -359,4 +382,30 @@ class Poll
     public function getBlocked() {
         return $this->blocked;
     }
+    
+    public function setTransferOpenVoteStatus($var) {
+        $this->transferOpenVoteStatus = $var;
+    }    
+    public function getTransferOpenVoteStatus() {
+        return $this->transferOpenVoteStatus;
+    }
+    public function setTransferPoolOptionStatus($var) {
+        $this->transferPoolOptionStatus = $var;
+    }
+    public function getTransferPoolOptionStatus() {
+        return $this->transferPoolOptionStatus;
+    }
+    public function setApurationStatus($var) {
+        $this->apurationStatus = $var;
+    }
+    public function getApurationStatus() {
+        return $this->apurationStatus;
+    }
+    public function setTransferYear($var) {
+        $this->transferYear = $var;
+    }
+    public function getTransferYear() {
+        return $this->transferYear;
+    }
+    
 }

@@ -63,7 +63,7 @@ class PollController extends Controller
      *
      * @Route("/", name="admin_poll_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:edit.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -86,7 +86,8 @@ class PollController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'edit_form'   => $form->createView(),
+            'delete_form'  => null,
         );
     }
 
@@ -114,7 +115,7 @@ class PollController extends Controller
      *
      * @Route("/new", name="admin_poll_new")
      * @Method("GET")
-     * @Template()
+     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:edit.html.twig")
      */
     public function newAction()
     {
@@ -124,7 +125,8 @@ class PollController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'edit_form'   => $form->createView(),
+            'delete_form' => null
         );
     }
 
