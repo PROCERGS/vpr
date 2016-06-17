@@ -53,13 +53,40 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
         c.name
    FROM stats_prev_ppp b
    INNER JOIN corede c on c.id = b.corede_id
-   WHERE b.poll_id = :poll   
+   WHERE b.poll_id = :poll
    GROUP BY b.corede_id, c.name
    ORDER BY c.name
 
         ');
 
         $statement->bindParam('poll', $poll);
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
+
+    public function findTotalVotesByPollAndCorede($poll, $corede)
+    {
+        $em         = $this->getEntityManager();
+        $connection = $em->getConnection();
+
+        $statement = $connection->prepare('
+             SELECT
+  sum(b.tot_votes_online) AS votes_online,
+        sum(b.tot_votes_offline) AS votes_offline,
+        b.city_id,
+        city.name
+   FROM stats_prev_ppp b
+   INNER JOIN corede c on c.id = :corede
+   INNER JOIN city on city.id = b.city_id
+   WHERE b.poll_id = :poll
+   AND b.corede_id = :corede
+   GROUP BY b.city_id, city.name
+   ORDER BY city.name
+        ');
+
+        $statement->bindParam('poll', $poll);
+        $statement->bindParam('corede', $corede);
         $statement->execute();
 
         return $statement->fetchAll();
@@ -76,14 +103,41 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
         sum(b.tot_voters_offline) AS voters_offline,
         b.corede_id,
         c.name
-   FROM stats_prev_ppp b   
+   FROM stats_prev_ppp b
    INNER JOIN corede c on c.id = b.corede_id
-   WHERE b.poll_id = :poll   
+   WHERE b.poll_id = :poll
    GROUP BY b.corede_id, c.name
    ORDER BY c.name
         ');
 
         $statement->bindParam('poll', $poll);
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
+
+    public function findTotalVotersByPollAndCorede($poll, $corede)
+    {
+        $em         = $this->getEntityManager();
+        $connection = $em->getConnection();
+
+        $statement = $connection->prepare('
+             SELECT
+  sum(b.tot_voters_online ) AS voters_online,
+        sum(b.tot_voters_offline) AS voters_offline,
+        b.city_id,
+        city.name
+   FROM stats_prev_ppp b
+   INNER JOIN corede c on c.id = :corede
+   INNER JOIN city on city.id = b.city_id
+   WHERE b.poll_id = :poll
+   AND b.corede_id = :corede
+   GROUP BY b.city_id, city.name
+   ORDER BY city.name
+        ');
+
+        $statement->bindParam('poll', $poll);
+        $statement->bindParam('corede', $corede);
         $statement->execute();
 
         return $statement->fetchAll();

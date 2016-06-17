@@ -359,6 +359,7 @@ class PollController extends Controller
             $corede = $coredeRepo->find($vote['corede_id']);
             $coredeId = $corede->getId();
 
+            $coredes[$coredeId]['corede_id'] = $corede->getId();
             $coredes[$coredeId]['corede'] = $corede->getName();
             $coredes[$coredeId]['votes_online'] = $vote['votes_online'];
             $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
@@ -372,6 +373,7 @@ class PollController extends Controller
         }
 
         return array(
+            'poll' => $poll,
             'coredes' => $coredes,
             'form' => $form->createView()
         );
@@ -406,5 +408,50 @@ class PollController extends Controller
     		$response->setData(array('message' => $e->getMessage()));
     	}
     	return $response;
+    }
+
+    /**
+     * Lists poll stats by corede.
+     *
+     * @Route("/stats/{poll}/corede/{corede}", name="admin_stats_corede")
+     * @Template()
+     */
+    public function statsListCoredeAction($poll, $corede)
+    {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
+
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        $corede = $coredeRepo->find($corede);
+
+        $cityRepo    = $em->getRepository('PROCERGSVPRCoreBundle:City');
+
+        $votes = $statsRepo->findTotalVotesByPollAndCorede($poll, $corede->getId());
+
+        $cities = null;
+        foreach ($votes as $vote) {
+            $city = $cityRepo->find($vote['city_id']);
+            $cityId = $city->getId();
+
+            $cities[$cityId]['city_id'] = $city->getId();
+            $cities[$cityId]['city'] = $city->getName();
+            $cities[$cityId]['votes_online'] = $vote['votes_online'];
+            $cities[$cityId]['votes_offline'] = $vote['votes_offline'];
+        }
+
+        $voters    = $statsRepo->findTotalVotersByPollAndCorede($poll, $corede->getId());
+        foreach ($voters as $vote) {
+            $cityId = $vote['city_id'];
+            $cities[$cityId]['voters_online'] = $vote['voters_online'];
+            $cities[$cityId]['voters_offline'] = $vote['voters_offline'];
+        }
+
+        return array(
+            'corede' => $corede,
+            'cities' => $cities
+        );
     }
 }
