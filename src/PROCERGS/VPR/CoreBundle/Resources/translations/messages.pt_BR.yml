@@ -276,3 +276,7 @@ vpr.user:
             sign: Consulta Popular
 admin.ballobox.new: Nova Urna
 admin.stats: Apuração
+admin.title.bg: Cor de fundo da categoria
+admin.icon.bg: Cor de fundo do ícone
+admin.icon.img: Ícone
+admin.option.bg: Cor de fundo das opções

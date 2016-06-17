@@ -598,3 +598,7 @@ input::-webkit-inner-spin-button {
     background-color: #FFF;
     color: #000;
 }
+
+#vote-places td {
+    padding: 10px;
+}

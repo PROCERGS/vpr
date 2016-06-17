@@ -20,20 +20,20 @@
     {% endfor %}
 
     <div class="jumbotron">
-        {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
+        {{ form_start(form, {'method':'POST', 'attr': {'role':'form'}}) }}
         <div class="row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
                 <label>{{ 'admin.poll'|trans }}</label>
                 {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
                 <label>{{ 'admin.corede'|trans }}</label>
                 {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <div class="form-group col-md-1">
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12 text-right">
                 <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-            </div>
-            <div class="form-group col-md-2">
                 <a href="{{ path('admin_poll_option_clear_filters') }}" class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
             </div>
         </div>

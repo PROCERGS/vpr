@@ -138,6 +138,9 @@ form .user-roles input {
     display: inline-block;
     float: left;
     clear: both;
+    height: 20px;
+    margin: 0 10px 15px 0;
+    width: 20px;
 }
 form .user-roles label {
     display: inline-block;

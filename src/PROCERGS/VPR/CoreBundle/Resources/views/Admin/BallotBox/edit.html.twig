@@ -41,7 +41,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.name'|trans }}</label>
         <div class="col-sm-10">
             {{ form_errors(edit_form.name) }}
-            {{ form_widget(edit_form.name, {'attr': {'class': 'form-control', 'data-val': lastBallotbox.name }}) }}
+            {{ form_widget(edit_form.name, {'attr': {'class': 'form-control' }}) }}
         </div>
     </div>
 
@@ -79,7 +79,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.opening_time'|trans }}</label>
         <div class="col-sm-10">
             {{ form_errors(edit_form.openingTime) }}
-            {{ form_widget(edit_form.openingTime, {'attr': {'class': 'opening-time', 'data-day': lastBallotbox.openingTime|date("d"), 'data-month': lastBallotbox.openingTime|date("n"), 'data-year': lastBallotbox.openingTime|date("Y"), 'data-hour': lastBallotbox.openingTime|date("H"), 'data-minute': lastBallotbox.openingTime|date("i")}}) }}
+            {{ form_widget(edit_form.openingTime, {'attr': {'class': 'opening-time', 'data-day': lastBallotbox.openingTime|date("j"), 'data-month': lastBallotbox.openingTime|date("n"), 'data-year': lastBallotbox.openingTime|date("Y"), 'data-hour': lastBallotbox.openingTime|date("H"), 'data-minute': lastBallotbox.openingTime|date("i")}}) }}
         </div>
     </div>
 
@@ -87,7 +87,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.closing_time'|trans }}</label>
         <div class="col-sm-10">
             {{ form_errors(edit_form.closingTime) }}
-            {{ form_widget(edit_form.closingTime, {'attr': {'class': 'closing-time', 'data-day': lastBallotbox.closingTime|date("d"), 'data-month': lastBallotbox.closingTime|date("n"), 'data-year': lastBallotbox.closingTime|date("Y"), 'data-hour': lastBallotbox.closingTime|date("H"), 'data-minute': lastBallotbox.closingTime|date("i")}}) }}
+            {{ form_widget(edit_form.closingTime, {'attr': {'class': 'closing-time', 'data-day': lastBallotbox.closingTime|date("j"), 'data-month': lastBallotbox.closingTime|date("n"), 'data-year': lastBallotbox.closingTime|date("Y"), 'data-hour': lastBallotbox.closingTime|date("H"), 'data-minute': lastBallotbox.closingTime|date("i")}}) }}
         </div>
     </div>
 
