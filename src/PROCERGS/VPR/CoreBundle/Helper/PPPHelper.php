@@ -3,20 +3,12 @@ namespace PROCERGS\VPR\CoreBundle\Helper;
 
 class PPPHelper
 {
-    protected $host = 'pr01.oracle-des.procergs.reders';
-    protected $port = '1525';
-    protected $dbname = 'pr01';
-    protected $username = 'D_SEPLAN_PPP_AD';
-    protected $password = 'd353nvppp4d';
+    protected $host;
+    protected $port;
+    protected $dbname;
+    protected $username;
+    protected $password;
     
-    public function __construct()
-    {
-        $this->host = 'pr01.oracle-des.procergs.reders';
-        $this->port = '1525';
-        $this->dbname = 'pr01';
-        $this->username = 'D_SEPLAN_PPP_AD';
-        $this->password = 'd353nvppp4d';
-    }
     public function setHost($var)
     {
         $this->host = $var;
