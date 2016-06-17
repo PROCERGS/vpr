@@ -40,13 +40,13 @@
                 <tr>
                     <th><input type="checkbox" id="check-all"></input></th>
                     <th>{{ 'admin.pin'|trans }}</th>
-                    <th>{{ 'admin.email'|trans }}</th>
-                    <th>{{ 'admin.phone'|trans }}</th>
+                    <th width="25%">{{ 'admin.email'|trans }}</th>
+                    <th width="10%">{{ 'admin.phone'|trans }}</th>
                     <th>{{ 'admin.city'|trans }}</th>
                     <th>{{ 'admin.status'|trans }}</th>
                     <th width="8%">{{ 'admin.sentMessage1'|trans }}</th>
                     <th width="8%">{{ 'admin.sentMessage2'|trans }}</th>
-                    <th width="5%">{{ 'admin.actions'|trans }}</th>
+                    <th width="8%">{{ 'admin.actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,7 +63,7 @@
                             <td>{% if (entity.sentMessage1 is not empty) %}{{ entity.sentMessage1.sentDate | date('d/m/Y H:i:s') }}{% endif %}</td>
                             <td>{% if (entity.sentMessage2 is not empty) %}{{ entity.sentMessage2.sentDate | date('d/m/Y H:i:s') }}{% endif %}</td>
                             </td>
-                            <td class="text-center">
+                            <td>
                                 {% if is_granted('ROLE_BALLOTBOX_READ') %}
                                     <a title="{{ 'admin.show'|trans }}" class="btn btn-default btn-sm"
                                        href="{{ path('admin_ballotbox_show', { 'id': entity.id }) }}"><span
