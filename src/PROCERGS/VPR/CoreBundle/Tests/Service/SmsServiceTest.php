@@ -12,7 +12,6 @@ class SmsServiceTest extends KernelAwareTest
 {
     public function testSend()
     {
-        return;
         $to = new PhoneNumber();
         $to
             ->setCountryCode($this->container->getParameter('test.tpd.to_phone.country_code'))
@@ -25,11 +24,23 @@ class SmsServiceTest extends KernelAwareTest
         $this->assertTrue(is_string($response));
     }
 
-    public function testForceReceive()
+    public function testForceReceiveAll()
     {
         $tag = $this->container->getParameter('test.tpd.sms_tag');
-        $testMessage = "$tag testing";
 
+        /** @var SmsService $smsService */
+        $smsService = $this->container->get('sms.service');
+
+        $allSms = $smsService->forceReceive($tag);
+        $this->assertNotEmpty($allSms);
+        $lastSms = end($allSms);
+
+        $smsQueue = $smsService->forceReceive($tag, $lastSms->id);
+        $this->assertEmpty($smsQueue);
+    }
+
+    public function testStatus()
+    {
         /** @var SmsService $smsService */
         $smsService = $this->container->get('sms.service');
 
@@ -37,21 +48,14 @@ class SmsServiceTest extends KernelAwareTest
         $to
             ->setAreaCode($this->container->getParameter('test.tpd.from_phone.area_code'))
             ->setSubscriberNumber($this->container->getParameter('test.tpd.from_phone.subscriber'));
-        $this->sendSms($to, $testMessage);
+        $transactionId = $this->sendSms($to, 'testing status');
 
-        $smsQueue = $smsService->forceReceive($tag);
-        $this->assertNotEmpty($smsQueue);
+        $status = $smsService->getStatus($transactionId);
+        $this->assertNotNull($status);
+        $this->assertNotEmpty($status);
 
-        $found = false;
-        foreach ($smsQueue as $sms) {
-            if ($sms->mensagem == $testMessage) {
-                $found = true;
-            }
-        }
-        $this->assertTrue($found, 'Test message not found in queue!');
-
-        $smsRepeat = $smsService->forceReceive($tag);
-        $this->assertEmpty($smsRepeat, 'Messages are not being removed from the queue!');
+        $first = reset($status);
+        $this->assertEquals($transactionId, $first->numero);
     }
 
     private function sendSms(PhoneNumber $to, $message)

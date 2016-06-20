@@ -20,6 +20,9 @@ class SmsService
     protected $receiveUrl;
 
     /** @var string */
+    protected $statusUrl;
+
+    /** @var string */
     protected $serviceOrder;
 
     /** @var string */
@@ -39,6 +42,7 @@ class SmsService
 
         $this->sendUrl = $options['send_url'];
         $this->receiveUrl = $options['receive_url'];
+        $this->statusUrl = $options['status_url'];
         $this->systemId = $options['system_id'];
         $this->serviceOrder = $options['service_order'];
 
@@ -56,7 +60,7 @@ class SmsService
     /**
      * Sends an SMS and returns the id for later checking.
      * @param Sms $sms
-     * @return string sending id for later checking
+     * @return string transaction id for later checking
      * @throws SmsServiceException
      */
     public function send(Sms $sms)
@@ -86,16 +90,29 @@ class SmsService
     /**
      * Force fetch pending SMS messages
      * @param $tag string "tag" to be fetched
+     * @param integer $lastId
      * @return array
      * @throws SmsServiceException
      */
-    public function forceReceive($tag)
+    public function forceReceive($tag, $lastId = null)
     {
         $client = $this->restClient;
 
-        $response = $client->get($this->receiveUrl."?tag=".urlencode($tag));
+        $params = compact('tag');
+        if ($lastId !== null) {
+            $params['ultimoId'] = $lastId;
+        }
+
+        $response = $client->get($this->receiveUrl."?".http_build_query($params));
         $json = json_decode($response->getContent());
         if ($response->isOk() && $json !== null && is_array($json)) {
+            usort(
+                $json,
+                function ($a, $b) {
+                    return $a->id - $b->id;
+                }
+            );
+
             return $json;
         } else {
             $this->handleException($response, $json);
@@ -116,6 +133,30 @@ class SmsService
             throw new SmsServiceException($json);
         } else {
             throw new SmsServiceException($response->getContent());
+        }
+    }
+
+    /**
+     * Checks the status of sent messages
+     * @param $transactionId mixed
+     * @return array
+     * @throws SmsServiceException
+     */
+    public function getStatus($transactionId)
+    {
+        if (is_array($transactionId)) {
+            $transactionIds = $transactionId;
+        } else {
+            $transactionIds = [$transactionId];
+        }
+
+        $client = $this->restClient;
+        $response = $client->get($this->statusUrl.'?protocolos='.implode(',', $transactionIds));
+        $json = json_decode($response->getContent());
+        if ($response->isOk() && $json !== null && is_array($json)) {
+            return $json;
+        } else {
+            $this->handleException($response, $json);
         }
     }
 }

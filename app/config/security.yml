@@ -252,6 +252,7 @@ security:
         - { path: ^/admin/oidc, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/confirm, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/receive, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/counting, role: ROLE_ADMIN }
         - { path: ^/api/offline/download, roles: ROLE_ADMIN }

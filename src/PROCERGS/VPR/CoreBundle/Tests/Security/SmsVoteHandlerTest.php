@@ -15,6 +15,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\VoteRepository;
 use PROCERGS\VPR\CoreBundle\Security\SmsVoteHandler;
 use PROCERGS\VPR\CoreBundle\Security\VotingSessionProvider;
+use PROCERGS\VPR\CoreBundle\Tests\DatabasePopulator;
 use PROCERGS\VPR\CoreBundle\Tests\KernelAwareTest;
 
 class SmsVoteHandlerTest extends KernelAwareTest
@@ -37,63 +38,25 @@ class SmsVoteHandlerTest extends KernelAwareTest
         $this->validSms = new SmsVote();
         $this->validSms
             ->setSender('+55 51 1234 56789')
-            ->setMessage('VOTE '.self::VOTER_REGISTRATION.' 1 2 3 # 5  9#7  % 6')
+            ->setMessage('VOTE '.self::VOTER_REGISTRATION.' 1 2 # 5  6#3  % 6')
             ->setReceivedAt(new \DateTime());
 
-        $poll = new Poll();
-        $poll->setName('Test Poll')
-            ->setOpeningTime(new \DateTime("-1 hour"))
-            ->setClosingTime(new \DateTime("+1 hour"))
-            ->setApurationTime(new \DateTime("+2 hours"))
-            ->setDescription('Test Poll')
-            ->generatePrivateAndPublicKeys();
-        $this->pollPassphrase = $poll->getSecret();
-        $this->em->persist($poll);
-        $this->em->flush($poll);
+        $populator = new DatabasePopulator($this->em);
+        $response = $populator->populate();
 
-        $ballotBox = new BallotBox();
-        $this->ballotBoxPassphrase = $ballotBox->generatePassphrase();
-        $ballotBox->setName('SMS BallotBox')
-            ->setPoll($poll)
-            ->setSecret($this->ballotBoxPassphrase)
-            ->setPin(1234)
-            ->setIsOnline(false)
-            ->setIsSms(true)
-            ->setKeys();
-        $this->em->persist($ballotBox);
-        $this->em->flush($ballotBox);
+        $this->pollPassphrase = $response['pollPassphrase'];
+        $this->ballotBoxPassphrase = $response['ballotBoxPassphrase'];
 
-        $corede = new Corede();
-        $corede->setName('Metropolitano');
-        $this->em->persist($corede);
-        $this->em->flush($corede);
+        /** @var City $city */
+        $city = $response['city'];
 
-        $city = new City();
-        $city->setName('Porto Alegre')
-            ->setId(88013)
-            ->setIsCapital(true)
-            ->setCodSefa(96)
-            ->setIbgeCode(4314902)
-            ->setCorede($corede);
-        $this->em->persist($city);
-        $this->em->flush($city);
-
-        $voterRegistration = self::VOTER_REGISTRATION;
-        $treVoter = new TREVoter($voterRegistration);
-        $treVoter->setId(self::VOTER_REGISTRATION)
-            ->setVotingZone(1)
-            ->setName('Fulano de Tal')
-            ->setCity($city)
-            ->setCorede($corede)
-            ->setCityName($city->getName())
-            ->setCityCode($city->getId());
-        $this->em->persist($treVoter);
-        $this->em->flush($treVoter);
+        $populator->addVoter(self::VOTER_REGISTRATION, $city);
     }
 
     public function testSmsVoteParsing()
     {
-        $smsVoteHandler = new SmsVoteHandler();
+        /** @var SmsVoteHandler $smsVoteHandler */
+        $smsVoteHandler = $this->container->get('sms.vote_handler');
 
         $smsVote = $this->validSms;
 
@@ -104,8 +67,6 @@ class SmsVoteHandlerTest extends KernelAwareTest
         $this->assertContains(2, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
         $this->assertContains(3, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
         $this->assertContains(5, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
-        $this->assertContains(9, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
-        $this->assertContains(7, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
         $this->assertContains(6, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
     }
 
@@ -130,16 +91,19 @@ class SmsVoteHandlerTest extends KernelAwareTest
         $this->assertInstanceOf('PROCERGS\VPR\CoreBundle\Entity\BallotBox', $ballotBox);
         $this->assertTrue($ballotBox->isSms());
 
-        $smsVoteHandler = new SmsVoteHandler();
+        /** @var SmsVoteHandler $smsVoteHandler */
+        $smsVoteHandler = $this->container->get('sms.vote_handler');
 
         $smsVote = $this->validSms;
 
-        /** @var TREVoterRepository $treVoterRepo */
-        $treVoterRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:TREVoter');
-
-        $vote = $smsVoteHandler->getVoteFromSmsVote($smsVote, $ballotBox, $treVoterRepo);
+        $vote = $smsVoteHandler->getVoteFromSmsVote($smsVote, $ballotBox);
         $this->assertInstanceOf('PROCERGS\VPR\CoreBundle\Entity\Vote', $vote);
         $this->assertNotEmpty($vote->getPollOption(), 'No options found in the vote!');
+        $this->assertContains(10, $vote->getPollOption(), implode(' ', $vote->getPollOption()));
+        $this->assertContains(9, $vote->getPollOption());
+        $this->assertContains(8, $vote->getPollOption());
+        $this->assertContains(6, $vote->getPollOption());
+        $this->assertContains(5, $vote->getPollOption());
 
         $votingSessionProvider->persistVote($vote, null);
         $this->em->flush();

@@ -2,6 +2,8 @@
 
 namespace PROCERGS\VPR\CoreBundle\Tests\Entity\Sms;
 
+use PROCERGS\VPR\CoreBundle\Entity\Sms\BrazilianPhoneNumberFactory;
+use PROCERGS\VPR\CoreBundle\Entity\Sms\BrazilianServicePhoneNumberFactory;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\PhoneNumber;
 
 class PhoneNumberTest extends \PHPUnit_Framework_TestCase
@@ -29,12 +31,13 @@ class PhoneNumberTest extends \PHPUnit_Framework_TestCase
 
     public function testE164toPhoneNumber()
     {
-        $options = ['country_code' => 55];
-        $phone1 = PhoneNumber::createFromE164('+555112345678', $options);
-        $phone2 = PhoneNumber::createFromE164('+5551123456789', $options);
+        $phone1 = BrazilianPhoneNumberFactory::createFromE164('+555112345678');
+        $phone2 = BrazilianPhoneNumberFactory::createFromE164('+5551123456789');
+        $phone3 = BrazilianServicePhoneNumberFactory::createFromE164('+5512345');
 
         $this->assertPhoneNumber($phone1, 55, 51, 12345678);
         $this->assertPhoneNumber($phone2, 55, 51, 123456789);
+        $this->assertPhoneNumber($phone3, 55, 12, 345);
     }
 
     /**

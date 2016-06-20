@@ -8,7 +8,7 @@ class Sms
     /** @var PhoneNumber */
     protected $to;
 
-    /** @var string */
+    /** @var PhoneNumber */
     protected $from;
 
     /** @var string */
