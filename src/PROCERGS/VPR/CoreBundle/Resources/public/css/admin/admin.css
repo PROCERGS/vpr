@@ -179,117 +179,199 @@ form .user-roles label {
     width: 40px;
 }
 
+.category-preview .option .content {
+    padding: 10px 30px 10px 50px;
+    position: relative;
+}
+
+.category-preview input[type="checkbox"] {
+    display: none;
+}
+
+.category-preview input[type="checkbox"] {
+    opacity: 0;
+    -webkit-appearance: none;
+    display: block;
+    vertical-align: middle;
+    z-index: 100;
+    width: 30px;
+    height: 30px;
+}
+
+.category-preview input[type="checkbox"] {
+    float: left;
+    height: 20px;
+    width: 20px;
+}
+
+.category-preview input[type="checkbox"], .category-preview label::before {
+    width: 30px;
+    height: 30px;
+    left: 5px;
+    position: absolute;
+    top: 50%;
+    margin-top: -17px;
+    cursor: pointer;
+}
+
+.category-preview label {
+    color: #007136;
+    display: block;
+    line-height: normal;
+    font-size: 16px;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+    vertical-align: top;
+    cursor: pointer;
+    -webkit-transition: color 0.3s;
+    transition: color 0.3s;
+}
+
+
+.category-preview label::before {
+    content: '';
+    border: 2px solid #036e35;
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+}
+
+.category-preview input[type="checkbox"], .category-preview label::before {
+    width: 30px;
+    height: 30px;
+    left: 5px;
+    position: absolute;
+    top: 50%;
+    margin-top: -17px;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .pre-icon-1 .icon {
     background-position: 0 -9px;
-  }
-  .pre-icon-1 .icon .img {
+}
+
+.pre-icon-1 .icon .img {
     background-position: -65px -9px;
-  }
+}
 
-  .pre-icon-2 .icon {
+.pre-icon-2 .icon {
     background-position: 0px -68px;
-  }
-  .pre-icon-2 .icon .img {
+}
+.pre-icon-2 .icon .img {
     background-position: -65px -68px;
-  }
+}
 
-  .pre-icon-3 .icon {
+.pre-icon-3 .icon {
     background-position: 0 -130px;
-  }
-  .pre-icon-3 .icon .img {
+}
+.pre-icon-3 .icon .img {
     background-position: -65px -130px;
-  }
+}
 
-  .pre-icon-4 .icon {
+.pre-icon-4 .icon {
     background-position: 0 -191px;
-  }
-  .pre-icon-4 .icon .img {
+}
+.pre-icon-4 .icon .img {
     background-position: -65px -191px;
-  }
+}
 
-  .pre-icon-5 .icon {
+.pre-icon-5 .icon {
     background-position: 0 -250px;
-  }
-  .pre-icon-5 .icon .img {
+}
+.pre-icon-5 .icon .img {
     background-position: -65px -250px;
-  }
+}
 
-  .pre-icon-6 .icon {
+.pre-icon-6 .icon {
     background-position: 0 -310px;
-  }
-  .pre-icon-6 .icon .img {
+}
+.pre-icon-6 .icon .img {
     background-position: -65px -310px;
-  }
+}
 
-  .pre-icon-7 .icon {
+.pre-icon-7 .icon {
     background-position: 0 -370px;
-  }
-  .pre-icon-7 .icon .img {
+}
+.pre-icon-7 .icon .img {
     background-position: -65px -370px;
-  }
+}
 
-  .pre-icon-8 .icon {
+.pre-icon-8 .icon {
     background-position: 0 -430px;
-  }
-  .pre-icon-8 .icon .img {
+}
+.pre-icon-8 .icon .img {
     background-position: -65px -430px;
-  }
+}
 
-  .pre-icon-9 .icon {
+.pre-icon-9 .icon {
     background-position: 0 -490px;
-  }
-  .pre-icon-9 .icon .img {
+}
+.pre-icon-9 .icon .img {
     background-position: -65px -490px;
-  }
+}
 
-  .pre-icon-10 .icon {
+.pre-icon-10 .icon {
     background-position: 0 -550px;
-  }
-  .pre-icon-10 .icon .img {
+}
+.pre-icon-10 .icon .img {
     background-position: -65px -550px;
-  }
+}
 
-  .pre-icon-11 .icon {
+.pre-icon-11 .icon {
     background-position: 0 -610px;
-  }
-  .pre-icon-11 .icon .img {
+}
+.pre-icon-11 .icon .img {
     background-position: -65px -610px;
-  }
+}
 
-  .pre-icon-12 .icon {
+.pre-icon-12 .icon {
     background-position: 0 -670px;
-  }
-  .pre-icon-12 .icon .img {
+}
+.pre-icon-12 .icon .img {
     background-position: -65px -670px;
-  }
+}
 
-  .pre-icon-13 .icon {
+.pre-icon-13 .icon {
     background-position: 0 -730px;
-  }
-  .pre-icon-13 .icon .img {
+}
+.pre-icon-13 .icon .img {
     background-position: -65px -730px;
-  }
+}
 
-  .pre-icon-14 .icon {
+.pre-icon-14 .icon {
     background-position: 0 -790px;
-  }
-  .pre-icon-14 .icon .img {
+}
+.pre-icon-14 .icon .img {
     background-position: -65px -790px;
-  }
+}
 
-  .pre-icon-15 .icon {
+.pre-icon-15 .icon {
     background-position: 0 -850px;
-  }
-  .pre-icon-15 .icon .img {
+}
+.pre-icon-15 .icon .img {
     background-position: -65px -850px;
-  }
+}
 
-  .pre-icon-16 .icon {
+.pre-icon-16 .icon {
     background-position: 0 -910px;
-  }
-  .pre-icon-16 .icon .img {
+}
+.pre-icon-16 .icon .img {
     background-position: -65px -910px;
-  }
+}
 
 
 
