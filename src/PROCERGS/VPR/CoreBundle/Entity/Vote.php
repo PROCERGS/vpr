@@ -447,7 +447,7 @@ class Vote
     }
 
     /**
-     * @param type $var
+     * @param Corede $var
      * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
      */
     public function setCorede($var)

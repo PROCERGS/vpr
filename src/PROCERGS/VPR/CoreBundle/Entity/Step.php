@@ -141,7 +141,7 @@ class Step
 
     /**
      * @param \PROCERGS\VPR\CoreBundle\Entity\Poll $poll
-     * @return \PROCERGS\VPR\CoreBundle\Entity\Poll
+     * @return \PROCERGS\VPR\CoreBundle\Entity\Step
      */
     public function setPoll(Poll $poll)
     {
