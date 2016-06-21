@@ -132,7 +132,14 @@
             </div>
         </div>
 
-                <div class="form-group">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{ 'admin.ballotbox_sms'|trans }}?</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{% if(entity.isSms) %}{{ 'admin.yes'|trans }}{% else %}{{ 'admin.no'|trans }}{% endif %}</p>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label class="col-sm-3 control-label">{{ 'admin.fone'|trans }}</label>
             <div class="col-sm-9">
                 <p class="form-control-static">{{ entity.fone }}</p>

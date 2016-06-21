@@ -43,6 +43,13 @@ class BallotBoxFilterType extends AbstractType
                 'required' => false,
                 'data' => false
             ))
+            ->add('is_sms', 'choice',
+                array(
+                'choices' => array(true => 'Urna SMS'),
+                'multiple' => true,
+                'expanded' => true,
+                'label'    => false
+            ))
             ->add('pin', 'text', array(
                 'required' => false,
                 'data' => false

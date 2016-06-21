@@ -43,6 +43,10 @@ class BallotBoxType extends AbstractType
                 array(
                 'required' => false
             ))
+            ->add('isSms', null,
+                array(
+                'required' => false
+            ))
             ->add('poll', 'entity',
                 array(
                 'class' => 'PROCERGSVPRCoreBundle:Poll',

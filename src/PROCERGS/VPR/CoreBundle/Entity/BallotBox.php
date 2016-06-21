@@ -198,6 +198,14 @@ class BallotBox
     protected $sentMessage2;
     protected $blocked;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_sms", type="boolean")
+     * @Groups({"vote"})
+     */
+    protected $isSms;
+
     public function __construct()
     {
         $this->setTotalInvalidVotes(0);
@@ -699,6 +707,29 @@ class BallotBox
 
     public function getBlocked() {
         return $this->blocked;
+    }
+
+    /**
+     * Set isSms
+     *
+     * @param boolean $isSms
+     * @return BallotBox
+     */
+    public function setIsSms($isSms)
+    {
+        $this->isSms = $isSms;
+
+        return $this;
+    }
+
+    /**
+     * Get isSms
+     *
+     * @return boolean
+     */
+    public function getIsSms()
+    {
+        return $this->isSms;
     }
 
 
