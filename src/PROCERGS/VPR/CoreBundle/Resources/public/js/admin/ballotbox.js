@@ -28,8 +28,11 @@ $(function() {
 
     })
 
-    $('#procergs_vpr_corebundle_ballotbox_isOnline').change(function(){
-        if ($(this).prop('checked')) {
+    var isOnline = $('#procergs_vpr_corebundle_ballotbox_isOnline');
+    var isSms = $('#procergs_vpr_corebundle_ballotbox_isSms');
+
+    $('#procergs_vpr_corebundle_ballotbox_isOnline, #procergs_vpr_corebundle_ballotbox_isSms').change(function(){
+        if (isOnline.prop('checked') || isSms.prop('checked')) {
         	$('.ballotbox-offline-itens').hide();
         	$('#procergs_vpr_corebundle_ballotbox_city').val('');
         	$('#procergs_vpr_corebundle_ballotbox_city').prop('selectedIndex', '');
