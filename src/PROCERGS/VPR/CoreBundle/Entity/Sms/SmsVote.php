@@ -9,7 +9,7 @@ use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 /**
  * SmsVote
  *
- * @ORM\Table()
+ * @ORM\Table(name="sms_vote")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\Sms\SmsVoteRepository")
  */
 class SmsVote
@@ -22,6 +22,13 @@ class SmsVote
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="sms_id", type="integer")
+     */
+    private $smsId;
 
     /**
      * @var string
@@ -120,6 +127,25 @@ class SmsVote
     public function setReceivedAt($receivedAt)
     {
         $this->receivedAt = $receivedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSmsId()
+    {
+        return $this->smsId;
+    }
+
+    /**
+     * @param int $smsId
+     * @return SmsVote
+     */
+    public function setSmsId($smsId)
+    {
+        $this->smsId = $smsId;
 
         return $this;
     }

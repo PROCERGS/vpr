@@ -3,5 +3,7 @@
 {% block title %}PROCERGSVPRCoreBundle:SmsVote:receive{% endblock %}
 
 {% block body %}
-    {{ dump(pendingMessages) }}
+    {% for vote in votes %}
+        {{ dump(vote.pollOption) | raw }}
+    {% endfor %}
 {% endblock %}

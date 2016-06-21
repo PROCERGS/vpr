@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Helper;
 
 use PROCERGS\VPR\CoreBundle\Entity\Corede;
+use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\PollOption;
 use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
 
@@ -25,16 +26,10 @@ class PollOptionHelper
      * @param Corede $corede
      * @return array
      */
-    public function ballotSeqToIds($ballotSeq, Corede $corede)
+    public function ballotSeqToIds($ballotSeq, Poll $poll, Corede $corede)
     {
-        if (!is_array($ballotSeq)) {
-            $ballotSeq = [$ballotSeq];
-        }
-
         /** @var PollOption[] $pollOption */
-        $pollOptions = $this->pollOptionRepository->findBy(
-            ['categorySorting' => $ballotSeq, 'corede' => $corede]
-        );
+        $pollOptions = $this->pollOptionRepository->findByCategorySorting($ballotSeq, $poll, $corede);
 
         $result = [];
         foreach ($pollOptions as $pollOption) {

@@ -8,8 +8,9 @@ class SmsServiceException extends \Exception
     /** @var array */
     protected $errorResponse;
 
-    public function __construct($errorResponse)
+    public function __construct($errorResponse, $code = null)
     {
+        $this->code = $code;
         $this->errorResponse = $errorResponse;
         if (is_array($errorResponse) && count($errorResponse) === 1) {
             $error = reset($errorResponse);

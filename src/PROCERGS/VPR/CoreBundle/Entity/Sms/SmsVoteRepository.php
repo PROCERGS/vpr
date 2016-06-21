@@ -12,4 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class SmsVoteRepository extends EntityRepository
 {
+    public function getLastSmsId()
+    {
+        $query = $this->createQueryBuilder('s')
+            ->select('MAX(s.smsId)');
+
+        return $query->getQuery()->getSingleScalarResult();
+    }
 }

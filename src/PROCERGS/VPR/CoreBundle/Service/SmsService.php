@@ -4,11 +4,14 @@ namespace PROCERGS\VPR\CoreBundle\Service;
 
 
 use Circle\RestClientBundle\Services\RestClient;
+use PROCERGS\VPR\CoreBundle\Entity\Sms\PhoneNumber;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\Sms;
 use PROCERGS\VPR\CoreBundle\Exception\SmsServiceException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class SmsService
+class SmsService implements LoggerAwareInterface
 {
     /** @var RestClient */
     protected $restClient;
@@ -30,6 +33,9 @@ class SmsService
 
     /** @var string */
     protected $systemKey;
+
+    /** @var LoggerInterface */
+    protected $logger;
 
     /**
      * SmsService constructor.
@@ -78,11 +84,15 @@ class SmsService
             ]
         );
 
+        $this->logger->info("Sending SMS to {$sms->getTo()->toE164()}: {$sms->getMessage()}");
         $response = $client->post($this->sendUrl, $payload);
         $json = json_decode($response->getContent());
         if ($response->isOk() && property_exists($json, 'protocolo')) {
+            $this->logger->info("SMS sent to {$sms->getTo()->toE164()}: {$sms->getMessage()}");
+
             return $json->protocolo;
         } else {
+            $this->logger->error("Error sending log to {$sms->getTo()->toE164()}");
             $this->handleException($response, $json);
         }
     }
@@ -103,6 +113,7 @@ class SmsService
             $params['ultimoId'] = $lastId;
         }
 
+        $this->logger->info("Fetching SMS for tag $tag...");
         $response = $client->get($this->receiveUrl."?".http_build_query($params));
         $json = json_decode($response->getContent());
         if ($response->isOk() && $json !== null && is_array($json)) {
@@ -130,9 +141,9 @@ class SmsService
             $json = json_decode($response->getContent());
         }
         if (is_array($json)) {
-            throw new SmsServiceException($json);
+            throw new SmsServiceException($json, $response->getStatusCode());
         } else {
-            throw new SmsServiceException($response->getContent());
+            throw new SmsServiceException($response->getContent(), $response->getStatusCode());
         }
     }
 
@@ -158,5 +169,32 @@ class SmsService
         } else {
             $this->handleException($response, $json);
         }
+    }
+
+    /**
+     * @param PhoneNumber $to
+     * @param string $message
+     * @return string
+     */
+    public function easySend(PhoneNumber $to, $message)
+    {
+        $sms = new Sms();
+        $sms
+            ->setFrom($this->systemId)
+            ->setTo($to)
+            ->setMessage($message);
+
+        return $this->send($sms);
+    }
+
+    /**
+     * Sets a logger instance on the object
+     *
+     * @param LoggerInterface $logger
+     * @return null
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 }

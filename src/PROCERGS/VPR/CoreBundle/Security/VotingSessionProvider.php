@@ -93,6 +93,24 @@ class VotingSessionProvider
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
     }
 
+    public function getSmsBallotBox($poll = null)
+    {
+        if ($poll === null) {
+            $poll = $this->getActivePollOrFail();
+        }
+
+        /** @var BallotBoxRepository $ballotBoxRepo */
+        $ballotBoxRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+
+        /** @var BallotBox $ballotBox */
+        return $ballotBoxRepo->findOneBy(
+            [
+                'isSms' => true,
+                'poll' => $poll,
+            ]
+        );
+    }
+
     /**
      * Checks if a given person has already cast a vote in the specified BallotBox.
      * @param \PROCERGS\VPR\CoreBundle\Entity\Person $person
