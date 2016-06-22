@@ -226,5 +226,5 @@ circle_rest_client:
                 - "Content-Type: application/json"
                 - "sistema: %tpd_system_id%"
                 - "chave: %tpd_system_key%"
-            CURLOPT_CONNECTTIMEOUT: 10
-            CURLOPT_TIMEOUT: 10
+            CURLOPT_CONNECTTIMEOUT: 15
+            CURLOPT_TIMEOUT: 15

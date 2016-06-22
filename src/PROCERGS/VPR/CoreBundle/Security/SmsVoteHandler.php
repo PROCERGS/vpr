@@ -5,10 +5,10 @@ namespace PROCERGS\VPR\CoreBundle\Security;
 
 use Doctrine\ORM\EntityManager;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
-use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\BrazilianPhoneNumberFactory;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\SmsVote;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\SmsVoteRepository;
+use PROCERGS\VPR\CoreBundle\Entity\Sms\TPDSmsVoteFactory;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 use PROCERGS\VPR\CoreBundle\Entity\TREVoterRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
@@ -133,24 +133,18 @@ class SmsVoteHandler
         $lastId = $smsVoteRepository->getLastSmsId();
         $pendingMessages = $smsService->forceReceive($this->smsPrefix, $lastId);
 
+        $votes = [];
         if (empty($pendingMessages)) {
-            return [];
+            return $votes;
         }
 
         $ballotBox = $this->votingSessionProvider->getSmsBallotBox();
         $this->votingSessionProvider->setPassphrase($ballotBox->getSecret());
 
-        $votes = [];
         foreach ($pendingMessages as $sms) {
             $to = BrazilianPhoneNumberFactory::createFromE164("+{$sms->de}");
             try {
-                $date = \DateTime::createFromFormat('Y-m-d\TH:i:s.000-03:00', $sms->dataHoraRecebimento);
-                $smsVote = new SmsVote();
-                $smsVote
-                    ->setSmsId($sms->id)
-                    ->setSender($to->toE164())
-                    ->setMessage($sms->mensagem)
-                    ->setReceivedAt($date);
+                $smsVote = TPDSmsVoteFactory::createSmsVote($sms);
                 $em->persist($smsVote);
                 $em->flush($smsVote);
 

@@ -93,7 +93,12 @@ class VotingSessionProvider
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
     }
 
-    public function getSmsBallotBox($poll = null)
+    /**
+     * @param Poll $poll
+     * @return BallotBox
+     * @throws VotingTimeoutException
+     */
+    public function getSmsBallotBox(Poll $poll = null)
     {
         if ($poll === null) {
             $poll = $this->getActivePollOrFail();
