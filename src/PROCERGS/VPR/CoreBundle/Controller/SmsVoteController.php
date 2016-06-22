@@ -2,14 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
-use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
-use PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository;
-use PROCERGS\VPR\CoreBundle\Entity\Sms\BrazilianPhoneNumberFactory;
-use PROCERGS\VPR\CoreBundle\Entity\Sms\Sms;
-use PROCERGS\VPR\CoreBundle\Entity\Sms\SmsVote;
-use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
 use PROCERGS\VPR\CoreBundle\Security\SmsVoteHandler;
-use PROCERGS\VPR\CoreBundle\Security\VotingSessionProvider;
 use PROCERGS\VPR\CoreBundle\Service\SmsService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
