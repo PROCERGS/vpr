@@ -3,8 +3,6 @@
 namespace PROCERGS\VPR\CoreBundle\Entity\Sms;
 
 use Doctrine\ORM\Mapping as ORM;
-use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
-use PROCERGS\VPR\CoreBundle\Entity\TREVoter;
 
 /**
  * SmsVote
