@@ -310,4 +310,17 @@ form .user-roles label {
     z-index:2;
     overflow: auto;
 }
+form input[type="checkbox"] {
+    height: 20px;
+    margin-right: 5px;
+    position: relative;
+    width: 20px;
+}
 
+.ballotbox-filter input[type="checkbox"] {
+    top: 4px;
+}
+
+.ballotbox-edit input[type="checkbox"] {
+    top: -4px;
+}

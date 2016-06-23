@@ -30,7 +30,7 @@
             <label class="col-sm-2 control-label">{% trans %}admin.title.bg{% endtrans %}</label>
             <div class="col-sm-2 col-input">
                 {{ form_errors(form.titleBg) }}
-                {{ form_widget(form.titleBg, {'attr': {'class': 'form-control colorHex'}}) }}
+                {{ form_widget(form.titleBg, {'attr': {'class': 'form-control colorHex', 'data-type': 'title'}}) }}
             </div>
             <div class="col-sm-2">
                 <div class="colorSelector" data-type="title"><div class="bg" style="background-color: {{ form.vars.data.titleBg}}"></div></div>
@@ -41,7 +41,7 @@
             <label class="col-sm-2 control-label">{% trans %}admin.icon.bg{% endtrans %}</label>
             <div class="col-sm-2 col-input">
                 {{ form_errors(form.iconBg) }}
-                {{ form_widget(form.iconBg, {'attr': {'class': 'form-control colorHex icon-color'}}) }}
+                {{ form_widget(form.iconBg, {'attr': {'class': 'form-control colorHex icon-color', 'data-type': 'icon'}}) }}
             </div>
             <div class="col-sm-2">
                 <div class="colorSelector" data-type="icon"><div class="bg" style="background-color: {{ form.vars.data.iconBg}}"></div></div>
@@ -65,7 +65,7 @@
             <label class="col-sm-2 control-label">{% trans %}admin.option.bg{% endtrans %}</label>
             <div class="col-sm-2 col-input">
                 {{ form_errors(form.optionBg) }}
-                {{ form_widget(form.optionBg, {'attr': {'class': 'form-control colorHex'}}) }}
+                {{ form_widget(form.optionBg, {'attr': {'class': 'form-control colorHex', 'data-type': 'option'}}) }}
             </div>
             <div class="col-sm-2">
                 <div class="colorSelector" data-type="option"><div class="bg" style="background-color: {{ form.vars.data.optionBg}}"></div></div>
@@ -82,10 +82,15 @@
 
     <h3>Preview</h3>
     <div class="category-preview" style="margin: 10px 0 20px;">
-        <div class="bg">
-            <div class="pre-icon-1"><span class="icon"><i class="img"></i></span></div>
-            <span class="name"></span>
-
+        <div class="bg" style="background-color: #44B752;">
+            <div class="pre-icon-1"><span class="icon" style="background-color: #44B752;"><i class="img"></i></span></div>
+            <span class="name">Nome da categoria</span>
+        </div>
+        <div class="option" style="background-color: #DCECD6;">
+            <div class="content">
+                <input name="options[]" type="checkbox">
+                <label>1 - Descrição da opção</label>
+            </div>
         </div>
     </div>
 </ul>
@@ -103,42 +108,8 @@
 {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/colorpicker.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-<script type="text/javascript">
-    $(function() {
-        $('.colorSelector').ColorPicker({
-            onChange: function (hsb, hex, rgb) {
-                var el = this.data('colorpicker').el;
-                $(el).find('.bg').css('backgroundColor', '#' + hex);
-                $(el).parent().prev('.col-input').find(".colorHex").val("#" + hex);
 
-                var type = $(el).data("type");
-                switch (type) {
-                    case 'title':
-                        $(".category-preview .bg").css("background-color", '#' + hex);
-                        break;
-                    case 'icon':
-                        $(".category-preview .icon").css("background-color", '#' + hex);
-                        break;
-                    case 'option':
-                        // $(".category-preview .icon").css("background-color", '#' + hex);
-                        break;
-                }
-            }
-        });
-
-        $(".cat-name").on("input", function() {
-            var name = $(this).val();
-            $(".category-preview .name").text(name);
-        });
-
-        $(".icon-select").on("change", function() {
-            console.log($('.colorSelector').ColorPicker());
-
-            var val = $(this).val();
-            $(".category-preview").removeClass (function (index, css) {
-                return (css.match (/(^|\s)pre-icon-\S+/g) || []).join(' ');
-            }).addClass("pre-icon-" + val);
-        })
-    })
-</script>
+{% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/category.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 {% endblock %}

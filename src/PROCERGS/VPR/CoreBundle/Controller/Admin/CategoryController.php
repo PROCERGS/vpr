@@ -177,10 +177,6 @@ class CategoryController extends Controller
         $checkPoll = $this->get('vpr.checkpoll.helper');
         $status = $checkPoll->checkBlocked($entity->getId(), "category");
         if ($status) {
-            $entity->setBlocked(true);
-        }
-
-        if ($entity->getBlocked()) {
             throw $this->createNotFoundException('Unable to edit. Closed Poll');
         }
 

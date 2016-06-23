@@ -129,6 +129,11 @@ class BallotBoxController extends Controller
             $queryBuilder->andWhere('b.isOnline = :online');
             $queryBuilder->setParameter('online', false);
         }
+
+        if (!empty($filters['is_sms'])) {
+            $queryBuilder->andWhere('b.isSms = true');
+        }
+
         switch ($filters['status1']) {
             case 1:
                 $queryBuilder->andWhere('b.setupAt is null');
