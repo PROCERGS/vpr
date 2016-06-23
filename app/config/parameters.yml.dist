@@ -49,7 +49,6 @@ parameters:
     smshelper_ordem_servico: ~
     smshelper_senha: ~
 
-    tpd_url: http://some.url.com
     tpd_base_url: http://some.url.com
     tpd_post_endpoint: %tpd_base_url%
     tpd_get_endpoint: %tpd_base_url%/received
