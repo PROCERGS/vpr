@@ -35,6 +35,24 @@
                                             class="glyphicon glyphicon-pencil"></span></a>
                             {% endif %}
                         {% endif %}
+                        {% if is_granted('ROLE_POLL_UPDATE') %}
+                            {% if entity.transferYear is not null %}
+                                {% if entity.transferPoolOptionStatus == 0 %}
+                                    <a title="{{ 'admin.admin_transfer_poll_option'|trans }}" class="btn btn-default btn-sm btn-transfer-poll-option"
+                                        href="javascript:void(0)"
+                                        data-href="{{ path('admin_transfer_poll_option', { 'id': entity.id }) }}">
+                                        <span class="glyphicon glyphicon-retweet"></span>
+                                    </a>
+                                {% endif %}
+                                {% if entity.apurationStatus == 3 and entity.transferOpenVoteStatus == 0 and entity.transferPoolOptionStatus == 3 %}
+                                   <a title="{{ 'admin.admin_transfer_open_vote'|trans }}" class="btn btn-default btn-sm btn-transfer-open-vote"
+                                   href="javascript:void(0)"                                   
+                                   data-href="{{ path('admin_transfer_open_vote', { 'id': entity.id }) }}">
+                                   <span class="glyphicon glyphicon-bullhorn"></span>
+                                   </a>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
                     </td>
                     </tr>
                 {% endfor %}

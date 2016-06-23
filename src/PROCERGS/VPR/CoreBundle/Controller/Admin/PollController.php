@@ -11,6 +11,8 @@ use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
+use PROCERGS\VPR\CoreBundle\Helper\PPPHelper;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Poll controller.
@@ -23,7 +25,7 @@ class PollController extends Controller
     /**
      * Lists all Poll entities.
      *
-     * @Route("/", name="admin_poll")
+     * @Route("/index", name="admin_poll")
      * @Method("GET")
      * @Template()
      */
@@ -453,5 +455,97 @@ class PollController extends Controller
             'corede' => $corede,
             'cities' => $cities
         );
+    }
+    
+    /**
+     * Lists all Poll entities.
+     *
+     * @Route("/admin_transfer_poll_option/{id}", name="admin_transfer_poll_option")
+     * @Method("POST")
+     */
+    public function transferPollOptionAction($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
+        $em = $this->getDoctrine()->getManager();
+        /**
+         * @var Poll $entity
+         */
+        $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+        if ($entity && $entity->getTransferYear() && $entity->getTransferPoolOptionStatus() == 0) {
+            $entity->setTransferPoolOptionStatus(2);
+            $em->persist($entity);
+            $em->flush();
+            $connection = $em->getConnection();
+            /**
+             * @var PPPHelper $pppHelper
+             */
+            $pppHelper = $this->get('vpr.ppphelper');
+            $ret = $pppHelper->sync($entity, $connection);
+            if (!$ret) {
+                throw new HttpException(500, "Nao deu");
+                $entity->setTransferPoolOptionStatus(null);
+                $em->persist($entity);
+                $em->flush();
+            }
+            $entity->setTransferPoolOptionStatus(3);
+            $em->persist($entity);
+            $em->flush();            
+        } else {
+            $ret = false;
+            if (!$entity) {
+                throw $this->createNotFoundException('Nao encontrei a urna.');
+            }
+            if (!$entity->getTransferYear()) {
+                throw $this->createNotFoundException('Essa urna nao e sincronizavel.');
+            }
+            if ($entity->getTransferPoolOptionStatus() != 0) {
+                throw $this->createNotFoundException('Essa urna nao pode ser sincornizada.');
+            }            
+        }
+        return new JsonResponse(array(
+            'hash' => $ret
+        ));
+    }
+    
+    /**
+     * Lists all Poll entities.
+     *
+     * @Route("/admin_transfer_open_vote/{id}", name="admin_transfer_open_vote")
+     * @Method("POST")
+     */
+    public function transferOpenVoteAction($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
+        $em = $this->getDoctrine()->getManager();
+        /**
+         * @var Poll $entity
+         */
+        $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+        if ($entity && $entity->getTransferYear() && $entity->getApurationStatus() == 3 && $entity->getTransferOpenVoteStatus() == 0 && $entity->getTransferPoolOptionStatus() == 3) {
+            $entity->setTransferOpenVoteStatus(1);
+            $em->persist($entity);
+            $em->flush();            
+            $ret = true;
+        } else {
+            $ret = false;
+            if (!$entity) {
+                throw $this->createNotFoundException("Nao encontrei a urna.");            
+            }
+            if (!$entity->getTransferYear()) {
+                throw $this->createNotFoundException('Essa urna nao e sincronizavel.');
+            }
+            if ($entity->getTransferPoolOptionStatus() != 3) {
+                throw $this->createNotFoundException('Essa urna não teve a cedula sincronizada.');
+            }
+            if ($entity->getApurationStatus() != 3) {
+                throw $this->createNotFoundException('Essa urna não foi apurada.');
+            }
+            if ($entity->getTransferOpenVoteStatus() != 0) {
+                throw $this->createNotFoundException('Essa urna nao pode ser sincornizada.');
+            }
+        }
+        return new JsonResponse(array(
+            'hash' => $ret
+        ));        
     }
 }

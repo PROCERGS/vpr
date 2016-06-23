@@ -130,6 +130,15 @@ class Poll
      * @ORM\Column(name="transfer_year", type="integer", nullable=true)
      */
     protected $transferYear;
+    
+    /**
+     * @ORM\Column(name="ppp_cod_programa", type="integer", nullable=true)
+     */
+    protected $pppCodPrograma;
+    /**
+     * @ORM\Column(name="ppp_cod_projeto", type="integer", nullable=true)
+     */
+    protected $pppCodProjeto;
 
     public function __construct()
     {
@@ -407,5 +416,16 @@ class Poll
     public function getTransferYear() {
         return $this->transferYear;
     }
-    
+    public function setPppCodPrograma($var) {
+        $this->pppCodPrograma = $var;
+    }
+    public function getPppCodPrograma() {
+        return $this->pppCodPrograma;
+    }
+    public function setPppCodProjeto($var) {
+        $this->pppCodProjeto = $var;
+    }
+    public function getPppCodProjeto() {
+        return $this->pppCodProjeto;
+    }
 }

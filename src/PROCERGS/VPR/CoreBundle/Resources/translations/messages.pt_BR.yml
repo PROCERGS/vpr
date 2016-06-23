@@ -280,3 +280,5 @@ admin.title.bg: Cor de fundo da categoria
 admin.icon.bg: Cor de fundo do ícone
 admin.icon.img: Ícone
 admin.option.bg: Cor de fundo das opções
+admin.admin_transfer_open_vote: Transfere apuração
+admin.admin_transfer_poll_option: Transfere cedulas

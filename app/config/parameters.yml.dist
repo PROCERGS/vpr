@@ -48,3 +48,9 @@ parameters:
     smshelper_sistema: ~
     smshelper_ordem_servico: ~
     smshelper_senha: ~
+
+    ppphelper_host: ~
+    ppphelper_port: ~
+    ppphelper_dbname: ~
+    ppphelper_username: ~
+    ppphelper_password: ~
