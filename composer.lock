@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5bf87273f69732fac07a12488583232b",
-    "content-hash": "c82553661489e6223905efc060c615f7",
+    "hash": "7056fa403141f0721a94c7226c11adee",
+    "content-hash": "64b4f11458320bfa45067ab42cb9d01a",
     "packages": [
         {
             "name": "becklyn/static-roles-bundle",
@@ -848,6 +848,99 @@
                 "orm"
             ],
             "time": "2014-12-16 13:45:01"
+        },
+        {
+            "name": "ejsmont-artur/php-circuit-breaker",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ejsmont-artur/php-circuit-breaker.git",
+                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ejsmont-artur/php-circuit-breaker/zipball/5e63a6b8774166bf6e5a591559bf25030e8dcce7",
+                "reference": "5e63a6b8774166bf6e5a591559bf25030e8dcce7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ejsmont": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Ejsmont",
+                    "homepage": "http://artur.ejsmont.org/blog/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Circuit Breaker component",
+            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker",
+            "keywords": [
+                "circuit breaker",
+                "error handling",
+                "graceful"
+            ],
+            "time": "2013-03-17 09:59:05"
+        },
+        {
+            "name": "ejsmont-artur/php-circuit-breaker-bundle",
+            "version": "dev-master",
+            "target-dir": "Ejsmont/CircuitBreakerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle.git",
+                "reference": "ea930a18c18b8e74f6ef89ad6a2d796ee24c7e8b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guilhermednt/php-circuit-breaker-bundle/zipball/ea930a18c18b8e74f6ef89ad6a2d796ee24c7e8b",
+                "reference": "ea930a18c18b8e74f6ef89ad6a2d796ee24c7e8b",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": ">=2.0.0",
+                "ejsmont-artur/php-circuit-breaker": ">=0.1.0",
+                "php": ">=5.3.0",
+                "symfony/symfony": "2.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Ejsmont\\CircuitBreakerBundle": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Artur Ejsmont",
+                    "homepage": "http://artur.ejsmont.org/blog/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP Circuit Breaker Bundle - Symfony 2 integration",
+            "homepage": "https://github.com/ejsmont-artur/php-circuit-breaker-bundle",
+            "keywords": [
+                "circuit breaker",
+                "error handling",
+                "graceful",
+                "symfony2 adapter"
+            ],
+            "support": {
+                "source": "https://github.com/guilhermednt/php-circuit-breaker-bundle/tree/master"
+            },
+            "time": "2016-06-23 14:23:34"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -4263,7 +4356,8 @@
         "sensio/buzz-bundle": 20,
         "guilhermednt/buzz-proxied-curl-bundle": 20,
         "knplabs/knp-gaufrette-bundle": 20,
-        "becklyn/static-roles-bundle": 20
+        "becklyn/static-roles-bundle": 20,
+        "ejsmont-artur/php-circuit-breaker-bundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

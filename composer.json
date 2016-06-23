@@ -13,6 +13,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/guilhermednt/OpenID-Connect-PHP"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/guilhermednt/php-circuit-breaker-bundle"
         }
     ],
     "require": {
@@ -43,7 +47,8 @@
         "jumbojett/openid-connect-php": "^0.3.0",
         "becklyn/static-roles-bundle": "@dev",
         "phpunit/phpunit": "^4.8",
-        "ci/restclientbundle": "^2.0"
+        "ci/restclientbundle": "^2.0",
+        "ejsmont-artur/php-circuit-breaker-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

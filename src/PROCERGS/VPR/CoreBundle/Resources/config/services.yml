@@ -166,12 +166,14 @@ services:
             - "@vpr.poll_option.helper"
             - "@vpr.tre_voter.repository"
             - "@vpr_voting_session_provider"
+            - "@circuitBreaker"
             - %tpd_sms_tag%
 
     sms.service:
         class: PROCERGS\VPR\CoreBundle\Service\SmsService
         arguments:
             - "@circle.restclient"
+            - "@circuitBreaker"
             - { send_url: %tpd_post_endpoint%, receive_url: %tpd_get_endpoint%, status_url: %tpd_status_endpoint%, system_id: %tpd_system_id%, service_order: %tpd_service_order% }
         calls:
             - [setLogger, ["@logger"]]

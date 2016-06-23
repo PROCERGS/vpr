@@ -31,6 +31,7 @@ class AppKernel extends Kernel
             new Donato\OIDCBundle\DonatoOIDCBundle(),
             new \Becklyn\StaticRolesBundle\BecklynStaticRolesBundle(),
             new Circle\RestClientBundle\CircleRestClientBundle(),
+            new Ejsmont\CircuitBreakerBundle\EjsmontCircuitBreakerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

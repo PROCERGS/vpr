@@ -161,6 +161,12 @@ fos_user:
 parameters:
     buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
 
+    # Circuit Breaker Configs
+    # Allowed amount of failures before marking service as unavailable
+    ejsmont_circuit_breaker.threshold: 2
+    # how many seconds should we wait before allowing a single request
+    ejsmont_circuit_breaker.retry_timeout: 30
+
 knp_paginator:
     page_range: 5                      # default page range used in pagination control
     default_options:

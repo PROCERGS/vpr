@@ -3,7 +3,9 @@
 namespace PROCERGS\VPR\CoreBundle\Service;
 
 
+use Circle\RestClientBundle\Exceptions\CurlException;
 use Circle\RestClientBundle\Services\RestClient;
+use Ejsmont\CircuitBreaker\Core\CircuitBreaker;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\PhoneNumber;
 use PROCERGS\VPR\CoreBundle\Entity\Sms\Sms;
 use PROCERGS\VPR\CoreBundle\Exception\SmsServiceException;
@@ -13,8 +15,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SmsService implements LoggerAwareInterface
 {
+    const CB_SERVICE_SMS_SEND = 'services.sms.send';
+    const CB_SERVICE_SMS_RECEIVE = 'services.sms.receive';
+    const CB_SERVICE_SMS_STATUS = 'services.sms.status';
+
     /** @var RestClient */
     protected $restClient;
+
+    /** @var CircuitBreaker */
+    protected $circuitBreaker;
 
     /** @var string */
     protected $sendUrl;
@@ -40,11 +49,13 @@ class SmsService implements LoggerAwareInterface
     /**
      * SmsService constructor.
      * @param RestClient $restClient
+     * @param CircuitBreaker $circuitBreaker
      * @param array $options
      */
-    public function __construct(RestClient $restClient, array $options = [])
+    public function __construct(RestClient $restClient, CircuitBreaker $circuitBreaker, array $options = [])
     {
         $this->restClient = $restClient;
+        $this->circuitBreaker = $circuitBreaker;
 
         $this->sendUrl = $options['send_url'];
         $this->receiveUrl = $options['receive_url'];
@@ -67,6 +78,7 @@ class SmsService implements LoggerAwareInterface
      * Sends an SMS and returns the id for later checking.
      * @param Sms $sms
      * @return string transaction id for later checking
+     * @throws CurlException
      * @throws SmsServiceException
      */
     public function send(Sms $sms)
@@ -85,15 +97,22 @@ class SmsService implements LoggerAwareInterface
         );
 
         $this->logger->info("Sending SMS to {$sms->getTo()->toE164()}: {$sms->getMessage()}");
-        $response = $client->post($this->sendUrl, $payload);
-        $json = json_decode($response->getContent());
-        if ($response->isOk() && property_exists($json, 'protocolo')) {
-            $this->logger->info("SMS sent to {$sms->getTo()->toE164()}: {$sms->getMessage()}");
+        try {
+            $response = $client->post($this->sendUrl, $payload);
+            $json = json_decode($response->getContent());
+            if ($response->isOk() && property_exists($json, 'protocolo')) {
+                $this->logger->info("SMS sent to {$sms->getTo()->toE164()}: {$sms->getMessage()}");
+                $this->circuitBreaker->reportSuccess(self::CB_SERVICE_SMS_SEND);
 
-            return $json->protocolo;
-        } else {
-            $this->logger->error("Error sending log to {$sms->getTo()->toE164()}");
-            $this->handleException($response, $json);
+                return $json->protocolo;
+            } else {
+                $this->logger->error("Error sending log to {$sms->getTo()->toE164()}");
+                $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_SEND);
+                $this->handleException($response, $json);
+            }
+        } catch (CurlException $e) {
+            $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_SEND);
+            throw $e;
         }
     }
 
@@ -102,6 +121,7 @@ class SmsService implements LoggerAwareInterface
      * @param $tag string "tag" to be fetched
      * @param integer $lastId
      * @return array
+     * @throws CurlException
      * @throws SmsServiceException
      */
     public function forceReceive($tag, $lastId = null)
@@ -114,19 +134,27 @@ class SmsService implements LoggerAwareInterface
         }
 
         $this->logger->info("Fetching SMS for tag $tag...");
-        $response = $client->get($this->receiveUrl."?".http_build_query($params));
-        $json = json_decode($response->getContent());
-        if ($response->isOk() && $json !== null && is_array($json)) {
-            usort(
-                $json,
-                function ($a, $b) {
-                    return $a->id - $b->id;
-                }
-            );
+        try {
+            $response = $client->get($this->receiveUrl."?".http_build_query($params));
+            $json = json_decode($response->getContent());
+            if ($response->isOk() && $json !== null && is_array($json)) {
+                usort(
+                    $json,
+                    function ($a, $b) {
+                        return $a->id - $b->id;
+                    }
+                );
 
-            return $json;
-        } else {
-            $this->handleException($response, $json);
+                $this->circuitBreaker->reportSuccess(self::CB_SERVICE_SMS_RECEIVE);
+
+                return $json;
+            } else {
+                $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_RECEIVE);
+                $this->handleException($response, $json);
+            }
+        } catch (CurlException $e) {
+            $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_RECEIVE);
+            throw $e;
         }
     }
 
@@ -151,6 +179,7 @@ class SmsService implements LoggerAwareInterface
      * Checks the status of sent messages
      * @param $transactionId mixed
      * @return array
+     * @throws CurlException
      * @throws SmsServiceException
      */
     public function getStatus($transactionId)
@@ -162,12 +191,20 @@ class SmsService implements LoggerAwareInterface
         }
 
         $client = $this->restClient;
-        $response = $client->get($this->statusUrl.'?protocolos='.implode(',', $transactionIds));
-        $json = json_decode($response->getContent());
-        if ($response->isOk() && $json !== null && is_array($json)) {
-            return $json;
-        } else {
-            $this->handleException($response, $json);
+        try {
+            $response = $client->get($this->statusUrl.'?protocolos='.implode(',', $transactionIds));
+            $json = json_decode($response->getContent());
+            if ($response->isOk() && $json !== null && is_array($json)) {
+                $this->circuitBreaker->reportSuccess(self::CB_SERVICE_SMS_STATUS);
+
+                return $json;
+            } else {
+                $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_STATUS);
+                $this->handleException($response, $json);
+            }
+        } catch (CurlException $e) {
+            $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_STATUS);
+            throw $e;
         }
     }
 
