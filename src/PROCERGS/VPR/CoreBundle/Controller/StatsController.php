@@ -186,21 +186,58 @@ class StatsController extends Controller
      * @Route("/stats/votes", name="vpr_stats_votes")
      * @Template()
      */
-    public function votesAction()
+    public function votesAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $this->updateCacheAction();
         $em = $this->getDoctrine()->getManager();
 
+        $session = $this->getRequest()->getSession();
+
+        $poll_filters = $session->get('poll_filters');
+        $form = $this->createForm(new PollOptionFilterType());
+        $form->remove("corede");
+
+
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
+            } else{
+                $form->bind($request);
+                $session->set('poll_filters', $request);
+            }
+            $selected = $form->getData();
+
+            $poll = $selected['poll'];
+            if (!$poll) {
+                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+            }
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        }
+
+
         $query = $em->createQueryBuilder()
-            ->select('v')
+            ->select('v.coredeName,
+                      sum(v.totalWithVoterRegistration) as totalWithVoterRegistration,
+                      sum(v.totalWithLoginCidadao) as totalWithLoginCidadao,
+                      sum(v.totalWithVoterRegistrationAndLoginCidadao) as totalWithVoterRegistrationAndLoginCidadao,
+                      sum(v.totalVotes) as totalVotes')
             ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
-            ->orderBy('v.totalVotes', 'DESC')
-            ->getQuery();
+            ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
+            ->where('b.poll = :poll')
+            ->groupBy('v.coredeId, v.coredeName')
+            ->orderBy('v.coredeName', 'ASC')
+            ->getQuery()->setParameters(array("poll" => $poll->getId()));
 
         $results    = $query->getResult();
-        $entity     = reset($results);
-        $created_at = $entity->getCreatedAt();
+
+        $created_at = $em->createQueryBuilder()
+            ->select('MAX(v.createdAt)')
+            ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+            ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
+            ->where('b.poll = :poll')
+            ->getQuery()->setParameters(array("poll" => 4))->setMaxResults(1)->getOneOrNullResult();
 
         $encoders    = array(new JsonEncoder());
         $normalizers = array(new GetSetMethodNormalizer());
@@ -208,10 +245,12 @@ class StatsController extends Controller
 
         $jsonContent = $serializer->serialize($results, 'json');
 
+
         return array(
             'results' => $results,
             'jsonContent' => $jsonContent,
-            'created_at' => $created_at
+            'created_at' => $created_at[1],
+            'form' => $form->createView()
         );
     }
 
