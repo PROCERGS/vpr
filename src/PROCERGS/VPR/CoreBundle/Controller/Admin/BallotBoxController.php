@@ -3,6 +3,10 @@
 namespace PROCERGS\VPR\CoreBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManager;
+use PROCERGS\VPR\CoreBundle\Entity\Sms\BrazilianPhoneNumberFactory;
+use PROCERGS\VPR\CoreBundle\Entity\Sms\PhoneNumber;
+use PROCERGS\VPR\CoreBundle\Entity\Sms\Sms;
+use PROCERGS\VPR\CoreBundle\Service\SmsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -294,23 +298,23 @@ class BallotBoxController extends Controller
             $msg2 = "Autorizacao urna offline da consulta popular. PIN: %s SENHA: %s ENCERRAMENTO: %s";
             $msg1 = "Urgente! Transmita urna offline consulta popular de PIN %s ate %s";
 
-            $smsHelper = $this->get('vpr.smshelper');
-            $smsHelper->setAplicacao('votação de prioridades');
-            $smsHelper->setRemetente('PROCERGS');
+            /** @var SmsService $smsService */
+            $smsService = $this->get('sms.service');
             while ($result = $statement->fetch()) {
                 try {
                     $success = true;
                     $protocolo = null;
-                    $smsHelper->setDdd($result['ddd']);
-                    $smsHelper->setTelefone($result['fone']);
+                    $to = new PhoneNumber();
+                    $to
+                        ->setCountryCode(BrazilianPhoneNumberFactory::COUNTRY_CODE)
+                        ->setAreaCode($result['ddd'])
+                        ->setSubscriberNumber($result['fone']);
                     if ($params['message_type'] == SentMessage::TYPE_REQUISICAO) {
-                        $smsHelper->setMensagem(
-                            sprintf($msg2, $result['pin'], $result['secret'], $result['closing_time'])
-                        );
+                        $message = sprintf($msg2, $result['pin'], $result['secret'], $result['closing_time']);
                     } else {
-                        $smsHelper->setMensagem(sprintf($msg1, $result['pin'], $result['apuration_time']));
+                        $message = sprintf($msg1, $result['pin'], $result['apuration_time']);
                     }
-                    $protocolo = $smsHelper->send();
+                    $protocolo = $smsService->easySend($to, $message);
                 } catch (\Exception $e) {
                     $success = false;
                 }
@@ -409,7 +413,7 @@ class BallotBoxController extends Controller
         return array(
             'entity' => $entity,
             'edit_form' => $form->createView(),
-            'delete_form' => null
+            'delete_form' => null,
         );
     }
 
