@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\VPR\CoreBundle\Helper\Utils;
 use JMS\Serializer\SerializationContext;
 use FOS\RestBundle\Controller\Annotations as REST;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class StatsController extends Controller
 {
@@ -664,5 +665,17 @@ class StatsController extends Controller
             $data = $cached['data'];
         }
         return $data;
+    }
+
+    /**
+     * Clear Filters
+     * @Method("GET")
+     * @Route("/filters/clear", name="admin_stats_clear_filters")
+     */
+    public function clearFiltersAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('poll_filters');
+        return $this->redirect($this->generateUrl('vpr_stats_votes'));
     }
 }
