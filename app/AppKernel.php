@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new \Becklyn\StaticRolesBundle\BecklynStaticRolesBundle(),
             new Circle\RestClientBundle\CircleRestClientBundle(),
             new Ejsmont\CircuitBreakerBundle\EjsmontCircuitBreakerBundle(),
+            new Liip\MonitorBundle\LiipMonitorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

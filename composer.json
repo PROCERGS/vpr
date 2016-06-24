@@ -48,7 +48,8 @@
         "becklyn/static-roles-bundle": "@dev",
         "phpunit/phpunit": "^4.8",
         "ci/restclientbundle": "^2.0",
-        "ejsmont-artur/php-circuit-breaker-bundle": "dev-master"
+        "ejsmont-artur/php-circuit-breaker-bundle": "dev-master",
+        "liip/monitor-bundle": "^2.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

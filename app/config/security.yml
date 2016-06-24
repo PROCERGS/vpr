@@ -253,6 +253,7 @@ security:
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/confirm, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/receive, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/monitor/health, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
         - { path: ^/counting, role: ROLE_ADMIN }
         - { path: ^/api/offline/download, roles: ROLE_ADMIN }
