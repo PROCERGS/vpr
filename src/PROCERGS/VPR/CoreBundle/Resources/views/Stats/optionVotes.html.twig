@@ -4,7 +4,7 @@
 <div class="row" style="margin-top: 20px;">
     <div class="col-xs-12">
         <h1>{% trans %}Results for the Online Voting{% endtrans %}</h1>
-        {% if statsCorede is defined %}
+        {% if statsCorede is defined and statsCorede is not null %}
         <h2>COREDE {{ statsCorede.coredeName }}</h2>
         {% endif %}
     </div>
@@ -23,6 +23,10 @@
         <div class="form-group">
             {{ form_label(form.corede, 'admin.corede'|trans, {'label_attr': {'class': 'corede-label'} }) }}
             {{ form_widget(form.corede, {'attr': {'class': 'form-control corede'}}) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.poll, 'admin.poll'|trans) }}
+            {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
         </div>
         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'admin.filter' | trans}) }}
     {{ form_end(form) }}
