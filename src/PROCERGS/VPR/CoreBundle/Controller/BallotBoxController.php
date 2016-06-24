@@ -19,9 +19,9 @@ class BallotBoxController extends Controller
     public function listByCityAction(Request $request)
     {
         $form = $this->createFormBuilder()
-                ->add('city', 'city', array('required' => true, 'label' => 'Type your city'))
-                ->add('submit', 'submit')
-                ->getForm();
+            ->add('city', 'city', array('required' => true, 'label' => 'Type your city'))
+            ->add('submit', 'submit')
+            ->getForm();
 
         $form->handleRequest($request);
 
@@ -37,14 +37,19 @@ class BallotBoxController extends Controller
                 $ballotBoxRepo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
 
                 $poll = $pollRepo->findActivePoll();
-                $boxes = $ballotBoxRepo->findBy(array(
-                    'city' => $city,
-                    'poll' => $poll
-                ));
+                $boxes = $ballotBoxRepo->findBy(
+                    array(
+                        'city' => $city,
+                        'poll' => $poll,
+                    )
+                );
             } else {
                 $translator = $this->get('translator');
-                $message = $translator->trans('form.city-selection.city-not-found',
-                        array(), 'validators');
+                $message = $translator->trans(
+                    'form.city-selection.city-not-found',
+                    array(),
+                    'validators'
+                );
                 $form->addError(new FormError($message));
             }
         }
@@ -54,10 +59,13 @@ class BallotBoxController extends Controller
         $serializer = $this->container->get('jms_serializer');
         $em = $this->getDoctrine()->getManager();
         $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
-        $cities = $serializer->serialize($cityRepo->findAll(), 'json',
-                SerializationContext::create()
-                        ->setSerializeNull(true)
-                        ->setGroups(array('autocomplete')));
+        $cities = $serializer->serialize(
+            $cityRepo->findAll(),
+            'json',
+            SerializationContext::create()
+                ->setSerializeNull(true)
+                ->setGroups(array('autocomplete'))
+        );
 
         return compact('form', 'boxes', 'cities');
     }

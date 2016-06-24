@@ -12,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table(name="poll")
  * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\PollRepository")
-* @UniqueEntity(
+ * @UniqueEntity(
  *     fields={"transferYear"},
  *     message="ja existe uma votacao sincronizando com o mesmo ano da Data de fechamento"
  * )
@@ -86,14 +86,14 @@ class Poll
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="apuration_time", type="datetime", nullable=false)     
+     * @ORM\Column(name="apuration_time", type="datetime", nullable=false)
      */
     protected $apurationTime;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="apuration_done", type="datetime", nullable=true)     
+     * @ORM\Column(name="apuration_done", type="datetime", nullable=true)
      */
     protected $apurationDone;
 
@@ -110,31 +110,32 @@ class Poll
     protected $steps;
 
     protected $blocked;
-    
+
     /**
-     * @ORM\Column(name="transfer_pool_option_status", type="integer", nullable=false)     
+     * @ORM\Column(name="transfer_pool_option_status", type="integer", nullable=false)
      */
     protected $transferPoolOptionStatus = 0;
-    
+
     /**
      * @ORM\Column(name="transfer_open_vote_status", type="integer", nullable=false)
      */
     protected $transferOpenVoteStatus = 0;
-    
+
     /**
      * @ORM\Column(name="apuration_status", type="integer", nullable=false)
      */
     protected $apurationStatus = 0;
-    
+
     /**
      * @ORM\Column(name="transfer_year", type="integer", nullable=true)
      */
     protected $transferYear;
-    
+
     /**
      * @ORM\Column(name="ppp_cod_programa", type="integer", nullable=true)
      */
     protected $pppCodPrograma;
+
     /**
      * @ORM\Column(name="ppp_cod_projeto", type="integer", nullable=true)
      */
@@ -328,104 +329,129 @@ class Poll
 
     public function setSecret($var)
     {
-    	$this->secret = $var;
+        $this->secret = $var;
     }
 
     public function getSecret()
     {
-    	return $this->secret;
+        return $this->secret;
     }
 
     public function setPrivateKey($var)
     {
-    	$this->privateKey = $var;
+        $this->privateKey = $var;
     }
 
     public function getPrivateKey()
     {
-    	return $this->privateKey;
+        return $this->privateKey;
     }
 
     public function generatePrivateAndPublicKeys()
     {
-    	if (null === $this->id) {
-	    	$config = array(
-	    			"digest_alg" => "sha512",
-	    			"private_key_bits" => 4096,
-	    			"private_key_type" => OPENSSL_KEYTYPE_RSA,
-	    			"encrypt_key" => true,
-	    	);
+        if (null === $this->id) {
+            $config = array(
+                "digest_alg" => "sha512",
+                "private_key_bits" => 4096,
+                "private_key_type" => OPENSSL_KEYTYPE_RSA,
+                "encrypt_key" => true,
+            );
 
-	    	$res = openssl_pkey_new($config);
-	    	if (!$res) {
-	    		$a = openssl_error_string();
-	    	}
+            $res = openssl_pkey_new($config);
+            if (!$res) {
+                $a = openssl_error_string();
+            }
 
-    		$chars = 'abcdefghjkmnpqrstuvwxyz';
-    		$secret = substr(str_shuffle($chars), 0, 10);
+            $chars = 'abcdefghjkmnpqrstuvwxyz';
+            $secret = substr(str_shuffle($chars), 0, 10);
 
-	    	openssl_pkey_export($res, $privKey, $secret);
+            openssl_pkey_export($res, $privKey, $secret);
 
-	    	$details = openssl_pkey_get_details($res);
-	    	$pubKey  = $details["key"];
+            $details = openssl_pkey_get_details($res);
+            $pubKey = $details["key"];
 
-	    	$this->setPrivateKey($privKey);
-	    	$this->setPublicKey($pubKey);
-	    	$this->setSecret($secret);
-    	}
+            $this->setPrivateKey($privKey);
+            $this->setPublicKey($pubKey);
+            $this->setSecret($secret);
+        }
     }
 
     public function isBiggerThen1Day()
     {
-    	if ($this->openingTime->format('Y-m-d') != $this->closingTime->format('Y-m-d')) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+        if ($this->openingTime->format('Y-m-d') != $this->closingTime->format('Y-m-d')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public function setBlocked($var) {
+    public function setBlocked($var)
+    {
         $this->blocked = $var;
     }
 
-    public function getBlocked() {
+    public function getBlocked()
+    {
         return $this->blocked;
     }
-    
-    public function setTransferOpenVoteStatus($var) {
+
+    public function setTransferOpenVoteStatus($var)
+    {
         $this->transferOpenVoteStatus = $var;
-    }    
-    public function getTransferOpenVoteStatus() {
+    }
+
+    public function getTransferOpenVoteStatus()
+    {
         return $this->transferOpenVoteStatus;
     }
-    public function setTransferPoolOptionStatus($var) {
+
+    public function setTransferPoolOptionStatus($var)
+    {
         $this->transferPoolOptionStatus = $var;
     }
-    public function getTransferPoolOptionStatus() {
+
+    public function getTransferPoolOptionStatus()
+    {
         return $this->transferPoolOptionStatus;
     }
-    public function setApurationStatus($var) {
+
+    public function setApurationStatus($var)
+    {
         $this->apurationStatus = $var;
     }
-    public function getApurationStatus() {
+
+    public function getApurationStatus()
+    {
         return $this->apurationStatus;
     }
-    public function setTransferYear($var) {
+
+    public function setTransferYear($var)
+    {
         $this->transferYear = $var;
     }
-    public function getTransferYear() {
+
+    public function getTransferYear()
+    {
         return $this->transferYear;
     }
-    public function setPppCodPrograma($var) {
+
+    public function setPppCodPrograma($var)
+    {
         $this->pppCodPrograma = $var;
     }
-    public function getPppCodPrograma() {
+
+    public function getPppCodPrograma()
+    {
         return $this->pppCodPrograma;
     }
-    public function setPppCodProjeto($var) {
+
+    public function setPppCodProjeto($var)
+    {
         $this->pppCodProjeto = $var;
     }
-    public function getPppCodProjeto() {
+
+    public function getPppCodProjeto()
+    {
         return $this->pppCodProjeto;
     }
 }

@@ -99,9 +99,9 @@ class PollOptionRepository extends EntityRepository
     public function findLastPollOption()
     {
         return $this->getEntityManager()
-                        ->createQuery(
-                                'SELECT p FROM PROCERGSVPRCoreBundle:PollOption p ORDER BY p.id DESC'
-                        )->setMaxResults(1)->getOneOrNullResult();
+            ->createQuery(
+                'SELECT p FROM PROCERGSVPRCoreBundle:PollOption p ORDER BY p.id DESC'
+            )->setMaxResults(1)->getOneOrNullResult();
     }
 
 }
