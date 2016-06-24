@@ -90,25 +90,29 @@ class StatsController extends Controller
     }
 
     /**
-     * @Route("/reports/city/{cityId}", name="vpr_report_voted_options_by_city")
+     * @Route("/reports/city/{cityId}/{pollId}", name="vpr_report_voted_options_by_city")
      * @Template()
      */
-    public function reportOptionsCityAction($cityId)
+    public function reportOptionsCityAction($cityId, $pollId)
     {
         $this->updateCacheAction();
+        $em           = $this->getDoctrine()->getManager();
+        $pollRepo     = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        $poll    = $pollRepo->find($pollId);
+
         $form   = $this->getCityForm();
+        $form->get('poll')->setData($poll);
         $params = array(
             'form' => $form->createView(),
             'cities' => $this->getCities(),
             'updateCache' => $this->shouldUpdateCache()
         );
 
-        $em           = $this->getDoctrine()->getManager();
-        $pollRepo     = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+
+
         $openVoteRepo = $em->getRepository('PROCERGSVPRCoreBundle:OpenVote');
 
         $results = array();
-        $poll    = $pollRepo->findLastPoll();
 
         $city      = $em->getRepository('PROCERGSVPRCoreBundle:City')->findOneById($cityId);
         $cityTotal = $openVoteRepo->findTotalByCity($poll, $cityId);
@@ -183,10 +187,11 @@ class StatsController extends Controller
             $name     = trim($data['city']);
             $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
             $city     = $cityRepo->findOneByName($name);
+            $poll = $data['poll'];
 
             if (strlen($name) > 0) {
                 $url = $this->generateUrl('vpr_report_voted_options_by_city',
-                    array('cityId' => $city->getId()));
+                    array('cityId' => $city->getId(), 'pollId' => $poll->getId()));
                 return $this->redirect($url);
             }
         }
@@ -276,7 +281,17 @@ class StatsController extends Controller
                 array(
                 'required' => true,
                 'label' => 'form.city.select'
-            ))->add('submit', 'submit')->getForm();
+            ))
+            ->add('poll', 'entity', array(
+                    'class' => 'PROCERGSVPRCoreBundle:Poll',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('p')
+                            ->orderBy('p.openingTime', 'DESC');
+                    },
+                    'property' => 'name',
+                    'required' => true
+                ))
+            ->add('submit', 'submit')->getForm();
     }
 
     private function getCoredeForm()

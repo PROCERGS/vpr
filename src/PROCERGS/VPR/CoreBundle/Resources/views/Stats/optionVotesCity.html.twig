@@ -24,6 +24,10 @@
             {{ form_label(form.city, 'admin.city'|trans, {'label_attr': {'class': 'city-label'} }) }}
             {{ form_widget(form.city, {'attr': {'class': 'form-control city'}}) }}
         </div>
+        <div class="form-group">
+            {{ form_label(form.poll, 'admin.poll'|trans) }}
+            {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+        </div>
         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-success'},'label':'admin.filter' | trans}) }}
     {{ form_end(form) }}
 </div>
