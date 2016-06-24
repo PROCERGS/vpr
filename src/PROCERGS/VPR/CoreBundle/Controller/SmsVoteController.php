@@ -2,12 +2,17 @@
 
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
+use JMS\Serializer\Serializer;
+use PROCERGS\VPR\CoreBundle\Exception\SmsServiceException;
 use PROCERGS\VPR\CoreBundle\Security\SmsVoteHandler;
 use PROCERGS\VPR\CoreBundle\Service\SmsService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class SmsVoteController extends Controller
 {
@@ -25,8 +30,21 @@ class SmsVoteController extends Controller
         /** @var SmsService $smsService */
         $smsService = $this->get('sms.service');
 
-        $votes = $smsVoteHandler->processPendingSms($em, $smsService);
+        try {
+            $votes = $smsVoteHandler->processPendingSms($em, $smsService);
 
-        return compact('votes');
+            return new JsonResponse(
+                [
+                    'votes' => count($votes),
+                ]
+            );
+        } catch (ServiceUnavailableHttpException $e) {
+            return new JsonResponse(
+                [
+                    'votes' => 0,
+                    'error' => $e->getMessage(),
+                ], Response::HTTP_SERVICE_UNAVAILABLE
+            );
+        }
     }
 }

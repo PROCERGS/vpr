@@ -2,7 +2,6 @@
 
 namespace PROCERGS\VPR\CoreBundle\Service;
 
-
 use Circle\RestClientBundle\Exceptions\CurlException;
 use Circle\RestClientBundle\Services\RestClient;
 use Ejsmont\CircuitBreaker\Core\CircuitBreaker;
@@ -12,9 +11,11 @@ use PROCERGS\VPR\CoreBundle\Exception\SmsServiceException;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class SmsService implements LoggerAwareInterface
 {
+
     const CB_SERVICE_SMS_SEND = 'services.sms.send';
     const CB_SERVICE_SMS_RECEIVE = 'services.sms.receive';
     const CB_SERVICE_SMS_STATUS = 'services.sms.status';
@@ -78,11 +79,14 @@ class SmsService implements LoggerAwareInterface
      * Sends an SMS and returns the id for later checking.
      * @param Sms $sms
      * @return string transaction id for later checking
-     * @throws CurlException
-     * @throws SmsServiceException
+     * @throws ServiceUnavailableHttpException
      */
     public function send(Sms $sms)
     {
+        if (false === $this->circuitBreaker->isAvailable(SmsService::CB_SERVICE_SMS_SEND)) {
+            throw new ServiceUnavailableHttpException(null, '[Circuit Breaker] SMS sending service is unavailable');
+        }
+
         $client = $this->restClient;
 
         $payload = json_encode(
@@ -106,13 +110,15 @@ class SmsService implements LoggerAwareInterface
 
                 return $json->protocolo;
             } else {
-                $this->logger->error("Error sending log to {$sms->getTo()->toE164()}");
-                $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_SEND);
+                $this->logger->error("Error sending SMS to {$sms->getTo()->toE164()}");
                 $this->handleException($response, $json);
             }
         } catch (CurlException $e) {
             $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_SEND);
-            throw $e;
+            throw new ServiceUnavailableHttpException(null, $e->getMessage(), $e);
+        } catch (SmsServiceException $e) {
+            $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_SEND);
+            throw new ServiceUnavailableHttpException(null, $e->getMessage(), $e);
         }
     }
 
@@ -126,6 +132,10 @@ class SmsService implements LoggerAwareInterface
      */
     public function forceReceive($tag, $lastId = null)
     {
+        if (false === $this->circuitBreaker->isAvailable(SmsService::CB_SERVICE_SMS_RECEIVE)) {
+            throw new ServiceUnavailableHttpException(null, '[Circuit Breaker] SMS receiving service is unavailable');
+        }
+
         $client = $this->restClient;
 
         $params = compact('tag');
@@ -149,12 +159,14 @@ class SmsService implements LoggerAwareInterface
 
                 return $json;
             } else {
-                $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_RECEIVE);
                 $this->handleException($response, $json);
             }
         } catch (CurlException $e) {
             $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_RECEIVE);
-            throw $e;
+            throw new ServiceUnavailableHttpException(null, $e->getMessage(), $e);
+        } catch (SmsServiceException $e) {
+            $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_RECEIVE);
+            throw new ServiceUnavailableHttpException(null, $e->getMessage(), $e);
         }
     }
 
@@ -184,6 +196,10 @@ class SmsService implements LoggerAwareInterface
      */
     public function getStatus($transactionId)
     {
+        if (false === $this->circuitBreaker->isAvailable(SmsService::CB_SERVICE_SMS_STATUS)) {
+            throw new ServiceUnavailableHttpException(null, '[Circuit Breaker] SMS status service is unavailable');
+        }
+
         if (is_array($transactionId)) {
             $transactionIds = $transactionId;
         } else {
@@ -199,12 +215,14 @@ class SmsService implements LoggerAwareInterface
 
                 return $json;
             } else {
-                $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_STATUS);
                 $this->handleException($response, $json);
             }
         } catch (CurlException $e) {
             $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_STATUS);
-            throw $e;
+            throw new ServiceUnavailableHttpException(null, $e->getMessage(), $e);
+        } catch (SmsServiceException $e) {
+            $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_STATUS);
+            throw new ServiceUnavailableHttpException(null, $e->getMessage(), $e);
         }
     }
 

@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Security;
 
 
+use Circle\RestClientBundle\Exceptions\CurlException;
 use Doctrine\ORM\EntityManager;
 use Ejsmont\CircuitBreaker\Core\CircuitBreaker;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
@@ -136,20 +137,13 @@ class SmsVoteHandler
     /**
      * @param EntityManager $em
      * @param SmsService $smsService
-     * @return array
-     * @throws ServiceUnavailableHttpException
-     * @throws SmsServiceException
+     * @return f array
+     * @throws \Exception
      */
     public function processPendingSms(
         EntityManager $em,
         SmsService $smsService
     ) {
-        if (false === $this->circuitBreaker->isAvailable(SmsService::CB_SERVICE_SMS_SEND)
-            || false === $this->circuitBreaker->isAvailable(SmsService::CB_SERVICE_SMS_RECEIVE)
-        ) {
-            // SMS services are unavailable
-            throw new ServiceUnavailableHttpException('SMS services are unavailable');
-        }
 
         /** @var SmsVoteRepository $smsVoteRepository */
         $smsVoteRepository = $em->getRepository('PROCERGSVPRCoreBundle:Sms\SmsVote');
@@ -167,15 +161,17 @@ class SmsVoteHandler
         foreach ($pendingMessages as $sms) {
             $to = BrazilianPhoneNumberFactory::createFromE164("+{$sms->de}");
             try {
-                $em->beginTransaction();
                 $smsVote = TPDSmsVoteFactory::createSmsVote($sms);
-                $em->persist($smsVote);
 
                 $vote = $this->getVoteFromSmsVote($smsVote, $ballotBox);
                 $votes[] = $vote;
+
+                $em->beginTransaction();
                 $this->votingSessionProvider->persistVote($vote);
 
-                $smsService->easySend($to, "Seu voto foi registrado. Agradecemos a participação.");
+                $transactionId = $smsService->easySend($to, "Seu voto foi registrado. Agradecemos a participação.");
+                $smsVote->setTransactionId($transactionId);
+                $em->persist($smsVote);
                 $em->flush($smsVote);
                 $em->commit();
             } catch (\InvalidArgumentException $e) {

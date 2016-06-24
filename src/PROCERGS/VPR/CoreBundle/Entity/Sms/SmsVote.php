@@ -49,6 +49,13 @@ class SmsVote
      */
     private $receivedAt;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transaction_id", type="string", length=255, nullable=true)
+     */
+    private $transactionId;
+
 
     /**
      * Get id
@@ -144,6 +151,25 @@ class SmsVote
     public function setSmsId($smsId)
     {
         $this->smsId = $smsId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * @param string $transactionId
+     * @return SmsVote
+     */
+    public function setTransactionId($transactionId)
+    {
+        $this->transactionId = $transactionId;
 
         return $this;
     }

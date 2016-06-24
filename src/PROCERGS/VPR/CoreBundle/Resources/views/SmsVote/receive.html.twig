@@ -3,6 +3,10 @@
 {% block title %}PROCERGSVPRCoreBundle:SmsVote:receive{% endblock %}
 
 {% block body %}
+    {% transchoice votes | length %}
+        {0} No votes received.|{1} One vote received.|]1,Inf[ %count% votes received.
+    {% endtranschoice %}
+
     {% for vote in votes %}
         {{ dump(vote.pollOption) | raw }}
     {% endfor %}
