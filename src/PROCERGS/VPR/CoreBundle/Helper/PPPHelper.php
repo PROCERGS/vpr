@@ -103,6 +103,47 @@ class PPPHelper
         }
     }
     
+    private function cleanUpDanger(Poll &$poll)
+    {
+        if ($poll->getPppCodProjeto()) {
+            $sql = "delete from POP_CIDADAO where nro_ano_corrente = ". $poll->getTransferYear();
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+            
+            $sql = "delete from pop_voto_web where nro_ano_corrente = ". $poll->getTransferYear();
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);            
+
+            $sql = "delete from POP_VOTO_MANUAL where nro_ano_corrente = ". $poll->getTransferYear();
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+            
+            $sql = "delete from pop_demanda_pleito where cod_demanda in (select cod_demanda from pop_demanda where cod_projeto = ". $poll->getPppCodProjeto()." )";
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+    
+            $sql = "delete from pop_demanda where cod_projeto = ". $poll->getPppCodProjeto()." ";
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+    
+            $sql = "delete from pop_descricao_cedula where nro_ano_corrente = ". $poll->getTransferYear()." ";
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+    
+            $sql = "delete from pop_arquivo_corede where nro_ano_corrente = ". $poll->getTransferYear()." ";
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+    
+            $sql = "delete from pop_projeto where cod_projeto = ". $poll->getPppCodProjeto()." ";
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+    
+            $sql = "delete from pop_programa where cod_programa = ". $poll->getPppCodPrograma()." ";
+            $stid = oci_parse($this->_conn, $sql);
+            self::oci_execute($stid);
+        }
+    }
+    
     public function sync(Poll &$poll,\Doctrine\DBAL\Connection &$conn2)
     {        
         //comeca transaction
@@ -178,25 +219,26 @@ class PPPHelper
                 if ($result['cost']) {
                     $txt .= " Valor: R$ ". number_format($result['cost'],2,",","."); 
                 }
-                oci_bind_by_name($stid, ":txt_desc_cedula", $txt);
-                oci_bind_by_name($stid, ":nro_ordem", $result['category_sorting']);
-                oci_bind_by_name($stid, ":cod_corede", $result['corede_id']);
+                $txt2 = substr($txt, 0, 300);
+                oci_bind_by_name($stid, ":txt_desc_cedula", $txt2, -1, SQLT_CHR);
+                oci_bind_by_name($stid, ":nro_ordem", $result['category_sorting'], -1, OCI_B_INT);
+                oci_bind_by_name($stid, ":cod_corede", $result['corede_id'], -1, OCI_B_INT);
                 self::oci_execute($stid);
                 
                 self::oci_execute($stid2);            
                 $pop_descricao_cedula = oci_fetch_array($stid2, OCI_ASSOC + OCI_RETURN_NULLS);            
                 $cod_desc_cedula = $pop_descricao_cedula['COD_DESC_CEDULA'];
                 
-                oci_bind_by_name($stid3, ":txt_demanda", $txt);
+                oci_bind_by_name($stid3, ":txt_demanda", $txt, -1, SQLT_CHR);
                 if (null === $result['cost']) {
                     $cost = 0;
                 } else {
                     $cost = $result['cost']*1;
                 }
-                oci_bind_by_name($stid3, ":vlr_unitario", $cost);
+                oci_bind_by_name($stid3, ":vlr_unitario", $cost, -1, OCI_B_INT);
                 $controleTemp = ($result['corede_id'] * 100) + ($result['category_sorting']*1);
-                oci_bind_by_name($stid3, ":nro_controle_temp", $controleTemp);
-                self::oci_execute($stid3);
+                oci_bind_by_name($stid3, ":nro_controle_temp", $controleTemp, -1, OCI_B_INT);
+                self::oci_execute($stid3, array($txt,$cost,$controleTemp));
                 
                 self::oci_execute($stid4);
                 $pop_demanda = oci_fetch_array($stid4, OCI_ASSOC + OCI_RETURN_NULLS);

@@ -14,7 +14,7 @@ $(function() {
                 window.location.reload();
             },
             error: function(result) {
-            	alert('Aconteceu um erro');            	
+            	alert(result.responseText);            	
             },
             complete:function() {
             	removeLoader($('#admin-poll-list'));
@@ -36,7 +36,7 @@ $(function() {
                 window.location.reload();
             },
             error: function(result) {
-            	alert('Aconteceu um erro');            	
+            	alert(result.responseText);            	
             },
             complete:function() {
             	removeLoader($('#admin-poll-list'));

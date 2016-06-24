@@ -481,11 +481,11 @@ class PollController extends Controller
              */
             $pppHelper = $this->get('vpr.ppphelper');
             $ret = $pppHelper->sync($entity, $connection);
-            if (!$ret) {
-                throw new HttpException(500, "Nao deu");
-                $entity->setTransferPoolOptionStatus(null);
+            if (!$ret) {                
+                $entity->setTransferPoolOptionStatus(0);
                 $em->persist($entity);
                 $em->flush();
+                throw new HttpException(500, "Nao deu");
             }
             $entity->setTransferPoolOptionStatus(3);
             $em->persist($entity);
@@ -493,13 +493,13 @@ class PollController extends Controller
         } else {
             $ret = false;
             if (!$entity) {
-                throw $this->createNotFoundException('Nao encontrei a urna.');
+                throw new HttpException(500, 'Nao encontrei a urna.');
             }
             if (!$entity->getTransferYear()) {
-                throw $this->createNotFoundException('Essa urna nao e sincronizavel.');
+                throw new HttpException(500, 'Essa urna nao e sincronizavel.');
             }
             if ($entity->getTransferPoolOptionStatus() != 0) {
-                throw $this->createNotFoundException('Essa urna nao pode ser sincornizada.');
+                throw new HttpException(500, 'Essa urna nao pode ser sincornizada.');
             }            
         }
         return new JsonResponse(array(
