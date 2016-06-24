@@ -707,18 +707,20 @@ class BallotBox
     {
         if (null === $this->setupAt) {
             return self::$allowedStatus1[1];
-        } else if ( null === $this->closedAt) {
+        } elseif (null === $this->closedAt) {
             return self::$allowedStatus1[2];
         } else {
             return self::$allowedStatus1[3];
         }
     }
 
-    public function setBlocked($var) {
+    public function setBlocked($var)
+    {
         $this->blocked = $var;
     }
 
-    public function getBlocked() {
+    public function getBlocked()
+    {
         return $this->blocked;
     }
 
