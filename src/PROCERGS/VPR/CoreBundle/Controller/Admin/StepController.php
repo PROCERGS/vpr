@@ -23,7 +23,7 @@ class StepController extends Controller
     /**
      * Lists all Step entities.
      *
-     * @Route("/", name="admin_step")
+     * @Route("/index", name="admin_step")
      * @Template()
      */
     public function indexAction(Request $request)
@@ -47,7 +47,9 @@ class StepController extends Controller
             $selected = $form->getData();
 
             $poll = $selected['poll'];
-
+            if (!$poll) {
+                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+            }
         } else {
             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
         }
@@ -172,6 +174,12 @@ class StepController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
+
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
+        if ($status) {
+            $entity->getPoll()->setBlocked(true);
+        }
 
         return array(
             'entity'      => $entity,

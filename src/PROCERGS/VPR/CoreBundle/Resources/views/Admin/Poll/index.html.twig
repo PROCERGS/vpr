@@ -25,3 +25,10 @@
         {{ knp_pagination_render(entities) }}
     </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/poll_index.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+

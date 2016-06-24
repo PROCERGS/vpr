@@ -20,13 +20,19 @@
     {% endfor %}
 
     <div class="jumbotron">
-        {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class':'form-inline'}}) }}
-            <div class="form-group">
+        {{ form_start(form, {'method':'POST', 'attr': {'role':'form'}}) }}
+        <div class="row">
+            <div class="form-group col-md-12">
                 <label>{{ 'admin.poll'|trans }}</label>
                 {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
             </div>
-            <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
-            <a href="{{ path('admin_step_clear_filters') }}" class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12 text-right">
+                <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+                <a href="{{ path('admin_step_clear_filters') }}" class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
+            </div>
+        </div>
         {{ form_end(form) }}
     </div>
 

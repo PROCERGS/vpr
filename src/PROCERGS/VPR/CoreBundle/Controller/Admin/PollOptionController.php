@@ -147,15 +147,26 @@ class PollOptionController extends Controller
     {
         $this->denyAccessUnlessGranted('ROLE_BALLOT_CREATE');
         $entity = new PollOption();
-        $form   = $this->createCreateForm($entity);
 
         $em = $this->getDoctrine()->getManager();
         $polls = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findAll();
+
+        $lastPoll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        $poll_selected_id = $lastPoll->getId();
+
+        $lastPollOption = $em->getRepository('PROCERGSVPRCoreBundle:PollOption')->findLastPollOption();
+
+        $entity->setCorede($lastPollOption->getCorede());
+        $entity->setCategory($lastPollOption->getCategory());
+        $entity->setStep($lastPollOption->getStep());
+
+        $form   = $this->createCreateForm($entity);
 
         return array(
             'entity' => $entity,
             'polls' => $polls,
             'form'   => $form->createView(),
+            'poll_selected_id' => $poll_selected_id
         );
     }
 

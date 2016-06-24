@@ -155,11 +155,11 @@ class Vote
     protected $offlineId;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="is_invalid", type="boolean", nullable=true)
+     * @ORM\Column(name="vote_invalid_id", type="integer", nullable=true)
      */
-    protected $isInvalid;
+    protected $voteInvalidId;
 
     /**
      * Get id

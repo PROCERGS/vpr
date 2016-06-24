@@ -275,3 +275,13 @@ vpr.user:
             help: Se precisar de ajuda, entre em contato com a SEPLAN.
             sign: Consulta Popular
 admin.ballobox.new: Nova Urna
+admin.stats: Apuração
+admin.title.bg: Cor de fundo da categoria
+admin.icon.bg: Cor de fundo do ícone
+admin.icon.img: Ícone
+admin.option.bg: Cor de fundo das opções
+admin.admin_transfer_open_vote: Transfere apuração
+admin.admin_transfer_poll_option: Transfere cedulas
+admin.ballotbox_sms: Urna SMS
+Stats: Apuração
+Reports: Relatórios

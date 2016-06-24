@@ -24,6 +24,7 @@ class BallotBoxFilterType extends AbstractType
                 },
                 'property' => 'name',
                 'empty_value' => 'Todos',
+                'empty_data' => 0,
                 'required' => false
             ))
             ->add('city', 'entity', array(
@@ -42,6 +43,13 @@ class BallotBoxFilterType extends AbstractType
                 'required' => false,
                 'data' => false
             ))
+            ->add('is_sms', 'choice',
+                array(
+                'choices' => array(true => 'Urna SMS'),
+                'multiple' => true,
+                'expanded' => true,
+                'label'    => false
+            ))
             ->add('pin', 'text', array(
                 'required' => false,
                 'data' => false
@@ -50,6 +58,14 @@ class BallotBoxFilterType extends AbstractType
                 'choices' => BallotBox::getAllowedStatus1(),
                 'empty_value' => 'Selecione',
                 'empty_data' => null,
+                'required' => false,
+                'data' => false
+            ))
+            ->add('email', 'text', array(
+                'required' => false,
+                'data' => false
+            ))
+            ->add('name', 'text', array(
                 'required' => false,
                 'data' => false
             ))

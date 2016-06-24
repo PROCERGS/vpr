@@ -25,6 +25,14 @@
         </div>
 
         <div class="form-group">
+            <label class="col-sm-2 control-label">{{ 'admin.corede'|trans }}</label>
+            <div class="col-sm-6">
+                {{ form_errors(form.corede) }}
+                {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
+            </div>
+        </div>
+
+        <div class="form-group">
             <label class="col-sm-2 control-label">{{ 'admin.step'|trans }}</label>
             <div class="col-sm-10">
                 {{ form_errors(form.step) }}
@@ -37,14 +45,6 @@
             <div class="col-sm-6">
                 {{ form_errors(form.category) }}
                 {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-sm-2 control-label">{{ 'admin.corede'|trans }}</label>
-            <div class="col-sm-6">
-                {{ form_errors(form.corede) }}
-                {{ form_widget(form.corede, {'attr': {'class': 'form-control'}}) }}
             </div>
         </div>
 
@@ -94,4 +94,13 @@
             </div>
         </div>
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    $(function() {
+        $('form.poll-option select#poll_select').trigger("change");
+    })
+    </script>
 {% endblock %}

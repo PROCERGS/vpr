@@ -49,6 +49,12 @@ parameters:
     smshelper_ordem_servico: ~
     smshelper_senha: ~
 
+    ppphelper_host: ~
+    ppphelper_port: ~
+    ppphelper_dbname: ~
+    ppphelper_username: ~
+    ppphelper_password: ~
+
     tpd_base_url: http://some.url.com
     tpd_post_endpoint: %tpd_base_url%
     tpd_get_endpoint: %tpd_base_url%/received

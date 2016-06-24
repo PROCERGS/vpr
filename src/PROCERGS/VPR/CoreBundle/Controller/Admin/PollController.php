@@ -11,6 +11,8 @@ use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
+use PROCERGS\VPR\CoreBundle\Helper\PPPHelper;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Poll controller.
@@ -23,7 +25,7 @@ class PollController extends Controller
     /**
      * Lists all Poll entities.
      *
-     * @Route("/", name="admin_poll")
+     * @Route("/index", name="admin_poll")
      * @Method("GET")
      * @Template()
      */
@@ -63,7 +65,7 @@ class PollController extends Controller
      *
      * @Route("/", name="admin_poll_create")
      * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:new.html.twig")
+     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:edit.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -86,7 +88,8 @@ class PollController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'edit_form'   => $form->createView(),
+            'delete_form'  => null,
         );
     }
 
@@ -114,7 +117,7 @@ class PollController extends Controller
      *
      * @Route("/new", name="admin_poll_new")
      * @Method("GET")
-     * @Template()
+     * @Template("PROCERGSVPRCoreBundle:Admin\Poll:edit.html.twig")
      */
     public function newAction()
     {
@@ -124,7 +127,8 @@ class PollController extends Controller
 
         return array(
             'entity' => $entity,
-            'form'   => $form->createView(),
+            'edit_form'   => $form->createView(),
+            'delete_form' => null
         );
     }
 
@@ -149,6 +153,12 @@ class PollController extends Controller
         $steps = $entity->getSteps();
 
         $deleteForm = $this->createDeleteForm($id);
+
+        $checkPoll = $this->get('vpr.checkpoll.helper');
+        $status = $checkPoll->checkBlocked($entity->getId());
+        if ($status) {
+            $entity->setBlocked(true);
+        }
 
         return array(
             'entity'      => $entity,
@@ -317,6 +327,7 @@ class PollController extends Controller
     public function statsListAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
+
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
 
@@ -350,6 +361,7 @@ class PollController extends Controller
             $corede = $coredeRepo->find($vote['corede_id']);
             $coredeId = $corede->getId();
 
+            $coredes[$coredeId]['corede_id'] = $corede->getId();
             $coredes[$coredeId]['corede'] = $corede->getName();
             $coredes[$coredeId]['votes_online'] = $vote['votes_online'];
             $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
@@ -363,6 +375,7 @@ class PollController extends Controller
         }
 
         return array(
+            'poll' => $poll,
             'coredes' => $coredes,
             'form' => $form->createView()
         );
@@ -397,5 +410,142 @@ class PollController extends Controller
     		$response->setData(array('message' => $e->getMessage()));
     	}
     	return $response;
+    }
+
+    /**
+     * Lists poll stats by corede.
+     *
+     * @Route("/stats/{poll}/corede/{corede}", name="admin_stats_corede")
+     * @Template()
+     */
+    public function statsListCoredeAction($poll, $corede)
+    {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
+
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        $corede = $coredeRepo->find($corede);
+
+        $cityRepo    = $em->getRepository('PROCERGSVPRCoreBundle:City');
+
+        $votes = $statsRepo->findTotalVotesByPollAndCorede($poll, $corede->getId());
+
+        $cities = null;
+        foreach ($votes as $vote) {
+            $city = $cityRepo->find($vote['city_id']);
+            $cityId = $city->getId();
+
+            $cities[$cityId]['city_id'] = $city->getId();
+            $cities[$cityId]['city'] = $city->getName();
+            $cities[$cityId]['votes_online'] = $vote['votes_online'];
+            $cities[$cityId]['votes_offline'] = $vote['votes_offline'];
+        }
+
+        $voters    = $statsRepo->findTotalVotersByPollAndCorede($poll, $corede->getId());
+        foreach ($voters as $vote) {
+            $cityId = $vote['city_id'];
+            $cities[$cityId]['voters_online'] = $vote['voters_online'];
+            $cities[$cityId]['voters_offline'] = $vote['voters_offline'];
+        }
+
+        return array(
+            'corede' => $corede,
+            'cities' => $cities
+        );
+    }
+    
+    /**
+     * Lists all Poll entities.
+     *
+     * @Route("/admin_transfer_poll_option/{id}", name="admin_transfer_poll_option")
+     * @Method("POST")
+     */
+    public function transferPollOptionAction($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
+        $em = $this->getDoctrine()->getManager();
+        /**
+         * @var Poll $entity
+         */
+        $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+        if ($entity && $entity->getTransferYear() && $entity->getTransferPoolOptionStatus() == 0) {
+            $entity->setTransferPoolOptionStatus(2);
+            $em->persist($entity);
+            $em->flush();
+            $connection = $em->getConnection();
+            /**
+             * @var PPPHelper $pppHelper
+             */
+            $pppHelper = $this->get('vpr.ppphelper');
+            $ret = $pppHelper->sync($entity, $connection);
+            if (!$ret) {
+                throw new HttpException(500, "Nao deu");
+                $entity->setTransferPoolOptionStatus(null);
+                $em->persist($entity);
+                $em->flush();
+            }
+            $entity->setTransferPoolOptionStatus(3);
+            $em->persist($entity);
+            $em->flush();            
+        } else {
+            $ret = false;
+            if (!$entity) {
+                throw $this->createNotFoundException('Nao encontrei a urna.');
+            }
+            if (!$entity->getTransferYear()) {
+                throw $this->createNotFoundException('Essa urna nao e sincronizavel.');
+            }
+            if ($entity->getTransferPoolOptionStatus() != 0) {
+                throw $this->createNotFoundException('Essa urna nao pode ser sincornizada.');
+            }            
+        }
+        return new JsonResponse(array(
+            'hash' => $ret
+        ));
+    }
+    
+    /**
+     * Lists all Poll entities.
+     *
+     * @Route("/admin_transfer_open_vote/{id}", name="admin_transfer_open_vote")
+     * @Method("POST")
+     */
+    public function transferOpenVoteAction($id)
+    {
+        $this->denyAccessUnlessGranted('ROLE_POLL_UPDATE');
+        $em = $this->getDoctrine()->getManager();
+        /**
+         * @var Poll $entity
+         */
+        $entity = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($id);
+        if ($entity && $entity->getTransferYear() && $entity->getApurationStatus() == 3 && $entity->getTransferOpenVoteStatus() == 0 && $entity->getTransferPoolOptionStatus() == 3) {
+            $entity->setTransferOpenVoteStatus(1);
+            $em->persist($entity);
+            $em->flush();            
+            $ret = true;
+        } else {
+            $ret = false;
+            if (!$entity) {
+                throw $this->createNotFoundException("Nao encontrei a urna.");            
+            }
+            if (!$entity->getTransferYear()) {
+                throw $this->createNotFoundException('Essa urna nao e sincronizavel.');
+            }
+            if ($entity->getTransferPoolOptionStatus() != 3) {
+                throw $this->createNotFoundException('Essa urna não teve a cedula sincronizada.');
+            }
+            if ($entity->getApurationStatus() != 3) {
+                throw $this->createNotFoundException('Essa urna não foi apurada.');
+            }
+            if ($entity->getTransferOpenVoteStatus() != 0) {
+                throw $this->createNotFoundException('Essa urna nao pode ser sincornizada.');
+            }
+        }
+        return new JsonResponse(array(
+            'hash' => $ret
+        ));        
     }
 }

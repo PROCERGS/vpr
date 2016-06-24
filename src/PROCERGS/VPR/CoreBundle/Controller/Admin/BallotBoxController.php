@@ -113,7 +113,7 @@ class BallotBoxController extends Controller
         if (isset($filters['poll'])) {
             $queryBuilder->andWhere('b.poll = :poll');
             $queryBuilder->setParameter('poll', $filters['poll']);
-        } else {
+        } else if (!isset($filters)) {
             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
             $queryBuilder->andWhere('b.poll = :poll');
             $queryBuilder->setParameter('poll', $poll->getId());
@@ -132,6 +132,11 @@ class BallotBoxController extends Controller
             $queryBuilder->andWhere('b.isOnline = :online');
             $queryBuilder->setParameter('online', false);
         }
+
+        if (!empty($filters['is_sms'])) {
+            $queryBuilder->andWhere('b.isSms = true');
+        }
+
         switch ($filters['status1']) {
             case 1:
                 $queryBuilder->andWhere('b.setupAt is null');
@@ -148,6 +153,16 @@ class BallotBoxController extends Controller
             $queryBuilder->setParameter('pin', $filters['pin']);
         }
 
+        if ($filters['email']) {
+            $queryBuilder->andWhere('b.email = :email');
+            $queryBuilder->setParameter('email', $filters['email']);
+        }
+
+        if ($filters['name']) {
+            $queryBuilder->andWhere('lower(b.name) LIKE lower(:name)');
+            $queryBuilder->setParameter('name', '%'.$filters['name'].'%');
+        }
+
         $query = $queryBuilder->getQuery();
 
         $page = $this->get('request')->query->get('page', 1);;
@@ -156,9 +171,9 @@ class BallotBoxController extends Controller
 
         $checkPoll = $this->get('vpr.checkpoll.helper');
         foreach ($entities as $e) {
-            $status = $checkPoll->checkBlocked($e->getPoll()->getId());
+            $status = $checkPoll->checkBlocked($e->getId(), "ballotbox");
             if ($status) {
-                $e->getPoll()->setBlocked(true);
+                $e->setBlocked(true);
             }
         }
 
@@ -369,19 +384,22 @@ class BallotBoxController extends Controller
                     $translator->trans('admin.successfully_added_record')
                 );
 
-                return $this->redirect(
-                    $this->generateUrl('admin_ballotbox_new')
-                );
+                return $this->redirect($this->generateUrl('admin_ballotbox_show',
+                        array('id' => $entity->getId())));
 
             }
         } catch (\Exception $e) {
             $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $lastBallotbox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findLastBallotBox();
+
         return array(
             'entity' => $entity,
             'edit_form' => $form->createView(),
             'delete_form' => null,
+            'lastBallotbox' => $lastBallotbox
         );
     }
 
@@ -400,12 +418,6 @@ class BallotBoxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $lastBallotbox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findLastBallotBox();
-        $entity->setName($lastBallotbox->getName());
-        $entity->setPoll($lastBallotbox->getPoll());
-        $entity->setCity($lastBallotbox->getCity());
-        $entity->setIsOnline($lastBallotbox->getIsOnline());
-        $entity->setOpeningTime($lastBallotbox->getOpeningTime());
-        $entity->setClosingTime($lastBallotbox->getClosingTime());
 
         $form = $this->createCreateForm($entity);
 
@@ -414,6 +426,7 @@ class BallotBoxController extends Controller
             'entity' => $entity,
             'edit_form' => $form->createView(),
             'delete_form' => null,
+            'lastBallotbox' => $lastBallotbox
         );
     }
 
@@ -438,9 +451,10 @@ class BallotBoxController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         $checkPoll = $this->get('vpr.checkpoll.helper');
-        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
+
+        $status = $checkPoll->checkBlocked($entity->getId(), "ballotbox");
         if ($status) {
-            $entity->getPoll()->setBlocked(true);
+            $entity->setBlocked(true);
         }
 
         return array(
@@ -468,11 +482,7 @@ class BallotBoxController extends Controller
         }
 
         $checkPoll = $this->get('vpr.checkpoll.helper');
-        $status = $checkPoll->checkBlocked($entity->getPoll()->getId());
-        if ($status) {
-            $entity->getPoll()->setBlocked(true);
-        }
-
+        $status = $checkPoll->checkBlocked($entity->getId(), "ballotbox");
         if ($status) {
             throw new \Exception('Unable to edit!');
         }
@@ -480,10 +490,13 @@ class BallotBoxController extends Controller
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
+        $lastBallotbox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findLastBallotBox();
+
         return array(
             'entity' => $entity,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'lastBallotbox' => $lastBallotbox
         );
     }
 

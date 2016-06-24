@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 use PROCERGS\VPR\CoreBundle\Helper\Utils;
 use JMS\Serializer\SerializationContext;
 use FOS\RestBundle\Controller\Annotations as REST;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Doctrine\ORM\EntityRepository;
 
 class StatsController extends Controller
 {
@@ -25,29 +27,42 @@ class StatsController extends Controller
     const CACHE_TIME_MINUTES     = 15;
 
     /**
-     * @Route("/reports/corede/{coredeId}", name="vpr_report_voted_options_by_corede")
+     * @Route("/reports/corede/{coredeId}/{pollId}", name="vpr_report_voted_options_by_corede")
      * @Template()
      */
-    public function reportOptionsCoredeAction($coredeId)
+    public function reportOptionsCoredeAction($coredeId, $pollId)
     {
         $this->updateCacheAction();
+
+        $em        = $this->getDoctrine()->getManager();
+        $pollRepo  = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        $poll       = $pollRepo->find($pollId);
+
         $form   = $this->getCoredeForm();
+        $form->get('poll')->setData($poll);
+
         $params = array(
             'form' => $form->createView(),
             'coredes' => $this->getCoredes(),
             'updateCache' => $this->shouldUpdateCache()
         );
         if ($coredeId != 2) {
-            $em        = $this->getDoctrine()->getManager();
             $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
-            $pollRepo  = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
 
             $results    = array();
             $created_at = null;
-            $poll       = $pollRepo->findLastPoll();
+            $poll       = $pollRepo->find($pollId);
 
-            $statsCorede = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote')->findOneByCoredeId($poll,
-                $coredeId);
+            $statsCorede = $em->createQueryBuilder()
+            ->select('v.coredeName,
+                      sum(v.totalVotes) as totalVotes')
+            ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+            ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
+            ->where('b.poll = :poll')
+            ->andWhere('v.coredeId = :corede')
+            ->groupBy('v.coredeId, v.coredeName')
+            ->orderBy('totalVotes', 'DESC')
+            ->getQuery()->setParameters(array("poll" => $poll->getId(), "corede" => $coredeId))->setMaxResults(1)->getOneOrNullResult();
 
             $steps = $poll->getSteps();
             foreach ($steps as $step) {
@@ -75,25 +90,29 @@ class StatsController extends Controller
     }
 
     /**
-     * @Route("/reports/city/{cityId}", name="vpr_report_voted_options_by_city")
+     * @Route("/reports/city/{cityId}/{pollId}", name="vpr_report_voted_options_by_city")
      * @Template()
      */
-    public function reportOptionsCityAction($cityId)
+    public function reportOptionsCityAction($cityId, $pollId)
     {
         $this->updateCacheAction();
+        $em           = $this->getDoctrine()->getManager();
+        $pollRepo     = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        $poll    = $pollRepo->find($pollId);
+
         $form   = $this->getCityForm();
+        $form->get('poll')->setData($poll);
         $params = array(
             'form' => $form->createView(),
             'cities' => $this->getCities(),
             'updateCache' => $this->shouldUpdateCache()
         );
 
-        $em           = $this->getDoctrine()->getManager();
-        $pollRepo     = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+
+
         $openVoteRepo = $em->getRepository('PROCERGSVPRCoreBundle:OpenVote');
 
         $results = array();
-        $poll    = $pollRepo->findLastPoll();
 
         $city      = $em->getRepository('PROCERGSVPRCoreBundle:City')->findOneById($cityId);
         $cityTotal = $openVoteRepo->findTotalByCity($poll, $cityId);
@@ -120,6 +139,7 @@ class StatsController extends Controller
      */
     public function optionVotesAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $this->updateCacheAction();
         $form = $this->getCoredeForm();
 
@@ -132,10 +152,11 @@ class StatsController extends Controller
             $name       = trim($data['corede']);
             $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
             $corede     = $coredeRepo->findOneByName($name);
+            $poll = $data['poll'];
 
             if (strlen($name) > 0) {
                 $url = $this->generateUrl('vpr_report_voted_options_by_corede',
-                    array('coredeId' => $corede->getId()));
+                    array('coredeId' => $corede->getId(), 'pollId' => $poll->getId()));
                 return $this->redirect($url);
             }
         }
@@ -153,6 +174,7 @@ class StatsController extends Controller
      */
     public function optionVotesCityAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $this->updateCacheAction();
         $form = $this->getCityForm();
 
@@ -165,10 +187,11 @@ class StatsController extends Controller
             $name     = trim($data['city']);
             $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
             $city     = $cityRepo->findOneByName($name);
+            $poll = $data['poll'];
 
             if (strlen($name) > 0) {
                 $url = $this->generateUrl('vpr_report_voted_options_by_city',
-                    array('cityId' => $city->getId()));
+                    array('cityId' => $city->getId(), 'pollId' => $poll->getId()));
                 return $this->redirect($url);
             }
         }
@@ -184,20 +207,58 @@ class StatsController extends Controller
      * @Route("/stats/votes", name="vpr_stats_votes")
      * @Template()
      */
-    public function votesAction()
+    public function votesAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $this->updateCacheAction();
         $em = $this->getDoctrine()->getManager();
 
+        $session = $this->getRequest()->getSession();
+
+        $poll_filters = $session->get('poll_filters');
+        $form = $this->createForm(new PollOptionFilterType());
+        $form->remove("corede");
+
+
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
+            } else{
+                $form->bind($request);
+                $session->set('poll_filters', $request);
+            }
+            $selected = $form->getData();
+
+            $poll = $selected['poll'];
+            if (!$poll) {
+                $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+            }
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        }
+
+
         $query = $em->createQueryBuilder()
-            ->select('v')
+            ->select('v.coredeName,
+                      sum(v.totalWithVoterRegistration) as totalWithVoterRegistration,
+                      sum(v.totalWithLoginCidadao) as totalWithLoginCidadao,
+                      sum(v.totalWithVoterRegistrationAndLoginCidadao) as totalWithVoterRegistrationAndLoginCidadao,
+                      sum(v.totalVotes) as totalVotes')
             ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
-            ->orderBy('v.totalVotes', 'DESC')
-            ->getQuery();
+            ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
+            ->where('b.poll = :poll')
+            ->groupBy('v.coredeId, v.coredeName')
+            ->orderBy('totalVotes', 'DESC')
+            ->getQuery()->setParameters(array("poll" => $poll->getId()));
 
         $results    = $query->getResult();
-        $entity     = reset($results);
-        $created_at = $entity->getCreatedAt();
+
+        $created_at = $em->createQueryBuilder()
+            ->select('MAX(v.createdAt)')
+            ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+            ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
+            ->where('b.poll = :poll')
+            ->getQuery()->setParameters(array("poll" => 4))->setMaxResults(1)->getOneOrNullResult();
 
         $encoders    = array(new JsonEncoder());
         $normalizers = array(new GetSetMethodNormalizer());
@@ -205,10 +266,12 @@ class StatsController extends Controller
 
         $jsonContent = $serializer->serialize($results, 'json');
 
+
         return array(
             'results' => $results,
             'jsonContent' => $jsonContent,
-            'created_at' => $created_at
+            'created_at' => $created_at[1],
+            'form' => $form->createView()
         );
     }
 
@@ -218,7 +281,17 @@ class StatsController extends Controller
                 array(
                 'required' => true,
                 'label' => 'form.city.select'
-            ))->add('submit', 'submit')->getForm();
+            ))
+            ->add('poll', 'entity', array(
+                    'class' => 'PROCERGSVPRCoreBundle:Poll',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('p')
+                            ->orderBy('p.openingTime', 'DESC');
+                    },
+                    'property' => 'name',
+                    'required' => true
+                ))
+            ->add('submit', 'submit')->getForm();
     }
 
     private function getCoredeForm()
@@ -227,7 +300,17 @@ class StatsController extends Controller
                 array(
                 'required' => true,
                 'label' => 'form.corede.select'
-            ))->add('submit', 'submit')->getForm();
+            ))
+            ->add('poll', 'entity', array(
+                'class' => 'PROCERGSVPRCoreBundle:Poll',
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                        ->orderBy('p.openingTime', 'DESC');
+                },
+                'property' => 'name',
+                'required' => true
+            ))
+            ->add('submit', 'submit')->getForm();
     }
 
     private function getCities()
@@ -393,6 +476,7 @@ class StatsController extends Controller
      */
     public function graphicsAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $this->updateCacheAction();
         $em       = $this->getDoctrine()->getManager();
         $entity   = $em->createQueryBuilder()
@@ -404,6 +488,7 @@ class StatsController extends Controller
         if ($entity) {
             $response['created_at'] = $entity->getCreatedAt();
         }
+
         return $response;
     }
 
@@ -550,6 +635,7 @@ class StatsController extends Controller
      */
     public function ballotBoxesAction()
     {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $em   = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 
@@ -620,5 +706,17 @@ class StatsController extends Controller
             $data = $cached['data'];
         }
         return $data;
+    }
+
+    /**
+     * Clear Filters
+     * @Method("GET")
+     * @Route("/filters/clear", name="admin_stats_clear_filters")
+     */
+    public function clearFiltersAction()
+    {
+        $session = $this->getRequest()->getSession();
+        $session->remove('poll_filters');
+        return $this->redirect($this->generateUrl('vpr_stats_votes'));
     }
 }

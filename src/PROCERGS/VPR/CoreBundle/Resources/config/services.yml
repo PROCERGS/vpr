@@ -143,6 +143,15 @@ services:
         arguments:
             entityManager: "@doctrine.orm.entity_manager"
 
+    vpr.ppphelper:
+        class: PROCERGS\VPR\CoreBundle\Helper\PPPHelper
+        calls:
+            - [setHost, [%ppphelper_host%]]
+            - [setPort, [%ppphelper_port%]]
+            - [setDbname, [%ppphelper_dbname%]]
+            - [setUsername, [%ppphelper_username%]]
+            - [setPassword, [%ppphelper_password%]]
+
     vpr.poll_option.repository:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]

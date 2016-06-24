@@ -21,6 +21,8 @@
     <div class="navbar">
         <a class="btn btn-default" href="{{ path('admin_ballotbox') }}" role="button"><span
                     class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
+
+        <a class="btn btn-info pull-right" id="btn-load-ballotbox">Copiar última urna</a>
     </div>
 
     {% for type, messages in app.session.flashbag.all() %}
@@ -32,14 +34,14 @@
         {% endfor %}
     {% endfor %}
 
-    {{ form_start(edit_form, {'attr': {'role':'form', 'class':'form-horizontal'}}) }}
+    {{ form_start(edit_form, {'attr': {'role':'form', 'class':'form-horizontal ballotbox-edit'}}) }}
     {{ form_errors(edit_form) }}
 
     <div class="form-group">
         <label class="col-sm-2 control-label">{{ 'admin.name'|trans }}</label>
         <div class="col-sm-10">
             {{ form_errors(edit_form.name) }}
-            {{ form_widget(edit_form.name, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(edit_form.name, {'attr': {'class': 'form-control' }}) }}
         </div>
     </div>
 
@@ -47,7 +49,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.poll'|trans }}</label>
         <div class="col-sm-5">
             {{ form_errors(edit_form.poll) }}
-            {{ form_widget(edit_form.poll, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(edit_form.poll, {'attr': {'class': 'form-control', 'data-val': lastBallotbox.poll.id }}) }}
         </div>
     </div>
 
@@ -62,12 +64,22 @@
         </div>
     </div>
 
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+                <label>
+                    {{ form_errors(edit_form.isSms) }}
+                    {{ form_widget(edit_form.isSms) }} {{ 'admin.ballotbox_sms'|trans }}
+                </label>
+            </div>
+        </div>
+    </div>
+
     <div class="form-group ballotbox-offline-itens">
         <div class="col-sm-offset-2 col-sm-10">
             <div class="checkbox">
                 <label>
-                    <input {{ isDtDiffPoll ? 'checked="checked"' : '' }} type="checkbox" value="1" name="chkDtDiffPoll"
-                                                                         id="chkDtDiffPoll">Deseja usar horarios
+                    <input {{ isDtDiffPoll ? 'checked="checked"' : '' }} type="checkbox" value="1" name="chkDtDiffPoll" id="chkDtDiffPoll">Deseja usar horarios
                     diferentes da votação?
                 </label>
             </div>
@@ -78,7 +90,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.opening_time'|trans }}</label>
         <div class="col-sm-10">
             {{ form_errors(edit_form.openingTime) }}
-            {{ form_widget(edit_form.openingTime, {'attr': {'class': ''}}) }}
+            {{ form_widget(edit_form.openingTime, {'attr': {'class': 'opening-time', 'data-day': lastBallotbox.openingTime|date("j"), 'data-month': lastBallotbox.openingTime|date("n"), 'data-year': lastBallotbox.openingTime|date("Y"), 'data-hour': lastBallotbox.openingTime|date("H"), 'data-minute': lastBallotbox.openingTime|date("i")}}) }}
         </div>
     </div>
 
@@ -86,7 +98,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.closing_time'|trans }}</label>
         <div class="col-sm-10">
             {{ form_errors(edit_form.closingTime) }}
-            {{ form_widget(edit_form.closingTime, {'attr': {'class': ''}}) }}
+            {{ form_widget(edit_form.closingTime, {'attr': {'class': 'closing-time', 'data-day': lastBallotbox.closingTime|date("j"), 'data-month': lastBallotbox.closingTime|date("n"), 'data-year': lastBallotbox.closingTime|date("Y"), 'data-hour': lastBallotbox.closingTime|date("H"), 'data-minute': lastBallotbox.closingTime|date("i")}}) }}
         </div>
     </div>
 
@@ -94,7 +106,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.city'|trans }}</label>
         <div class="col-sm-5">
             {{ form_errors(edit_form.city) }}
-            {{ form_widget(edit_form.city, {'attr': {'class': 'form-control'}}) }}
+            {{ form_widget(edit_form.city, {'attr': {'class': 'form-control', 'data-val': lastBallotbox.city.id }}) }}
         </div>
     </div>
 
@@ -165,6 +177,8 @@
                 {{ form_widget(delete_form.submit, {'attr': {'class': 'btn btn-danger btn-sm btn-delete'},'label':'admin.delete'|trans}) }}
                 {{ form_end(delete_form) }}
             {% endif %}
+
+
         </div>
     </div>
 {% endblock %}

@@ -196,6 +196,7 @@ class BallotBox
      * @ORM\JoinColumn(name="sent_message2_id", referencedColumnName="id", nullable=true)
      */
     protected $sentMessage2;
+    protected $blocked;
 
     /**
      * @var boolean
@@ -706,13 +707,19 @@ class BallotBox
     {
         if (null === $this->setupAt) {
             return self::$allowedStatus1[1];
+        } else if ( null === $this->closedAt) {
+            return self::$allowedStatus1[2];
         } else {
-            if (null === $this->closedAt) {
-                return self::$allowedStatus1[2];
-            } else {
-                return self::$allowedStatus1[3];
-            }
+            return self::$allowedStatus1[3];
         }
+    }
+
+    public function setBlocked($var) {
+        $this->blocked = $var;
+    }
+
+    public function getBlocked() {
+        return $this->blocked;
     }
 
     /**

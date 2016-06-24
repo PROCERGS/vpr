@@ -39,6 +39,14 @@ SELECT exists
                 ');
                 $statement->bindParam('category', $id);
                 break;
+              case 'ballotbox':
+                $statement = $connection->prepare('
+                    select
+                        exists(select id from ballot_box b where b.id = :ballotbox and b.setup_at is not null) as downloaded,
+                        exists(select v.id from vote v where v.ballot_box_id = :ballotbox) as voted
+                ');
+                $statement->bindParam('ballotbox', $id);
+                break;
             default:
                 $statement = $connection->prepare('
                     select
