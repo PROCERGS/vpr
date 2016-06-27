@@ -142,6 +142,7 @@ services:
         class: PROCERGS\VPR\CoreBundle\Helper\CheckPollHelper
         arguments:
             entityManager: "@doctrine.orm.entity_manager"
+
     vpr.ppphelper:
         class: PROCERGS\VPR\CoreBundle\Helper\PPPHelper
         calls:
@@ -150,3 +151,38 @@ services:
             - [setDbname, [%ppphelper_dbname%]]
             - [setUsername, [%ppphelper_username%]]
             - [setPassword, [%ppphelper_password%]]
+
+    vpr.poll_option.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - PROCERGS\VPR\CoreBundle\Entity\PollOption
+
+    vpr.tre_voter.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - PROCERGS\VPR\CoreBundle\Entity\TREVoter
+
+    vpr.poll_option.helper:
+        class: PROCERGS\VPR\CoreBundle\Helper\PollOptionHelper
+        arguments:
+            - "@vpr.poll_option.repository"
+
+    sms.vote_handler:
+        class: PROCERGS\VPR\CoreBundle\Security\SmsVoteHandler
+        arguments:
+            - "@vpr.poll_option.helper"
+            - "@vpr.tre_voter.repository"
+            - "@vpr_voting_session_provider"
+            - "@circuitBreaker"
+            - %tpd_sms_tag%
+
+    sms.service:
+        class: PROCERGS\VPR\CoreBundle\Service\SmsService
+        arguments:
+            - "@circle.restclient"
+            - "@circuitBreaker"
+            - { send_url: %tpd_post_endpoint%, receive_url: %tpd_get_endpoint%, status_url: %tpd_status_endpoint%, system_id: %tpd_system_id%, from_string: %tpd_from_string%, service_order: %tpd_service_order% }
+        calls:
+            - [setLogger, ["@logger"]]

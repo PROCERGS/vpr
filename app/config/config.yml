@@ -20,7 +20,7 @@ framework:
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
-    trusted_proxies: ~
+    trusted_proxies: %trusted_proxies%
     session:         ~
     fragments:       ~
     http_method_override: true
@@ -161,6 +161,12 @@ fos_user:
 parameters:
     buzz.client.class: Donato\Generic\HWIOAuthProxyBundle\Buzz\Client\CurlProxy
 
+    # Circuit Breaker Configs
+    # Allowed amount of failures before marking service as unavailable
+    ejsmont_circuit_breaker.threshold: 5
+    # how many seconds should we wait before allowing a single request
+    ejsmont_circuit_breaker.retry_timeout: 5
+
 knp_paginator:
     page_range: 5                      # default page range used in pagination control
     default_options:
@@ -218,3 +224,29 @@ nelmio_cors:
             allow_methods: ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS']
             max_age: 3600
             hosts: ['^ballotbox\.']
+
+circle_rest_client:
+    curl:
+        defaults:
+            CURLOPT_HTTPHEADER:
+                - "Content-Type: application/json"
+                - "sistema: %tpd_system_id%"
+                - "chave: %tpd_system_key%"
+            CURLOPT_CONNECTTIMEOUT: 15
+            CURLOPT_TIMEOUT: 15
+
+liip_monitor:
+    enable_controller: true
+    checks:
+        memcache:
+            main:
+                host: %memcached_host%
+                port: %memcached_port%
+
+        doctrine_dbal: default
+
+        readable_directory:
+            - '%kernel.cache_dir%'
+
+        writable_directory:
+            - '%kernel.cache_dir%'

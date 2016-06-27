@@ -149,7 +149,7 @@ class BallotBox
     /**
      * @var string
      *
-     * @ORM\Column(name="csv", type="text")
+     * @ORM\Column(name="csv", type="text", nullable=true)
      */
     protected $csv;
 
@@ -209,6 +209,7 @@ class BallotBox
     public function __construct()
     {
         $this->setTotalInvalidVotes(0);
+        $this->isSms = false;
     }
 
     /**
@@ -224,6 +225,7 @@ class BallotBox
     public function setId($var)
     {
         $this->id = $var;
+
         return $this;
     }
 
@@ -501,7 +503,7 @@ class BallotBox
         openssl_pkey_export($res, $privKey, $this->getSecret());
 
         $details = openssl_pkey_get_details($res);
-        $pubKey  = $details["key"];
+        $pubKey = $details["key"];
 
         $this->setPrivateKey($privKey);
         $this->setPublicKey($pubKey);
@@ -548,8 +550,10 @@ class BallotBox
     public function sign($serializedOptions, $passphrase)
     {
         $encryptedPrivate = $this->getPrivateKey();
-        $privateKey       = openssl_pkey_get_private($encryptedPrivate,
-            $passphrase);
+        $privateKey = openssl_pkey_get_private(
+            $encryptedPrivate,
+            $passphrase
+        );
 
         $signature = false;
         openssl_sign($serializedOptions, $signature, $privateKey);
@@ -589,46 +593,51 @@ class BallotBox
     public function setSetupAt(\DateTime $setupAt)
     {
         $this->setupAt = $setupAt;
+
         return $this;
     }
 
     public function setClosedAt(\DateTime $closedAt)
     {
         $this->closedAt = $closedAt;
+
         return $this;
     }
 
     public function getCsv()
     {
-    	return $this->csv;
+        return $this->csv;
     }
 
     public function setCsv($var)
     {
-    	$this->csv = $var;
-    	return $this;
+        $this->csv = $var;
+
+        return $this;
     }
 
     public function getFone()
     {
-    	return $this->fone;
+        return $this->fone;
     }
 
     public function setFone($var)
     {
-    	$this->fone = $var;
-    	return $this;
+        $this->fone = $var;
+
+        return $this;
     }
 
     public function getEmail()
     {
-    	return $this->email;
+        return $this->email;
     }
 
     public function setEmail($var)
     {
-    	$this->email = $var;
-    	return $this;
+        $this->email = $var;
+
+        return $this;
     }
 
     public function getDdd()
@@ -639,6 +648,7 @@ class BallotBox
     public function setDdd($var)
     {
         $this->ddd = $var;
+
         return $this;
     }
 
@@ -651,6 +661,7 @@ class BallotBox
     {
         $this->sentMessage1Id = $var;
     }
+
     public function getSentMessage2Id()
     {
         return $this->sentMessage2Id;
@@ -670,6 +681,7 @@ class BallotBox
     {
         $this->sentMessage1 = $var;
     }
+
     public function getSentMessage2()
     {
         return $this->sentMessage2;
@@ -680,7 +692,8 @@ class BallotBox
         $this->sentMessage2 = $var;
     }
 
-    protected static $allowedStatus1 = array(1=> 'Disponível', 2=> 'Ativa', 3=> 'Encerrada');
+    protected static $allowedStatus1 = array(1 => 'Disponível', 2 => 'Ativa', 3 => 'Encerrada');
+
     public static function getAllowedStatus1($var = null)
     {
         if (null === $var) {
@@ -692,26 +705,34 @@ class BallotBox
 
     public function getStatus1Label()
     {
-        if ( null === $this->setupAt) {
+        if (null === $this->setupAt) {
             return self::$allowedStatus1[1];
-        } else if ( null === $this->closedAt) {
+        } elseif (null === $this->closedAt) {
             return self::$allowedStatus1[2];
         } else {
             return self::$allowedStatus1[3];
         }
     }
 
-    public function setBlocked($var) {
+    public function setBlocked($var)
+    {
         $this->blocked = $var;
     }
 
-    public function getBlocked() {
+    public function getBlocked()
+    {
         return $this->blocked;
     }
 
     /**
-     * Set isSms
-     *
+     * @return boolean
+     */
+    public function isSms()
+    {
+        return $this->isSms;
+    }
+
+    /**
      * @param boolean $isSms
      * @return BallotBox
      */
@@ -721,16 +742,4 @@ class BallotBox
 
         return $this;
     }
-
-    /**
-     * Get isSms
-     *
-     * @return boolean
-     */
-    public function getIsSms()
-    {
-        return $this->isSms;
-    }
-
-
 }

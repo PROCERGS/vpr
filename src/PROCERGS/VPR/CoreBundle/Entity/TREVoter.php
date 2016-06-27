@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TREVoter
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\TREVoterRepository")
  * @ORM\Table(name="tre_voter",
  *      indexes={
  *          @ORM\Index(name="index_trevoter_name", columns={"name"}),
@@ -192,5 +192,27 @@ class TREVoter
     public function getCorede()
     {
         return $this->corede;
+    }
+
+    /**
+     * @param Corede $corede
+     * @return TREVoter
+     */
+    public function setCorede(Corede $corede)
+    {
+        $this->corede = $corede;
+
+        return $this;
+    }
+
+    /**
+     * @param City $city
+     * @return TREVoter
+     */
+    public function setCity(City $city)
+    {
+        $this->city = $city;
+
+        return $this;
     }
 }

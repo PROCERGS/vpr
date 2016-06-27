@@ -54,3 +54,28 @@ parameters:
     ppphelper_dbname: ~
     ppphelper_username: ~
     ppphelper_password: ~
+
+    tpd_base_url: http://some.url.com
+    tpd_post_endpoint: %tpd_base_url%
+    tpd_get_endpoint: %tpd_base_url%/received
+    tpd_status_endpoint: %tpd_base_url%/status
+    tpd_service_order: 0000
+    tpd_system_id: SYS
+    # tpd_from_string: 10 characters
+    tpd_from_string: FROMSTRING
+    tpd_system_key: TDPKeyHere
+    tpd_sms_tag: VOTE
+
+    test.tpd.sms_tag: %tpd_sms_tag%_TEST
+    test.tpd.to_phone.country_code: 55
+    test.tpd.to_phone.area_code: 51
+    test.tpd.to_phone.subscriber: 99999999
+    test.tpd.from_phone.area_code: 99
+    test.tpd.from_phone.subscriber: 999
+
+    # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
+    trusted_proxies: []
+    # IPs allowed to access monitoring endpoint
+    allowed_monitors: [ 127.0.0.0/8 ]
+    # IPs allowed to call the Receive SMS endpoint
+    allowed_sms_receive: []

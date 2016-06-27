@@ -198,4 +198,26 @@ class City
     {
         return $this->corede;
     }
+
+    /**
+     * @param Corede $corede
+     * @return City
+     */
+    public function setCorede(Corede $corede)
+    {
+        $this->corede = $corede;
+
+        return $this;
+    }
+
+    /**
+     * @param int $id
+     * @return City
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace PROCERGS\VPR\CoreBundle\Security;
 
+use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -34,15 +35,17 @@ class VotingSessionProvider
     /** @var string */
     private $passphrase;
 
-    public function __construct(EntityManagerInterface $entityManager,
-                                SessionInterface $session,
-                                Serializer $serializer,
-                                RequestStack $requestStack, $passphrase)
-    {
-        $this->em           = $entityManager;
-        $this->session      = $session;
-        $this->serializer   = $serializer;
-        $this->passphrase   = $passphrase;
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        SessionInterface $session,
+        Serializer $serializer,
+        RequestStack $requestStack,
+        $passphrase
+    ) {
+        $this->em = $entityManager;
+        $this->session = $session;
+        $this->serializer = $serializer;
+        $this->passphrase = $passphrase;
         $this->requestStack = $requestStack;
     }
 
@@ -77,6 +80,7 @@ class VotingSessionProvider
             throw new VotingTimeoutException();
             //return $this->redirect($this->generateUrl('procergsvpr_core_voting_timeout'));
         }
+
         return $poll;
     }
 
@@ -85,7 +89,31 @@ class VotingSessionProvider
         if (is_null($poll)) {
             $poll = $this->getActivePollOrFail();
         }
+
         return $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox')->findOnlineByPoll($poll);
+    }
+
+    /**
+     * @param Poll $poll
+     * @return BallotBox
+     * @throws VotingTimeoutException
+     */
+    public function getSmsBallotBox(Poll $poll = null)
+    {
+        if ($poll === null) {
+            $poll = $this->getActivePollOrFail();
+        }
+
+        /** @var BallotBoxRepository $ballotBoxRepo */
+        $ballotBoxRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+
+        /** @var BallotBox $ballotBox */
+        return $ballotBoxRepo->findOneBy(
+            [
+                'isSms' => true,
+                'poll' => $poll,
+            ]
+        );
     }
 
     /**
@@ -98,10 +126,12 @@ class VotingSessionProvider
      * @throws VoterAlreadyVotedException
      * @throws VoterRegistrationAlreadyVotedException
      */
-    public function checkExistingVotes(Person $person, BallotBox $ballotBox,
-                                       Vote $conflictingVote = null)
-    {
-        $filter   = compact('ballotBox');
+    public function checkExistingVotes(
+        Person $person,
+        BallotBox $ballotBox,
+        Vote $conflictingVote = null
+    ) {
+        $filter = compact('ballotBox');
         $voteRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Vote');
         if ($person->getTreVoter() instanceof TREVoter) {
             $filter['voterRegistration'] = $person->getTreVoter()->getId();
@@ -137,6 +167,7 @@ class VotingSessionProvider
         if (!$this->checkExistingVotes($person, $this->getOnlineBallotBox())) {
             return;
         }
+
         return $this->save($this->createVotingSession($person));
     }
 
@@ -160,9 +191,11 @@ class VotingSessionProvider
                 throw new VotingTimeoutException();
             }
         }
-        $vote   = new Vote();
-        $vote->setAuthType($person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO
-                    : Vote::AUTH_VOTER_REGISTRATION);
+        $vote = new Vote();
+        $vote->setAuthType(
+            $person->getLoginCidadaoAccessToken() ? Vote::AUTH_LOGIN_CIDADAO
+                : Vote::AUTH_VOTER_REGISTRATION
+        );
         $vote->setBallotBox($ballotBox);
         $corede = $this->em->getRepository('PROCERGSVPRCoreBundle:Corede')
             ->find($person->getCorede()->getId());
@@ -179,11 +212,13 @@ class VotingSessionProvider
         if (strlen($person->getFirstName()) && isset($badges['login-cidadao.valid_email'])
             && $badges['login-cidadao.valid_email'] && isset($badges['login-cidadao.nfg_access_lvl'])
             && $badges['login-cidadao.nfg_access_lvl'] >= 2 && isset($badges['login-cidadao.voter_registration'])
-            && $badges['login-cidadao.voter_registration']) {
+            && $badges['login-cidadao.voter_registration']
+        ) {
             $vote->setNfgCpf(1);
         }
         $stepRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:Step');
         $vote->setLastStep($stepRepo->findNextPollStep($vote));
+
         return $vote;
     }
 
@@ -191,6 +226,7 @@ class VotingSessionProvider
     {
         $this->em->detach($vote);
         $this->updateVote($vote);
+
         return $vote;
     }
 
@@ -227,14 +263,15 @@ class VotingSessionProvider
         }
     }
 
-    public function persistVote(Vote $vote, Person $person)
+    public function persistVote(Vote $vote, Person $person = null)
     {
-        $pollOptionRepo    = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
-        $serializer        = $this->serializer;
-        $context           = SerializationContext::create()
+        /** @var PollOptionRepository $pollOptionRepo */
+        $pollOptionRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:PollOption');
+        $serializer = $this->serializer;
+        $context = SerializationContext::create()
             ->setSerializeNull(true)
             ->setGroups(array('vote'));
-        $options           = $pollOptionRepo->getPollOption($vote);
+        $options = $pollOptionRepo->getPollOption($vote);
         $serializedOptions = $serializer->serialize($options, 'json', $context);
         $vote->setPlainOptions($serializedOptions);
         $vote->close($this->passphrase);
@@ -264,5 +301,10 @@ class VotingSessionProvider
     public function updateVote(Vote $vote = null)
     {
         $this->session->set('vote', $vote);
+    }
+
+    public function setPassphrase($passphrase)
+    {
+        $this->passphrase = $passphrase;
     }
 }
