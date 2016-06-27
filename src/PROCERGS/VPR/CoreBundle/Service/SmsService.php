@@ -42,6 +42,9 @@ class SmsService implements LoggerAwareInterface
     protected $systemId;
 
     /** @var string */
+    protected $fromString;
+
+    /** @var string */
     protected $systemKey;
 
     /** @var LoggerInterface */
@@ -62,6 +65,7 @@ class SmsService implements LoggerAwareInterface
         $this->receiveUrl = $options['receive_url'];
         $this->statusUrl = $options['status_url'];
         $this->systemId = $options['system_id'];
+        $this->fromString = $options['from_string'];
         $this->serviceOrder = $options['service_order'];
 
         if (array_key_exists('authentication', $options)) {
@@ -235,7 +239,7 @@ class SmsService implements LoggerAwareInterface
     {
         $sms = new Sms();
         $sms
-            ->setFrom($this->systemId)
+            ->setFrom($this->fromString)
             ->setTo($to)
             ->setMessage($message);
 

@@ -81,7 +81,7 @@ class SmsVoteHandler
         $voterRegistration = $parsed[self::MESSAGE_VOTER_REGISTRATION];
 
         if (!VoterRegistrationValidator::isValid($voterRegistration)) {
-            throw new TREVoterException('Invalid voter registration: '.$voterRegistration);
+            throw new TREVoterException('Título de eleitor inválido: '.$voterRegistration);
         }
 
         /** @var TREVoter $treVoter */
@@ -92,7 +92,7 @@ class SmsVoteHandler
         );
 
         if (!($treVoter instanceof TREVoter)) {
-            throw new TREVoterException('Voter registration not found: '.$voterRegistration);
+            throw new TREVoterException('Título de eleitor não encontrado: '.$voterRegistration);
         }
 
         $poll = $ballotBox->getPoll();
@@ -137,7 +137,7 @@ class SmsVoteHandler
     /**
      * @param EntityManager $em
      * @param SmsService $smsService
-     * @return f array
+     * @return array
      * @throws \Exception
      */
     public function processPendingSms(

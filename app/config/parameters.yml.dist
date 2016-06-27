@@ -61,6 +61,8 @@ parameters:
     tpd_status_endpoint: %tpd_base_url%/status
     tpd_service_order: 0000
     tpd_system_id: SYS
+    # tpd_from_string: 10 characters
+    tpd_from_string: FROMSTRING
     tpd_system_key: TDPKeyHere
     tpd_sms_tag: VOTE
 
