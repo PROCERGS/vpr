@@ -20,7 +20,7 @@ framework:
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
-    trusted_proxies: ~
+    trusted_proxies: %trusted_proxies%
     session:         ~
     fragments:       ~
     http_method_override: true

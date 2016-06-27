@@ -72,3 +72,10 @@ parameters:
     test.tpd.to_phone.subscriber: 99999999
     test.tpd.from_phone.area_code: 99
     test.tpd.from_phone.subscriber: 999
+
+    # Trusted proxies (http://symfony.com/doc/current/cookbook/request/load_balancer_reverse_proxy.html)
+    trusted_proxies: []
+    # IPs allowed to access monitoring endpoint
+    allowed_monitors: [ 127.0.0.0/8 ]
+    # IPs allowed to call the Receive SMS endpoint
+    allowed_sms_receive: []
