@@ -107,7 +107,8 @@ class SmsVoteHandler
             ->setIpAddress($smsVote->getSender())
             ->setVoterRegistration($voterRegistration)
             ->addPollOption($translatedIds)
-            ->setCorede($treVoter->getCorede());
+            ->setCorede($treVoter->getCorede())
+            ->setCity($treVoter->getCity());
 
         return $vote;
     }
