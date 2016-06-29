@@ -537,7 +537,7 @@ class Vote
     }
 
     /**
-     * @param type $var
+     * @param City $var
      * @return \PROCERGS\VPR\CoreBundle\Entity\Vote
      */
     public function setCity($var)
