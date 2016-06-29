@@ -201,7 +201,14 @@ class VotingSessionProvider
             ->find($person->getCorede()->getId());
         $this->em->refresh($corede);
         $vote->setCorede($corede);
+
+        $city = $this->em->getRepository('PROCERGSVPRCoreBundle:City')
+            ->find($person->getCityOrTreCity()->getId());
+        $this->em->refresh($city);
+        $vote->setCity($city);
+
         $vote->setIpAddress($this->requestStack->getMasterRequest()->getClientIp());
+
         if ($person->getTreVoter() instanceof TREVoter) {
             $vote->setVoterRegistration($person->getTreVoter()->getId());
         }
