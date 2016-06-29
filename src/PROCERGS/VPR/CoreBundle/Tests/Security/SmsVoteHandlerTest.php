@@ -38,7 +38,7 @@ class SmsVoteHandlerTest extends KernelAwareTest
         $this->validSms = new SmsVote();
         $this->validSms
             ->setSender('+55 51 1234 56789')
-            ->setMessage('VOTE '.self::VOTER_REGISTRATION.' 1 2 # 5  6#3  % 6')
+            ->setMessage('VOTE '.self::VOTER_REGISTRATION.' 1 02 # 5  6#3  % 6')
             ->setReceivedAt(new \DateTime());
 
         $populator = new DatabasePopulator($this->em);
