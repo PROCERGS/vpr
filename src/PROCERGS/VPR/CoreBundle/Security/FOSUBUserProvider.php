@@ -116,8 +116,7 @@ class FOSUBUserProvider extends BaseClass
         if ($updateDate instanceof \DateTime) {
             $user->setLoginCidadaoUpdatedAt($updateDate);
         }
-        $user->setTreVoter(null);
-        $user->setCity(null);
+        
         if (array_key_exists('city', $userData) && is_numeric($userData['city']['id'])) {
             $cityRepo = $this->em->getRepository('PROCERGSVPRCoreBundle:City');
             $city = $cityRepo->findOneBy(array('ibgeCode' => $userData['city']['id']));
