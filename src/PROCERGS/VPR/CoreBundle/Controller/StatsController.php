@@ -635,6 +635,28 @@ class StatsController extends Controller
      */
     public function ballotBoxesAction()
     {
+        $em   = $this->getDoctrine()->getManager();
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+
+        $cacheKey = "ballotboxes_{$poll->getId()}";
+
+        $ballotBoxes = $this->getCached($cacheKey, 15,
+            function() use ($poll, $em) {
+            return $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
+                    ->getActivationStatistics($poll);
+        });
+        $data = $this->groupBallotBoxes($ballotBoxes);
+        $total = count($ballotBoxes);
+
+        return compact('data', 'total');
+    }
+
+    /**
+     * @Route("/stats/ballotboxes/admin", name="vpr_stats_ballotboxes_admin")
+     * @Template
+     */
+    public function ballotBoxesAdminAction()
+    {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $em   = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
@@ -647,7 +669,6 @@ class StatsController extends Controller
                     ->getActivationStatistics($poll);
         });
         $data = $this->groupBallotBoxes($ballotBoxes);
-
         $total = count($ballotBoxes);
 
         return compact('data', 'total');
