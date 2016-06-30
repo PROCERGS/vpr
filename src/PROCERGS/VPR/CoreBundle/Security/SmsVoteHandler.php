@@ -16,6 +16,7 @@ use PROCERGS\VPR\CoreBundle\Entity\TREVoterRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Exception\SmsServiceException;
 use PROCERGS\VPR\CoreBundle\Exception\TREVoterException;
+use PROCERGS\VPR\CoreBundle\Exception\VotingTimeoutException;
 use PROCERGS\VPR\CoreBundle\Helper\PollOptionHelper;
 use PROCERGS\VPR\CoreBundle\Service\SmsService;
 use PROCERGS\VPR\CoreBundle\Validation\Constraints\VoterRegistrationValidator;
@@ -156,25 +157,41 @@ class SmsVoteHandler
             return $votes;
         }
 
-        $ballotBox = $this->votingSessionProvider->getSmsBallotBox();
-        $this->votingSessionProvider->setPassphrase($ballotBox->getSecret());
+        $smsVotes = $this->getSmsVoteFromSms($pendingMessages);
 
-        foreach ($pendingMessages as $sms) {
-            $to = BrazilianPhoneNumberFactory::createFromE164("+{$sms->de}");
+        $pollOpen = true;
+        $ballotBox = null;
+        try {
+            $this->votingSessionProvider->getActivePollOrFail();
+
+            $ballotBox = $this->votingSessionProvider->getSmsBallotBox();
+            $this->votingSessionProvider->setPassphrase($ballotBox->getSecret());
+
+            if (false === $this->isBallotBoxOpen($ballotBox, $pollOpen)) {
+                $pollOpen = false;
+            }
+        } catch (VotingTimeoutException $e) {
+            $pollOpen = false;
+        }
+
+        foreach ($smsVotes as $smsVote) {
+            $to = BrazilianPhoneNumberFactory::createFromE164($smsVote->getSender());
             try {
-                $smsVote = TPDSmsVoteFactory::createSmsVote($sms);
+                if ($pollOpen) {
+                    $vote = $this->getVoteFromSmsVote($smsVote, $ballotBox);
+                    $votes[] = $vote;
 
-                $vote = $this->getVoteFromSmsVote($smsVote, $ballotBox);
-                $votes[] = $vote;
+                    $em->beginTransaction();
+                    $this->votingSessionProvider->persistVote($vote);
 
-                $em->beginTransaction();
-                $this->votingSessionProvider->persistVote($vote);
-
-                $transactionId = $smsService->easySend($to, "Seu voto foi registrado. Agradecemos a participação.");
-                $smsVote->setTransactionId($transactionId);
+                    $transactionId = $smsService->easySend($to, "Seu voto foi registrado. Agradecemos a participação.");
+                    $smsVote->setTransactionId($transactionId);
+                }
                 $em->persist($smsVote);
                 $em->flush($smsVote);
-                $em->commit();
+                if ($pollOpen) {
+                    $em->commit();
+                }
             } catch (\InvalidArgumentException $e) {
                 continue;
             } catch (TREVoterException $e) {
@@ -186,5 +203,45 @@ class SmsVoteHandler
         }
 
         return $votes;
+    }
+
+    /**
+     * Creates SmsVotes from SMS messages
+     *
+     * @param array $messages
+     * @return SmsVote[]
+     */
+    protected function getSmsVoteFromSms($messages = [])
+    {
+        $smsVotes = [];
+        foreach ($messages as $sms) {
+            $smsVote = TPDSmsVoteFactory::createSmsVote($sms);
+            $smsVotes[] = $smsVote;
+        }
+
+        return $smsVotes;
+    }
+
+    /**
+     * @param BallotBox $ballotBox
+     * @param bool $pollOpen
+     * @return bool
+     */
+    protected function isBallotBoxOpen(BallotBox $ballotBox, $pollOpen)
+    {
+        if ($ballotBox->getOpeningTime() === null
+            && $ballotBox->getClosingTime() === null
+        ) {
+            return $pollOpen;
+        }
+
+        $now = new \DateTime();
+        if ($ballotBox->getOpeningTime() > $now
+            || $ballotBox->getClosingTime() < $now
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }
