@@ -479,11 +479,16 @@ class StatsController extends Controller
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
         $this->updateCacheAction();
         $em       = $this->getDoctrine()->getManager();
+
+        $poll     = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+
         $entity   = $em->createQueryBuilder()
                 ->select('v')
                 ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+                ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
+                ->where('b.poll = :poll')
                 ->orderBy('v.totalVotes', 'DESC')
-                ->setMaxResults(1)->getQuery()->getOneOrNullResult();
+                ->getQuery()->setParameters(array("poll" => $poll->getId()))->setMaxResults(1)->getOneOrNullResult();
         $response = array();
         if ($entity) {
             $response['created_at'] = $entity->getCreatedAt();
@@ -500,11 +505,14 @@ class StatsController extends Controller
     {
         $this->updateCacheAction();
         $em    = $this->getDoctrine()->getManager();
+        $poll     = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
         $query = $em->createQueryBuilder()
             ->select('v')
             ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
+            ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
+            ->where('b.poll = :poll')
             ->orderBy('v.totalVotes', 'DESC')
-            ->getQuery();
+            ->getQuery()->setParameters(array("poll" => $poll->getId()));
 
         $results = $query->getResult();
 
