@@ -285,3 +285,5 @@ admin.admin_transfer_poll_option: Transfere cedulas
 admin.ballotbox_sms: Urna SMS
 Stats: Apuração
 Reports: Relatórios
+admin.votes_sms: Votos SMS
+admin.voters_sms: Votantes SMS
