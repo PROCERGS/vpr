@@ -45,7 +45,7 @@ class SmsVote
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="receivedAt", type="datetime")
+     * @ORM\Column(name="received_at", type="datetime")
      */
     private $receivedAt;
 
