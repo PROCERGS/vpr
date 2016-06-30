@@ -38,10 +38,24 @@ class BallotBoxController extends Controller
             if ($ballotBox) {
                 if ($entity->getId()) {
                     if ($entity->getId() != $ballotBox->getId()) {
-                        throw new \Exception("Ja tem um urna online para essa votacao");
+                        throw new \Exception("Já existe um urna online para essa votacao");
                     }
                 } else {
-                    throw new \Exception("Ja tem um urna online para essa votacao");
+                    throw new \Exception("Já existe um urna online para essa votacao");
+                }
+            }
+        }  else if($entity->getIsSms()) {
+            $ballotBox = $em->getRepository(
+                'PROCERGSVPRCoreBundle:BallotBox'
+            )->hasSms($entity->getPoll());
+
+            if ($ballotBox) {
+                if ($entity->getId()) {
+                    if ($entity->getId() != $ballotBox->getId()) {
+                        throw new \Exception("Já existe uma urna sms para essa votacao");
+                    }
+                } else {
+                    throw new \Exception("Já existe uma urna sms para essa votacao");
                 }
             }
         } else {
