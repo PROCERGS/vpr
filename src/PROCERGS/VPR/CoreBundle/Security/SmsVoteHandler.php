@@ -197,7 +197,9 @@ class SmsVoteHandler
             } catch (TREVoterException $e) {
                 $smsService->easySend($to, $e->getMessage());
             } catch (\Exception $e) {
-                $em->rollback();
+                if ($pollOpen) {
+                    $em->rollback();
+                }
                 throw $e;
             }
         }
