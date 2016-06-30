@@ -420,10 +420,10 @@ class Person extends BaseUser implements OAuthAwareUserProviderInterface
         $return['item']['full_name']          = strlen($this->getFirstName()) > 0;
         $return['item']['email']              = isset($badges['login-cidadao.valid_email'])
             && $badges['login-cidadao.valid_email'];
-        $return['item']['nfg_access_lvl']     = isset($badges['login-cidadao.nfg_access_lvl'])
-            && $badges['login-cidadao.nfg_access_lvl'] >= 2;
-        $return['item']['voter_registration'] = isset($badges['login-cidadao.voter_registration'])
-            && $badges['login-cidadao.voter_registration'];
+        $return['item']['nfg_access_lvl']     = isset($badges['nfg.nfg_access_lvl'])
+            && $badges['nfg.nfg_access_lvl'] >= 2;
+        $return['item']['voter_registration'] = isset($badges['nfg.voter_registration'])
+            && $badges['nfg.voter_registration'];
         if (!is_null($this->getLoginCidadaoUpdatedAt())) {
             $return['updated_at'] = $this->getLoginCidadaoUpdatedAt()->format('Y-m-d H:i:s');
         } else {

@@ -59,8 +59,10 @@
                     <th width="30%">{{ 'admin.corede'|trans }}</th>
                     <th width="15%">{{ 'admin.votes_online'|trans }}</th>
                     <th width="15%">{{ 'admin.votes_offline'|trans }}</th>
+                    <th width="15%">{{ 'admin.votes_sms'|trans }}</th>
                     <th width="15%">{{ 'admin.voters_online'|trans }}</th>
                     <th width="15%">{{ 'admin.voters_offline'|trans }}</th>
+                    <th width="15%">{{ 'admin.voters_sms'|trans }}</th>
                 </tr>
             </thead>
             <tbody id="admin-poll-list">
@@ -70,8 +72,10 @@
                             <td><a href="{{ path('admin_stats_corede', {'poll' : poll.id, 'corede' : corede.corede_id}) }}">{{ corede.corede }}</a></td>
                             <td>{{ corede.votes_online }}</td>
                             <td>{{ corede.votes_offline }}</td>
+                            <td>{{ corede.votes_sms }}</td>
                             <td>{{ corede.voters_online }}</td>
                             <td>{{ corede.voters_offline }}</td>
+                            <td>{{ corede.voters_sms }}</td>
                         </tr>
                     {% endfor %}
                 {% else %}

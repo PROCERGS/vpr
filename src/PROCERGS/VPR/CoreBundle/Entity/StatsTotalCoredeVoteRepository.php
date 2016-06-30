@@ -49,6 +49,7 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
              SELECT
   sum(b.tot_votes_online) AS votes_online,
         sum(b.tot_votes_offline) AS votes_offline,
+            sum(b.tot_votes_sms) AS votes_sms,
         b.corede_id,
         c.name
    FROM stats_prev_ppp b
@@ -74,6 +75,7 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
              SELECT
   sum(b.tot_votes_online) AS votes_online,
         sum(b.tot_votes_offline) AS votes_offline,
+        sum(b.tot_votes_sms) AS votes_sms,
         b.city_id,
         city.name
    FROM stats_prev_ppp b
@@ -101,6 +103,7 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
              SELECT
   sum(b.tot_voters_online ) AS voters_online,
         sum(b.tot_voters_offline) AS voters_offline,
+            sum(b.tot_voters_sms) AS voters_sms,
         b.corede_id,
         c.name
    FROM stats_prev_ppp b
@@ -125,6 +128,7 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
              SELECT
   sum(b.tot_voters_online ) AS voters_online,
         sum(b.tot_voters_offline) AS voters_offline,
+            sum(b.tot_voters_sms) AS voters_sms,
         b.city_id,
         city.name
    FROM stats_prev_ppp b

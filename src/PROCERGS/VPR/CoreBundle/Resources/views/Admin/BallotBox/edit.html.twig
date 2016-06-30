@@ -106,7 +106,7 @@
         <label class="col-sm-2 control-label">{{ 'admin.city'|trans }}</label>
         <div class="col-sm-5">
             {{ form_errors(edit_form.city) }}
-            {{ form_widget(edit_form.city, {'attr': {'class': 'form-control', 'data-val': lastBallotbox.city.id }}) }}
+            {{ form_widget(edit_form.city, {'attr': {'class': 'form-control', 'data-val': lastBallotbox.city ? lastBallotbox.city.id : null }}) }}
         </div>
     </div>
 

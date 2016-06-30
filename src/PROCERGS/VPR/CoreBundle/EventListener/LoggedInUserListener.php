@@ -17,7 +17,7 @@ class LoggedInUserListener
 {
 
     const CITY_SELECTION_ROUTE = 'vpr_city_selection';
-    const VPR_HOME_ROUTE = 'vpr_city_selection';
+    const VPR_HOME_ROUTE = 'procergsvpr_core_homepage';
 
     /** @var TokenStorage */
     private $tokenStorage;

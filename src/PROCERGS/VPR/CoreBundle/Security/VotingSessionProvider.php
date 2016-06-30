@@ -217,9 +217,9 @@ class VotingSessionProvider
         }
         $badges = $person->getBadges();
         if (strlen($person->getFirstName()) && isset($badges['login-cidadao.valid_email'])
-            && $badges['login-cidadao.valid_email'] && isset($badges['login-cidadao.nfg_access_lvl'])
-            && $badges['login-cidadao.nfg_access_lvl'] >= 2 && isset($badges['login-cidadao.voter_registration'])
-            && $badges['login-cidadao.voter_registration']
+            && $badges['login-cidadao.valid_email'] && isset($badges['nfg.nfg_access_lvl'])
+            && $badges['nfg.nfg_access_lvl'] >= 2 && isset($badges['nfg.voter_registration'])
+            && $badges['nfg.voter_registration']
         ) {
             $vote->setNfgCpf(1);
         }

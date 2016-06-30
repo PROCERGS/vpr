@@ -358,13 +358,12 @@ class PollController extends Controller
 
         $coredes = null;
         foreach ($votes as $vote) {
-            $corede = $coredeRepo->find($vote['corede_id']);
-            $coredeId = $corede->getId();
-
-            $coredes[$coredeId]['corede_id'] = $corede->getId();
-            $coredes[$coredeId]['corede'] = $corede->getName();
+            $coredeId = $vote['corede_id'];
+            $coredes[$coredeId]['corede_id'] = $vote['corede_id'];
+            $coredes[$coredeId]['corede'] = $vote['name'];
             $coredes[$coredeId]['votes_online'] = $vote['votes_online'];
             $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
+            $coredes[$coredeId]['votes_sms'] = $vote['votes_sms'];
         }
 
         $voters    = $statsRepo->findTotalVotersByPoll($poll->getId());
@@ -372,6 +371,7 @@ class PollController extends Controller
             $coredeId = $vote['corede_id'];
             $coredes[$coredeId]['voters_online'] = $vote['voters_online'];
             $coredes[$coredeId]['voters_offline'] = $vote['voters_offline'];
+            $coredes[$coredeId]['voters_sms'] = $vote['voters_sms'];
         }
 
         return array(
@@ -434,14 +434,13 @@ class PollController extends Controller
         $votes = $statsRepo->findTotalVotesByPollAndCorede($poll, $corede->getId());
 
         $cities = null;
-        foreach ($votes as $vote) {
-            $city = $cityRepo->find($vote['city_id']);
-            $cityId = $city->getId();
-
-            $cities[$cityId]['city_id'] = $city->getId();
-            $cities[$cityId]['city'] = $city->getName();
+        foreach ($votes as $vote) {            
+            $cityId = $vote['city_id'];
+            $cities[$cityId]['city_id'] = $vote['city_id'];
+            $cities[$cityId]['city'] = $vote['name'];
             $cities[$cityId]['votes_online'] = $vote['votes_online'];
             $cities[$cityId]['votes_offline'] = $vote['votes_offline'];
+            $cities[$cityId]['votes_sms'] = $vote['votes_sms'];
         }
 
         $voters    = $statsRepo->findTotalVotersByPollAndCorede($poll, $corede->getId());
@@ -449,6 +448,7 @@ class PollController extends Controller
             $cityId = $vote['city_id'];
             $cities[$cityId]['voters_online'] = $vote['voters_online'];
             $cities[$cityId]['voters_offline'] = $vote['voters_offline'];
+            $cities[$cityId]['voters_sms'] = $vote['voters_sms'];
         }
 
         return array(

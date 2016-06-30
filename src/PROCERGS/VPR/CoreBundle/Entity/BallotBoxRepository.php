@@ -56,10 +56,20 @@ class BallotBoxRepository extends EntityRepository
     {
     		return $this->createQueryBuilder('b')
     	->select('b')
-    	->where('b.isOnline = true and b.poll = :poll')
-    	->andWhere('b.isOnline = true')
+    	->where('b.isOnline = true')
+        ->andWhere('b.poll = :poll')
     	->setParameters(array('poll' => $poll))
     	->getQuery()->getOneOrNullResult();
+    }
+
+    public function hasSms(Poll $poll)
+    {
+            return $this->createQueryBuilder('b')
+        ->select('b')
+        ->where('b.isSms = true')
+        ->andWhere('b.poll = :poll')
+        ->setParameters(array('poll' => $poll))
+        ->getQuery()->getOneOrNullResult();
     }
 
     public function findLastBallotBox()

@@ -37,7 +37,7 @@ class PersonController extends Controller
             $data['city'] = $person->getCity()->getName();
         }
         $form = $this->createForm(new CitySelectionType());
-        
+
         if (!$person->getFirstName()) {
             $form->add('firstname', 'text', array(
                 'required' => false
@@ -54,7 +54,7 @@ class PersonController extends Controller
                 if(isset($data['firstname']) && strlen($data['firstname'])){
                     $person->setFirstName($data['firstname']);
                 }
-                
+
                 $dispatcher = $this->container->get('event_dispatcher');
 
                 $event = new PersonEvent($person, $data['voterRegistration']);
@@ -85,10 +85,11 @@ class PersonController extends Controller
                 if(isset($city)){
                     $person->setCity($city);
                 }
-                
+
                 //$this->get('session')->set('city_id', $city->getId());
                 $userManager = $this->get('fos_user.user_manager');
-                $userManager->updateUser($person);
+                $userManager->updateUser($person, true);
+                $userManager->reloadUser($person);
 
                 $url = $this->generateUrl('procergsvpr_core_homepage');
                 return $this->redirect($url);
