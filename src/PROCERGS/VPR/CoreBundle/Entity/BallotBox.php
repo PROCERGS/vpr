@@ -733,6 +733,14 @@ class BallotBox
     }
 
     /**
+     * @return boolean
+     */
+    public function getIsSms()
+    {
+        return $this->isSms;
+    }
+
+    /**
      * @param boolean $isSms
      * @return BallotBox
      */
