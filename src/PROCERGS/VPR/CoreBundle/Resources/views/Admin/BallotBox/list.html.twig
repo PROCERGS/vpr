@@ -7,6 +7,9 @@
         <button class="btn btn-info btn-form-type" data-type="2" data-toggle="modal" data-target="#myModal">Enviar
             senha
         </button>
+        <button class="btn btn-info btn-form-type" data-type="3" data-toggle="modal" data-target="#myModal">Enviar
+            mensagem
+        </button>
     </div>
 
 
@@ -26,6 +29,17 @@
                                 <option value="1">Enviar para a seleção</option>
                                 <option value="2">Enviar para todos da pesquisa</option>
                             </select>
+                        </div>
+                        <div style="display:none;" id="message-send-group">
+                        <div class="form-group">
+                            <label>Mensagem EMAIL:</label>
+                            <textarea class="form-control message-send-content" name="message_email" id="message-email"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Mensagem SMS*:</label>
+                            <textarea maxlength="139" class="form-control message-send-content" name="message_sms" id="message-sms"></textarea>
+                            <div class="text-right">*Apenas 139 caracteres</div>
+                        </div>
                         </div>
                         <div class="form-group text-right">
                             <button type="button" class="btn btn-primary btn-selection-type" value="1">Enviar</button>

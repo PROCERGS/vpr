@@ -298,9 +298,13 @@ class BallotBoxController extends Controller
                     if ($params['message_type'] == SentMessage::TYPE_REQUISICAO) {
                         $message->setSubject('Autorizacao para urna offline');
                         $message->setBody(sprintf($msg2, $result['apuration_time'], $result['content']), 'text/html');
-                    } else {
+                    } elseif ($params['message_type'] == SentMessage::TYPE_SENHA) {
                         $message->setSubject('Urgente! Retorno de urna offline');
                         $message->setBody(sprintf($msg1, $result['apuration_time'], $result['content']), 'text/html');
+                    } else {
+                        $message->setSubject('Atencao');
+                        self::trataMensageVazia($params['message_email']);
+                        $message->setBody($params['message_email'], 'text/plain');                        
                     }
                     $this->get('mailer')->send($message);
                 } catch (\Exception $e) {
@@ -340,8 +344,11 @@ class BallotBoxController extends Controller
                         ->setSubscriberNumber($result['fone']);
                     if ($params['message_type'] == SentMessage::TYPE_REQUISICAO) {
                         $message = sprintf($msg2, $result['pin'], $result['secret'], $result['closing_time']);
-                    } else {
+                    } elseif ($params['message_type'] == SentMessage::TYPE_SENHA) {
                         $message = sprintf($msg1, $result['pin'], $result['apuration_time']);
+                    } else {
+                        self::trataMensageVazia($params['message_sms']);
+                        $message = $params['message_sms'];
                     }
                     $protocolo = $smsService->easySend($to, $message);
                 } catch (\Exception $e) {
@@ -364,6 +371,17 @@ class BallotBoxController extends Controller
         }
 
         return $this->redirectToRoute('admin_ballotbox');
+    }
+    
+    private static function trataMensageVazia(&$val)
+    {
+        if (!isset($val)) {
+            throw new \Exception("Sem mensagem");
+        }
+        $val = trim($val);
+        if (!strlen($val)) {
+            throw new \Exception("Sem mensagem");
+        }
     }
 
     /**

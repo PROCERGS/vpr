@@ -101,12 +101,26 @@
         $(".btn-form-type").on("click", function() {
             var data = $(this).data("type");
             $("#message-type").val(data);
+            $("#message-send-group").hide();
+            if ($("#message-type").val() == 3) {
+                $("#message-send-group").show();
+            }
         });
         $(".btn-selection-type").click(function (e) {
             $('#myModal').modal('hide');
             if ($(this).val() == 1) {
                 if (!$('#ballotbox-items-form input.ballot-check:checked').length) {
                     alert('Por favor, selecione alguma urna');
+                    return;
+                }
+            }
+            if ($("#message-type").val() == 3) {
+                if (!$('#message-sms').val().trim().length) {
+                    alert('Por favor, Coloque um mensagem para sms');
+                    return;
+                }
+                if (!$('#message-email').val().trim().length) {
+                    alert('Por favor, Coloque um mensagem para email');
                     return;
                 }
             }

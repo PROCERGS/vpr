@@ -16,6 +16,7 @@ class SentMessage
     const MODE_SMS = 2;
     const TYPE_SENHA = 1;
     const TYPE_REQUISICAO = 2;
+    const TYPE_GENERICA = 3;
     
     /**
      * @ORM\ManyToOne(targetEntity="BallotBox")
