@@ -258,7 +258,7 @@ class StatsController extends Controller
             ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
             ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
             ->where('b.poll = :poll')
-            ->getQuery()->setParameters(array("poll" => 4))->setMaxResults(1)->getOneOrNullResult();
+            ->getQuery()->setParameters(array("poll" => $poll->getId()))->setMaxResults(1)->getOneOrNullResult();
 
         $encoders    = array(new JsonEncoder());
         $normalizers = array(new GetSetMethodNormalizer());
