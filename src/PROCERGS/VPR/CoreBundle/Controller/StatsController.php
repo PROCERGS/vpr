@@ -407,32 +407,49 @@ class StatsController extends Controller
         $poll      = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 
         $created_at = new \DateTime();
-
-        $coredes = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
-        foreach ($coredes as $corede) {
-            $results = $statsRepo->findTotalOptionVoteByCorede($corede, $poll);
-
-            foreach ($results as $line) {
-                $entity = $statsRepo->findOneBy(array('coredeId' => $line['coredeId'],
-                    'optionId' => $line['optionId']));
-                if (!$entity) {
-                    $entity = new StatsTotalOptionVote();
-                }
-
-                $entity->setPollId($line['pollId']);
-                $entity->setCoredeId($line['coredeId']);
-                $entity->setOptionStepId($line['stepId']);
-                $entity->setOptionNumber($line['optionNumber']);
-                $entity->setOptionTitle($line['optionTitle']);
-                $entity->setOptionId($line['optionId']);
-                $entity->setTotalVotes($line['totalVotes']);
-                $entity->setCreatedAt($created_at);
-
-                $em->persist($entity);
-                $em->flush();
-            }
+        /**
+         * @var \Doctrine\DBAL\Connection $connection
+         */
+        $connection = $em->getConnection();        
+        try {
+            $connection->beginTransaction();
+            $sql = "delete from stats_total_option_vote where poll_id = ? " ;
+            $stmt1 = $connection->prepare($sql);
+            $stmt1->execute(array($poll->getId()));
+            $sql = "
+            with tb1 as (
+                SELECT s0_.poll_id
+                , s0_.corede_id
+                , s0_.poll_option_id
+                , count(s0_.poll_option_id) tot
+                FROM stats_option_vote s0_
+                WHERE                
+                s0_.poll_id = ?
+                group by s0_.poll_id
+                , s0_.corede_id
+                , s0_.poll_option_id
+                )
+                insert into stats_total_option_vote (id, poll_id, corede_id, option_step_id, option_id, option_number, option_title, total_votes, created_at)
+                SELECT
+                nextval('stats_total_option_vote_id_seq')
+                ,s0_.poll_id
+                , s0_.corede_id
+                , p2_.step_id
+                , p2_.id
+                , p2_.category_sorting
+                , p2_.title
+                , sum(s0_.tot)
+                , now_test()
+                FROM tb1 s0_
+                INNER JOIN poll_option p2_ ON (s0_.poll_option_id = p2_.id)
+                GROUP BY s0_.poll_id, s0_.corede_id, p2_.step_id, p2_.id, p2_.category_sorting, p2_.title
+            ";
+            $stmt1 = $connection->prepare($sql);
+            $stmt1->execute(array($poll->getId()));            
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollBack();
         }
-
         $response = new JsonResponse();
         $response->setData(array(
             'success' => true,
