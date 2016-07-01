@@ -18,42 +18,6 @@ class PersonController extends Controller
 {
 
     /**
-     * @Route("/", name="admin_person")
-     * @Route("/search", name="admin_person_search")
-     * @Method("GET")
-     * @Template("PROCERGSVPRCoreBundle:Admin/Person:index.html.twig")
-     */
-    public function searchAction(Request $request)
-    {
-        $query  = $request->get('query');
-        $search = $this->getPersonRepository()
-            ->getfindLoginCidadaoQuery()
-            ->join('p.treVoter', 't')
-            ->orderBy('p.firstName');
-
-        if ($query !== null) {
-            $search->andWhere(
-                    $search->expr()->orX(
-                        'LOWER(p.firstName) LIKE LOWER(:name)',
-                        'LOWER(t.name) LIKE LOWER(:name)', 't.id = :query'
-                    )
-                )
-                ->setParameter('name', "%$query%")
-                ->setParameter('query', $query);
-        }
-
-        $paginator = $this->get('knp_paginator');
-        $entities  = $paginator->paginate(
-            $search->getQuery(), $this->get('request')->query->get('page', 1),
-            20
-        );
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-
-    /**
      * Finds and displays a Person entity.
      *
      * @Route("/{id}/edit", name="admin_person_edit")

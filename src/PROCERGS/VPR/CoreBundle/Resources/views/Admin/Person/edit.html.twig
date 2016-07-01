@@ -6,9 +6,7 @@
 {% block content -%}
     <div class="row navbar">
         <div class="col-md-3 col-sm-12">
-            <a class="btn btn-default" href="{{ path('admin_person', backParams) }}" role="button">
-                <span class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}
-            </a>
+
         </div>
         {{ include('PROCERGSVPRCoreBundle:Admin/Person:search.html.twig', { 'widget_only': true, 'class': 'col-md-9 col-sm-12' }) }}
     </div>
