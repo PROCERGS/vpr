@@ -289,3 +289,7 @@ admin.votes_sms: Votos SMS
 admin.voters_sms: Votantes SMS
 Partial results online by Corede: Votos por Corede
 Partial results online by City: Votos por Cidade
+admin.tot_pop: Total Eleitores
+admin.tot: Total votantes
+admin.perc: Perc. votantes
+admin.stats2: Apuracao Parcial

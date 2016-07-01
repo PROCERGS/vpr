@@ -1,0 +1,57 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'admin.poll'|trans %}
+{% set actionName = 'admin.stats'|trans %}
+
+{% block content -%}
+
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-{{type}} alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('admin_stats2') }}" role="button"><span
+                    class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover records_list">
+            <thead>
+                <tr>
+                    <th colspan="7"><h4>Corede: {{ corede.name }}</h4></th>
+                </tr>
+                <tr>
+                    <th width="30%">{{ 'admin.city'|trans }}</th>
+                    <th width="15%">{{ 'admin.voters_online'|trans }}</th>
+                    <th width="15%">{{ 'admin.voters_offline'|trans }}</th>
+                    <th width="15%">{{ 'admin.voters_sms'|trans }}</th>
+                    <th width="15%">{{ 'admin.tot_pop'|trans }}</th>
+                    <th width="15%">{{ 'admin.tot'|trans }}</th>
+                    <th width="15%">{{ 'admin.perc'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody id="admin-poll-list">
+                {% if(cities) %}
+                    {% for city in cities %}
+                        <tr>
+                            <td>{{ city.city }}</td>
+                            <td>{{ city.voters_online }}</td>
+                            <td>{{ city.voters_offline }}</td>
+                            <td>{{ city.voters_sms }}</td>
+                            <td>{{ city.tot_pop }}</td>
+                            <td>{{ city.tot }}</td>
+                            <td>{{ city.perc }}</td>                            
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                        <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
