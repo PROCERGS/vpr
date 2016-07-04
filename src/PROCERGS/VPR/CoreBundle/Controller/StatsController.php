@@ -410,7 +410,7 @@ class StatsController extends Controller
         /**
          * @var \Doctrine\DBAL\Connection $connection
          */
-        $connection = $em->getConnection();        
+        $connection = $em->getConnection();
         try {
             $connection->beginTransaction();
             $sql = "delete from stats_total_option_vote where poll_id = ? " ;
@@ -423,7 +423,7 @@ class StatsController extends Controller
                 , s0_.poll_option_id
                 , count(s0_.poll_option_id) tot
                 FROM stats_option_vote s0_
-                WHERE                
+                WHERE
                 s0_.poll_id = ?
                 group by s0_.poll_id
                 , s0_.corede_id
@@ -445,7 +445,7 @@ class StatsController extends Controller
                 GROUP BY s0_.poll_id, s0_.corede_id, p2_.step_id, p2_.id, p2_.category_sorting, p2_.title
             ";
             $stmt1 = $connection->prepare($sql);
-            $stmt1->execute(array($poll->getId()));            
+            $stmt1->execute(array($poll->getId()));
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();
@@ -693,6 +693,7 @@ class StatsController extends Controller
             return $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
                     ->getActivationStatistics($poll);
         });
+
         $data = $this->groupBallotBoxes($ballotBoxes);
         $total = count($ballotBoxes);
 
@@ -738,16 +739,32 @@ class StatsController extends Controller
         $cached  = $cache->get($cacheKey);
         $locked  = $cache->get($cacheLockKey);
         $expired = !$cached || $cached['expires'] < time();
-        if ($expired && !$locked) {
-            $cache->set($cacheLockKey, date('Y-m-d H:i:s'));
-            $data = $fetchDataCallback();
+        if ($expired) {
+            if (!$locked) {
+                $go = true;
+            } else {
+                $t = time() - $cached['expires'];
 
-            $cached = array(
-                'expires' => time() + $timeout,
-                'data' => $data
-            );
-            $cache->set($cacheKey, $cached, MEMCACHE_COMPRESSED);
-            $cache->set($cacheLockKey, null);
+                if($t > ($timeout * 2)) {
+                    $go = true;
+                    $cache->set($cacheLockKey, null);
+                } else {
+                    $go = false;
+                }
+            }
+
+            if ($go) {
+                $cache->set($cacheLockKey, date('Y-m-d H:i:s'));
+                $data = $fetchDataCallback();
+
+                $cached = array(
+                    'expires' => time() + $timeout,
+                    'data' => $data
+                );
+                $cache->set($cacheKey, $cached, MEMCACHE_COMPRESSED);
+                $cache->set($cacheLockKey, null);
+            }
+
         } else {
             $data = $cached['data'];
         }

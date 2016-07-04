@@ -72,7 +72,7 @@
                 title: 'Votos por Minuto',
                 width: '100%',
                 legend: {position: 'none'},
-                chart: {subtitle: 'Consulta Popular 2015 - 19/08/2015'},
+                chart: {subtitle: 'Consulta Popular'},
                 bar: {groupWidth: "90%"}
             };
 
@@ -91,7 +91,7 @@
                     var time = rawData[index].time;
                     var votes = rawData[index].votes;
                     chartData.push([new Date(time), votes]);
-                    total += votes;
+                    total += (votes * 1);
                     if (index === rawData.length - 2) {
                         $('.last-minute').html(time.split(' ')[1]);
                         $('.vpm').html(votes);
