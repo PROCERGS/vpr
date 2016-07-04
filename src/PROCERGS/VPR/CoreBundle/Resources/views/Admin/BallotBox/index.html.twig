@@ -108,7 +108,7 @@
         });
         $(".btn-selection-type").click(function (e) {
             $('#myModal').modal('hide');
-            if ($(this).val() == 1) {
+            if ($('#selection-type').val() == 1) {
                 if (!$('#ballotbox-items-form input.ballot-check:checked').length) {
                     alert('Por favor, selecione alguma urna');
                     return;
