@@ -3,6 +3,7 @@
 namespace PROCERGS\VPR\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +31,9 @@ class StatsController extends Controller
      * @Route("/reports/corede/{coredeId}/{pollId}", name="vpr_report_voted_options_by_corede")
      * @Template()
      */
-    public function reportOptionsCoredeAction($coredeId, $pollId)
+    public function reportOptionsCoredeAction(Request $request, $coredeId, $pollId)
     {
+        $this->checkAccess($request);
         $this->updateCacheAction();
 
         $em        = $this->getDoctrine()->getManager();
@@ -93,8 +95,9 @@ class StatsController extends Controller
      * @Route("/reports/city/{cityId}/{pollId}", name="vpr_report_voted_options_by_city")
      * @Template()
      */
-    public function reportOptionsCityAction($cityId, $pollId)
+    public function reportOptionsCityAction(Request $request, $cityId, $pollId)
     {
+        $this->checkAccess($request);
         $this->updateCacheAction();
         $em           = $this->getDoctrine()->getManager();
         $pollRepo     = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
@@ -347,8 +350,9 @@ class StatsController extends Controller
     /**
      * @Route("/stats/update_total_votes", name="vpr_stats_update_total_votes")
      */
-    public function updateTotalVotesAction()
+    public function updateTotalVotesAction(Request $request)
     {
+        $this->checkAccess($request);
         $em        = $this->getDoctrine()->getManager();
         $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
         $pollRepo  = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
@@ -400,8 +404,9 @@ class StatsController extends Controller
     /**
      * @Route("/stats/update_total_option_votes", name="vpr_stats_update_total_option_votes")
      */
-    public function updateTotalOptionVotesAction()
+    public function updateTotalOptionVotesAction(Request $request)
     {
+        $this->checkAccess($request);
         $em        = $this->getDoctrine()->getManager();
         $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
         $poll      = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
@@ -463,8 +468,9 @@ class StatsController extends Controller
     /**
      * @Route("/stats/votes_by_corede", name="vpr_stats_votes_by_corede")
      */
-    public function votesByCoredeAction()
+    public function votesByCoredeAction(Request $request)
     {
+        $this->checkAccess($request);
         $this->updateCacheAction();
         $em = $this->getDoctrine()->getManager();
 
@@ -518,8 +524,9 @@ class StatsController extends Controller
      * @Route("/stats/graphics/query1", name="vpr_stats_graphics_query1")
      * @Template()
      */
-    public function query1Action()
+    public function query1Action(Request $request)
     {
+        $this->checkAccess($request);
         $this->updateCacheAction();
         $em    = $this->getDoctrine()->getManager();
         $poll     = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
@@ -579,8 +586,9 @@ class StatsController extends Controller
      * @Route("/reports/update/corede", name="vpr_update_corede_report_cache")
      * @template()
      */
-    public function updateCacheAction()
+    public function updateCacheAction(Request $request)
     {
+        $this->checkAccess($request);
         if ($this->shouldUpdateCache()) {
             $cache = $this->get('session.memcached');
 
@@ -609,8 +617,9 @@ class StatsController extends Controller
      * @Route("/stats/live", name="vpr_stats_votes_per_minute_live")
      * @Template
      */
-    public function votesPerMinuteAction()
+    public function votesPerMinuteAction(Request $request)
     {
+        $this->checkAccess($request);
         $data = $this->getVotesPerMinute();
 
         return compact('data');
@@ -620,8 +629,9 @@ class StatsController extends Controller
      * @REST\Get("/stats/live/data", name="vpr_stats_vpm_data")
      * @REST\View
      */
-    public function votesPerMinuteDataAction()
+    public function votesPerMinuteDataAction(Request $request)
     {
+        $this->checkAccess($request);
         $data = $this->getVotesPerMinute();
 
         return new JsonResponse($data);
@@ -658,8 +668,9 @@ class StatsController extends Controller
      * @Route("/stats/ballotboxes", name="vpr_stats_ballotboxes")
      * @Template
      */
-    public function ballotBoxesAction()
+    public function ballotBoxesAction(Request $request)
     {
+        $this->checkAccess($request);
         $em   = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 
@@ -781,5 +792,18 @@ class StatsController extends Controller
         $session = $this->getRequest()->getSession();
         $session->remove('poll_filters');
         return $this->redirect($this->generateUrl('vpr_stats_votes'));
+    }
+
+    private function checkAccess(Request $request)
+    {
+        $allowed  = $this->getParameter('allowed_monitors');
+        $clientIp = $request->getClientIp();
+
+        if (IpUtils::checkIp($clientIp, $allowed)) {
+            // Allow monitors to access without authentication
+            return;
+        }
+
+        $this->denyAccessUnlessGranted('ROLE_STATS');
     }
 }
