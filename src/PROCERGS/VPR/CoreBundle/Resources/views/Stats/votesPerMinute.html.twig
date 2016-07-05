@@ -14,7 +14,7 @@
 
         .summary {
             margin: 0 auto;
-            width: 36vmax;
+            width: 48vmax;
         }
 
         .summary .tile {
@@ -47,6 +47,10 @@
         <div class="tile">
             <h1><span class="vpm">--</span><small>votos</small></h1>
             <p>No último minuto</p>
+        </div>
+        <div class="tile">
+            <h1><span class="max-vpm">--</span><small>votos</small></h1>
+            <p>Pico de votos/minuto</p>
         </div>
         <div class="tile">
             <h1 class="total">---</h1>
@@ -87,6 +91,7 @@
                     ['Time', 'Votes']
                 ];
                 var total = 0;
+                var maxVpm = 0;
                 for (var index = 0; index < rawData.length; ++index) {
                     var time = rawData[index].time;
                     var votes = rawData[index].votes;
@@ -95,6 +100,10 @@
                     if (index === rawData.length - 2) {
                         $('.last-minute').html(time.split(' ')[1]);
                         $('.vpm').html(votes);
+                    }
+                    if (votes > maxVpm) {
+                        maxVpm = votes;
+                        $('.max-vpm').html(maxVpm);
                     }
                 }
                 drawStuff(chartData);
