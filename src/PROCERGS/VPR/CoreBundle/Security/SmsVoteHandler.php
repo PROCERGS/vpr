@@ -127,7 +127,7 @@ class SmsVoteHandler
             throw new \InvalidArgumentException('Invalid vote string');
         }
 
-        $options = explode(' ', preg_replace('/\D+/', ' ', $m[3]));
+        $options = array_filter(explode(' ', trim(preg_replace('/\D+/', ' ', $m[3]))));
 
         return [
             self::MESSAGE_PREFIX => $m[1],
@@ -174,6 +174,7 @@ class SmsVoteHandler
             $pollOpen = false;
         }
 
+        $inTransaction = false;
         foreach ($smsVotes as $smsVote) {
             $to = BrazilianPhoneNumberFactory::createFromE164($smsVote->getSender());
             try {
@@ -182,6 +183,7 @@ class SmsVoteHandler
                     $votes[] = $vote;
 
                     $em->beginTransaction();
+                    $inTransaction = true;
                     $this->votingSessionProvider->persistVote($vote);
 
                     $transactionId = $smsService->easySend($to, "Seu voto foi registrado. Agradecemos a participação.");
@@ -189,15 +191,20 @@ class SmsVoteHandler
                 }
                 $em->persist($smsVote);
                 $em->flush($smsVote);
-                if ($pollOpen) {
+                if ($inTransaction) {
                     $em->commit();
+                    $inTransaction = false;
                 }
             } catch (\InvalidArgumentException $e) {
+                if ($inTransaction) {
+                    $em->rollback();
+                    $inTransaction = false;
+                }
                 continue;
             } catch (TREVoterException $e) {
                 $smsService->easySend($to, $e->getMessage());
             } catch (\Exception $e) {
-                if ($pollOpen) {
+                if ($inTransaction) {
                     $em->rollback();
                 }
                 throw $e;
