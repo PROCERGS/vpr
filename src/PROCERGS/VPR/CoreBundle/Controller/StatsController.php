@@ -34,7 +34,7 @@ class StatsController extends Controller
     public function reportOptionsCoredeAction(Request $request, $coredeId, $pollId)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
 
         $em        = $this->getDoctrine()->getManager();
         $pollRepo  = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
@@ -98,7 +98,7 @@ class StatsController extends Controller
     public function reportOptionsCityAction(Request $request, $cityId, $pollId)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
         $em           = $this->getDoctrine()->getManager();
         $pollRepo     = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
         $poll    = $pollRepo->find($pollId);
@@ -143,7 +143,7 @@ class StatsController extends Controller
     public function optionVotesAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
         $form = $this->getCoredeForm();
 
         $form->handleRequest($request);
@@ -178,7 +178,7 @@ class StatsController extends Controller
     public function optionVotesCityAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
         $form = $this->getCityForm();
 
         $form->handleRequest($request);
@@ -213,7 +213,7 @@ class StatsController extends Controller
     public function votesAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
 
         $session = $this->getRequest()->getSession();
@@ -471,7 +471,7 @@ class StatsController extends Controller
     public function votesByCoredeAction(Request $request)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
@@ -497,10 +497,10 @@ class StatsController extends Controller
      * @Route("/stats/graphics", name="vpr_stats_graphics")
      * @Template()
      */
-    public function graphicsAction()
+    public function graphicsAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
         $em       = $this->getDoctrine()->getManager();
 
         $poll     = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
@@ -527,7 +527,7 @@ class StatsController extends Controller
     public function query1Action(Request $request)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction();
+        $this->updateCacheAction($request);
         $em    = $this->getDoctrine()->getManager();
         $poll     = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
         $query = $em->createQueryBuilder()
