@@ -25,6 +25,9 @@ class SmsVoteHandlerTest extends KernelAwareTest
     /** @var SmsVote */
     protected $validSms;
 
+    /** @var SmsVote */
+    protected $invalidSms;
+
     /** @var string */
     protected $ballotBoxPassphrase;
 
@@ -39,6 +42,12 @@ class SmsVoteHandlerTest extends KernelAwareTest
         $this->validSms
             ->setSender('+55 51 1234 56789')
             ->setMessage('VOTE '.self::VOTER_REGISTRATION.' 1 02 # 5  6#3  % 6 test')
+            ->setReceivedAt(new \DateTime());
+
+        $this->invalidSms = new SmsVote();
+        $this->invalidSms
+            ->setSender('+55 51 1234 56789')
+            ->setMessage('VOTE#'.self::VOTER_REGISTRATION.'#setel#sdr#seapi#seduc')
             ->setReceivedAt(new \DateTime());
 
         $populator = new DatabasePopulator($this->em);
@@ -68,6 +77,19 @@ class SmsVoteHandlerTest extends KernelAwareTest
         $this->assertContains(3, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
         $this->assertContains(5, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
         $this->assertContains(6, $parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
+    }
+
+    public function testInvalidSmsVoteParsing()
+    {
+        /** @var SmsVoteHandler $smsVoteHandler */
+        $smsVoteHandler = $this->container->get('sms.vote_handler');
+
+        $smsVote = $this->invalidSms;
+
+        $parsed = $smsVoteHandler->parseMessage($smsVote);
+        $this->assertEquals('VOTE', $parsed[SmsVoteHandler::MESSAGE_PREFIX]);
+        $this->assertEquals(self::VOTER_REGISTRATION, $parsed[SmsVoteHandler::MESSAGE_VOTER_REGISTRATION]);
+        $this->assertEmpty($parsed[SmsVoteHandler::MESSAGE_OPTIONS]);
     }
 
     public function testSmsVoteRegistration()

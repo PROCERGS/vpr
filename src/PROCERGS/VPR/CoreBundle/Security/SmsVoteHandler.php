@@ -127,7 +127,7 @@ class SmsVoteHandler
             throw new \InvalidArgumentException('Invalid vote string');
         }
 
-        $options = explode(' ', preg_replace('/\D+/', ' ', $m[3]));
+        $options = array_filter(explode(' ', trim(preg_replace('/\D+/', ' ', $m[3]))));
 
         return [
             self::MESSAGE_PREFIX => $m[1],
