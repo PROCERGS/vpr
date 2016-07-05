@@ -87,6 +87,9 @@
 
         function updateChart() {
             $.getJSON('{{ path('vpr_stats_vpm_data') }}', function (rawData) {
+                if ($.isEmptyObject(rawData) || rawData.length === 0) {
+                    return;
+                }
                 var chartData = [
                     ['Time', 'Votes']
                 ];
