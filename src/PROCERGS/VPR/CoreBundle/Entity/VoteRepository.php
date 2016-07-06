@@ -62,4 +62,43 @@ class VoteRepository extends EntityRepository
 
         return array_map('reset', $offlineIds);
     }
+
+    public function getVotesPerIp(
+        Poll $poll,
+        Corede $corede = null,
+        City $city = null,
+        $thresholdMin = 0,
+        $thresholdMax = 0
+    ) {
+        $query = $this->createQueryBuilder('v')
+            ->select('v.ipAddress, c.name AS city, c.id AS city_id, co.name AS corede, COUNT(v) AS votes')
+            ->join('v.ballotBox', 'b')
+            ->join('v.city', 'c')
+            ->join('v.corede', 'co')
+            ->where('b.poll = :poll')
+            ->groupBy('v.ipAddress, c.name, c.id, co.name')
+            ->orderBy('votes', 'DESC')
+            ->setParameter('poll', $poll);
+
+        if ($corede instanceof Corede) {
+            $query->andWhere('c.corede = :corede')
+                ->setParameter('corede', $corede);
+        }
+        if ($city instanceof City) {
+            $query->andWhere('b.city = :city')
+                ->setParameter('city', $city);
+        }
+
+        if ($thresholdMin > 0) {
+            $query->andHaving('COUNT(v) >= :min')
+                ->setParameter('min', $thresholdMin);
+        }
+
+        if ($thresholdMax > 0) {
+            $query->andHaving('COUNT(v) <= :max')
+                ->setParameter('max', $thresholdMax);
+        }
+
+        return $query->getQuery()->getScalarResult();
+    }
 }

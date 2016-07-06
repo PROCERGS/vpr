@@ -914,4 +914,42 @@ class StatsController extends Controller
 
         $this->denyAccessUnlessGranted('ROLE_STATS');
     }
+
+
+    /**
+     * @Route("/stats/ip", name="vpr_stats_votes_per_ip")
+     * @Template
+     */
+    public function votesPerIpAction(Request $request)
+    {
+        $this->checkAccess($request);
+
+        /** @var VotingSessionProvider $votingSessionProvider */
+        $votingSessionProvider = $this->get('vpr_voting_session_provider');
+        $poll = $votingSessionProvider->getActivePoll();
+
+        $coredeId = '';
+        $cityId = '';
+        $cacheKey = "votes_per_ip_{$poll->getId()}".$coredeId.$cityId;
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $this->getCached(
+            $cacheKey,
+            60,
+            function () use ($em, $poll) {
+                /** @var VoteRepository $repo */
+                $repo = $em->getRepository('PROCERGSVPRCoreBundle:Vote');
+
+                return $repo->getVotesPerIp($poll, null, null, 10);
+            }
+        );
+
+        $cities = [];
+        foreach ($data as $entry) {
+            $cities[$entry['city_id']] = $entry['city'];
+        }
+        asort($cities);
+
+        return compact('data', 'cities');
+    }
 }

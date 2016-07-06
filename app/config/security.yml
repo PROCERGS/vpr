@@ -276,7 +276,7 @@ security:
         - { path: ^/admin/poll_option, role: ROLE_BALLOT }
         - { path: ^/admin/person, role: ROLE_USER }
         - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/stats/(live|ip), role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }
         - { path: ^/stats/update_total_option_votes$, role: ROLE_ADMIN }
