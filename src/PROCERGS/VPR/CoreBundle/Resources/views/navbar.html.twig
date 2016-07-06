@@ -50,6 +50,8 @@
                         <li class="{{ controller == 'admin\\poll' ? 'active' }}">
                             <a href="{{ path('admin_stats2') }}">{{'admin.stats2'|trans}}</a>
                         </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_STATS') %}
                         <li role="presentation" class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                               {{'Reports'|trans}} <span class="caret"></span>
@@ -60,8 +62,9 @@
                                 <li><a href="{{ path('vpr_stats_graphics') }}">{{ 'Total votes by COREDE via map'|trans }}</a></li>
                                 <li><a href="{{ path('vpr_option_vote_by_corede') }}">{{ "Partial results online by Corede"|trans }}</a></li>
                                 <li><a href="{{ path('vpr_option_vote_by_city') }}">{{ "Partial results online by City"|trans }}</a></li>
+                                <li><a href="{{ path('vpr_stats_votes_per_ip') }}">Votos por IP</a></li>
                             </ul>
-                          </li>
+                      </li>
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
