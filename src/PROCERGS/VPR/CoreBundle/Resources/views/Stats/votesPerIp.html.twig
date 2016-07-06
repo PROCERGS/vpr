@@ -2,13 +2,7 @@
 {% set contentName = 'admin.poll'|trans %}
 {% set actionName = 'Votos por IP' %}
 
-{% block stylesheets %}
-    {{ include('PROCERGSVPRCoreBundle::spinner.style.html.twig') }}
-    {{ parent() }}
-{% endblock %}
-
 {% block content -%}
-    {{ include('PROCERGSVPRCoreBundle::spinner.html.twig') }}
 
     {% for type, messages in app.session.flashbag.all() %}
         {% for message in messages %}
