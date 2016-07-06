@@ -10,9 +10,9 @@ class VoteRepository extends EntityRepository
     public function findByPoll($poll)
     {
         return $this->getEntityManager()
-                ->createQuery(
-                    'SELECT v FROM PROCERGSVPRCoreBundle:Vote v JOIN PROCERGSVPRCoreBundle:BallotBox b WITH v.ballotBox = b WHERE b.poll = :poll'
-                )->setParameter('poll', $poll)->getResult();
+            ->createQuery(
+                'SELECT v FROM PROCERGSVPRCoreBundle:Vote v JOIN PROCERGSVPRCoreBundle:BallotBox b WITH v.ballotBox = b WHERE b.poll = :poll'
+            )->setParameter('poll', $poll)->getResult();
     }
 
     public function findByEspecial($filter)
@@ -27,31 +27,38 @@ class VoteRepository extends EntityRepository
         if (isset($filter['vote'])) {
             $sql .= 'and v != :vote ';
         }
+
         return $this->getEntityManager()->createQuery($sql)->setParameters($filter)->getResult();
     }
 
-    public function getVotesPerMinute(Poll $poll)
+    public function getVotesPerMinute(Poll $poll, BallotBox $ballotBox = null)
     {
         $query = $this->createQueryBuilder('v')
-                ->select("YEAR(v.createdAt) AS year, MONTH(v.createdAt) AS month, DAY(v.createdAt) AS day, HOUR(v.createdAt) AS hour, MINUTE(v.createdAt) AS minute, COUNT(v) AS votes")
-                ->join('v.ballotBox', 'b')
-                ->where('b.poll = :poll')
-                ->groupBy('year, month, day, hour, minute')
-                ->setParameter('poll', $poll)
-                ->getQuery()->getScalarResult();
+            ->select(
+                "YEAR(v.createdAt) AS year, MONTH(v.createdAt) AS month, DAY(v.createdAt) AS day, HOUR(v.createdAt) AS hour, MINUTE(v.createdAt) AS minute, COUNT(v) AS votes"
+            )
+            ->join('v.ballotBox', 'b')
+            ->where('b.poll = :poll')
+            ->groupBy('year, month, day, hour, minute')
+            ->setParameter('poll', $poll);
 
-        return $query;
+        if ($ballotBox instanceof BallotBox) {
+            $query->andWhere('b = :ballotbox')
+                ->setParameter('ballotbox', $ballotBox);
+        }
+
+        return $query->getQuery()->getScalarResult();
     }
 
     public function getOfflineIds(Poll $poll)
     {
         $offlineIds = $this->createQueryBuilder('v')
-                ->select('v.offlineId')
-                ->join('v.ballotBox', 'b')
-                ->where('b.poll = :poll')
-                ->andWhere('v.offlineId IS NOT NULL')
-                ->setParameter('poll', $poll)
-                ->getQuery()->getScalarResult();
+            ->select('v.offlineId')
+            ->join('v.ballotBox', 'b')
+            ->where('b.poll = :poll')
+            ->andWhere('v.offlineId IS NOT NULL')
+            ->setParameter('poll', $poll)
+            ->getQuery()->getScalarResult();
 
         return array_map('reset', $offlineIds);
     }
