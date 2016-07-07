@@ -4,6 +4,8 @@ namespace Donato\OIDCBundle\Security\Authentication\Token;
 
 use Donato\OIDCBundle\Entity\IdentityProvider;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 class OIDCToken extends AbstractToken
 {
@@ -12,6 +14,8 @@ class OIDCToken extends AbstractToken
 
     /** @var IdentityProvider */
     private $identityProvider;
+
+    private $roles = array();
 
     /**
      * OIDCToken constructor.
@@ -91,5 +95,20 @@ class OIDCToken extends AbstractToken
     public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
+    }
+
+    public function getRoles()
+    {
+        $roles = $this->getUser()->getRoles();
+        foreach ($roles as $role) {
+            if (is_string($role)) {
+                $role = new Role($role);
+            } elseif (!$role instanceof RoleInterface) {
+                throw new \InvalidArgumentException(sprintf('$roles must be an array of strings, or RoleInterface instances, but got %s.', gettype($role)));
+            }
+
+            $this->roles[] = $role;
+        }
+        return $this->roles;
     }
 }
