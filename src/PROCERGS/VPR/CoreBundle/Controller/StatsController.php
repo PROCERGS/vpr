@@ -906,7 +906,7 @@ class StatsController extends Controller
     private function checkAccess(Request $request)
     {
         /** @var LoggerInterface $logger */
-        $logger = $this->get('monolog.logger.security');
+        $logger = $this->get('monolog.logger.stats_security');
 
         $allowed = $this->getParameter('allowed_monitors');
         $clientIp = $request->getClientIp();

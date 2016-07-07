@@ -31,7 +31,7 @@ services:
         tags: [{ name: 'twig.extension' }]
 
 monolog:
-    channels: ["api", "security"]
+    channels: ["api", "stats_security"]
     handlers:
         api:
             level: debug
@@ -44,7 +44,7 @@ monolog:
             level:    debug
             type:     stream
             path:     '%kernel.logs_dir%/security.log'
-            channels: [security]
+            channels: [stats_security]
 
 # Twig Configuration
 twig:
