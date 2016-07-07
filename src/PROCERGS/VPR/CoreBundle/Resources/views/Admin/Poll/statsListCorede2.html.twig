@@ -36,7 +36,17 @@
             </thead>
             <tbody id="admin-poll-list">
                 {% if(cities) %}
+                    {% set total_online = 0 %}
+                    {% set total_offline = 0 %}
+                    {% set total_sms = 0 %}
+                    {% set total_pop = 0 %}
+                    {% set total_tot = 0 %}
                     {% for city in cities %}
+                        {% set total_online = total_online + city.voters_online %}
+                        {% set total_offline = total_offline + city.voters_offline %}
+                        {% set total_sms = total_sms + city.voters_sms %}
+                        {% set total_pop = total_pop + city.tot_pop %}
+                        {% set total_tot = total_tot + city.tot %}
                         <tr>
                             <td>{{ city.city }}</td>
                             <td>{{ city.voters_online }}</td>
@@ -47,6 +57,15 @@
                             <td>{{ city.perc }}</td>                            
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td class="text-right">Total</td>
+                        <td><strong>{{ total_online }}</strong></td>
+                        <td><strong>{{ total_offline }}</strong></td>
+                        <td><strong>{{ total_sms }}</strong></td>
+                        <td><strong>{{ total_pop }}</strong></td>
+                        <td><strong>{{ total_tot }}</strong></td>
+                        <td>-</td>
+                    </tr>
                 {% else %}
                         <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
                 {% endif %}

@@ -469,17 +469,14 @@ group by a1.corede_id
      * @Route("/stats2/{poll}/corede/{corede}", name="admin_stats_corede2")
      * @Template()
      */
-    public function statsListCorede2Action($poll, $corede)
+    public function statsListCorede2Action(Request $request, $poll, $corede)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
     
         $em = $this->getDoctrine()->getManager();
-        $session = $this->getRequest()->getSession();
     
         $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
         $corede = $coredeRepo->find($corede);
-    
-        $cityRepo    = $em->getRepository('PROCERGSVPRCoreBundle:City');
     
         /**
          * @var \Doctrine\DBAL\Connection $connection
@@ -512,7 +509,7 @@ group by a1.city_id
         $stmt1->setFetchMode(\PDO::FETCH_ASSOC);
         while ($vote = $stmt1->fetch()) {
             $tId = $vote['city_id'];
-            if (null === $tId) {
+            if (null === $tId || false === array_key_exists($tId, $citiesList)) {
                 continue;
             }
             $t = array();

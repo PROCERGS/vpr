@@ -45,7 +45,17 @@
             </thead>
             <tbody id="admin-poll-list">
                 {% if(coredes) %}
+                    {% set total_online = 0 %}
+                    {% set total_offline = 0 %}
+                    {% set total_sms = 0 %}
+                    {% set total_pop = 0 %}
+                    {% set total_tot = 0 %}
                     {% for corede in coredes %}
+                        {% set total_online = total_online + corede.voters_online %}
+                        {% set total_offline = total_offline + corede.voters_offline %}
+                        {% set total_sms = total_sms + corede.voters_sms %}
+                        {% set total_pop = total_pop + corede.tot_pop %}
+                        {% set total_tot = total_tot + corede.tot %}
                         <tr>
                             <td><a href="{{ path('admin_stats_corede2', {'poll' : poll.id, 'corede' : corede.corede_id}) }}">{{ corede.corede }}</a></td>
                             <td>{{ corede.voters_online }}</td>
@@ -56,6 +66,15 @@
                             <td>{{ corede.perc }}</td>
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td class="text-right">Total</td>
+                        <td><strong>{{ total_online }}</strong></td>
+                        <td><strong>{{ total_offline }}</strong></td>
+                        <td><strong>{{ total_sms }}</strong></td>
+                        <td><strong>{{ total_pop }}</strong></td>
+                        <td><strong>{{ total_tot }}</strong></td>
+                        <td>-</td>
+                    </tr>
                 {% else %}
                         <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
                 {% endif %}
