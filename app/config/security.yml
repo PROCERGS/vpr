@@ -194,16 +194,6 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
         PROCERGS\VPR\CoreBundle\Entity\Voter: sha512
 
-#    role_hierarchy:
-#        ROLE_COORDINATOR:       ROLE_USER, ROLE_ADMIN_MENU
-#        ROLE_COREDE:            ROLE_COORDINATOR
-#        ROLE_STATS:             ROLE_USER
-#        ROLE_CRUD_POLL:         ROLE_COORDINATOR
-#        ROLE_CRUD_BALLOTBOX:    ROLE_COORDINATOR
-#        ROLE_MANAGE_USER:       ROLE_COORDINATOR
-#        ROLE_ADMIN:             ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_BALLOTBOX, ROLE_MANAGE_USER
-#        ROLE_SUPER_ADMIN:       ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, ROLE_COREDE
-
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
