@@ -7,6 +7,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\PollRepository;
 use PROCERGS\VPR\CoreBundle\Entity\VoteRepository;
 use PROCERGS\VPR\CoreBundle\Security\VotingSessionProvider;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\Routing\Annotation\Route;
@@ -904,12 +905,19 @@ class StatsController extends Controller
 
     private function checkAccess(Request $request)
     {
+        /** @var LoggerInterface $logger */
+        $logger = $this->get('monolog.logger.security');
+
         $allowed = $this->getParameter('allowed_monitors');
         $clientIp = $request->getClientIp();
 
         if (IpUtils::checkIp($clientIp, $allowed)) {
             // Allow monitors to access without authentication
+            $logger->info('Allowed access to '.$clientIp);
+
             return;
+        } else {
+            $logger->info($clientIp.' not allowed by IP. Testing ROLE_STATS...');
         }
 
         $this->denyAccessUnlessGranted('ROLE_STATS');
