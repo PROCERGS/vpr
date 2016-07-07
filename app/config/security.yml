@@ -10,16 +10,16 @@ becklyn_static_roles:
             included_roles: [ROLE_ADMIN_MENU, ROLE_STATS, ROLE_CRUD_POLL, ROLE_CRUD_STEP, ROLE_CRUD_CATEGORY, ROLE_CRUD_BALLOT, ROLE_CRUD_BALLOTBOX, ROLE_CRUD_USER, ROLE_RESULTS]
         ROLE_ADMIN_BALLOTBOXES:
             title: "Administrador de Urnas"
-            included_roles: [ROLE_USER, ROLE_CRUD_BALLOTBOX, ROLE_BALLOTBOXES_SEND_EMAIL, ROLE_BALLOTBOXES_SEND_SMS]
+            included_roles: [ROLE_ADMIN_MENU, ROLE_USER, ROLE_CRUD_BALLOTBOX, ROLE_BALLOTBOXES_SEND_EMAIL, ROLE_BALLOTBOXES_SEND_SMS]
         ROLE_APPROVE_RESULT:
             title: "Homologador de Resultados"
-            included_roles: [ROLE_USER, ROLE_RESULTS]
+            included_roles: [ROLE_ADMIN_MENU, ROLE_USER, ROLE_RESULTS]
         ROLE_RESULTS:
             title: "Acesso aos resultados"
-            included_roles: [ROLE_USER]
+            included_roles: [ROLE_ADMIN_MENU, ROLE_USER]
         ROLE_STATS:
             title: "Estatísticas"
-            included_roles: [ROLE_USER]
+            included_roles: [ROLE_ADMIN_MENU, ROLE_USER]
         ROLE_USER:
             title: "User"
             description: "The default frontend user"
@@ -169,24 +169,24 @@ becklyn_static_roles:
             title: "CRUD de Usuários"
             included_roles: [ROLE_USER_CREATE, ROLE_USER_READ, ROLE_USER_UPDATE, ROLE_USER_DELETE]
             hidden: true
-        ROLE_USER:
+        ROLE_ADM_USER:
             title: ""
             hidden: true
         ROLE_USER_CREATE:
             title: "Criar Urnas"
-            included_roles: [ROLE_USER]
+            included_roles: [ROLE_ADM_USER]
             hidden: true
         ROLE_USER_READ:
             title: "Consultar Urnas"
-            included_roles: [ROLE_USER]
+            included_roles: [ROLE_ADM_USER]
             hidden: true
         ROLE_USER_UPDATE:
             title: "Atualizar Urnas"
-            included_roles: [ROLE_USER]
+            included_roles: [ROLE_ADM_USER]
             hidden: true
         ROLE_USER_DELETE:
             title: "Deletar Urnas"
-            included_roles: [ROLE_USER]
+            included_roles: [ROLE_ADM_USER]
             hidden: true
 
 security:
@@ -259,18 +259,19 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/end, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/poll/stats, role: ROLE_RESULTS }
         - { path: ^/admin/poll, role: ROLE_POLL }
         - { path: ^/admin/step, role: ROLE_STEP }
         - { path: ^/admin/category, role: ROLE_CATEGORY }
         - { path: ^/admin/ballotbox, role: ROLE_BALLOTBOX }
         - { path: ^/admin/poll_option, role: ROLE_BALLOT }
         - { path: ^/admin/person, role: ROLE_USER }
-        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/admin/, role: ROLE_ADMIN_MENU }
         - { path: ^/stats/live, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/ip, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/ballotboxes, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/stats/update_total_votes$, role: ROLE_ADMIN }
         - { path: ^/stats/update_total_option_votes$, role: ROLE_ADMIN }
-        - { path: ^/reports, role: ROLE_ADMIN }
-        - { path: ^/stats, role: ROLE_ADMIN }
+        - { path: ^/reports, role: ROLE_STATS }
+        - { path: ^/stats, role: ROLE_STATS }
         - { path: ^/, role: IS_AUTHENTICATED_FULLY }

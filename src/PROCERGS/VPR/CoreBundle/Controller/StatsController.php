@@ -235,7 +235,7 @@ class StatsController extends Controller
      */
     public function votesAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_RESULTS');
+        $this->checkAccess($request);
         $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
 
@@ -557,7 +557,7 @@ class StatsController extends Controller
      */
     public function graphicsAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_RESULTS');
+        $this->checkAccess($request);
         $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
 
@@ -795,9 +795,9 @@ class StatsController extends Controller
      * @Route("/stats/ballotboxes/admin", name="vpr_stats_ballotboxes_admin")
      * @Template
      */
-    public function ballotBoxesAdminAction()
+    public function ballotBoxesAdminAction(Request $request)
     {
-        $this->denyAccessUnlessGranted('ROLE_RESULTS');
+        $this->checkAccess($request);
         $em = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 

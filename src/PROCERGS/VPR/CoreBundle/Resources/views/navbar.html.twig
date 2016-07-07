@@ -15,60 +15,77 @@
                     {% set controller = "app.request.attributes.get('_template').get('controller')|lower" %}
                     {% if is_granted('ROLE_POLL') %}
                         <li class="{{ controller == 'admin\\poll' ? 'active' }}">
-                            <a href="{{ path('admin_poll') }}">{{'Polls'|trans}}</a>
+                            <a href="{{ path('admin_poll') }}">{{ 'Polls'|trans }}</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_STEP') %}
                         <li class="{{ controller == 'admin\\step' ? 'active' }}">
-                            <a href="{{ path('admin_step') }}">{{'Steps'|trans}}</a>
+                            <a href="{{ path('admin_step') }}">{{ 'Steps'|trans }}</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_CATEGORY') %}
                         <li class="{{ controller == 'admin\\category' ? 'active' }}">
-                            <a href="{{ path('admin_category') }}">{{'Categories'|trans}}</a>
+                            <a href="{{ path('admin_category') }}">{{ 'Categories'|trans }}</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_BALLOT') %}
                         <li class="{{ controller == 'admin\\polloption' ? 'active' }}">
-                            <a href="{{ path('admin_poll_option') }}">{{'Ballots'|trans}}</a>
+                            <a href="{{ path('admin_poll_option') }}">{{ 'Ballots'|trans }}</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_BALLOTBOX') %}
                         <li class="{{ controller == 'admin\\ballotbox' ? 'active' }}">
-                            <a href="{{ path('admin_ballotbox') }}">{{'Ballot Boxes'|trans}}</a>
+                            <a href="{{ path('admin_ballotbox') }}">{{ 'Ballot Boxes'|trans }}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_USER') %}
+                    {% if is_granted('ROLE_ADM_USER') %}
                         <li class="{{ controller == 'admin\\user' ? 'active' }}">
-                            <a href="{{ path('admin_user_list') }}">{{'Users'|trans}}</a>
+                            <a href="{{ path('admin_user_list') }}">{{ 'Users'|trans }}</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_RESULTS') %}
                         <li class="{{ controller == 'admin\\poll' ? 'active' }}">
-                            <a href="{{ path('admin_stats') }}">{{'Stats'|trans}}</a>
+                            <a href="{{ path('admin_stats') }}">{{ 'Stats'|trans }}</a>
                         </li>
                         <li class="{{ controller == 'admin\\poll' ? 'active' }}">
-                            <a href="{{ path('admin_stats2') }}">{{'admin.stats2'|trans}}</a>
+                            <a href="{{ path('admin_stats2') }}">{{ 'admin.stats2'|trans }}</a>
                         </li>
                     {% endif %}
-                    {% if is_granted('ROLE_STATS') %}
+                    {% if is_granted('ROLE_STATS') or is_granted('ROLE_RESULTS') %}
                         <li role="presentation" class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                              {{'Reports'|trans}} <span class="caret"></span>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                {{ 'Reports'|trans }} <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ path('vpr_stats_ballotboxes_admin') }}">{{'Ballot Boxes'|trans}}</a></li>
-                                <li><a href="{{ path('vpr_stats_votes') }}">{{ 'Total votes by COREDE via graph'|trans }}</a></li>
-                                <li><a href="{{ path('vpr_stats_graphics') }}">{{ 'Total votes by COREDE via map'|trans }}</a></li>
-                                <li><a href="{{ path('vpr_option_vote_by_corede') }}">{{ "Partial results online by Corede"|trans }}</a></li>
-                                <li><a href="{{ path('vpr_option_vote_by_city') }}">{{ "Partial results online by City"|trans }}</a></li>
-                                <li><a href="{{ path('vpr_stats_votes_per_ip') }}">Votos por IP</a></li>
+                                {% if is_granted('ROLE_STATS') %}
+                                    <li>
+                                        <a href="{{ path('vpr_stats_ballotboxes_admin') }}">{{ 'Ballot Boxes'|trans }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('vpr_stats_votes') }}">{{ 'Total votes by COREDE via graph'|trans }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('vpr_stats_graphics') }}">{{ 'Total votes by COREDE via map'|trans }}</a>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('ROLE_RESULTS') %}
+                                    <li>
+                                        <a href="{{ path('vpr_option_vote_by_corede') }}">{{ "Partial results online by Corede"|trans }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('vpr_option_vote_by_city') }}">{{ "Partial results online by City"|trans }}</a>
+                                    </li>
+                                {% endif %}
+                                {% if is_granted('ROLE_STATS') %}
+                                    <li><a href="{{ path('vpr_stats_votes_per_ip') }}">Votos por IP</a></li>
+                                {% endif %}
                             </ul>
-                      </li>
+                        </li>
                     {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ path('fos_user_security_logout') }}">{{'Logout'|trans}}</a></li>
+                    <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>
                 </ul>
             </div>
         </div>
