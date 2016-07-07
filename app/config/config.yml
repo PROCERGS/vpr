@@ -31,7 +31,7 @@ services:
         tags: [{ name: 'twig.extension' }]
 
 monolog:
-    channels: ["api"]
+    channels: ["api", "security"]
     handlers:
         api:
             level: debug
@@ -39,6 +39,12 @@ monolog:
             path: "%kernel.logs_dir%/api.log"
             channels: [api]
             formatter: monolog.multiline
+        security:
+            # log all messages (since debug is the lowest level)
+            level:    debug
+            type:     stream
+            path:     '%kernel.logs_dir%/security.log'
+            channels: [security]
 
 # Twig Configuration
 twig:
