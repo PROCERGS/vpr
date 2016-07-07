@@ -913,11 +913,11 @@ class StatsController extends Controller
 
         if (IpUtils::checkIp($clientIp, $allowed)) {
             // Allow monitors to access without authentication
-            $logger->info('Allowed access to '.$clientIp);
+            $logger->info('Allowed access to '.$clientIp.' at '.$request->getRequestUri());
 
             return;
         } else {
-            $logger->info($clientIp.' not allowed by IP. Testing ROLE_STATS...');
+            $logger->info($clientIp.' not allowed by IP at '.$request->getRequestUri().'. Testing ROLE_STATS...');
         }
 
         $this->denyAccessUnlessGranted('ROLE_STATS');
