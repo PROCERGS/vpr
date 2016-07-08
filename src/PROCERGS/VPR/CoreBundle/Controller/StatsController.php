@@ -932,14 +932,12 @@ class StatsController extends Controller
     {
         $this->checkAccess($request);
 
-        /** @var VotingSessionProvider $votingSessionProvider */
-        $votingSessionProvider = $this->get('vpr_voting_session_provider');
-        $poll = $votingSessionProvider->getActivePoll();
+        $em = $this->getDoctrine()->getManager();
+        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
 
         $coredeId = '';
         $cityId = '';
         $cacheKey = "votes_per_ip_{$poll->getId()}".$coredeId.$cityId;
-        $em = $this->getDoctrine()->getManager();
 
         $data = $this->getCached(
             $cacheKey,
