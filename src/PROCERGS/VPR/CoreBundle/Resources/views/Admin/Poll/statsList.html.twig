@@ -43,7 +43,7 @@
                 {% endif %}
                 {% if poll.apurationStatus == 3 and poll.transferOpenVoteStatus == 0 and poll.transferPoolOptionStatus == 3 %}
                    <a title="{{ 'admin.admin_transfer_open_vote'|trans }}" class="btn btn-default btn-sm btn-sm btn-transfer-open-vote"
-                   href="javascript:void(0)"                                   
+                   href="javascript:void(0)"
                    data-href="{{ path('admin_transfer_open_vote', { 'id': poll.id }) }}">
                    <span class="glyphicon glyphicon-bullhorn"></span>
                    </a>
@@ -67,7 +67,21 @@
             </thead>
             <tbody id="admin-poll-list">
                 {% if(coredes) %}
+                    {% set total_votes_online = 0 %}
+                    {% set total_votes_offline = 0 %}
+                    {% set total_votes_sms = 0 %}
+                    {% set total_voters_online = 0 %}
+                    {% set total_voters_offline = 0 %}
+                    {% set total_voters_sms = 0 %}
+
                     {% for corede in coredes %}
+                        {% set total_votes_online = total_votes_online + corede.votes_online %}
+                        {% set total_votes_offline = total_votes_offline + corede.votes_offline %}
+                        {% set total_votes_sms = total_votes_sms + corede.votes_sms %}
+                        {% set total_voters_online = total_voters_online + corede.voters_online %}
+                        {% set total_voters_offline = total_voters_offline + corede.voters_offline %}
+                        {% set total_voters_sms = total_voters_sms + corede.voters_sms %}
+
                         <tr>
                             <td><a href="{{ path('admin_stats_corede', {'poll' : poll.id, 'corede' : corede.corede_id}) }}">{{ corede.corede }}</a></td>
                             <td>{{ corede.votes_online }}</td>
@@ -78,6 +92,15 @@
                             <td>{{ corede.voters_sms }}</td>
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td class="text-right">Total</td>
+                        <td><strong>{{ total_votes_online }}</strong></td>
+                        <td><strong>{{ total_votes_offline }}</strong></td>
+                        <td><strong>{{ total_votes_sms }}</strong></td>
+                        <td><strong>{{ total_voters_online }}</strong></td>
+                        <td><strong>{{ total_voters_offline }}</strong></td>
+                        <td><strong>{{ total_voters_sms }}</strong></td>
+                    </tr>
                 {% else %}
                         <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
                 {% endif %}
