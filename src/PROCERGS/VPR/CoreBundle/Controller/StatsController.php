@@ -692,9 +692,10 @@ class StatsController extends Controller
 
         $ballotBox = $request->get('ballotbox', null);
         if ($ballotBox !== null && strtolower($ballotBox) === 'sms') {
+            $poll = $this->getDoctrine()->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
             /** @var VotingSessionProvider $votingSessionProvider */
             $votingSessionProvider = $this->get('vpr_voting_session_provider');
-            $ballotBox = $votingSessionProvider->getSmsBallotBox();
+            $ballotBox = $votingSessionProvider->getSmsBallotBox($poll);
             $dataUrl = $this->generateUrl('vpr_stats_vpm_data', ['ballotbox' => $ballotBox->getId()]);
         } else {
             $dataUrl = $this->generateUrl('vpr_stats_vpm_data');
