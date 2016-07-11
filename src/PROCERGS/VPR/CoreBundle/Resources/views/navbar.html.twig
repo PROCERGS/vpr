@@ -69,10 +69,12 @@
                                         <a href="{{ path('vpr_stats_graphics') }}">{{ 'Total votes by COREDE via map'|trans }}</a>
                                     </li>
                                 {% endif %}
-                                {% if is_granted('ROLE_RESULTS') %}
+                                {% if is_granted('ROLE_RESULTS') and 1 == 2 %}
                                     <li>
                                         <a href="{{ path('vpr_option_vote_by_corede') }}">{{ "Partial results online by Corede"|trans }}</a>
                                     </li>
+                                {% endif %}                                
+                                {% if is_granted('ROLE_RESULTS') %}
                                     <li>
                                         <a href="{{ path('vpr_option_vote_by_city') }}">{{ "Partial results online by City"|trans }}</a>
                                     </li>

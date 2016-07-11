@@ -118,7 +118,11 @@ group by a1.name
         ";
         $stmt1 = $connection->prepare($sql);
         $stmt1->execute(array($poll->getId(), $cityId));
-        $cityTotal = current($stmt1->fetchAll(\PDO::FETCH_ASSOC));
+        $tot = current($stmt1->fetchAll(\PDO::FETCH_ASSOC));
+        $cityTotal = null;
+        if ($tot) {
+            $cityTotal = $tot['total'];
+        }
         
         $sql = "
 select a2.name, a1.title option_title, a1.category_sorting option_number, sum(a3.tot) total
