@@ -22,21 +22,51 @@
         <table class="table table-striped table-bordered table-hover records_list">
             <thead>
                 <tr>
-                    <th colspan="7"><h4>Corede: {{ corede.name }}</h4></th>
+                    <th colspan="13"><h4>Corede: {{ corede.name }}</h4></th>
                 </tr>
                 <tr>
-                    <th width="30%">{{ 'admin.city'|trans }}</th>
-                    <th width="15%">{{ 'admin.votes_online'|trans }}</th>
-                    <th width="15%">{{ 'admin.votes_offline'|trans }}</th>
-                    <th width="15%">{{ 'admin.votes_sms'|trans }}</th>
-                    <th width="15%">{{ 'admin.voters_online'|trans }}</th>
-                    <th width="15%">{{ 'admin.voters_offline'|trans }}</th>
-                    <th width="15%">{{ 'admin.voters_sms'|trans }}</th>
+                    <th >{{ 'admin.city'|trans }}</th>
+                    <th >{{ 'admin.votes_online'|trans }}</th>
+                    <th >{{ 'admin.votes_offline'|trans }}</th>
+                    <th >{{ 'admin.votes_sms'|trans }}</th>
+                    <th >Votos Online validos</th>
+                    <th >Votos Offline validos</th>
+                    <th >Votos SMS validos</th>
+                    <th >{{ 'admin.voters_online'|trans }}</th>
+                    <th >{{ 'admin.voters_offline'|trans }}</th>
+                    <th >{{ 'admin.voters_sms'|trans }}</th>
+                    <th >{{ 'admin.tot_pop'|trans }}</th>
+                    <th >{{ 'admin.tot'|trans }}</th>
+                    <th >{{ 'admin.perc'|trans }}</th>
                 </tr>
             </thead>
             <tbody id="admin-poll-list">
                 {% if(cities) %}
+                    {% set total_votes_online = 0 %}
+                    {% set total_votes_offline = 0 %}
+                    {% set total_votes_sms = 0 %}
+                    {% set total_voters_online = 0 %}
+                    {% set total_voters_offline = 0 %}
+                    {% set total_voters_sms = 0 %}
+                    {% set total_fake_voters_online = 0 %}
+                    {% set total_fake_voters_offline = 0 %}
+                    {% set total_fake_voters_sms = 0 %}
+                    {% set total_fake_tot_pop = 0 %}
+                    {% set total_fake_tot = 0 %}
                     {% for city in cities %}
+                        {% set total_votes_online = total_votes_online + city.votes_online %}
+                        {% set total_votes_offline = total_votes_offline + city.votes_offline %}
+                        {% set total_votes_sms = total_votes_sms + city.votes_sms %}
+                        {% set total_voters_online = total_voters_online + city.voters_online %}
+                        {% set total_voters_offline = total_voters_offline + city.voters_offline %}
+                        {% set total_voters_sms = total_voters_sms + city.voters_sms %}
+                        {% set total_fake_voters_online = total_fake_voters_online + city.fake_voters_online %}
+                        {% set total_fake_voters_offline = total_fake_voters_offline + city.fake_voters_offline %}
+                        {% set total_fake_voters_sms = total_fake_voters_sms + city.fake_voters_sms %}
+                        
+                        {% set total_fake_tot_pop = total_fake_tot_pop + city.fake_tot_pop %}
+                        {% set total_fake_tot = total_fake_tot + city.fake_tot %}                        
+                    
                         <tr>
                             <td>{{ city.city }}</td>
                             <td>{{ city.votes_online }}</td>
@@ -45,8 +75,29 @@
                             <td>{{ city.voters_online }}</td>
                             <td>{{ city.voters_offline }}</td>
                             <td>{{ city.voters_sms }}</td>
+                            <td>{{ city.fake_voters_online }}</td>
+                            <td>{{ city.fake_voters_offline }}</td>
+                            <td>{{ city.fake_voters_sms }}</td>
+                            <td>{{ city.fake_tot_pop }}</td>
+                            <td>{{ city.fake_tot }}</td>
+                            <td>{{ city.fake_perc }}</td>                            
                         </tr>
                     {% endfor %}
+                    <tr>
+                        <td class="text-right">Total</td>
+                        <td><strong>{{ total_votes_online }}</strong></td>
+                        <td><strong>{{ total_votes_offline }}</strong></td>
+                        <td><strong>{{ total_votes_sms }}</strong></td>
+                        <td><strong>{{ total_voters_online }}</strong></td>
+                        <td><strong>{{ total_voters_offline }}</strong></td>
+                        <td><strong>{{ total_voters_sms }}</strong></td>
+                        <td><strong>{{ total_fake_voters_online }}</strong></td>
+                        <td><strong>{{ total_fake_voters_offline }}</strong></td>
+                        <td><strong>{{ total_fake_voters_sms }}</strong></td>
+                        <td><strong>{{ total_fake_tot_pop }}</strong></td>
+                        <td><strong>{{ total_fake_tot }}</strong></td>
+                        <td><strong>{{ ((total_fake_tot * 100)/ total_fake_tot_pop)|number_format(2) }}</strong></td>
+                    </tr>
                 {% else %}
                         <tr><td colspan="7" class="text-center">{% trans %}admin.no_record_found{% endtrans %}</td></tr>
                 {% endif %}

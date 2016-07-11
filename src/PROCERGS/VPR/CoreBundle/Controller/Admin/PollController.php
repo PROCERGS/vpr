@@ -373,7 +373,16 @@ class PollController extends Controller
             $coredes[$coredeId]['voters_offline'] = $vote['voters_offline'];
             $coredes[$coredeId]['voters_sms'] = $vote['voters_sms'];
         }
-
+        $voters = $statsRepo->findTotalVotersByPollFake($poll->getId());
+        foreach ($voters as $vote) {
+            $coredeId = $vote['corede_id'];
+            $coredes[$coredeId]['fake_voters_online'] = $vote['voters_online'];
+            $coredes[$coredeId]['fake_voters_offline'] = $vote['voters_offline'];
+            $coredes[$coredeId]['fake_voters_sms'] = $vote['voters_sms'];
+            $coredes[$coredeId]['fake_tot_pop'] = $vote['tot_pop'];
+            $coredes[$coredeId]['fake_tot'] = $vote['tot'];
+            $coredes[$coredeId]['fake_perc'] = $vote['perc'];
+        }
         return array(
             'poll' => $poll,
             'coredes' => $coredes,
@@ -413,49 +422,8 @@ class PollController extends Controller
         } else {
             $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
         }
-    
-        /**
-         * @var \Doctrine\DBAL\Connection $connection
-         */
-        $connection = $em->getConnection();    
-        $sql = "
-select a2.id, a2.name, sum(a1.tot_voter) tot_pop
-from city a1
-inner join corede a2 on a1.corede_id = a2.id
-group by a2.id, a2.name
-order by a2.id
-        ";
-        $stmt1 = $connection->prepare($sql);
-        $stmt1->execute();
-        $coredesList = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
-        
-        $sql = "
-select a1.corede_id
-, count(case when a1.voter_registration is not null and a1.vote_invalid_id is null and a2.is_online = true then 1 else null end) voters_online
-, count(case when a1.voter_registration is not null and a1.vote_invalid_id is null and a2.is_online = false and a2.is_sms = true then 1 else null end) voters_sms
-, count(case when a1.voter_registration is not null and a1.vote_invalid_id is null and a2.is_online = false and a2.csv is not null then 1 else null end) voters_offline
-from vote a1 
-inner join ballot_box a2
-on a1.ballot_box_id = a2.id
-where a2.poll_id = ?
-group by a1.corede_id
-        ";
-        $stmt1 = $connection->prepare($sql);
-        $stmt1->execute(array($poll->getId()));
-        $stmt1->setFetchMode(\PDO::FETCH_ASSOC);
-        while ($vote = $stmt1->fetch()) {
-            $coredeId = $vote['corede_id'];
-            $t = array();
-            $t['corede_id'] = $coredeId;
-            $t['corede'] = $coredesList[$coredeId][0]['name'];
-            $t['voters_online'] = $vote['voters_online'];
-            $t['voters_offline'] = $vote['voters_offline'];
-            $t['voters_sms'] = $vote['voters_sms'];
-            $t['tot_pop'] = $coredesList[$coredeId][0]['tot_pop'];
-            $t['tot'] = $vote['voters_online'] + $vote['voters_offline'] + $vote['voters_sms'];
-            $t['perc'] = number_format(($t['tot'] * 100) /$t['tot_pop'], 2);  
-            $coredes[$coredeId] = $t;
-        }
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredes = $statsRepo->findTotalVotersByPollFake($poll->getId());
         return array(
             'poll' => $poll,
             'coredes' => $coredes,
@@ -477,52 +445,8 @@ group by a1.corede_id
     
         $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
         $corede = $coredeRepo->find($corede);
-    
-        /**
-         * @var \Doctrine\DBAL\Connection $connection
-         */
-        $connection = $em->getConnection();
-        $sql = "
-select a1.id, a1.name, sum(a1.tot_voter) tot_pop
-from city a1
-where corede_id = ?
-group by a1.id, a1.name
-order by a1.id
-        ";
-        $stmt1 = $connection->prepare($sql);
-        $stmt1->execute(array($corede->getId()));
-        $citiesList = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
-        
-        $sql = "
-select a1.city_id
-, count(case when a1.voter_registration is not null and a1.vote_invalid_id is null and a2.is_online = true then 1 else null end) voters_online
-, count(case when a1.voter_registration is not null and a1.vote_invalid_id is null and a2.is_online = false and a2.is_sms = true then 1 else null end) voters_sms
-, count(case when a1.voter_registration is not null and a1.vote_invalid_id is null and a2.is_online = false and a2.csv is not null then 1 else null end) voters_offline
-from vote a1
-inner join ballot_box a2
-on a1.ballot_box_id = a2.id
-where a2.poll_id = ? and a1.corede_id = ?
-group by a1.city_id
-        ";
-        $stmt1 = $connection->prepare($sql);
-        $stmt1->execute(array($poll, $corede->getId()));
-        $stmt1->setFetchMode(\PDO::FETCH_ASSOC);
-        while ($vote = $stmt1->fetch()) {
-            $tId = $vote['city_id'];
-            if (null === $tId || false === array_key_exists($tId, $citiesList)) {
-                continue;
-            }
-            $t = array();
-            $t['city_id'] = $tId;
-            $t['city'] = $citiesList[$tId][0]['name'];
-            $t['voters_online'] = $vote['voters_online'];
-            $t['voters_offline'] = $vote['voters_offline'];
-            $t['voters_sms'] = $vote['voters_sms'];
-            $t['tot_pop'] = $citiesList[$tId][0]['tot_pop'];
-            $t['tot'] = $vote['voters_online'] + $vote['voters_offline'] + $vote['voters_sms'];
-            $t['perc'] = number_format(($t['tot'] * 100) /$t['tot_pop'], 2);
-            $cities[$tId] = $t;
-        }
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $cities = $statsRepo->findTotalVotersByPollAndCoredeFake($poll, $corede->getId());
         return array(
             'corede' => $corede,
             'cities' => $cities
@@ -598,7 +522,16 @@ group by a1.city_id
             $cities[$cityId]['voters_offline'] = $vote['voters_offline'];
             $cities[$cityId]['voters_sms'] = $vote['voters_sms'];
         }
-
+        $voters = $statsRepo->findTotalVotersByPollAndCoredeFake($poll, $corede->getId());
+        foreach ($voters as $vote) {
+            $cityId = $vote['city_id'];
+            $cities[$cityId]['fake_voters_online'] = $vote['voters_online'];
+            $cities[$cityId]['fake_voters_offline'] = $vote['voters_offline'];
+            $cities[$cityId]['fake_voters_sms'] = $vote['voters_sms'];
+            $cities[$cityId]['fake_tot_pop'] = $vote['tot_pop'];
+            $cities[$cityId]['fake_tot'] = $vote['tot'];
+            $cities[$cityId]['fake_perc'] = $vote['perc'];
+        }
         return array(
             'corede' => $corede,
             'cities' => $cities
