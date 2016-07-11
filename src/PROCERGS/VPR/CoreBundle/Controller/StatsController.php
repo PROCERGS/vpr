@@ -56,7 +56,7 @@ class StatsController extends Controller
         
         $connection = $em->getConnection();
         $sql = "
-select a1.name corede_name, sum(a2.tot_votes_online + a2.tot_votes_offline + a2.tot_votes_sms) total_votes
+select a1.name corede_name, sum(a2.tot_voters_online + a2.tot_voters_offline + a2.tot_voters_sms) total_votes
 from corede a1
 left join stats_prev_ppp a2 on a1.id = a2.corede_id
 where a2.poll_id = ? and a2.corede_id = ?
@@ -110,7 +110,7 @@ order by a1.category_sorting
         $city = $em->getRepository('PROCERGSVPRCoreBundle:City')->findOneById($cityId);
         $connection = $em->getConnection();
         $sql = "
-select a1.name city_name, sum(a2.tot_votes_online + a2.tot_votes_offline + a2.tot_votes_sms) total
+select a1.name city_name, sum(a2.tot_voters_online + a2.tot_voters_offline + a2.tot_voters_sms) total
 from city a1
 left join stats_prev_ppp a2 on a1.id = a2.city_id
 where a2.poll_id = ? and a2.city_id = ?
