@@ -7,6 +7,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\PollOption;
 use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Step;
+use PROCERGS\VPR\CoreBundle\Exception\InvalidPollOptionsException;
 
 class PollOptionHelper
 {
@@ -48,7 +49,7 @@ class PollOptionHelper
             if ($this->pollOptionRepository->checkStepOptions($step, $options)) {
                 $valid = array_merge($valid, $options);
             } else {
-                throw new \InvalidArgumentException("Selecionadas opções em excesso ou de uma etapa inválida.");
+                throw new InvalidPollOptionsException("Selecionadas opções em excesso ou de uma etapa inválida.");
             }
         }
 
