@@ -40,7 +40,6 @@ class StatsController extends Controller
     public function reportOptionsCoredeAction(Request $request, $coredeId, $pollId)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction($request);
 
         $em = $this->getDoctrine()->getManager();
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
@@ -54,50 +53,35 @@ class StatsController extends Controller
             'coredes' => $this->getCoredes(),
             'updateCache' => $this->shouldUpdateCache(),
         );
-        if ($coredeId != 2) {
-            $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
-
-            $results = array();
-            $created_at = null;
-            $poll = $pollRepo->find($pollId);
-
-            $statsCorede = $em->createQueryBuilder()
-                ->select(
-                    'v.coredeName,
-                      sum(v.totalVotes) as totalVotes'
-                )
-                ->from('PROCERGSVPRCoreBundle:StatsTotalCoredeVote', 'v')
-                ->join('PROCERGSVPRCoreBundle:BallotBox', 'b', 'WITH', 'b.id = v.ballotBoxId')
-                ->where('b.poll = :poll')
-                ->andWhere('v.coredeId = :corede')
-                ->groupBy('v.coredeId, v.coredeName')
-                ->orderBy('totalVotes', 'DESC')
-                ->getQuery()->setParameters(array("poll" => $poll->getId(), "corede" => $coredeId))->setMaxResults(
-                    1
-                )->getOneOrNullResult();
-
-            $steps = $poll->getSteps();
-            foreach ($steps as $step) {
-                $data = $statsRepo->findTotalOptionVoteByCoredeAndStep(
-                    $coredeId,
-                    $step->getId()
-                );
-
-                $results[$step->getName()] = $data;
-
-                if (empty($created_at)) {
-                    $data = reset($data);
-                    $created_at = $data['created_at'];
-                }
-            }
-
-            $params['created_at'] = $created_at;
-            $params['results'] = $results;
-            $params['statsCorede'] = $statsCorede;
-        } else {
-            $message = 'Devido a uma liminar, não é possível acessar as informações desse COREDE.';
-            $params['error'] = $message;
-        }
+        
+        $connection = $em->getConnection();
+        $sql = "
+select a1.name corede_name, sum(a2.tot_votes_online + a2.tot_votes_offline + a2.tot_votes_sms) total_votes
+from corede a1
+left join stats_prev_ppp a2 on a1.id = a2.corede_id
+where a2.poll_id = ? and a2.corede_id = ?
+group by a1.name
+        ";
+        $stmt1 = $connection->prepare($sql);
+        $stmt1->execute(array($poll->getId(), $coredeId));
+        $statsCorede = current($stmt1->fetchAll(\PDO::FETCH_ASSOC));
+        
+        $sql = "
+select a2.name, a1.title option_title, a1.category_sorting option_number, sum(a3.tot) total
+from poll_option a1
+inner join step a2 on a1.step_id = a2.id
+left join stats_prev_ppp2 a3 on a1.id = a3.option_id
+where a3.poll_id = ? and a3.corede_id = ?
+group by a2.name, a1.title, a1.category_sorting 
+order by a1.category_sorting
+        ";
+        $stmt1 = $connection->prepare($sql);
+        $stmt1->execute(array($poll->getId(), $coredeId));
+        $results = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
+        $created_at = new \DateTime();
+        $params['created_at'] = $created_at;
+        $params['results'] = $results;
+        $params['statsCorede'] = $statsCorede;
 
         return $this->render(
             'PROCERGSVPRCoreBundle:Stats:optionVotes.html.twig',
@@ -112,7 +96,6 @@ class StatsController extends Controller
     public function reportOptionsCityAction(Request $request, $cityId, $pollId)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
         $poll = $pollRepo->find($pollId);
@@ -124,24 +107,32 @@ class StatsController extends Controller
             'cities' => $this->getCities(),
             'updateCache' => $this->shouldUpdateCache(),
         );
-
-
-        $openVoteRepo = $em->getRepository('PROCERGSVPRCoreBundle:OpenVote');
-
-        $results = array();
-
         $city = $em->getRepository('PROCERGSVPRCoreBundle:City')->findOneById($cityId);
-        $cityTotal = $openVoteRepo->findTotalByCity($poll, $cityId);
-
-        $steps = $poll->getSteps();
-        foreach ($steps as $step) {
-            $data = $openVoteRepo->findOptionVoteByCityAndStep(
-                $cityId,
-                $step->getId()
-            );
-            $results[$step->getName()] = $data;
-        }
-
+        $connection = $em->getConnection();
+        $sql = "
+select a1.name city_name, sum(a2.tot_votes_online + a2.tot_votes_offline + a2.tot_votes_sms) total
+from city a1
+left join stats_prev_ppp a2 on a1.id = a2.city_id
+where a2.poll_id = ? and a2.city_id = ?
+group by a1.name
+        ";
+        $stmt1 = $connection->prepare($sql);
+        $stmt1->execute(array($poll->getId(), $cityId));
+        $cityTotal = current($stmt1->fetchAll(\PDO::FETCH_ASSOC));
+        
+        $sql = "
+select a2.name, a1.title option_title, a1.category_sorting option_number, sum(a3.tot) total
+from poll_option a1
+inner join step a2 on a1.step_id = a2.id
+left join stats_prev_ppp2 a3 on a1.id = a3.option_id
+where a3.poll_id = ? and a3.city_id = ?
+group by a2.name, a1.title, a1.category_sorting
+order by a1.category_sorting
+        ";
+        $stmt1 = $connection->prepare($sql);
+        $stmt1->execute(array($poll->getId(), $cityId));
+        $results = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
+        
         $params['results'] = $results;
         $params['city'] = $city;
         $params['cityTotal'] = $cityTotal;
@@ -655,8 +646,8 @@ class StatsController extends Controller
 
             $cache->set(self::CACHE_UPDATE_LOCK, true, null, 60);
             try {
-                $this->updateTotalOptionVotesAction();
-                $this->updateTotalVotesAction();
+                $this->updateTotalOptionVotesAction($request);
+                $this->updateTotalVotesAction($request);
 
                 $lastUpdated = new \DateTime();
                 $cache->set(
