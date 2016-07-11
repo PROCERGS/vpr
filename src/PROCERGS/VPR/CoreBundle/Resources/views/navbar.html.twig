@@ -73,6 +73,8 @@
                                     <li>
                                         <a href="{{ path('vpr_option_vote_by_corede') }}">{{ "Partial results online by Corede"|trans }}</a>
                                     </li>
+                                {% endif %}                                
+                                {% if is_granted('ROLE_RESULTS') %}
                                     <li>
                                         <a href="{{ path('vpr_option_vote_by_city') }}">{{ "Partial results online by City"|trans }}</a>
                                     </li>
