@@ -74,7 +74,7 @@ class DatabasePopulator
         $step
             ->setName('Step 1')
             ->setPoll($poll)
-            ->setMaxSelection(1)
+            ->setMaxSelection(5)
             ->setSorting(1);
         $this->em->persist($step);
         $this->em->flush($step);

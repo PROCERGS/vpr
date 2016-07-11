@@ -6,6 +6,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Corede;
 use PROCERGS\VPR\CoreBundle\Entity\Poll;
 use PROCERGS\VPR\CoreBundle\Entity\PollOption;
 use PROCERGS\VPR\CoreBundle\Entity\PollOptionRepository;
+use PROCERGS\VPR\CoreBundle\Entity\Step;
 
 class PollOptionHelper
 {
@@ -31,11 +32,26 @@ class PollOptionHelper
         /** @var PollOption[] $pollOption */
         $pollOptions = $this->pollOptionRepository->findByCategorySorting($ballotSeq, $poll, $corede);
 
+        $steps = [];
         $result = [];
         foreach ($pollOptions as $pollOption) {
-            $result[] = $pollOption->getId();
+            $step = $pollOption->getStep();
+            $steps[$step->getId()] = $step;
+            $result[$step->getId()][] = $pollOption->getId();
         }
 
-        return $result;
+        $valid = [];
+        foreach ($result as $stepId => $options) {
+            /** @var Step $step */
+            $step = $steps[$stepId];
+
+            if ($this->pollOptionRepository->checkStepOptions($step, $options)) {
+                $valid = array_merge($valid, $options);
+            } else {
+                throw new \InvalidArgumentException("Selecionadas opções em excesso ou de uma etapa inválida.");
+            }
+        }
+
+        return $valid;
     }
 }
