@@ -129,13 +129,11 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
         $sql = '
 with tb1 as (
 select a1.corede_id
-, count(case when a1.voter_registration is not null and a2.is_online = true then 1 else null end) voters_online
-, count(case when a1.voter_registration is not null and a2.is_online = false and a2.is_sms = true then 1 else null end) voters_sms
-, count(case when a1.voter_registration is not null and a2.is_online = false and a2.csv is not null then 1 else null end) voters_offline
-from vote a1 
-inner join ballot_box a2
-on a1.ballot_box_id = a2.id
-where a2.poll_id = ?
+, sum(voters_online) voters_online
+, sum(voters_sms) voters_sms
+, sum(voters_offline) voters_offline
+from stats_prev_ppp3 a1
+where a1.poll_id = ?
 group by a1.corede_id            
 ), tb2 as (
 select a2.id, a2.name, sum(a1.tot_voter) tot_pop
@@ -202,13 +200,11 @@ order by tb2.name
         $sql = "
 with tb1 as (
 select a1.city_id
-, count(case when a1.voter_registration is not null and a2.is_online = true then 1 else null end) voters_online
-, count(case when a1.voter_registration is not null and a2.is_online = false and a2.is_sms = true then 1 else null end) voters_sms
-, count(case when a1.voter_registration is not null and a2.is_online = false and a2.csv is not null then 1 else null end) voters_offline
-from vote a1
-inner join ballot_box a2
-on a1.ballot_box_id = a2.id
-where a2.poll_id = :poll_id and a1.corede_id = :corede_id
+, sum(voters_online) voters_online
+, sum(voters_sms) voters_sms
+, sum(voters_offline) voters_offline
+from stats_prev_ppp3 a1
+where a1.poll_id = :poll_id and a1.corede_id = :corede_id
 group by a1.city_id
 ), tb2 as (
 select a1.id, a1.name, sum(a1.tot_voter) tot_pop

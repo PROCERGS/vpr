@@ -22,7 +22,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
+                "php": ">=5.4",
                 "symfony/config": "^2.7",
                 "symfony/security-core": "^2.7"
             },
@@ -2372,7 +2372,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5"
+                "php": ">=5.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.6"
@@ -2426,7 +2426,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
+                "php": ">=5.4",
                 "phpdocumentor/reflection-common": "^1.0@dev",
                 "phpdocumentor/type-resolver": "^0.2.0",
                 "webmozart/assert": "^1.0"
@@ -2471,7 +2471,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
+                "php": ">=5.4",
                 "phpdocumentor/reflection-common": "^1.0"
             },
             "require-dev": {
