@@ -70,35 +70,45 @@ class VoteRepository extends EntityRepository
         $thresholdMin = 0,
         $thresholdMax = 0
     ) {
-        $query = $this->createQueryBuilder('v')
-            ->select('v.ipAddress, c.name AS city, c.id AS city_id, co.name AS corede, COUNT(v) AS votes')
-            ->join('v.ballotBox', 'b')
-            ->join('v.city', 'c')
-            ->join('v.corede', 'co')
-            ->where('b.poll = :poll')
-            ->groupBy('v.ipAddress, c.name, c.id, co.name')
-            ->orderBy('votes', 'DESC')
-            ->setParameter('poll', $poll);
-
-        if ($corede instanceof Corede) {
-            $query->andWhere('c.corede = :corede')
-                ->setParameter('corede', $corede);
-        }
-        if ($city instanceof City) {
-            $query->andWhere('b.city = :city')
-                ->setParameter('city', $city);
-        }
-
-        if ($thresholdMin > 0) {
-            $query->andHaving('COUNT(v) >= :min')
-                ->setParameter('min', $thresholdMin);
-        }
-
-        if ($thresholdMax > 0) {
-            $query->andHaving('COUNT(v) <= :max')
-                ->setParameter('max', $thresholdMax);
-        }
-
-        return $query->getQuery()->getScalarResult();
+    	$em = $this->getEntityManager();
+    	$connection = $em->getConnection();
+    	$sql = "
+select a1.ip_address ipAddress, a2.name city, a1.city_id city_id, a3.name corede, a1.total votes
+from stats_prev_ppp4 a1
+INNER JOIN city a2 ON a1.city_id = a2.id
+INNER JOIN corede a3 ON a1.corede_id = a3.id
+where a1.poll_id = :poll_id ";
+    	$params = array('poll_id' => $poll->getId());
+    	if ($corede instanceof Corede) {
+    		$sql .= "and a1.corede_id = :corede_id ";
+    		$params['corede_id'] = $corede->getId();
+    	}
+    	if ($city instanceof City) {
+    		$sql .= "and a1.city_id = :city_id ";
+    		$params['city_id'] = $city->getId();
+    	}
+    	if ($thresholdMin > 0) {
+    		$sql .= "and a1.total >= :total_min ";
+    		$params['total_min'] = $thresholdMin;
+    	}
+    	if ($thresholdMax > 0) {
+    		$sql .= "and a1.total <= :total_max ";
+    		$params['total_max'] = $thresholdMax;
+    	}
+    	$sql .= "order by a1.total desc, a1.corede_id, a1.city_id ";
+    	$stmt1 = $connection->prepare($sql);
+    	$stmt1->execute($params);
+    	$stmt1->setFetchMode(\PDO::FETCH_NUM);
+    	$result = array();
+    	while ($linha = $stmt1->fetch()) {
+    		$result[] = array(    				
+    				'ipAddress' => $linha[0],
+					'city' => $linha[1],
+    				'city_id' => $linha[2],
+    				'corede' => $linha[3],
+    				'votes' => $linha[4],
+    		);
+    	}
+    	return $result;
     }
 }
