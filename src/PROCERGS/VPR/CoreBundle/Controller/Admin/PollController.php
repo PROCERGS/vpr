@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
 use PROCERGS\VPR\CoreBundle\Helper\PPPHelper;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use PROCERGS\VPR\CoreBundle\Entity\StatsTotalCoredeVoteRepository;
 
 /**
  * Poll controller.
@@ -330,7 +331,8 @@ class PollController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-
+        
+        /* @var $statsRepo StatsTotalCoredeVoteRepository */
         $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
         $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
 
@@ -496,7 +498,7 @@ class PollController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $session = $this->getRequest()->getSession();
-
+        /* @var $statsRepo StatsTotalCoredeVoteRepository */
         $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
         $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
         $corede = $coredeRepo->find($corede);

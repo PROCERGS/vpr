@@ -50,14 +50,12 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
   sum(b.tot_votes_online) AS votes_online,
         sum(b.tot_votes_offline) AS votes_offline,
             sum(b.tot_votes_sms) AS votes_sms,
-        b.corede_id,
+        c.id corede_id,
         c.name
-   FROM stats_prev_ppp b
-   INNER JOIN corede c on c.id = b.corede_id
-   WHERE b.poll_id = :poll
-   GROUP BY b.corede_id, c.name
+   FROM corede c
+   left JOIN stats_prev_ppp b on c.id = b.corede_id and b.poll_id = :poll   
+   GROUP BY c.id, c.name
    ORDER BY c.name
-
         ');
 
         $statement->bindParam('poll', $poll);
@@ -76,14 +74,12 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
   sum(b.tot_votes_online) AS votes_online,
         sum(b.tot_votes_offline) AS votes_offline,
         sum(b.tot_votes_sms) AS votes_sms,
-        b.city_id,
+        city.id city_id,
         city.name
-   FROM stats_prev_ppp b
-   INNER JOIN corede c on c.id = :corede
-   INNER JOIN city on city.id = b.city_id
-   WHERE b.poll_id = :poll
-   AND b.corede_id = :corede
-   GROUP BY b.city_id, city.name
+   FROM city    
+   left JOIN stats_prev_ppp b on city.id = b.city_id and b.poll_id = :poll AND b.corede_id = :corede
+   WHERE city.corede_id = :corede
+   GROUP BY city.id, city.name
    ORDER BY city.name
         ');
 
@@ -104,12 +100,11 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
   sum(b.tot_voters_online ) AS voters_online,
         sum(b.tot_voters_offline) AS voters_offline,
             sum(b.tot_voters_sms) AS voters_sms,
-        b.corede_id,
+        c.id corede_id,
         c.name
-   FROM stats_prev_ppp b
-   INNER JOIN corede c on c.id = b.corede_id
-   WHERE b.poll_id = :poll
-   GROUP BY b.corede_id, c.name
+   FROM corede c
+   left JOIN stats_prev_ppp b on c.id = b.corede_id and b.poll_id = :poll   
+   GROUP BY c.id, c.name
    ORDER BY c.name
         ');
 
@@ -150,7 +145,7 @@ order by tb2.name
         $stmt1->execute(array($poll));
         $stmt1->setFetchMode(\PDO::FETCH_ASSOC);
         while ($vote = $stmt1->fetch()) {
-            $coredeId = $vote['corede_id'];
+            $coredeId = $vote['id'];
             $t = array();
             $t['corede_id'] = $coredeId;
             $t['corede'] = $vote['name'];
@@ -175,14 +170,12 @@ order by tb2.name
   sum(b.tot_voters_online ) AS voters_online,
         sum(b.tot_voters_offline) AS voters_offline,
             sum(b.tot_voters_sms) AS voters_sms,
-        b.city_id,
+        city.id city_id,
         city.name
-   FROM stats_prev_ppp b
-   INNER JOIN corede c on c.id = :corede
-   INNER JOIN city on city.id = b.city_id
-   WHERE b.poll_id = :poll
-   AND b.corede_id = :corede
-   GROUP BY b.city_id, city.name
+   FROM city    
+   left JOIN stats_prev_ppp b  on city.id = b.city_id and b.poll_id = :poll AND b.corede_id = :corede
+   WHERE city.corede_id = :corede
+   GROUP BY city.id, city.name
    ORDER BY city.name
         ');
 
@@ -221,7 +214,7 @@ order by tb2.name
         $stmt1->execute(array('poll_id' => $poll, 'corede_id' => $corede));
         $stmt1->setFetchMode(\PDO::FETCH_ASSOC);
         while ($vote = $stmt1->fetch()) {
-            $tId = $vote['city_id'];
+            $tId = $vote['id'];
             $t = array();
             $t['city_id'] = $tId;
             $t['city'] = $vote['name'];
