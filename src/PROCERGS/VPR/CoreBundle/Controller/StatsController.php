@@ -51,15 +51,15 @@ class StatsController extends Controller
         $params = array(
             'form' => $form->createView(),
             'coredes' => $this->getCoredes(),
-            'updateCache' => $this->shouldUpdateCache(),
+            'updateCache' => null,
         );
         
         $connection = $em->getConnection();
         $sql = "
 select a1.name corede_name, sum(a2.tot_voters_online + a2.tot_voters_offline + a2.tot_voters_sms) total_votes
 from corede a1
-left join stats_prev_ppp a2 on a1.id = a2.corede_id
-where a2.poll_id = ? and a2.corede_id = ?
+left join stats_prev_ppp a2 on a1.id = a2.corede_id and a2.poll_id = ? 
+where a1.id = ?
 group by a1.name
         ";
         $stmt1 = $connection->prepare($sql);
@@ -67,13 +67,13 @@ group by a1.name
         $statsCorede = current($stmt1->fetchAll(\PDO::FETCH_ASSOC));
         
         $sql = "
-select a2.name, a1.title option_title, a1.category_sorting option_number, sum(a3.tot) total
+select a2.name, a1.title option_title, a1.category_sorting option_number, sum(a3.tot) total, a2.sorting
 from poll_option a1
 inner join step a2 on a1.step_id = a2.id
 left join stats_prev_ppp2 a3 on a1.id = a3.option_id
-where a3.poll_id = ? and a3.corede_id = ?
-group by a2.name, a1.title, a1.category_sorting 
-order by a1.category_sorting
+where a2.poll_id = ? and a1.corede_id = ?
+group by a2.name, a1.title, a2.sorting, a1.category_sorting 
+order by a2.sorting, a1.category_sorting
         ";
         $stmt1 = $connection->prepare($sql);
         $stmt1->execute(array($poll->getId(), $coredeId));
@@ -105,15 +105,15 @@ order by a1.category_sorting
         $params = array(
             'form' => $form->createView(),
             'cities' => $this->getCities(),
-            'updateCache' => $this->shouldUpdateCache(),
+            'updateCache' => null,
         );
         $city = $em->getRepository('PROCERGSVPRCoreBundle:City')->findOneById($cityId);
         $connection = $em->getConnection();
         $sql = "
 select a1.name city_name, sum(a2.tot_voters_online + a2.tot_voters_offline + a2.tot_voters_sms) total
 from city a1
-left join stats_prev_ppp a2 on a1.id = a2.city_id
-where a2.poll_id = ? and a2.city_id = ?
+left join stats_prev_ppp a2 on a1.id = a2.city_id and a2.poll_id = ? 
+where a1.id = ?
 group by a1.name
         ";
         $stmt1 = $connection->prepare($sql);
@@ -125,13 +125,14 @@ group by a1.name
         }
         
         $sql = "
-select a2.name, a1.title option_title, a1.category_sorting option_number, sum(a3.tot) total
+select a2.name, a1.title option_title, a1.category_sorting option_number, sum(a3.tot) total, a2.sorting
 from poll_option a1
 inner join step a2 on a1.step_id = a2.id
 left join stats_prev_ppp2 a3 on a1.id = a3.option_id
-where a3.poll_id = ? and a3.city_id = ?
-group by a2.name, a1.title, a1.category_sorting
-order by a1.category_sorting
+inner join city a4 on a4.corede_id = a1.corede_id
+where a2.poll_id = ? and a4.id = ?
+group by a2.name, a1.title, a2.sorting, a1.category_sorting
+order by a2.sorting, a1.category_sorting
         ";
         $stmt1 = $connection->prepare($sql);
         $stmt1->execute(array($poll->getId(), $cityId));
@@ -155,7 +156,6 @@ order by a1.category_sorting
     public function optionVotesAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
-        $this->updateCacheAction($request);
         $form = $this->getCoredeForm();
 
         $form->handleRequest($request);
@@ -193,7 +193,6 @@ order by a1.category_sorting
     public function optionVotesCityAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_RESULTS');
-        $this->updateCacheAction($request);
         $form = $this->getCityForm();
 
         $form->handleRequest($request);
@@ -231,7 +230,6 @@ order by a1.category_sorting
     public function votesAction(Request $request)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
 
         $session = $this->getRequest()->getSession();
@@ -394,136 +392,11 @@ order by a1.category_sorting
     }
 
     /**
-     * @Route("/stats/update_total_votes", name="vpr_stats_update_total_votes")
-     */
-    public function updateTotalVotesAction(Request $request)
-    {
-        $this->checkAccess($request);
-        $em = $this->getDoctrine()->getManager();
-        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
-        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
-        $poll = $pollRepo->findLastPoll();
-
-        $results = $statsRepo->findTotalVotes();
-        $created_at = new \DateTime();
-
-        $coredes = $em->getRepository('PROCERGSVPRCoreBundle:Corede')->findAll();
-        $map = array();
-        foreach ($coredes as $corede) {
-            $map[$corede->getId()] = array(
-                'latitude' => $corede->getLatitude(),
-                'longitude' => $corede->getLongitude(),
-            );
-        }
-
-        foreach ($results as $line) {
-            $entity = $statsRepo->findOneByCoredeId($poll, $line['corede_id']);
-            if (!$entity) {
-                $entity = new StatsTotalCoredeVote();
-            }
-
-            $entity->setBallotBoxId($line['ballot_box_id']);
-            $entity->setCoredeId($line['corede_id']);
-            $entity->setCoredeName($line['corede_name']);
-            $entity->setTotalWithVoterRegistration($line['total_with_voter_registration']);
-            $entity->setTotalWithLoginCidadao($line['total_with_login_cidadao']);
-            $entity->setTotalWithVoterRegistrationAndLoginCidadao(
-                $line['total_with_voter_registration_and_login_cidadao']
-            );
-            $entity->setTotalVotes($line['total_votes']);
-            $entity->setCreatedAt($created_at);
-            $entity->setLatitude($map[$line['corede_id']]['latitude']);
-            $entity->setLongitude($map[$line['corede_id']]['longitude']);
-
-            $em->persist($entity);
-            $em->flush();
-        }
-
-        $response = new JsonResponse();
-        $response->setData(
-            array(
-                'success' => true,
-                'action' => 'update_corede_total_votes',
-                'created_at' => $created_at,
-            )
-        );
-
-        return $response;
-    }
-
-    /**
-     * @Route("/stats/update_total_option_votes", name="vpr_stats_update_total_option_votes")
-     */
-    public function updateTotalOptionVotesAction(Request $request)
-    {
-        $this->checkAccess($request);
-        $em = $this->getDoctrine()->getManager();
-        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalOptionVote');
-        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-
-        $created_at = new \DateTime();
-        /**
-         * @var \Doctrine\DBAL\Connection $connection
-         */
-        $connection = $em->getConnection();
-        try {
-            $connection->beginTransaction();
-            $sql = "delete from stats_total_option_vote where poll_id = ? ";
-            $stmt1 = $connection->prepare($sql);
-            $stmt1->execute(array($poll->getId()));
-            $sql = "
-            with tb1 as (
-                SELECT s0_.poll_id
-                , s0_.corede_id
-                , s0_.poll_option_id
-                , count(s0_.poll_option_id) tot
-                FROM stats_option_vote s0_
-                WHERE
-                s0_.poll_id = ?
-                group by s0_.poll_id
-                , s0_.corede_id
-                , s0_.poll_option_id
-                )
-                insert into stats_total_option_vote (id, poll_id, corede_id, option_step_id, option_id, option_number, option_title, total_votes, created_at)
-                SELECT
-                nextval('stats_total_option_vote_id_seq')
-                ,s0_.poll_id
-                , s0_.corede_id
-                , p2_.step_id
-                , p2_.id
-                , p2_.category_sorting
-                , p2_.title
-                , sum(s0_.tot)
-                , now_test()
-                FROM tb1 s0_
-                INNER JOIN poll_option p2_ ON (s0_.poll_option_id = p2_.id)
-                GROUP BY s0_.poll_id, s0_.corede_id, p2_.step_id, p2_.id, p2_.category_sorting, p2_.title
-            ";
-            $stmt1 = $connection->prepare($sql);
-            $stmt1->execute(array($poll->getId()));
-            $connection->commit();
-        } catch (\Exception $e) {
-            $connection->rollBack();
-        }
-        $response = new JsonResponse();
-        $response->setData(
-            array(
-                'success' => true,
-                'action' => 'update_option_total_votes',
-                'created_at' => $created_at,
-            )
-        );
-
-        return $response;
-    }
-
-    /**
      * @Route("/stats/votes_by_corede", name="vpr_stats_votes_by_corede")
      */
     public function votesByCoredeAction(Request $request)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
 
         $query = $em->createQueryBuilder()
@@ -553,7 +426,6 @@ order by a1.category_sorting
     public function graphicsAction(Request $request)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
 
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
@@ -580,7 +452,6 @@ order by a1.category_sorting
     public function query1Action(Request $request)
     {
         $this->checkAccess($request);
-        $this->updateCacheAction($request);
         $em = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
         $query = $em->createQueryBuilder()
@@ -635,45 +506,6 @@ order by a1.category_sorting
             return false;
         } else {
             return true;
-        }
-    }
-
-    /**
-     * @Route("/reports/update/corede", name="vpr_update_corede_report_cache")
-     * @template()
-     */
-    public function updateCacheAction(Request $request)
-    {
-        $this->checkAccess($request);
-        if ($this->shouldUpdateCache()) {
-            $cache = $this->get('session.memcached');
-
-            $cache->set(self::CACHE_UPDATE_LOCK, true, null, 60);
-            try {
-                $this->updateTotalOptionVotesAction($request);
-                $this->updateTotalVotesAction($request);
-
-                $lastUpdated = new \DateTime();
-                $cache->set(
-                    self::CACHE_KEY_LAST_UPDATED,
-                    $lastUpdated,
-                    null,
-                    60 * self::CACHE_TIME_MINUTES
-                );
-                $cache->delete(self::CACHE_UPDATE_LOCK);
-            } catch (Exception $e) {
-                $cache->delete(self::CACHE_UPDATE_LOCK);
-            }
-
-            return array('lastUpdated' => $cache->get(self::CACHE_KEY_LAST_UPDATED));
-        } else {
-            if ($this->has('session.memcached')) {
-                $cache = $this->get('session.memcached');
-
-                return array('lastUpdated' => $cache->get(self::CACHE_KEY_LAST_UPDATED));
-            } else {
-                return array('lastUpdated' => new \DateTime());
-            }
         }
     }
 
@@ -930,21 +762,15 @@ order by a1.category_sorting
 
         $em = $this->getDoctrine()->getManager();
         $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-
+		
+        
         $coredeId = '';
         $cityId = '';
         $cacheKey = "votes_per_ip_{$poll->getId()}".$coredeId.$cityId;
 
-        $data = $this->getCached(
-            $cacheKey,
-            60,
-            function () use ($em, $poll) {
-                /** @var VoteRepository $repo */
-                $repo = $em->getRepository('PROCERGSVPRCoreBundle:Vote');
-
-                return $repo->getVotesPerIp($poll, null, null, 10);
-            }
-        );
+        $repo = $em->getRepository('PROCERGSVPRCoreBundle:Vote');
+        
+        $data = $repo->getVotesPerIp($poll, null, null, 10);
 
         $cities = [];
         foreach ($data as $entry) {
