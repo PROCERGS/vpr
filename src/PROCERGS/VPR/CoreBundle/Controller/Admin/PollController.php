@@ -451,7 +451,8 @@ class PollController extends Controller
         $cities = $statsRepo->findTotalVotersByPollAndCoredeFake($poll, $corede->getId());
         return array(
             'corede' => $corede,
-            'cities' => $cities
+            'cities' => $cities,
+        	'poll'   => $poll
         );
     }
     
@@ -671,12 +672,12 @@ class PollController extends Controller
         		'%s;%s;%s;%s;%s;%s;%s;%s',
         		'Corede ID',
         		$translator->trans('admin.corede'),
-        		'Votantes Online',
-        		'Votantes Offline',
-        		'Votantes SMS',
-        		'Total votantes',
-        		'Total Eleitores',
-        		'Perc. votantes'
+        		$translator->trans('admin.voters_online'),
+        		$translator->trans('admin.voters_offline'),
+        		$translator->trans('admin.voters_sms'),
+        		$translator->trans('admin.tot'),
+        		$translator->trans('admin.tot_pop'),
+        		$translator->trans('admin.perc')
         ).PHP_EOL;
         $total_online = 0; 
         $total_offline = 0; 
@@ -731,6 +732,93 @@ class PollController extends Controller
         $response->setContent(utf8_decode($result));
         
         return $response;
+    }
+    
+    /**
+     * Export list poll stats by corede in csv.
+     *
+     * @Route("/stats2csv/{poll}/corede/{corede}", name="admin_stats_corede2_csv")
+     */
+    public function statsListCorede2Actioncsv(Request $request, $poll, $corede)
+    {
+    	$this->denyAccessUnlessGranted('ROLE_RESULTS');
+    
+    	$em = $this->getDoctrine()->getManager();
+    
+    	$coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+    	$corede = $coredeRepo->find($corede);
+    	$statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+    	$cities = $statsRepo->findTotalVotersByPollAndCoredeFake($poll, $corede->getId());
+    	
+    	$result = '';
+    	$translator = $this->get('translator');
+    	$result .= sprintf(
+    			'%s;%s;%s;%s;%s;%s;%s;%s',
+    			'Município ID',
+    			$translator->trans('admin.city'),
+    			$translator->trans('admin.voters_online'),
+    			$translator->trans('admin.voters_offline'),
+    			$translator->trans('admin.voters_sms'),
+    			$translator->trans('admin.tot'),
+    			$translator->trans('admin.tot_pop'),
+    			$translator->trans('admin.perc')
+    	).PHP_EOL;
+    	
+    	$total_online = 0;
+    	$total_offline = 0;
+    	$total_sms = 0;
+    	$total_pop = 0;
+    	$total_tot = 0;
+    	
+    	foreach ($cities as $req) {
+    		 
+    		$total_online = $total_online + $req['voters_online'];
+    		$total_offline = $total_offline + $req['voters_offline'];
+    		$total_sms = $total_sms + $req['voters_sms'];
+    		$total_pop = $total_pop + $req['tot_pop'];
+    		$total_tot = $total_tot + $req['tot'];
+    		 
+    		$result .= sprintf(
+    				'%s;%s;%s;%s;%s;%s;%s;%s',
+    				$req['city_id'],
+    				$req['city'],
+    				$req['voters_online'],
+    				$req['voters_offline'],
+    				$req['voters_sms'],
+    				$req['tot'],
+    				$req['tot_pop'],
+    				$req['perc']
+    		).PHP_EOL;
+    	}
+    	
+    	$result .= sprintf(
+    			'%s;%s;%s;%s;%s;%s;%s;%s',
+    			'',
+    			'',
+    			$total_online,
+    			$total_offline,
+    			$total_sms,
+    			$total_tot,
+    			$total_pop,
+    			''
+    	).PHP_EOL;
+    	
+    	
+    	$response = new \Symfony\Component\HttpFoundation\Response();
+    	$response->headers->set('Cache-Control', 'private');
+    	$response->headers->set('Content-type', 'text/csv');
+    	$response->headers->set(
+    			'Content-Disposition',
+    			'attachment; filename="'.$corede->getName().'";'
+    	);
+    	$response->headers->set('Content-length', strlen($result));
+    	
+    	$response->sendHeaders();
+    	
+    	$response->setContent(utf8_decode($result));
+    	
+    	return $response;
+    	
     }
     
 }
