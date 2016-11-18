@@ -631,4 +631,106 @@ class PollController extends Controller
             'hash' => $ret
         ));        
     }
+    
+    /**
+     * Lists poll stats.
+     *
+     * @Route("/stats2csv", name="admin_stats2_csv")
+     */
+    public function statsList2Actioncsv(Request $request)
+    {
+        $this->denyAccessUnlessGranted('ROLE_RESULTS');
+    
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+    
+        $poll_filters = $session->get('poll_filters');
+    
+        $form = $this->createForm(new PollOptionFilterType());
+        $form->remove("corede");
+    
+    
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
+            } else{
+                $form->bind($request);
+                $session->set('poll_filters', $request);
+            }
+            $selected = $form->getData();
+    
+            $poll = $selected['poll'];
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        }
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredes = $statsRepo->findTotalVotersByPollFake($poll->getId());
+        $result = '';
+        $translator = $this->get('translator');
+        $result .= sprintf(
+        		'%s;%s;%s;%s;%s;%s;%s;%s',
+        		'Corede ID',
+        		$translator->trans('admin.corede'),
+        		'Votantes Online',
+        		'Votantes Offline',
+        		'Votantes SMS',
+        		'Total votantes',
+        		'Total Eleitores',
+        		'Perc. votantes'
+        ).PHP_EOL;
+        $total_online = 0; 
+        $total_offline = 0; 
+        $total_sms = 0; 
+        $total_pop = 0; 
+        $total_tot = 0; 
+        
+        foreach ($coredes as $req) {
+        	
+        	$total_online = $total_online + $req['voters_online'];
+        	$total_offline = $total_offline + $req['voters_offline'];
+        	$total_sms = $total_sms + $req['voters_sms'];
+        	$total_pop = $total_pop + $req['tot_pop'];
+        	$total_tot = $total_tot + $req['tot'];
+        	
+        	$result .= sprintf(
+        			'%s;%s;%s;%s;%s;%s;%s;%s',
+        			$req['corede_id'],
+        			$req['corede'],
+        			$req['voters_online'],
+        			$req['voters_offline'],
+        			$req['voters_sms'],
+        			$req['tot'],
+        			$req['tot_pop'],
+        			$req['perc']
+        	).PHP_EOL;
+        }
+        
+        $result .= sprintf(
+        		'%s;%s;%s;%s;%s;%s;%s;%s',
+        		'',
+        		'',
+        		$total_online,
+        		$total_offline,
+        		$total_sms,
+        		$total_tot,
+        		$total_pop,
+        		''
+        ).PHP_EOL;
+        
+        $response = new \Symfony\Component\HttpFoundation\Response();
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set(
+        		'Content-Disposition',
+        		'attachment; filename="apuracao_final.csv";'
+        );
+        $response->headers->set('Content-length', strlen($result));
+        
+        $response->sendHeaders();
+        
+        $response->setContent(utf8_decode($result));
+        
+        return $response;
+    }
+    
 }
