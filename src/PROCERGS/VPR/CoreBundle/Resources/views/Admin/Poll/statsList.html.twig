@@ -64,6 +64,7 @@
                     <th >Votantes Online validos</th>
                     <th >Votantes Offline validos</th>
                     <th >Votantes SMS validos</th>
+                    <th >Total Votantes validos</th>
                     <th >{{ 'admin.voters_online'|trans }}</th>
                     <th >{{ 'admin.voters_offline'|trans }}</th>
                     <th >{{ 'admin.voters_sms'|trans }}</th>
@@ -81,6 +82,7 @@
                     {% set total_voters_online = 0 %}
                     {% set total_voters_offline = 0 %}
                     {% set total_voters_sms = 0 %}
+                    {% set total_voters_total = 0 %}
                     {% set total_fake_voters_online = 0 %}
                     {% set total_fake_voters_offline = 0 %}
                     {% set total_fake_voters_sms = 0 %}
@@ -95,6 +97,7 @@
                         {% set total_voters_online = total_voters_online + corede.voters_online %}
                         {% set total_voters_offline = total_voters_offline + corede.voters_offline %}
                         {% set total_voters_sms = total_voters_sms + corede.voters_sms %}
+                        {% set total_voters_total = total_voters_total + corede.voters_total %}
                         {% set total_fake_voters_online = total_fake_voters_online + corede.fake_voters_online %}
                         {% set total_fake_voters_offline = total_fake_voters_offline + corede.fake_voters_offline %}
                         {% set total_fake_voters_sms = total_fake_voters_sms + corede.fake_voters_sms %}
@@ -111,6 +114,7 @@
                             <td>{{ corede.voters_online }}</td>
                             <td>{{ corede.voters_offline }}</td>
                             <td>{{ corede.voters_sms }}</td>
+                            <td>{{ corede.voters_total }}</td>
                             <td>{{ corede.fake_voters_online }}</td>
                             <td>{{ corede.fake_voters_offline }}</td>
                             <td>{{ corede.fake_voters_sms }}</td>
@@ -128,6 +132,7 @@
                         <td><strong>{{ total_voters_online }}</strong></td>
                         <td><strong>{{ total_voters_offline }}</strong></td>
                         <td><strong>{{ total_voters_sms }}</strong></td>
+                        <td><strong>{{ total_voters_total }}</strong></td>
                         <td><strong>{{ total_fake_voters_online }}</strong></td>
                         <td><strong>{{ total_fake_voters_offline }}</strong></td>
                         <td><strong>{{ total_fake_voters_sms }}</strong></td>

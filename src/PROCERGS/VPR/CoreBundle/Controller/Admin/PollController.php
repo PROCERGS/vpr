@@ -375,6 +375,7 @@ class PollController extends Controller
             $coredes[$coredeId]['voters_online'] = $vote['voters_online'];
             $coredes[$coredeId]['voters_offline'] = $vote['voters_offline'];
             $coredes[$coredeId]['voters_sms'] = $vote['voters_sms'];
+            $coredes[$coredeId]['voters_total'] = $vote['voters_total'];
         }
         $voters = $statsRepo->findTotalVotersByPollFake($poll->getId());
         foreach ($voters as $vote) {

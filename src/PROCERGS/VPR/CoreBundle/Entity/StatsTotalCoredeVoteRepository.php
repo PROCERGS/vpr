@@ -98,15 +98,16 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
 
         $statement = $connection->prepare('
              SELECT
-  sum(b.tot_voters_online ) AS voters_online,
-        sum(b.tot_voters_offline) AS voters_offline,
-            sum(b.tot_voters_sms) AS voters_sms,
-        c.id corede_id,
-        c.name
-   FROM corede c
-   left JOIN stats_prev_ppp b on c.id = b.corede_id and b.poll_id = :poll   
-   GROUP BY c.id, c.name
-   ORDER BY c.name
+  					sum(b.tot_voters_online ) AS voters_online,
+        			sum(b.tot_voters_offline) AS voters_offline,
+        	    	sum(b.tot_voters_sms) AS voters_sms,
+        			sum(b.tot_voters_online )+sum(b.tot_voters_offline)+sum(b.tot_voters_sms) as voters_total, 
+        			c.id corede_id,
+        			c.name
+   			FROM 	corede c
+   					left JOIN stats_prev_ppp b on c.id = b.corede_id and b.poll_id = :poll   
+   			GROUP 	BY c.id, c.name
+   			ORDER 	BY c.name
         ');
 
         $statement->bindParam('poll', $poll);
