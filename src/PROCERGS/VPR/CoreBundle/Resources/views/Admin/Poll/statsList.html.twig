@@ -66,8 +66,8 @@
                     <th >{{ 'admin.voters_online'|trans }}</th>
                     <th >{{ 'admin.voters_offline'|trans }}</th>
                     <th >{{ 'admin.voters_sms'|trans }}</th>
-                    <th >{{ 'admin.tot_pop'|trans }}</th>
                     <th >{{ 'admin.tot'|trans }}</th>
+                    <th >{{ 'admin.tot_pop'|trans }}</th>
                     <th >{{ 'admin.perc'|trans }}</th>
                 </tr>
             </thead>
@@ -110,8 +110,8 @@
                             <td>{{ corede.fake_voters_online }}</td>
                             <td>{{ corede.fake_voters_offline }}</td>
                             <td>{{ corede.fake_voters_sms }}</td>
-                            <td>{{ corede.fake_tot_pop }}</td>
                             <td>{{ corede.fake_tot }}</td>
+                            <td>{{ corede.fake_tot_pop }}</td>
                             <td>{{ corede.fake_perc }}</td>
                         </tr>
                     {% endfor %}
@@ -126,8 +126,8 @@
                         <td><strong>{{ total_fake_voters_online }}</strong></td>
                         <td><strong>{{ total_fake_voters_offline }}</strong></td>
                         <td><strong>{{ total_fake_voters_sms }}</strong></td>
-                        <td><strong>{{ total_fake_tot_pop }}</strong></td>
                         <td><strong>{{ total_fake_tot }}</strong></td>
+                        <td><strong>{{ total_fake_tot_pop }}</strong></td>
                         <td><strong>{{ ((total_fake_tot * 100)/ total_fake_tot_pop)|number_format(2) }}</strong></td>
                     </tr>
                 {% else %}
