@@ -72,9 +72,10 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
 
         $statement = $connection->prepare('
              SELECT
-  sum(b.tot_votes_online) AS votes_online,
+  		sum(b.tot_votes_online) AS votes_online,
         sum(b.tot_votes_offline) AS votes_offline,
         sum(b.tot_votes_sms) AS votes_sms,
+        sum(b.tot_votes_online)+sum(b.tot_votes_offline)+sum(b.tot_votes_sms) AS votes_total,		
         city.id city_id,
         city.name
    FROM city    
@@ -169,11 +170,12 @@ order by tb2.name
 
         $statement = $connection->prepare('
              SELECT
-  sum(b.tot_voters_online ) AS voters_online,
-        sum(b.tot_voters_offline) AS voters_offline,
+  			sum(b.tot_voters_online ) AS voters_online,
+        	sum(b.tot_voters_offline) AS voters_offline,
             sum(b.tot_voters_sms) AS voters_sms,
-        city.id city_id,
-        city.name
+        	sum(b.tot_voters_online )+sum(b.tot_voters_offline)+sum(b.tot_voters_sms) AS voters_total,
+        	city.id city_id,
+        	city.name
    FROM city    
    left JOIN stats_prev_ppp b  on city.id = b.city_id and b.poll_id = :poll AND b.corede_id = :corede
    WHERE city.corede_id = :corede

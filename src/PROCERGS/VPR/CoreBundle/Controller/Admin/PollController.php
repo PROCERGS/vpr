@@ -518,6 +518,7 @@ class PollController extends Controller
             $cities[$cityId]['votes_online'] = $vote['votes_online'];
             $cities[$cityId]['votes_offline'] = $vote['votes_offline'];
             $cities[$cityId]['votes_sms'] = $vote['votes_sms'];
+            $cities[$cityId]['votes_total'] = $vote['votes_total'];
         }
 
         $voters    = $statsRepo->findTotalVotersByPollAndCorede($poll, $corede->getId());
@@ -526,6 +527,7 @@ class PollController extends Controller
             $cities[$cityId]['voters_online'] = $vote['voters_online'];
             $cities[$cityId]['voters_offline'] = $vote['voters_offline'];
             $cities[$cityId]['voters_sms'] = $vote['voters_sms'];
+            $cities[$cityId]['voters_total'] = $vote['voters_total'];
         }
         $voters = $statsRepo->findTotalVotersByPollAndCoredeFake($poll, $corede->getId());
         foreach ($voters as $vote) {
