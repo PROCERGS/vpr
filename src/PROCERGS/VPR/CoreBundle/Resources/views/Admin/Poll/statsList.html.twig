@@ -60,6 +60,7 @@
                     <th >{{ 'admin.votes_online'|trans }}</th>
                     <th >{{ 'admin.votes_offline'|trans }}</th>
                     <th >{{ 'admin.votes_sms'|trans }}</th>
+                     <th >{{ 'admin.votes_total'|trans }}</th>
                     <th >Votantes Online validos</th>
                     <th >Votantes Offline validos</th>
                     <th >Votantes SMS validos</th>
@@ -76,6 +77,7 @@
                     {% set total_votes_online = 0 %}
                     {% set total_votes_offline = 0 %}
                     {% set total_votes_sms = 0 %}
+                    {% set total_votes_tot = 0%}
                     {% set total_voters_online = 0 %}
                     {% set total_voters_offline = 0 %}
                     {% set total_voters_sms = 0 %}
@@ -84,11 +86,12 @@
                     {% set total_fake_voters_sms = 0 %}
                     {% set total_fake_tot_pop = 0 %}
                     {% set total_fake_tot = 0 %}
-
+                    
                     {% for corede in coredes %}
                         {% set total_votes_online = total_votes_online + corede.votes_online %}
                         {% set total_votes_offline = total_votes_offline + corede.votes_offline %}
                         {% set total_votes_sms = total_votes_sms + corede.votes_sms %}
+                        {% set total_votes_tot = total_votes_tot + corede.votes_total %}
                         {% set total_voters_online = total_voters_online + corede.voters_online %}
                         {% set total_voters_offline = total_voters_offline + corede.voters_offline %}
                         {% set total_voters_sms = total_voters_sms + corede.voters_sms %}
@@ -103,7 +106,8 @@
                             <td><a href="{{ path('admin_stats_corede', {'poll' : poll.id, 'corede' : corede.corede_id}) }}">{{ corede.corede }}</a></td>
                             <td>{{ corede.votes_online }}</td>
                             <td>{{ corede.votes_offline }}</td>
-                            <td>{{ corede.votes_sms }}</td>                            
+                            <td>{{ corede.votes_sms }}</td>
+                            <td>{{ corede.votes_total }}</td>                              
                             <td>{{ corede.voters_online }}</td>
                             <td>{{ corede.voters_offline }}</td>
                             <td>{{ corede.voters_sms }}</td>
@@ -120,6 +124,7 @@
                         <td><strong>{{ total_votes_online }}</strong></td>
                         <td><strong>{{ total_votes_offline }}</strong></td>
                         <td><strong>{{ total_votes_sms }}</strong></td>
+                        <td><strong>{{ total_votes_tot }}</strong></td>
                         <td><strong>{{ total_voters_online }}</strong></td>
                         <td><strong>{{ total_voters_offline }}</strong></td>
                         <td><strong>{{ total_voters_sms }}</strong></td>

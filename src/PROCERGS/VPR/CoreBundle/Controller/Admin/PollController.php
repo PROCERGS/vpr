@@ -366,6 +366,7 @@ class PollController extends Controller
             $coredes[$coredeId]['votes_online'] = $vote['votes_online'];
             $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
             $coredes[$coredeId]['votes_sms'] = $vote['votes_sms'];
+            $coredes[$coredeId]['votes_total'] = $vote['votes_total'];
         }
 
         $voters    = $statsRepo->findTotalVotersByPoll($poll->getId());
