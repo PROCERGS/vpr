@@ -541,7 +541,8 @@ class PollController extends Controller
         }
         return array(
             'corede' => $corede,
-            'cities' => $cities
+            'cities' => $cities,
+        	'poll'   => $poll
         );
     }
     
@@ -825,4 +826,342 @@ class PollController extends Controller
     	
     }
     
+    /**
+     * Lists poll stats.
+     *
+     * @Route("/statscsv", name="admin_stats_csv")
+     */
+    public function statsListActioncsv(Request $request)
+    {
+    $this->denyAccessUnlessGranted('ROLE_RESULTS');
+
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        
+        /* @var $statsRepo StatsTotalCoredeVoteRepository */
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+
+        $poll_filters = $session->get('poll_filters');
+
+        $form = $this->createForm(new PollOptionFilterType());
+        $form->remove("corede");
+
+
+        if ($request->isMethod('POST') || $poll_filters) {
+            if(!$request->isMethod('POST') && $poll_filters){
+                $form->bind($poll_filters);
+            } else{
+                $form->bind($request);
+                $session->set('poll_filters', $request);
+            }
+            $selected = $form->getData();
+
+            $poll = $selected['poll'];
+        } else {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+        }
+
+        $votes = $statsRepo->findTotalVotesByPoll($poll->getId());
+
+        $coredes = null;
+        foreach ($votes as $vote) {
+            $coredeId = $vote['corede_id'];
+            $coredes[$coredeId]['corede_id'] = $vote['corede_id'];
+            $coredes[$coredeId]['corede'] = $vote['name'];
+            $coredes[$coredeId]['votes_online'] = $vote['votes_online'];
+            $coredes[$coredeId]['votes_offline'] = $vote['votes_offline'];
+            $coredes[$coredeId]['votes_sms'] = $vote['votes_sms'];
+            $coredes[$coredeId]['votes_total'] = $vote['votes_total'];
+        }
+
+        $voters    = $statsRepo->findTotalVotersByPoll($poll->getId());
+        foreach ($voters as $vote) {
+            $coredeId = $vote['corede_id'];
+            $coredes[$coredeId]['voters_online'] = $vote['voters_online'];
+            $coredes[$coredeId]['voters_offline'] = $vote['voters_offline'];
+            $coredes[$coredeId]['voters_sms'] = $vote['voters_sms'];
+            $coredes[$coredeId]['voters_total'] = $vote['voters_total'];
+        }
+        $voters = $statsRepo->findTotalVotersByPollFake($poll->getId());
+        foreach ($voters as $vote) {
+            $coredeId = $vote['corede_id'];
+            $coredes[$coredeId]['fake_voters_online'] = $vote['voters_online'];
+            $coredes[$coredeId]['fake_voters_offline'] = $vote['voters_offline'];
+            $coredes[$coredeId]['fake_voters_sms'] = $vote['voters_sms'];
+            $coredes[$coredeId]['fake_tot_pop'] = $vote['tot_pop'];
+            $coredes[$coredeId]['fake_tot'] = $vote['tot'];
+            $coredes[$coredeId]['fake_perc'] = $vote['perc'];
+        }
+        
+        
+    	$result = '';
+    	$translator = $this->get('translator');
+    	$result .= sprintf(
+    			'%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s',
+    			'Corede ID',
+    			$translator->trans('admin.corede'),
+    			$translator->trans('admin.voters_online'),
+    			$translator->trans('admin.voters_offline'),
+    			$translator->trans('admin.voters_sms'),
+    			$translator->trans('admin.votes_total'),
+    			"Votantes Online validos",
+    			"Votantes Offline validos",
+    			"Votantes SMS validos",
+    			"Total Votantes validos",
+    			$translator->trans('admin.voters_online'),
+    			$translator->trans('admin.voters_offline'),
+    			$translator->trans('admin.voters_sms'),
+    			$translator->trans('admin.tot'),
+    			$translator->trans('admin.tot_pop'),
+    			$translator->trans('admin.perc')
+    	).PHP_EOL;
+    	
+    	$total_votes_online = 0;
+    	$total_votes_offline = 0;
+    	$total_votes_sms = 0;
+    	$total_votes_tot = 0;
+    	$total_voters_online = 0;
+    	$total_voters_offline = 0;
+    	$total_voters_sms = 0;
+    	$total_voters_total = 0;
+    	$total_fake_voters_online = 0;
+    	$total_fake_voters_offline = 0;
+    	$total_fake_voters_sms = 0;
+    	$total_fake_tot_pop = 0;
+    	$total_fake_tot = 0;
+    
+    	foreach ($coredes as $req) {
+    		
+    		$total_votes_online 	= $total_votes_online + $req['votes_online'];
+			$total_votes_offline 	= $total_votes_offline + $req['votes_offline'];
+            $total_votes_sms 		= $total_votes_sms + $req['votes_sms'];
+            $total_votes_tot 		= $total_votes_tot + $req['votes_total'];
+            $total_voters_online	= $total_voters_online + $req['voters_online'];
+            $total_voters_offline 	= $total_voters_offline + $req['voters_offline'];
+            $total_voters_sms 		= $total_voters_sms + $req['voters_sms'];
+            $total_voters_total 	= $total_voters_total + $req['voters_total'];
+            $total_fake_voters_online  = $total_fake_voters_online + $req['fake_voters_online'];
+            $total_fake_voters_offline = $total_fake_voters_offline + $req['fake_voters_offline'];
+            $total_fake_voters_sms 	= $total_fake_voters_sms + $req['fake_voters_sms'];
+			$total_fake_tot_pop 	= $total_fake_tot_pop + $req['fake_tot_pop'];
+            $total_fake_tot 		= $total_fake_tot + $req['fake_tot'];                       
+    		 
+    		$result .= sprintf(
+    				'%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s',
+    				$req['corede_id'],
+    				$req['corede'],
+    				$req['votes_online'],
+                    $req['votes_offline'],
+                    $req['votes_sms'],
+                    $req['votes_total'],                              
+                    $req['voters_online'],
+                    $req['voters_offline'],
+                    $req['voters_sms'],
+                    $req['voters_total'],
+                    $req['fake_voters_online'],
+                    $req['fake_voters_offline'],
+                    $req['fake_voters_sms'],
+                    $req['fake_tot'],
+                    $req['fake_tot_pop'],
+                    $req['fake_perc']
+    		).PHP_EOL;
+    	}
+    
+    	$result .= sprintf(
+    			'%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s',
+    			'',
+    			'TOTAL',
+    			$total_votes_online, 
+                $total_votes_offline,
+                $total_votes_sms,
+                $total_votes_tot,
+                $total_voters_online,
+                $total_voters_offline,
+                $total_voters_sms,
+                $total_voters_total,
+                $total_fake_voters_online,
+                $total_fake_voters_offline,
+                $total_fake_voters_sms,
+                $total_fake_tot,
+              	$total_fake_tot_pop,
+    			''
+    	).PHP_EOL;
+    
+    	$response = new \Symfony\Component\HttpFoundation\Response();
+    	$response->headers->set('Cache-Control', 'private');
+    	$response->headers->set('Content-type', 'text/csv');
+    	$response->headers->set(
+    			'Content-Disposition',
+    			'attachment; filename="apuracao.csv";'
+    	);
+    	$response->headers->set('Content-length', strlen($result));
+    
+    	$response->sendHeaders();
+    
+    	$response->setContent(utf8_decode($result));
+    
+    	return $response;
+    }
+    
+    /**
+     * Export list poll stats by corede in csv.
+     *
+     * @Route("/statscsv/{poll}/corede/{corede}", name="admin_stats_corede_csv")
+     */
+    public function statsListCoredeActioncsv(Request $request, $poll, $corede)
+    {
+    $this->denyAccessUnlessGranted('ROLE_RESULTS');
+
+        $em = $this->getDoctrine()->getManager();
+        $session = $this->getRequest()->getSession();
+        /* @var $statsRepo StatsTotalCoredeVoteRepository */
+        $statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
+        $coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        $corede = $coredeRepo->find($corede);
+
+        $cityRepo    = $em->getRepository('PROCERGSVPRCoreBundle:City');
+
+        $votes = $statsRepo->findTotalVotesByPollAndCorede($poll, $corede->getId());
+
+        $cities = null;
+        foreach ($votes as $vote) {            
+            $cityId = $vote['city_id'];
+            $cities[$cityId]['city_id'] = $vote['city_id'];
+            $cities[$cityId]['city'] = $vote['name'];
+            $cities[$cityId]['votes_online'] = $vote['votes_online'];
+            $cities[$cityId]['votes_offline'] = $vote['votes_offline'];
+            $cities[$cityId]['votes_sms'] = $vote['votes_sms'];
+            $cities[$cityId]['votes_total'] = $vote['votes_total'];
+        }
+
+        $voters    = $statsRepo->findTotalVotersByPollAndCorede($poll, $corede->getId());
+        foreach ($voters as $vote) {
+            $cityId = $vote['city_id'];
+            $cities[$cityId]['voters_online'] = $vote['voters_online'];
+            $cities[$cityId]['voters_offline'] = $vote['voters_offline'];
+            $cities[$cityId]['voters_sms'] = $vote['voters_sms'];
+            $cities[$cityId]['voters_total'] = $vote['voters_total'];
+        }
+        $voters = $statsRepo->findTotalVotersByPollAndCoredeFake($poll, $corede->getId());
+        foreach ($voters as $vote) {
+            $cityId = $vote['city_id'];
+            $cities[$cityId]['fake_voters_online'] = $vote['voters_online'];
+            $cities[$cityId]['fake_voters_offline'] = $vote['voters_offline'];
+            $cities[$cityId]['fake_voters_sms'] = $vote['voters_sms'];
+            $cities[$cityId]['fake_tot_pop'] = $vote['tot_pop'];
+            $cities[$cityId]['fake_tot'] = $vote['tot'];
+            $cities[$cityId]['fake_perc'] = $vote['perc'];
+        }
+    	 
+    	$result = '';
+    	$translator = $this->get('translator');
+    	$result .= sprintf(
+    			'%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s',
+    			'Município ID',
+    			$translator->trans('admin.city'),
+                $translator->trans('admin.votes_online'),
+                $translator->trans('admin.votes_offline'),
+				$translator->trans('admin.votes_sms'),
+                "Total de Votos",
+                "Votantes Online validos",
+                "Votantes Offline validos",
+                "Votantes SMS validos",
+                "Total de Votantes válidos",
+                $translator->trans('admin.voters_online'),
+                $translator->trans('admin.voters_offline'),
+                $translator->trans('admin.voters_sms'),
+                $translator->trans('admin.tot'),
+                $translator->trans('admin.tot_pop'),
+                $translator->trans('admin.perc')
+    	).PHP_EOL;
+    	 
+    	$total_votes_online = 0;
+        $total_votes_offline = 0;
+        $total_votes_sms = 0;
+        $total_votes_total = 0;
+        $total_voters_online = 0;
+        $total_voters_offline = 0;
+        $total_voters_sms = 0;
+        $total_voters_total = 0;
+        $total_fake_voters_online = 0;
+        $total_fake_voters_offline = 0;
+        $total_fake_voters_sms = 0;
+        $total_fake_tot_pop = 0;
+        $total_fake_tot = 0;
+    	 
+    	foreach ($cities as $req) {
+    		 
+    		$total_votes_online = $total_votes_online + $req['votes_online'];
+            $total_votes_offline = $total_votes_offline + $req['votes_offline'];
+            $total_votes_sms = $total_votes_sms + $req['votes_sms'];
+            $total_votes_total = $total_votes_total + $req['votes_total'];
+            $total_voters_online = $total_voters_online + $req['voters_online'];
+            $total_voters_offline = $total_voters_offline + $req['voters_offline'];
+            $total_voters_sms = $total_voters_sms + $req['voters_sms'];
+            $total_voters_total = $total_voters_total + $req['voters_total'];
+            $total_fake_voters_online = $total_fake_voters_online + $req['fake_voters_online'];
+            $total_fake_voters_offline = $total_fake_voters_offline + $req['fake_voters_offline'];
+            $total_fake_voters_sms = $total_fake_voters_sms + $req['fake_voters_sms'];
+            $total_fake_tot_pop = $total_fake_tot_pop + $req['fake_tot_pop'];
+            $total_fake_tot = $total_fake_tot + $req['fake_tot'];
+    		 
+    		$result .= sprintf(
+    				'%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s',
+    				$req['city_id'],
+    				$req['city'],
+                    $req['votes_online'],
+                    $req['votes_offline'],
+                    $req['votes_sms'],
+                   	$req['votes_total'],
+                   	$req['voters_online'],
+                    $req['voters_offline'],
+                    $req['voters_sms'],
+                    $req['voters_total'],
+                    $req['fake_voters_online'],
+                    $req['fake_voters_offline'],
+                    $req['fake_voters_sms'],
+                    $req['fake_tot'],
+                    $req['fake_tot_pop'],
+                    $req['fake_perc']            
+    		).PHP_EOL;
+    	}
+    	 
+    	$result .= sprintf(
+    			'%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s',
+    			'',
+    			'TOTAL',
+    			$total_votes_online,
+				$total_votes_offline,
+				$total_votes_sms,
+				$total_votes_total,
+				$total_voters_online,
+				$total_voters_offline,
+				$total_voters_sms,
+				$total_voters_total,
+				$total_fake_voters_online,
+				$total_fake_voters_offline,
+				$total_fake_voters_sms,
+				$total_fake_tot,
+				$total_fake_tot_pop,
+    			''
+    	).PHP_EOL;
+    	 
+    	 
+    	$response = new \Symfony\Component\HttpFoundation\Response();
+    	$response->headers->set('Cache-Control', 'private');
+    	$response->headers->set('Content-type', 'text/csv');
+    	$response->headers->set(
+    			'Content-Disposition',
+    			'attachment; filename="'.$corede->getName().'";'
+    	);
+    	$response->headers->set('Content-length', strlen($result));
+    	 
+    	$response->sendHeaders();
+    	 
+    	$response->setContent(utf8_decode($result));
+    	 
+    	return $response;
+    	 
+    }    
 }

@@ -31,7 +31,14 @@
         {{ form_end(form) }}
     </div>
     <div class="row">
-        <div class="form-group col-md-12 text-right">
+    
+    	<div class="row-fluid col-md-3">
+			<a href="{{ path('admin_stats_csv') }}">
+				<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
+			</a>
+    	</div>
+    
+        <div class="form-group col-md-9 text-right">
         {% if is_granted('ROLE_POLL_UPDATE') %}
             {% if poll.transferYear is not null %}
                 {% if poll.transferPoolOptionStatus == 0 %}
