@@ -27,6 +27,9 @@ use FOS\RestBundle\Controller\Annotations as REST;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Doctrine\ORM\EntityRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Vote;
+use PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository;
+use PROCERGS\VPR\CoreBundle\Entity\StatsTotalCoredeVoteRepository;
+use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
 
 class StatsController extends Controller
 {
@@ -654,78 +657,145 @@ order by a2.sorting, a1.category_sorting
     }
 
     /**
-     * @Route("/stats/ballotboxes", name="vpr_stats_ballotboxes")
-     * @Template
-     */
-    public function ballotBoxesAction(Request $request)
-    {
-        $this->checkAccess($request);
-        $em = $this->getDoctrine()->getManager();
-        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-
-        $cacheKey = "ballotboxes_{$poll->getId()}";
-
-        $ballotBoxes = $this->getCached(
-            $cacheKey,
-            15,
-            function () use ($poll, $em) {
-                return $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-                    ->getActivationStatistics($poll);
-            }
-        );
-        $data = $this->groupBallotBoxes($ballotBoxes);
-        $total = count($ballotBoxes);
-
-        return compact('data', 'total');
-    }
-
-    /**
      * @Route("/stats/ballotboxes/admin", name="vpr_stats_ballotboxes_admin")
      * @Template
      */
     public function ballotBoxesAdminAction(Request $request)
     {
         $this->checkAccess($request);
-        $em = $this->getDoctrine()->getManager();
-        $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
-
-        $cacheKey = "ballotboxes_{$poll->getId()}";
-
-        $ballotBoxes = $this->getCached(
-            $cacheKey,
-            15,
-            function () use ($poll, $em) {
-                return $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
-                    ->getActivationStatistics($poll);
+        
+        $em = $this->getDoctrine()->getManager();        
+        $connection = $em->getConnection();
+        $session = $this->getRequest()->getSession();
+        $form = $this->createForm(new BallotBoxFilterType());
+        $form->remove('is_sms')->remove('is_online');
+        $isCsv = $request->get('csv');
+        
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            $session->set('ballotBox_filters', $request);
+        } else {
+            $request = $session->get('ballotBox_filters');
+            if ($request) {
+                $form->handleRequest($request);
             }
+        }
+
+        $filters = $form->getData();
+
+        $params = array();
+        $sql = "select 
+            a1.setup_at
+            , a1.closed_at
+            , a1.pin
+            , a1.city_id
+            , a2.name city_name
+            , a2.corede_id
+            , a2.ibge_code
+            , a3.name corede_name
+            , case 
+            when a1.setup_at is null then '".BallotBox::getAllowedStatus1(1)."' 
+            when a1.setup_at is not null and a1.closed_at is null then '".BallotBox::getAllowedStatus1(2)."'
+            when a1.setup_at is not null and a1.closed_at is not null then '".BallotBox::getAllowedStatus1(3)."'
+            end status1_label
+            , case 
+            when a1.setup_at is null then 1 
+            when a1.setup_at is not null and a1.closed_at is null then 2
+            when a1.setup_at is not null and a1.closed_at is not null then 3
+            end status1
+            from ballot_box a1 
+            inner join city a2 on a2.id = a1.city_id 
+            inner join corede a3 on a3.id = a2.corede_id 
+            where a1.poll_id = :poll and a1.is_online = false and a1.is_sms = false ";
+        if (isset($filters['poll'])) {
+            $params['poll'] = $filters['poll']->getId();
+        } else if (!isset($filters)) {
+            $poll = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->findLastPoll();
+            $params['poll'] = $poll->getId();
+            $form->get('poll')->setData($poll);
+        }
+        if (isset($filters['city'])) {
+            $sql .= "and a1.city_id = :city ";
+            $params['city'] = $filters['city']->getId();
+        }
+
+        switch ($filters['status1']) {
+            case 1:
+                $sql .= 'and a1.setup_at is null ';
+                break;
+            case 2:
+                $sql .= 'and a1.setup_at is not null and a1.closed_at is null ';
+                break;
+            case 3:
+                $sql .= 'and a1.setup_at is not null and a1.closed_at is not null ';
+                break;
+        }
+        if ($filters['pin']) {
+            $sql .= 'and a1.pin = :pin ';
+            $params['pin'] = $filters['pin'];
+        }
+
+        if ($filters['email']) {
+            $sql .= 'and a1.email = :email ';
+            $params['email'] = $filters['email'];
+        }
+        if ($filters['name']) {
+            $sql .= 'and lower(b.name) LIKE lower(:name) ';
+            $params['name'] = '%'.$filters['name'].'%';
+        }
+        $sql .= "order by a2.corede_id, a1.city_id, status1, a1.pin ";
+
+        $stmt1 = $connection->prepare($sql);
+        $a = $stmt1->execute($params);
+        if ($isCsv) {
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="'.$params['poll'].'";'
+            );
+            $response->sendHeaders();
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('corede_id', 'corede', 'cidade_ibge_code', 'cidade', 'status_code', 'status', 'pin'), $sep);
+            while ($linha = $stmt1->fetch(\PDO::FETCH_ASSOC)) {
+                fputcsv($output, array($linha['corede_id'], utf8_decode($linha['corede_name']), $linha['ibge_code'], utf8_decode($linha['city_name']), $linha['status1'], utf8_decode($linha['status1_label']), $linha['pin']), $sep);
+            }
+            return $response;
+        }
+        $entities = $stmt1->fetchAll(\PDO::FETCH_ASSOC);
+        $data = $this->groupBallotBoxes($entities);
+        $total = count($entities);
+        
+        return array(
+            'data' => $data,
+            'total' => $total,
+            'entities' => $entities,
+            'form' => $form->createView(),
         );
-
-        $data = $this->groupBallotBoxes($ballotBoxes);
-        $total = count($ballotBoxes);
-
-        return compact('data', 'total');
     }
 
-    private function groupBallotBoxes($data)
+    private function groupBallotBoxes(&$data)
     {
         $result = array(
             'idle' => array(),
             'activated' => array(),
             'finished' => array(),
         );
-
-        foreach ($data as $ballotBox) {
-            if ($ballotBox['setupAt'] === null) {
+    
+        foreach ($data as &$ballotBox) {
+            if ($ballotBox['setup_at'] === null) {
                 $status = 'idle';
-            } elseif ($ballotBox['closedAt'] === null) {
+            } elseif ($ballotBox['closed_at'] === null) {
                 $status = 'activated';
             } else {
                 $status = 'finished';
             }
-
+    
             $result[$status][] = $ballotBox;
         }
-
+    
         return $result;
     }
 
@@ -828,7 +898,7 @@ order by a2.sorting, a1.category_sorting
         $cityId = '';
         $cacheKey = "votes_per_ip_{$poll->getId()}".$coredeId.$cityId;
 
-        /* @var Vote $repo */
+        /* @var $repo VoteRepository */
         $repo = $em->getRepository('PROCERGSVPRCoreBundle:Vote');
         
         $data = $repo->getVotesPerIp($poll, null, null, 10);

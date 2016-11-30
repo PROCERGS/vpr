@@ -1,8 +1,10 @@
-{% extends 'PROCERGSVPRCoreBundle::base.html.twig' %}
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'Reports'|trans %}
+{% set actionName = 'Ballot Boxes'|trans %}
 
-{% block body %}
+{% block content -%}
     <style>
-        body {
+        #ballot-box-board {
             font-family: monospace;
         }
 
@@ -10,6 +12,7 @@
             color: #000;
             border: 1px solid #ccc;
             text-align: center;
+            height: 240px;
         }
         .ballot-box.finished,
         .stats .finished {
@@ -26,15 +29,10 @@
             background-color: #ddd;
             text-align: center;
         }
-        .ballot-box.idle {
-            height: 200px;
-        }
         .ballot-box h1 {
-            /*font-size: 2.6vmax;*/
             margin-bottom: 0;
         }
         .ballot-box h2 {
-            /*font-size: 0.8vmax;*/
             font-weight: normal;
         }
         .ballot-box p {
@@ -43,19 +41,14 @@
 
         .stats {
             color: #000;
-            /*width: 92vmax;*/
             width: 100%;
         }
         .stats th {
             /*font-size: 1vmax;*/
         }
         .stats td {
-            /*width: 33vmax;
-            height: 10vmax;*/
             text-align: center;
             font-size: 25px;
-            /*font-size: 3vmax;*/
-            /*padding: 0 20px;*/
         }
         .stats td p {
             margin: 0 auto;
@@ -65,54 +58,178 @@
             font-size: 1.4vmax;
         }
     </style>
-    <div class="row">
-        <table class="stats">
-            <thead>
-                <tr>
-                    <th class="finished">Urnas Encerradas</th>
-                    <th class="activated">Urnas Ativas</th>
-                    <th class="idle">Urnas Disponíveis</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="finished">
-                        <p>{{ ((data.finished | length * 100) / total) | number_format(2, '.', ',') }}%</p>
-                        <small>{{ data.finished | length }} de {{ total }} urnas</small>
-                    </td>
-                    <td class="activated">
-                        <p>{{ ((data.activated | length * 100) / total) | number_format(2, '.', ',') }}%</p>
-                        <small>{{ data.activated | length }} de {{ total }} urnas</small>
-                    </td>
-                    <td class="idle">
-                        <p>{{ ((data.idle | length * 100) / total) | number_format(2, '.', ',') }}%</p>
-                        <small>{{ data.idle | length }} de {{ total }} urnas</small>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
 
-    <div class="row">
-        {% for box in data.finished %}
-            <div class="ballot-box finished col-sm-4 col-md-3">
-                <h1>{{ "%04d"|format(box.pin) }}</h1>
-                <h2>{{ box.city_name }}</h2>
-                <p>{{ box.closedAt | date('d/m H:i') }}</p>
+    <div class="jumbotron">
+        {{ form_start(form, {'method':'POST', 'attr': {'role':'form', 'class': 'ballotbox-filter'}}) }}
+         <div class="row">
+            <div class="form-group col-md-3">
+                <label>{{ 'admin.poll'|trans }}</label>
+                <div>
+                {{ form_widget(form.poll, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
-        {% endfor %}
-        {% for box in data.activated %}
-            <div class="ballot-box activated col-sm-4 col-md-3">
-                <h1>{{ "%04d"|format(box.pin) }}</h1>
-                <h2>{{ box.city_name }}</h2>
-                <p>{{ box.setupAt | date('d/m H:i') }}</p>
+            <div class="form-group col-md-3">
+                <label>{{ 'admin.city'|trans }}</label>
+                <div>
+                {{ form_widget(form.city, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
-        {% endfor %}
-        {% for box in data.idle %}
-            <div class="ballot-box idle col-sm-4 col-md-3">
-                <h1>{{ "%04d"|format(box.pin) }}</h1>
-                <h2>{{ box.city_name }}</h2>
+            <div class="form-group col-md-3">
+                <label>{{ 'admin.pin'|trans }}</label>
+                <div>
+                {{ form_widget(form.pin, {'attr': {'class': 'form-control'}}) }}
+                </div>
             </div>
-        {% endfor %}
+            <div class="form-group col-md-3">
+                <label>{{ 'admin.status'|trans }}</label>
+                <div>
+                {{ form_widget(form.status1, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label>{{ 'admin.email'|trans }}</label>
+                <div>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label>{{ 'admin.name'|trans }}</label>
+                <div>
+                {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-12 text-right">
+                <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+                <a href="{{ path('admin_ballotbox_clear_filters') }}"
+                   class="btn btn-danger">{{ 'admin.clear_filters'|trans }}</a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>    
+    
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">Gráfico</a></li>
+                <li><a href="#tab2" data-toggle="tab">Tabela</a></li>
+            </ul>
+            <div class="tab-content" style="padding-top: 25px;">
+                <div class="tab-pane active" id="tab1">
+                    {% if (data) %}
+                    
+					<div id="ballot-box-board">
+					    <div class="row">
+					        <table class="stats">
+					            <thead>
+					                <tr>
+					                    <th class="finished">Urnas Encerradas</th>
+					                    <th class="activated">Urnas Ativas</th>
+					                    <th class="idle">Urnas Disponíveis</th>
+					                </tr>
+					            </thead>
+					            <tbody>
+					                <tr>
+					                    <td class="finished">
+					                        <p>{{ ((data.finished | length * 100) / total) | number_format(2, '.', ',') }}%</p>
+					                        <small>{{ data.finished | length }} de {{ total }} urnas</small>
+					                    </td>
+					                    <td class="activated">
+					                        <p>{{ ((data.activated | length * 100) / total) | number_format(2, '.', ',') }}%</p>
+					                        <small>{{ data.activated | length }} de {{ total }} urnas</small>
+					                    </td>
+					                    <td class="idle">
+					                        <p>{{ ((data.idle | length * 100) / total) | number_format(2, '.', ',') }}%</p>
+					                        <small>{{ data.idle | length }} de {{ total }} urnas</small>
+					                    </td>
+					                </tr>
+					            </tbody>
+					        </table>
+					    </div>
+					
+					    <div class="row">
+					        {% for box in data.finished %}
+					            <div class="ballot-box finished col-sm-4 col-md-3">
+					                <h1>{{ "%04d"|format(box.pin) }}</h1>
+					                <h2>{{ box.city_name }}</h2>
+					                <p>{{ box.closed_at | date('d/m H:i') }}</p>
+					            </div>
+					        {% endfor %}
+					        {% for box in data.activated %}
+					            <div class="ballot-box activated col-sm-4 col-md-3">
+					                <h1>{{ "%04d"|format(box.pin) }}</h1>
+					                <h2>{{ box.city_name }}</h2>
+					                <p>{{ box.setup_at | date('d/m H:i') }}</p>
+					            </div>
+					        {% endfor %}
+					        {% for box in data.idle %}
+					            <div class="ballot-box idle col-sm-4 col-md-3">
+					                <h1>{{ "%04d"|format(box.pin) }}</h1>
+					                <h2>{{ box.city_name }}</h2>
+					            </div>
+					        {% endfor %}
+					    </div>
+				    </div>                    
+                    
+                       
+                    {% endif %}
+                </div>
+                <div class="tab-pane" id="tab2">
+                    {% if (entities) %}
+						<div class="row-fluid" style="margin-bottom: 20px;">
+							<a href="{{ path('vpr_stats_ballotboxes_admin', {'csv': 1}) }}">
+								<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
+							</a>
+					    </div>
+					    
+						<div class="table-responsive">
+						
+						        <table class="table table-striped table-bordered table-hover records_list">
+						            <thead>
+						                <tr>						                    
+						                    <th>{{ 'admin.corede'|trans }}</th>
+						                    <th>{{ 'admin.city'|trans }}</th>
+						                    <th>{{ 'admin.status'|trans }}</th>
+						                    <th>{{ 'admin.pin'|trans }}</th>
+						                </tr>
+						            </thead>
+						            <tbody>
+						                    {% for entity in entities %}
+						                        <tr>
+						                            <td>{{ entity.corede_name }}</td>
+						                            <td>{{ entity.city_name }}</td>
+						                            <td>{{ entity.status1_label }}</td>
+						                            <td>{{ entity.pin }}</td>
+						                        </tr>
+						                    {% endfor %}
+	
+						            </tbody>
+						        </table>
+								  
+		                {% else %}
+		                    <div class="row text-center">
+		                        {% trans %}admin.no_record_found{% endtrans %}
+		                    </div>
+		                {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
+</div>    
+    
+    
+    
+    
 {% endblock %}
