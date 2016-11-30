@@ -14,6 +14,7 @@ use PROCERGS\VPR\CoreBundle\Form\Type\Admin\PollOptionFilterType;
 use PROCERGS\VPR\CoreBundle\Helper\PPPHelper;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use PROCERGS\VPR\CoreBundle\Entity\StatsTotalCoredeVoteRepository;
+use PROCERGS\VPR\CoreBundle\Entity\StatsTotalCoredeVote;
 
 /**
  * Poll controller.
@@ -745,13 +746,14 @@ class PollController extends Controller
      * @Route("/stats2csv/{poll}/corede/{corede}", name="admin_stats_corede2_csv")
      */
     public function statsListCorede2Actioncsv(Request $request, $poll, $corede)
-    {
+    {        
     	$this->denyAccessUnlessGranted('ROLE_RESULTS');
     
     	$em = $this->getDoctrine()->getManager();
     
     	$coredeRepo    = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
     	$corede = $coredeRepo->find($corede);
+    	/* @var StatsTotalCoredeVote $statsRepo */
     	$statsRepo = $em->getRepository('PROCERGSVPRCoreBundle:StatsTotalCoredeVote');
     	$cities = $statsRepo->findTotalVotersByPollAndCoredeFake($poll, $corede->getId());
     	
@@ -785,7 +787,7 @@ class PollController extends Controller
     		 
     		$result .= sprintf(
     				'%s;%s;%s;%s;%s;%s;%s;%s',
-    				$req['city_id'],
+    				$req['ibge_code'],
     				$req['city'],
     				$req['voters_online'],
     				$req['voters_offline'],
@@ -1027,7 +1029,7 @@ class PollController extends Controller
         $cities = null;
         foreach ($votes as $vote) {            
             $cityId = $vote['city_id'];
-            $cities[$cityId]['city_id'] = $vote['city_id'];
+            $cities[$cityId]['city_id'] = $vote['ibge_code'];
             $cities[$cityId]['city'] = $vote['name'];
             $cities[$cityId]['votes_online'] = $vote['votes_online'];
             $cities[$cityId]['votes_offline'] = $vote['votes_offline'];

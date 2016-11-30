@@ -77,11 +77,12 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
         sum(b.tot_votes_sms) AS votes_sms,
         sum(b.tot_votes_online)+sum(b.tot_votes_offline)+sum(b.tot_votes_sms) AS votes_total,		
         city.id city_id,
+        city.ibge_code,
         city.name
    FROM city    
    left JOIN stats_prev_ppp b on city.id = b.city_id and b.poll_id = :poll AND b.corede_id = :corede
    WHERE city.corede_id = :corede
-   GROUP BY city.id, city.name
+   GROUP BY city.id, city.ibge_code, city.name
    ORDER BY city.name
         ');
 
@@ -91,7 +92,7 @@ class StatsTotalCoredeVoteRepository extends EntityRepository
 
         return $statement->fetchAll();
     }
-
+    
     public function findTotalVotersByPoll($poll)
     {
         $em         = $this->getEntityManager();
@@ -204,10 +205,10 @@ from stats_prev_ppp3 a1
 where a1.poll_id = :poll_id and a1.corede_id = :corede_id
 group by a1.city_id
 ), tb2 as (
-select a1.id, a1.name, sum(a1.tot_voter) tot_pop
+select a1.id, a1.ibge_code, a1.name, sum(a1.tot_voter) tot_pop
 from city a1
 where corede_id = :corede_id
-group by a1.id, a1.name
+group by a1.id, a1.ibge_code, a1.name
 )
 select *
 from tb2 
@@ -221,6 +222,7 @@ order by tb2.name
             $tId = $vote['id'];
             $t = array();
             $t['city_id'] = $tId;
+            $t['ibge_code'] = $vote['ibge_code'];
             $t['city'] = $vote['name'];
             $t['voters_online'] = $vote['voters_online'];
             $t['voters_offline'] = $vote['voters_offline'];
