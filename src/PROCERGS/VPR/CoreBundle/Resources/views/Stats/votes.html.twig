@@ -56,6 +56,11 @@
                 </div>
                 <div class="tab-pane" id="tab2">
                     {% if (results) %}
+						<div class="row-fluid" style="margin-bottom: 20px;">
+							<a href="{{ path('vpr_stats_votes', {'csv': 1}) }}">
+								<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
+							</a>
+					    </div>
                         <div class="row" style="color: #000;">
                             <div class="col-md-12">
                                 <table class="table table-hover table-bordered">

@@ -33,6 +33,11 @@
 </div>
 
 {% if results is defined %}
+	<div class="row-fluid" style="margin-bottom: 20px;">
+		<a href="{{ path('vpr_report_voted_options_by_city', {'cityId' : city.id, 'pollId':  pollId, 'csv': 1}) }}">
+			<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
+		</a>
+    </div>
 <div class="row results">
 {% for step,options in results %}
     <div class="col-md-12">

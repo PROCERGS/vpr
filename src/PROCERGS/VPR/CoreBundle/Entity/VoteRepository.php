@@ -73,7 +73,7 @@ class VoteRepository extends EntityRepository
     	$em = $this->getEntityManager();
     	$connection = $em->getConnection();
     	$sql = "
-select a1.ip_address ipAddress, a2.name city, a1.city_id city_id, a3.name corede, a1.total votes
+select a1.ip_address ipAddress, a2.name city, a1.city_id city_id, a3.name corede, a1.total votes, a3.id corede_id, a2.ibge_code city_ibge_code
 from stats_prev_ppp4 a1
 INNER JOIN city a2 ON a1.city_id = a2.id
 INNER JOIN corede a3 ON a1.corede_id = a3.id
@@ -106,6 +106,8 @@ where a1.poll_id = :poll_id ";
 					'city' => $linha[1],
     				'city_id' => $linha[2],
     				'corede' => $linha[3],
+    		        'corede_id' => $linha[5],
+    		        'city_ibge_code' => $linha[6],
     				'votes' => $linha[4],
     		);
     	}

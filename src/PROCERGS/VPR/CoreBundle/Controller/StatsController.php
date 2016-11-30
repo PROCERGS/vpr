@@ -26,6 +26,7 @@ use JMS\Serializer\SerializationContext;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Doctrine\ORM\EntityRepository;
+use PROCERGS\VPR\CoreBundle\Entity\Vote;
 
 class StatsController extends Controller
 {
@@ -77,11 +78,32 @@ order by a2.sorting, a1.category_sorting
         ";
         $stmt1 = $connection->prepare($sql);
         $stmt1->execute(array($poll->getId(), $coredeId));
-        $results = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
+        if ($request->get('csv')) {
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="'.$pollId . '_' .$coredeId.'";'
+            );
+            $response->sendHeaders();
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('corede_id', 'etapa', 'opcao', 'total'), $sep);
+            while ($linha = $stmt1->fetch(\PDO::FETCH_ASSOC)) {
+                fputcsv($output, array($coredeId, utf8_decode($linha['name']), $linha['option_number'] . ' - '. utf8_decode($linha['option_title']), $linha['total']), $sep);
+            }
+            fputcsv($output, array($coredeId, 'Total Votantes', '', $statsCorede['total_votes']), $sep);
+            return $response;
+        } else {
+            $results = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
+        }
         $created_at = new \DateTime();
         $params['created_at'] = $created_at;
         $params['results'] = $results;
         $params['statsCorede'] = $statsCorede;
+        $params['coredeId'] = $coredeId;
+        $params['pollId'] = $pollId;
 
         return $this->render(
             'PROCERGSVPRCoreBundle:Stats:optionVotes.html.twig',
@@ -136,11 +158,32 @@ order by a2.sorting, a1.category_sorting
         ";
         $stmt1 = $connection->prepare($sql);
         $stmt1->execute(array($poll->getId(), $cityId));
-        $results = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
+        
+        if ($request->get('csv')) {
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="'.$pollId . '_' .$city->getIbgeCode().'";'
+            );
+            $response->sendHeaders();
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('ibge_code', 'etapa', 'opcao', 'total'), $sep);
+            while ($linha = $stmt1->fetch(\PDO::FETCH_ASSOC)) {
+                fputcsv($output, array($city->getIbgeCode(), utf8_decode($linha['name']), $linha['option_number'] . ' - '. utf8_decode($linha['option_title']), $linha['total']), $sep);
+            }   
+            fputcsv($output, array($city->getIbgeCode(), 'Total Votantes', '', $cityTotal), $sep);
+            return $response;
+        } else {
+            $results = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
+        }
         
         $params['results'] = $results;
         $params['city'] = $city;
         $params['cityTotal'] = $cityTotal;
+        $params['pollId'] = $pollId;
 
 
         return $this->render(
@@ -259,7 +302,7 @@ order by a2.sorting, a1.category_sorting
 
         $query = $em->createQueryBuilder()
             ->select(
-                'v.coredeName,
+                'v.coredeId,v.coredeName,
                       sum(v.totalWithVoterRegistration) as totalWithVoterRegistration,
                       sum(v.totalWithLoginCidadao) as totalWithLoginCidadao,
                       sum(v.totalWithVoterRegistrationAndLoginCidadao) as totalWithVoterRegistrationAndLoginCidadao,
@@ -273,6 +316,23 @@ order by a2.sorting, a1.category_sorting
             ->getQuery()->setParameters(array("poll" => $poll->getId()));
 
         $results = $query->getResult();
+        if ($request->get('csv')) {
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="'.$poll->getId().'";'
+            );
+            $response->sendHeaders();
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('corede_id', 'corede_name', utf8_decode('Título'), utf8_decode('Login Cidadão'), utf8_decode('Título e Login Cidadão'), 'Total'), $sep);
+            foreach ($results as $linha) {
+                fputcsv($output, array($linha['coredeId'], utf8_decode($linha['coredeName']), $linha['totalWithVoterRegistration'], $linha['totalWithLoginCidadao'], $linha['totalWithVoterRegistrationAndLoginCidadao'], $linha['totalVotes']), $sep);
+            }
+            return $response;
+        }
 
         $created_at = $em->createQueryBuilder()
             ->select('MAX(v.createdAt)')
@@ -768,10 +828,28 @@ order by a2.sorting, a1.category_sorting
         $cityId = '';
         $cacheKey = "votes_per_ip_{$poll->getId()}".$coredeId.$cityId;
 
+        /* @var Vote $repo */
         $repo = $em->getRepository('PROCERGSVPRCoreBundle:Vote');
         
         $data = $repo->getVotesPerIp($poll, null, null, 10);
-
+        if ($request->get('csv')) {            
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="'.$poll->getId() .'";'
+            );
+            $response->sendHeaders();
+            
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('ip', 'corede_id', 'corede', 'cidade_ibge_code', 'cidade', 'total'), $sep);
+            foreach ($data as $linha) {
+                fputcsv($output, array($linha['ipAddress'], $linha['corede_id'], utf8_decode($linha['corede']), $linha['city_ibge_code'], utf8_decode($linha['city']), $linha['votes']), $sep);
+            }
+            return $response;
+        }
         $cities = [];
         foreach ($data as $entry) {
             $cities[$entry['city_id']] = $entry['city'];
