@@ -35,7 +35,7 @@ class PollType extends AbstractType
             		'years' => range(date('Y'), date('Y') - 70)
             ))
             ->add('description', 'textarea')
-            ->add('transferYear', 'hidden')
+            ->add('transferYear', 'integer')
         ;
     }
 

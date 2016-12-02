@@ -6,12 +6,6 @@
     {% set actionName = 'admin.add'|trans %}
 {% endif %}
 
-{% if entity.transferYear is not empty %}
-    {% set isTranferable = true %}
-{% else %}
-    {% set isTranferable = false %}
-{% endif %}
-
 {% block content -%}
     <div class="navbar">
         <a class="btn btn-default" href="{{ path('admin_poll') }}" role="button"><span
@@ -83,13 +77,11 @@
                         </div>
                     </div>
                     
-                    <div class="form-group ballotbox-offline-itens">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <div class="checkbox">
-                                <label>
-                                    <input {{ isTranferable ? 'checked="checked"' : '' }} type="checkbox" value="1" name="chkSyncPPP" id="chkSyncPPP">Deseja habilitar a sincronização dessa urna para o PPP?
-                                </label>
-                            </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ 'admin.transferYear'|trans }}</label>
+                        <div class="col-sm-10">
+                            {{ form_errors(edit_form.transferYear) }}
+                            {{ form_widget(edit_form.transferYear, {'attr': {'class': 'form-control'}}) }}
                         </div>
                     </div>
 
