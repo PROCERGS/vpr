@@ -717,20 +717,10 @@ class BallotBoxController extends Controller
             }
 
             $em->flush();
-
-            $response = new \Symfony\Component\HttpFoundation\Response();
-            $response->headers->set('Cache-Control', 'private');
-            $response->headers->set('Content-type', 'text/csv');
-            $response->headers->set(
-                'Content-Disposition',
-                'attachment; filename="offline_ballot_boxes.csv";'
-            );
-            $response->headers->set('Content-length', strlen($result));
-
-            $response->sendHeaders();
-
-            $response->setContent($result);
-
+            header('Content-Type: application/octet-stream');
+            header("Content-Transfer-Encoding: Binary");
+            header("Content-disposition: attachment; filename=\"offline_ballot_boxes.csv\"");
+            die(utf8_decode($result));
             return $response;
         }
 

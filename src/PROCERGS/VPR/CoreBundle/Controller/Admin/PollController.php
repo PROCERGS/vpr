@@ -723,20 +723,10 @@ class PollController extends Controller
         		$total_pop,
         		''
         ).PHP_EOL;
-        
-        $response = new \Symfony\Component\HttpFoundation\Response();
-        $response->headers->set('Cache-Control', 'private');
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set(
-        		'Content-Disposition',
-        		'attachment; filename="apuracao_final.csv";'
-        );
-        $response->headers->set('Content-length', strlen($result));
-        
-        $response->sendHeaders();
-        
-        $response->setContent(utf8_decode($result));
-        
+        header('Content-Type: application/octet-stream');
+        header("Content-Transfer-Encoding: Binary");
+        header("Content-disposition: attachment; filename=\"apuracao_final.csv\"");
+        die(utf8_decode($result));
         return $response;
     }
     
@@ -989,20 +979,10 @@ class PollController extends Controller
               	$total_fake_tot_pop,
     			''
     	).PHP_EOL;
-    
-    	$response = new \Symfony\Component\HttpFoundation\Response();
-    	$response->headers->set('Cache-Control', 'private');
-    	$response->headers->set('Content-type', 'text/csv');
-    	$response->headers->set(
-    			'Content-Disposition',
-    			'attachment; filename="apuracao.csv";'
-    	);
-    	$response->headers->set('Content-length', strlen($result));
-    
-    	$response->sendHeaders();
-    
-    	$response->setContent(utf8_decode($result));
-    
+    	header('Content-Type: application/octet-stream');
+    	header("Content-Transfer-Encoding: Binary");
+    	header("Content-disposition: attachment; filename=\"apuracao.csv\"");
+    	die(utf8_decode($result));    	
     	return $response;
     }
     
