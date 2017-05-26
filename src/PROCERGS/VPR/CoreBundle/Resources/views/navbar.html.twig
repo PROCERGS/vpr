@@ -85,6 +85,22 @@
                             </ul>
                         </li>
                     {% endif %}
+                    {% if is_granted('ROLE_RESULTS') %}
+                        <li role="presentation" class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                {{ 'report.missio'|trans }} <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">                                
+                                    <li>
+                                        <a href="{{ path('rlcriterio') }}">{{ 'report.missio.criterio'|trans }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('rlcriteriomun') }}">{{ 'report.missio.perc.mun'|trans }}</a>
+                                    </li>
+                            </ul>
+                        </li>
+                    {% endif %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>
