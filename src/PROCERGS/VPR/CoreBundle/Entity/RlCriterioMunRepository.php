@@ -1,5 +1,4 @@
 <?php
-
 namespace PROCERGS\VPR\CoreBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
@@ -7,51 +6,94 @@ use Doctrine\ORM\EntityRepository;
 class RlCriterioMunRepository extends EntityRepository
 {
 
-    public function findOptionVoteByCityAndStep($city_id, $step_id)
+    public function findEspecial1($id, $typeCalc)
     {
-        $em         = $this->getEntityManager();
-        $connection = $em->getConnection();
+        $em = $this->getEntityManager();
+        $conn = $em->getConnection();
+        $sql = '
+select a1.*
+from rl_criterio_mun a1
+where poll_id = :poll_id and a1.type_calc = :type_calc
 
-        $statement = $connection->prepare('
-            SELECT po.id, po.category_sorting as option_number, po.title as option_title, count(ov.poll_option_id) as total
-              FROM poll_option po
-        INNER JOIN open_vote ov
-                ON po.id = ov.poll_option_id
-             WHERE po.step_id = :step_id
-               AND ov.city_id = :city_id
-          GROUP BY ov.poll_option_id, po.id, po.category_sorting, po.title
-          ORDER BY total DESC
-        ');
-
-        $statement->bindParam('city_id', $city_id);
-        $statement->bindParam('step_id', $step_id);
-        $statement->execute();
-
-        return $statement->fetchAll();
+order by a1.limit_citizen asc
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam('poll_id', $id);
+        $stmt->bindParam('type_calc', $typeCalc);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function findTotalByCity(Poll $poll, $city_id)
+    public function saveComplete($pollId, &$item1, &$item2)
     {
-        return $this->createQueryBuilder('o')
-                ->select('COUNT(o.city) AS total')
-                ->join('o.ballotBox', 'b')
-                ->where('o.city = :city_id')
-                ->andWhere('b.poll = :poll')
-                ->setParameters(compact('poll', 'city_id'))
-                ->getQuery()->getSingleScalarResult();
 
-        $em         = $this->getEntityManager();
-        $connection = $em->getConnection();
-
-        $statement = $connection->prepare('
-            SELECT count(*) as total
-              FROM vote v
-             WHERE v.city_id = :city_id
-        ');
-
-        $statement->bindParam('city_id', $city_id);
-        $statement->execute();
-
-        return $statement->fetch();
+        function n(&$val)
+        {
+            if ("" === $val || null === $val) {
+                return null;
+            }
+            
+            if (is_numeric($val)) {
+                return $val;
+            } else {
+                return str_replace(array(
+                    '.',
+                    ','
+                ), array(
+                    '',
+                    '.'
+                ), $val);
+            }
+        }
+        $em = $this->getEntityManager();
+        $conn = $em->getConnection();
+        try {
+            $conn->beginTransaction();
+            $sql = 'delete from rl_criterio_mun where poll_id = :poll_id';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam('poll_id', $pollId);
+            $a = $stmt->execute();
+            
+            $sql = 'insert into rl_criterio_mun (poll_id, type_calc, limit_citizen, perc_apply) values (?,?,?,?)';
+            $stmt = $conn->prepare($sql);
+            if ($item1) {
+                foreach ($item1 as $key => $val) {
+                    foreach ($val as $key1 => $val2) {
+                        if (! is_numeric(n($val2['perc_apply']))) {
+                            continue;
+                        }
+                        $c = array(
+                            n($pollId),
+                            n($key1),
+                            n($val2['limit_citizen']),
+                            n($val2['perc_apply'])
+                        );
+                        $a = $stmt->execute($c);
+                    }
+                }
+            }
+            if ($item2) {
+                foreach ($item2 as $key => $val) {
+                    foreach ($val as $key1 => $val2) {
+                        if (! is_numeric(n($val2['perc_apply']))) {
+                            continue;
+                        }
+                        $c = array(
+                            n($pollId),
+                            n($key1),
+                            n($val2['limit_citizen']),
+                            n($val2['perc_apply'])
+                        );
+                        $a = $stmt->execute($c);
+                    }
+                }
+            }
+            
+            $conn->commit();
+        } catch (\Exception $e) {            
+            $conn->rollBack();
+            throw $e;
+        }
+        return true;
     }
 }

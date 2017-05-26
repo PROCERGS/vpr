@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use PROCERGS\VPR\CoreBundle\Entity\RlCriterioMun;
 use PROCERGS\VPR\CoreBundle\Form\RlCriterioMunType;
+use PROCERGS\VPR\CoreBundle\Entity\RlCriterioMunRepository;
 
 /**
  * RlCriterioMun controller.
@@ -21,227 +22,78 @@ class RlCriterioMunController extends Controller
     /**
      * Lists all RlCriterioMun entities.
      *
-     * @Route("/", name="rlcriteriomun")
-     * @Method("GET")
+     * @Route("/index", name="rlcriteriomun")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun')->findAll();
-
-        return array(
-            'entities' => $entities,
-        );
-    }
-    /**
-     * Creates a new RlCriterioMun entity.
-     *
-     * @Route("/", name="rlcriteriomun_create")
-     * @Method("POST")
-     * @Template("PROCERGSVPRCoreBundle:RlCriterioMun:new.html.twig")
-     */
-    public function createAction(Request $request)
-    {
-        $entity = new RlCriterioMun();
-        $form = $this->createCreateForm($entity);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('rlcriteriomun_show', array('id' => $entity->getId())));
-        }
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Creates a form to create a RlCriterioMun entity.
-     *
-     * @param RlCriterioMun $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createCreateForm(RlCriterioMun $entity)
-    {
-        $form = $this->createForm(new RlCriterioMunType(), $entity, array(
-            'action' => $this->generateUrl('rlcriteriomun_create'),
-            'method' => 'POST',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Create'));
-
-        return $form;
-    }
-
-    /**
-     * Displays a form to create a new RlCriterioMun entity.
-     *
-     * @Route("/new", name="rlcriteriomun_new")
-     * @Method("GET")
-     * @Template()
-     */
-    public function newAction()
-    {
-        $entity = new RlCriterioMun();
-        $form   = $this->createCreateForm($entity);
-
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Finds and displays a RlCriterioMun entity.
-     *
-     * @Route("/{id}", name="rlcriteriomun_show")
-     * @Method("GET")
-     * @Template()
-     */
-    public function showAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find RlCriterioMun entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-     * Displays a form to edit an existing RlCriterioMun entity.
-     *
-     * @Route("/{id}/edit", name="rlcriteriomun_edit")
-     * @Method("GET")
-     * @Template()
-     */
-    public function editAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find RlCriterioMun entity.');
-        }
-
-        $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-
-    /**
-    * Creates a form to edit a RlCriterioMun entity.
-    *
-    * @param RlCriterioMun $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
-    private function createEditForm(RlCriterioMun $entity)
-    {
-        $form = $this->createForm(new RlCriterioMunType(), $entity, array(
-            'action' => $this->generateUrl('rlcriteriomun_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
-
-        $form->add('submit', 'submit', array('label' => 'Update'));
-
-        return $form;
-    }
-    /**
-     * Edits an existing RlCriterioMun entity.
-     *
-     * @Route("/{id}", name="rlcriteriomun_update")
-     * @Method("PUT")
-     * @Template("PROCERGSVPRCoreBundle:RlCriterioMun:edit.html.twig")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find RlCriterioMun entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
-        $editForm->handleRequest($request);
-
-        if ($editForm->isValid()) {
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('rlcriteriomun_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
-    /**
-     * Deletes a RlCriterioMun entity.
-     *
-     * @Route("/{id}", name="rlcriteriomun_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find RlCriterioMun entity.');
+        /* @var $pollRepo PollRepository */
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        /* @var $rlCriterioRepo RlCriterioMunRepository */
+        $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun');
+        $a = $request->get('poll_id');
+        if (!$a) {
+            return $this->redirect($this->generateUrl('rlcriteriomun', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        } else {
+            $currentPollId = $a;
+        }        
+        if ($request->isMethod('POST')) {
+            $b = $request->get('item1');
+            $c = $request->get('item2');
+            try {
+                $rlCriterioRepo->saveComplete($currentPollId, $b, $c);
+            } catch (\Exception $e) {
+                if (stristr($e->getMessage(), 'uk_rl_criterio_mun1') !== false) {
+                    $msg = "Não pode repetir valores";                    
+                } else {
+                    $msg = $e->getMessage();
+                }
+                $this->get('session')->getFlashBag()->add('danger', $msg);
             }
-
-            $em->remove($entity);
-            $em->flush();
         }
-
-        return $this->redirect($this->generateUrl('rlcriteriomun'));
+        $entities1 = $rlCriterioRepo->findEspecial1($currentPollId, RlCriterioMun::CALC_POPULATION);
+        $entities2 = $rlCriterioRepo->findEspecial1($currentPollId, RlCriterioMun::CALC_PROGRAM);
+        $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        return array(
+            'entities1' => $entities1,
+            'entities2' => $entities2,
+            'polls' => $polls,
+            'currentPollId' => $currentPollId,
+        );
     }
-
+    
     /**
-     * Creates a form to delete a RlCriterioMun entity by id.
+     * Lists poll stats.
      *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/export", name="rlcriteriomun_csv")
      */
-    private function createDeleteForm($id)
+    public function exportCsv(Request $request)
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('rlcriteriomun_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+        $currentPollId = $request->get('poll_id');
+        $typeCalc = $request->get('type_calc');
+        if ($currentPollId && $typeCalc) {
+            $em = $this->getDoctrine()->getManager();
+            /* @var $rlCriterioRepo RlCriterioMunRepository */
+            $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun');
+            $entities = $rlCriterioRepo->findEspecial1($currentPollId, $typeCalc);
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="criterio_'.$currentPollId .'_'.$typeCalc.'.csv";'
+                );
+            $response->sendHeaders();
+    
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('type_calc', 'limit_citizen', 'perc_apply'), $sep);
+            foreach ($entities as $linha) {
+                fputcsv($output, array($linha['type_calc'], $linha['limit_citizen'], $linha['perc_apply']), $sep);
+            }
+            return $response;
+        }
     }
+    
 }

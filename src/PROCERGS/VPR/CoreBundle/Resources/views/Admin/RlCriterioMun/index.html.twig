@@ -1,43 +1,143 @@
-{% extends '::base.html.twig' %}
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'report.missio'|trans %}
+{% set actionName = 'report.missio.perc.mun'|trans %}
 
-{% block body -%}
-    <h1>RlCriterioMun list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Perccitizen</th>
-                <th>Percvoter</th>
-                <th>Id</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('rlcriteriomun_show', { 'id': entity.id }) }}">{{ entity.percCitizen }}</a></td>
-                <td>{{ entity.percVoter }}</td>
-                <td>{{ entity.id }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('rlcriteriomun_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('rlcriteriomun_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('rlcriteriomun_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% block content -%}
+{% for type, messages in app.session.flashbag.all() %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ message }}
+</div>
+{% endfor %}
+{% endfor %}
+<div class="jumbotron">
+	<form method="GET" id="filter-form" action="{{ path('rlcriteriomun') }}" role="form">
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label>{{ 'admin.poll'|trans }}</label>
+				<div>
+					<select id="poll_id" name="poll_id" class="form-control">
+						{% for poll in polls %}
+						<option value="{{ poll.id }}" {{  poll.id == currentPollId ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<form method="POST" id="table-form">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-sm-6">Lista de criterios para população</div>
+				<div class="text-right col-sm-6">
+					<div class="btn-group ">
+						<a href="{{ path('rlcriteriomun_csv') }}?poll_id={{ currentPollId }}&type_calc=1" target="_blank">
+							<button type="button" class="btn btn-success btn-form-type">
+								{{ 'admin.csv'|trans }}
+							</button>
+						</a>
+						<button type="button" data-add-criterio="1" class="btn btn-info">Adicionar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped table-bordered table-hover" id="criterio-population">
+				<thead>
+					<tr>
+						<th>Valor</th>
+						<th>Percentual</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set totValues = 0 %}
+					{% for entity in entities1 %}
+					{% set totValues = totValues + 1 %}
+					<tr>
+						<td><input class="form-control" type="number" min="0" name="item1[{{ totValues }}][{{ entity.type_calc }}][limit_citizen]" value="{{ entity.limit_citizen }}"></td>
+						<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item1[{{ totValues }}][{{ entity.type_calc }}][perc_apply]" value="{{ entity.perc_apply }}"></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-sm-6">Lista de criterios para programas</div>
+				<div class="text-right col-sm-6">
+					<div class="btn-group">
+						<a href="{{ path('rlcriteriomun_csv') }}?poll_id={{ currentPollId }}&type_calc=2" target="_blank">
+							<button type="button" class="btn btn-success btn-form-type">
+								{{ 'admin.csv'|trans }}
+							</button>
+						</a>
+						<button type="button" data-add-criterio="2" class="btn btn-info">Adicionar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="panel-body">
+			<table class="table table-striped table-bordered table-hover records_list" id="criterio-program">
+				<thead>
+					<tr>
+						<th>Valor</th>
+						<th>Percentual</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% set totValues = 0 %}
+					{% for entity in entities2 %}
+					{% set totValues = totValues + 1 %}
+					<tr>
+						<td><input class="form-control" type="number" min="0" name="item2[{{ totValues }}][{{ entity.type_calc }}][limit_citizen]" value="{{ entity.limit_citizen }}"></td>
+						<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item2[{{ totValues }}][{{ entity.type_calc }}][perc_apply]" value="{{ entity.perc_apply }}"></td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-actions text-right">
+			<input value="salvar" name="salvar" class="btn btn-primary" type="submit">
+		</div>
+	</div>
+</form>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+	$(function() {
+		$("#filter-form #poll_id").change(function(e) {
+			$("#filter-form").submit();
+		});
+		$("[data-add-criterio]").click(function(e) {
+			var a1 = $(this).data('add-criterio');
+			if (a1 == '1') {
+				var a2 = $('#criterio-population tbody tr').length + 1;
+				var a3 = $('#criterio-population tbody');
+			} else {
+				var a2 = $('#criterio-program tbody tr').length + 1;
+				var a3 = $('#criterio-program tbody');
+			}
+			var html = '<tr>';
+			html += '<td><input class="form-control" type="number" min="0" name="item'+ a1 +'['+a2+']['+a1+'][limit_citizen]" value=""></td>';
+			html += '<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item'+a1+'['+a2+']['+a1+'][perc_apply]" value=""></td>';
+			html += '</tr>';
+			a3.append(html);
+			$('.percentual').mask('000,00', {
+				reverse : true
+			});
+		});
+		
+		$('.percentual').mask('000,00', {
+			reverse : true
+		});
+	});
+</script>
+{% endblock %}

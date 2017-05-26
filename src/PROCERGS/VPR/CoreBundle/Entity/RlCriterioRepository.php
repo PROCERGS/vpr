@@ -53,6 +53,7 @@ order by a1.id asc
             $conn->commit();            
         } catch (\Exception $e) {
             $conn->rollBack();
+            throw $e;
         }
         return true;
     }

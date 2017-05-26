@@ -41,7 +41,12 @@ class RlCriterioController extends Controller
         }
         if ($request->isMethod('POST')) {
             $b = $request->get('item');
-            $rlCriterioRepo->saveComplete($currentPollId, $b);
+            try {
+                $rlCriterioRepo->saveComplete($currentPollId, $b);
+            } catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('danger', $e->getMessage());
+            }
+            
         }
         $entities = $rlCriterioRepo->findEspecial1($currentPollId);
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));

@@ -8,24 +8,34 @@ use Doctrine\ORM\Mapping as ORM;
  * RlCriterioMun
  *
  * @ORM\Table(name="rl_criterio_mun")
- * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\RlCriterioMunRepository") 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="PROCERGS\VPR\CoreBundle\Entity\RlCriterioMunRepository")
  */
 class RlCriterioMun
 {
+    const CALC_POPULATION = 1;
+    const CALC_PROGRAM = 2;
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="perc_citizen", type="decimal", precision=12, scale=2, nullable=true)
+     * @ORM\Column(name="calc_type", type="integer", nullable=false)
      */
-    private $percCitizen;
+    private $calcType;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="limit_citizen", type="integer", nullable=true)
+     */
+    private $limitCitizen;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="perc_voter", type="decimal", precision=12, scale=2, nullable=true)
+     * @ORM\Column(name="perc_apply", type="decimal", precision=12, scale=2, nullable=false)
      */
-    private $percVoter;
+    private $percApply;
 
     /**
      * @var integer
@@ -50,49 +60,57 @@ class RlCriterioMun
 
 
     /**
-     * Set percCitizen
-     *
-     * @param string $percCitizen
      * @return RlCriterioMun
      */
-    public function setPercCitizen($percCitizen)
+    public function setLimitCitizen($val)
     {
-        $this->percCitizen = $percCitizen;
+        $this->limitCitizen = $val;
 
         return $this;
     }
 
     /**
-     * Get percCitizen
-     *
      * @return string 
      */
-    public function getPercCitizen()
+    public function getLimitCitizen()
     {
-        return $this->percCitizen;
+        return $this->limitCitizen;
     }
 
     /**
-     * Set percVoter
-     *
-     * @param string $percVoter
      * @return RlCriterioMun
      */
-    public function setPercVoter($percVoter)
+    public function setPercApply($val)
     {
-        $this->percVoter = $percVoter;
+        $this->percApply = $val;
 
         return $this;
     }
 
     /**
-     * Get percVoter
-     *
      * @return string 
      */
-    public function getPercVoter()
+    public function getPercApply()
     {
-        return $this->percVoter;
+        return $this->percApply;
+    }
+    
+    /**
+     * @return RlCriterioMun
+     */
+    public function setCalcType($val)
+    {
+        $this->calcType = $val;
+    
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getCalcType()
+    {
+        return $this->calcType;
     }
 
     /**
