@@ -23,6 +23,105 @@ order by a1.id asc
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
     
+    public function findEspecial2($id)
+    {
+        $em = $this->getEntityManager();
+        $conn = $em->getConnection();
+        $sql = '
+   with tb1 as (
+select a1.city_id
+, sum(voters_online) + sum(voters_sms) + sum(voters_offline) voters_total
+from stats_prev_ppp3 a1
+where a1.poll_id = :poll_id
+group by a1.city_id
+), tb2 as (
+select a1.id city_id, a1.name city_name, a1.ibge_code, a1.corede_id, a2.name corede_name, a1.tot_voter tot_pop
+, (
+select perc_apply from rl_criterio_mun 
+where  1 = 1
+and coalesce(limit_citizen, a1.tot_voter) >= a1.tot_voter
+and type_calc = 1 
+and poll_id = :poll_id
+order by limit_citizen asc
+limit 1
+) perc_pop
+, (
+select perc_apply from rl_criterio_mun 
+where  1 = 1
+and coalesce(limit_citizen, a1.tot_voter) >= a1.tot_voter
+and type_calc = 2 
+and poll_id = :poll_id
+order by limit_citizen asc
+limit 1
+) perc_prog
+from city a1
+inner join corede a2 on a2.id = a1.corede_id
+),
+-- start prog --
+tb3 as (
+select corede_id, option_id, sum(tot) tot_corede
+from stats_prev_ppp2 
+where poll_id = :poll_id
+group by corede_id, option_id
+), tb4 as (
+select  
+a1.city_id
+, a1.option_id
+, a1.tot tot_in_city
+, a2.title option_name
+, (a1.tot::numeric*100)/tb3.tot_corede perc_in_corede
+from stats_prev_ppp2 a1
+inner join poll_option a2 on a2.id = a1.option_id
+inner join tb3 on tb3.corede_id = a1.corede_id and tb3.option_id = a1.option_id
+where a1.poll_id = :poll_id
+)
+-- end prog --
+, tb5 as (
+select a1.city_id
+, sum(tot_votes_online) + sum(tot_votes_sms) + sum(tot_votes_offline) votes_total
+from stats_prev_ppp a1
+where a1.poll_id = :poll_id
+group by a1.city_id
+)
+select 
+tb2.city_id
+, tb2.city_name
+, tb2.ibge_code
+, tb2.corede_id
+, tb2.corede_name
+, tb2.tot_pop
+, tb2.perc_pop
+, tb2.perc_prog
+, (tb2.tot_pop*tb2.perc_pop)/100 corte_mun
+, (tb2.tot_pop*tb2.perc_prog)/100 corte_prog
+, tb1.voters_total
+, tb5.votes_total
+, (tb1.voters_total::decimal*100)/tb2.tot_pop voters_perc
+, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_corte_mun
+, coalesce(sum(case when tb4.perc_in_corede >= (tb2.perc_prog) then 1 else null end),0) tot_prog_classficados
+from tb2 
+left join tb1 on tb1.city_id = tb2.city_id
+left join tb5 on tb5.city_id = tb2.city_id
+left join tb4 on tb4.city_id = tb2.city_id
+group by 
+tb2.city_id
+, tb2.city_name
+, tb2.ibge_code
+, tb2.corede_id
+, tb2.corede_name
+, tb2.tot_pop
+, tb2.perc_pop
+, tb2.perc_prog
+, tb1.voters_total
+, tb5.votes_total
+order by tb2.city_name
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam('poll_id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    
     public function saveComplete($pollId, $items)
     {
         function n(&$val) {

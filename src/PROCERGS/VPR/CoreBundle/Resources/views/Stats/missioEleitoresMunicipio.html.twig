@@ -1,0 +1,85 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'report.missio'|trans %}
+{% set actionName = 'report.missio.eleitores.muncipio'|trans %}
+
+{% block content -%}
+{% for type, messages in app.session.flashbag.all() %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ message }}
+</div>
+{% endfor %}
+{% endfor %}
+	<div class="jumbotron">
+		<form method="GET" id="filter-form" action="{{ path('vpr_rl_eleitores_municipio') }}" role="form">
+			<div class="row">
+				<div class="form-group col-md-12">
+					<label>{{ 'admin.poll'|trans }}</label>
+					<div>
+						<select id="poll_id" name="poll_id" class="form-control">
+							{% for poll in polls %}
+							<option value="{{ poll.id }}" {{  poll.id == currentPollId ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+<div class="row">
+<div class="row-fluid col-md-3">
+	<a href="{{ path('vpr_rl_eleitores_municipio_csv') }}?poll_id={{ currentPollId }}" target="_blank">
+		<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
+	</a>
+</div>
+</div>
+	<form method="POST" id="table-form">
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover records_list">
+				<thead>
+					<tr>
+						<th>COREDE</th>
+						<th>MUNICÍPIOS</th>
+						<th>Nº ELEITORES</th>
+						<th>Nº VOTANTES</th>
+						<th>PERCENTUAL CORTE MUNICÍPIOS</th>
+                        <th>CORTE MUNICÍPIOS</th>
+                        <th>PERCENTUAL CORTE PROGRAMAS</th>
+                        <th>TOTAL DE VOTOS</th>
+                        <th>PERCENTUAL DE VOTAÇÃO</th>
+                        <th>STATUS</th>
+                        <th>Nº PROGRAMAS CLASSIFICADOS</th>
+					</tr>
+				</thead>
+				<tbody>					
+					{% for entity in entities1 %}
+					<tr>
+						<td>{{ entity.corede_name }}</td>
+						<td>{{ entity.city_name }}</td>
+						<td>{{ entity.tot_pop|number_format(0, ',', '.') }}</td>						
+						<td>{{ entity.voters_total|number_format(0, ',', '.') }}</td>
+						<td>{{ entity.perc_pop|number_format(2, ',', '.') }}</td>
+						<td>{{ entity.corte_mun|number_format(2, ',', '.') }}</td>
+						<td>{{ entity.corte_prog|number_format(2, ',', '.') }}</td>
+						<td>{{ entity.votes_total|number_format(0, ',', '.') }}</td>
+						<td>{{ entity.voters_perc|number_format(2, ',', '.') }}</td>
+						<td>{{ entity.status_corte_mun }}</td>
+						<td>{{ entity.tot_prog_classficados }}</td>
+					</tr>					
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</form>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+	$(function() {
+		$("#filter-form #poll_id").change(function(e) {
+			$("#filter-form").submit();
+		});
+	});
+</script>
+{% endblock %}

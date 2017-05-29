@@ -30,6 +30,7 @@ use PROCERGS\VPR\CoreBundle\Entity\Vote;
 use PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository;
 use PROCERGS\VPR\CoreBundle\Entity\StatsTotalCoredeVoteRepository;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
+use PROCERGS\VPR\CoreBundle\Entity\RlCriterioRepository;
 
 class StatsController extends Controller
 {
@@ -927,5 +928,92 @@ order by a2.sorting, a1.category_sorting
         asort($cities);
 
         return compact('data', 'cities');
+    }
+    
+    /**
+     * Lists all RlCriterioMun entities.
+     *
+     * @Route("/eleitores-municipio", name="vpr_rl_eleitores_municipio")
+     * @Template()
+     */
+    public function missioEleitoresMunicipioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $pollRepo PollRepository */
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        /* @var $rlCriterioRepo RlCriterioRepository */        
+        $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+        $a = $request->get('poll_id');
+        if (!$a) {
+            return $this->redirect($this->generateUrl('vpr_rl_eleitores_municipio', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        } else {
+            $currentPollId = $a;
+        }
+        $entities1 = $rlCriterioRepo->findEspecial2($currentPollId);
+        $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        return array(
+            'entities1' => $entities1,
+            'polls' => $polls,
+            'currentPollId' => $currentPollId,
+        );
+    }
+    /**
+     * Lists poll stats.
+     *
+     * @Route("/eleitores-municipio-csv", name="vpr_rl_eleitores_municipio_csv")
+     */
+    public function missioEleitoresMunicipioCsvAction(Request $request)
+    {
+        $currentPollId = $request->get('poll_id');
+        if ($currentPollId) {
+            $em = $this->getDoctrine()->getManager();
+            /* @var $rlCriterioRepo RlCriterioRepository */
+            $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+            $entities = $rlCriterioRepo->findEspecial2($currentPollId);
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                );
+            $response->sendHeaders();
+    
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('COREDE_ID'
+                , 'COREDE_NOME'
+                , 'MUNICIPIOS_ID'
+                , 'MUNICIPIOS_NOME'
+                , 'MUNICIPIOS_IBGE'
+                , 'N_ELEITORES'
+                , 'N_VOTANTES'
+                , 'PERCENTUAL_CORTE_MUNICIPIOS'
+                , 'CORTE_MUNICIPIOS'
+                , 'PERCENTUAL_CORTE_PROGRAMAS'
+                , 'TOTAL_DE_VOTOS'
+                , 'PERCENTUAL_DE_VOTACAO'
+                , 'STATUS'
+                , 'N_PROGRAMAS_CLASSIFICADOS'
+            ), $sep);
+            foreach ($entities as $linha) {
+                fputcsv($output, array($linha['corede_id']
+                    , utf8_decode($linha['corede_name'])
+                    , $linha['city_id']                    
+                    , utf8_decode($linha['city_name'])
+                    , $linha['ibge_code']
+                    , $linha['tot_pop']
+                    , $linha['voters_total']
+                    , $linha['perc_pop']
+                    , $linha['corte_mun']
+                    , $linha['corte_prog']
+                    , $linha['votes_total']
+                    , $linha['voters_perc']
+                    , utf8_decode($linha['status_corte_mun'])
+                    , $linha['tot_prog_classficados']
+                ), $sep);
+            }
+            return $response;
+        }
     }
 }
