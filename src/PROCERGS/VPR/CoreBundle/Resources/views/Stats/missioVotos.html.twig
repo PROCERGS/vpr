@@ -1,6 +1,6 @@
 {% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
 {% set contentName = 'report.missio'|trans %}
-{% set actionName = 'report.missio.eleitores.muncipio'|trans %}
+{% set actionName = 'report.missio.votos'|trans %}
 
 {% block content -%}
 {% for type, messages in app.session.flashbag.all() %}
@@ -12,7 +12,7 @@
 {% endfor %}
 {% endfor %}
 	<div class="jumbotron">
-		<form method="GET" id="filter-form" action="{{ path('vpr_rl_eleitores_municipio') }}" role="form">
+		<form method="GET" id="filter-form" action="{{ path('vpr_rl_votos') }}" role="form">
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label>{{ 'admin.poll'|trans }}</label>
@@ -29,7 +29,7 @@
 	</div>
 <div class="row">
 <div class="row-fluid col-md-3">
-	<a href="{{ path('vpr_rl_eleitores_municipio_csv') }}?poll_id={{ currentPollId }}" target="_blank">
+	<a href="{{ path('vpr_rl_votos_csv') }}?poll_id={{ currentPollId }}" target="_blank">
 		<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
 	</a>
 </div>
@@ -40,16 +40,12 @@
 				<thead>
 					<tr>
 						<th>COREDE</th>
-						<th>MUNICÍPIOS</th>
-						<th>Nº ELEITORES</th>
-						<th>Nº VOTANTES</th>
-						<th>PERCENTUAL CORTE MUNICÍPIOS</th>
-                        <th>CORTE MUNICÍPIOS</th>
-                        <th>PERCENTUAL CORTE PROGRAMAS</th>
-                        <th>TOTAL DE VOTOS</th>
-                        <th>PERCENTUAL DE VOTAÇÃO</th>
+						<th>MUNICÍPIO</th>
+						<th>PROGRAMA</th>
+						<th>TOTAL VOTOS</th>
+						<th>PERCENTUAL DO NUMERO DE VOTOS %</th>
+                        <th>PERCENTUAL CORTE</th>
                         <th>STATUS</th>
-                        <th>Nº PROGRAMAS CLASSIFICADOS</th>
 					</tr>
 				</thead>
 				<tbody>					
@@ -57,15 +53,11 @@
 					<tr>
 						<td>{{ entity.corede_name }}</td>
 						<td>{{ entity.city_name }}</td>
-						<td>{{ entity.tot_pop|number_format(0, ',', '.') }}</td>						
-						<td>{{ entity.voters_total|number_format(0, ',', '.') }}</td>
-						<td>{{ entity.perc_pop|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.corte_mun|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.corte_prog|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.votes_total|number_format(0, ',', '.') }}</td>
-						<td>{{ entity.voters_perc|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.status_corte_mun }}</td>
-						<td>{{ entity.tot_prog_classificados }}</td>
+						<td>{{ entity.option_name }}</td>
+						<td>{{ entity.tot_in_city|number_format(0, ',', '.') }}</td>
+						<td>{{ entity.perc_in_corede|number_format(2, ',', '.') }}</td>						
+						<td>{{ entity.perc_prog|number_format(2, ',', '.') }}</td>						
+						<td>{{ entity.status_prog_classificados }}</td>
 					</tr>					
 					{% endfor %}
 				</tbody>

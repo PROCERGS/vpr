@@ -933,7 +933,7 @@ order by a2.sorting, a1.category_sorting
     /**
      * Lists all RlCriterioMun entities.
      *
-     * @Route("/eleitores-municipio", name="vpr_rl_eleitores_municipio")
+     * @Route("/rl/eleitores-municipio", name="vpr_rl_eleitores_municipio")
      * @Template()
      */
     public function missioEleitoresMunicipioAction(Request $request)
@@ -960,7 +960,7 @@ order by a2.sorting, a1.category_sorting
     /**
      * Lists poll stats.
      *
-     * @Route("/eleitores-municipio-csv", name="vpr_rl_eleitores_municipio_csv")
+     * @Route("/rl/eleitores-municipio-csv", name="vpr_rl_eleitores_municipio_csv")
      */
     public function missioEleitoresMunicipioCsvAction(Request $request)
     {
@@ -1010,7 +1010,86 @@ order by a2.sorting, a1.category_sorting
                     , $linha['votes_total']
                     , $linha['voters_perc']
                     , utf8_decode($linha['status_corte_mun'])
-                    , $linha['tot_prog_classficados']
+                    , $linha['tot_prog_classificados']
+                ), $sep);
+            }
+            return $response;
+        }
+    }
+    
+    /**
+     * Lists all RlCriterioMun entities.
+     *
+     * @Route("/rl/votos", name="vpr_rl_votos")
+     * @Template()
+     */
+    public function missioVotosAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $pollRepo PollRepository */
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        /* @var $rlCriterioRepo RlCriterioRepository */
+        $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+        $a = $request->get('poll_id');
+        if (!$a) {
+            return $this->redirect($this->generateUrl('vpr_rl_votos', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        } else {
+            $currentPollId = $a;
+        }
+        $entities1 = $rlCriterioRepo->findEspecial3($currentPollId);
+        $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        return array(
+            'entities1' => $entities1,
+            'polls' => $polls,
+            'currentPollId' => $currentPollId,
+        );
+    }
+    /**
+     * Lists poll stats.
+     *
+     * @Route("/rl/votos-csv", name="vpr_rl_votos_csv")
+     */
+    public function missioVotosCsvAction(Request $request)
+    {
+        $currentPollId = $request->get('poll_id');
+        if ($currentPollId) {
+            $em = $this->getDoctrine()->getManager();
+            /* @var $rlCriterioRepo RlCriterioRepository */
+            $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+            $entities = $rlCriterioRepo->findEspecial3($currentPollId);
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                );
+            $response->sendHeaders();
+    
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('COREDE_ID'
+                , 'COREDE_NOME'
+                , 'MUNICIPIOS_ID'
+                , 'MUNICIPIOS_NOME'
+                , 'MUNICIPIOS_IBGE'
+                , 'PROGRAMA'
+                , 'TOTAL_VOTOS'
+                , 'PERCENTUAL_DO_NUMERO_DE_VOTOS'
+                , 'PERCENTUAL_CORTE'
+                , 'STATUS'
+            ), $sep);
+            foreach ($entities as $linha) {
+                fputcsv($output, array($linha['corede_id']
+                    , utf8_decode($linha['corede_name'])
+                    , $linha['city_id']
+                    , utf8_decode($linha['city_name'])
+                    , $linha['ibge_code']
+                    , utf8_decode($linha['option_name'])
+                    , $linha['tot_in_city']
+                    , $linha['perc_in_corede']
+                    , $linha['perc_prog']
+                    , utf8_decode($linha['status_prog_classificados'])
                 ), $sep);
             }
             return $response;
