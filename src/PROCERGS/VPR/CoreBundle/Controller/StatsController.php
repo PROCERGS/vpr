@@ -931,8 +931,6 @@ order by a2.sorting, a1.category_sorting
     }
     
     /**
-     * Lists all RlCriterioMun entities.
-     *
      * @Route("/rl/eleitores-municipio", name="vpr_rl_eleitores_municipio")
      * @Template()
      */
@@ -958,8 +956,6 @@ order by a2.sorting, a1.category_sorting
         );
     }
     /**
-     * Lists poll stats.
-     *
      * @Route("/rl/eleitores-municipio-csv", name="vpr_rl_eleitores_municipio_csv")
      */
     public function missioEleitoresMunicipioCsvAction(Request $request)
@@ -1018,8 +1014,6 @@ order by a2.sorting, a1.category_sorting
     }
     
     /**
-     * Lists all RlCriterioMun entities.
-     *
      * @Route("/rl/votos", name="vpr_rl_votos")
      * @Template()
      */
@@ -1045,8 +1039,6 @@ order by a2.sorting, a1.category_sorting
         );
     }
     /**
-     * Lists poll stats.
-     *
      * @Route("/rl/votos-csv", name="vpr_rl_votos_csv")
      */
     public function missioVotosCsvAction(Request $request)
@@ -1073,7 +1065,8 @@ order by a2.sorting, a1.category_sorting
                 , 'MUNICIPIOS_ID'
                 , 'MUNICIPIOS_NOME'
                 , 'MUNICIPIOS_IBGE'
-                , 'PROGRAMA'
+                , 'PROGRAMA_ID'
+                , 'PROGRAMA_NOME'
                 , 'TOTAL_VOTOS'
                 , 'PERCENTUAL_DO_NUMERO_DE_VOTOS'
                 , 'PERCENTUAL_CORTE'
@@ -1085,11 +1078,87 @@ order by a2.sorting, a1.category_sorting
                     , $linha['city_id']
                     , utf8_decode($linha['city_name'])
                     , $linha['ibge_code']
+                    , $linha['option_id']
                     , utf8_decode($linha['option_name'])
                     , $linha['tot_in_city']
                     , $linha['perc_in_corede']
                     , $linha['perc_prog']
                     , utf8_decode($linha['status_prog_classificados'])
+                ), $sep);
+            }
+            return $response;
+        }
+    }
+    
+    /**
+     * @Route("/rl/programas-valor", name="vpr_rl_programas_valor")
+     * @Template()
+     */
+    public function missioProgramasValorAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $pollRepo PollRepository */
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        /* @var $rlCriterioRepo RlCriterioRepository */
+        $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+        $a = $request->get('poll_id');
+        if (!$a) {
+            return $this->redirect($this->generateUrl('vpr_rl_programas_valor', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        } else {
+            $currentPollId = $a;
+        }
+        $entities1 = $rlCriterioRepo->findEspecial4($currentPollId);
+        $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        return array(
+            'entities1' => $entities1,
+            'polls' => $polls,
+            'currentPollId' => $currentPollId,
+        );
+    }
+    /**
+     * @Route("/rl/programas-valor-csv", name="vpr_rl_programas_valor_csv")
+     */
+    public function missioProgramasValorCsvAction(Request $request)
+    {
+        $currentPollId = $request->get('poll_id');
+        if ($currentPollId) {
+            $em = $this->getDoctrine()->getManager();
+            /* @var $rlCriterioRepo RlCriterioRepository */
+            $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+            $entities = $rlCriterioRepo->findEspecial4($currentPollId);
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                );
+            $response->sendHeaders();
+    
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('COREDE_ID'
+                , 'COREDE_NOME'
+                , 'PROGRAMA_ID'
+                , 'PROGRAMA_NOME'
+                , 'SECRETARIA_ID'
+                , 'SECRETARIA_NOME'
+                , 'VOTOS'
+                , 'N_CLASSIFICADOS'
+                , 'CLASSIFICADO'
+                , 'VALOR'
+            ), $sep);
+            foreach ($entities as $linha) {
+                fputcsv($output, array($linha['corede_id']
+                    , utf8_decode($linha['corede_name'])
+                    , $linha['option_id']
+                    , utf8_decode($linha['option_name'])
+                    , $linha['rl_agency_id']
+                    , utf8_decode($linha['rl_agency_name'])
+                    , $linha['tot_corede']
+                    , $linha['rank_in_corede']
+                    , utf8_decode($linha['classificado'])
+                    , $linha['tot_value_calc']
                 ), $sep);
             }
             return $response;
