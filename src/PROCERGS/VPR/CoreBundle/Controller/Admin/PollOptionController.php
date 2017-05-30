@@ -131,6 +131,7 @@ class PollOptionController extends Controller
         $stepOptions = $this->generateStepOptions($poll_selected);
 
         $form->add('step', 'entity', $stepOptions);
+        $form->add('rlAgency', 'entity', $this->generateRlAgencyOptions($poll_selected));
         $form->add('submit', 'submit', array('label' => 'Create'));
 
         return $form;
@@ -257,6 +258,7 @@ class PollOptionController extends Controller
         $stepOptions = $this->generateStepOptions($poll_selected);
 
         $form->add('step', 'entity', $stepOptions);
+        $form->add('rlAgency', 'entity', $this->generateRlAgencyOptions($poll_selected));
         $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
@@ -368,6 +370,26 @@ class PollOptionController extends Controller
         );
         $stepOptions['disabled'] = $steps ? false : true;
 
+        return $stepOptions;
+    }
+    private function generateRlAgencyOptions($poll_selected)
+    {
+        $steps = array();
+        if($poll_selected){
+            $em = $this->getDoctrine()->getManager();
+            $pollSelected = $em->getRepository('PROCERGSVPRCoreBundle:Poll')->find($poll_selected);
+            $steps = $em->getRepository('PROCERGSVPRCoreBundle:RlAgency')->findBy(array('poll' => $pollSelected), array('name' => 'ASC'));
+        }
+    
+        $stepOptions = array(
+            'class' => 'PROCERGSVPRCoreBundle:RlAgency',
+            'choices' => $steps,
+            'property' => 'name',
+            'empty_value' => '',
+            'required' => true
+        );
+        $stepOptions['disabled'] = $steps ? false : true;
+    
         return $stepOptions;
     }
 

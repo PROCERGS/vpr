@@ -84,6 +84,16 @@ class PollOption
      * @Groups({"vote", "setup"})
      */
     protected $category;
+    
+    /**
+     * @var \PROCERGS\VPR\CoreBundle\Entity\RlAgency
+     *
+     * @ORM\ManyToOne(targetEntity="PROCERGS\VPR\CoreBundle\Entity\RlAgency")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="rl_agency_id", referencedColumnName="id")
+     * })
+     */
+    protected $rlAgency;
 
     /**
      * just to have compatibiliti to migrate to system ppp, this is not used in the system
@@ -263,6 +273,27 @@ class PollOption
     public function getCodDescCedula()
     {
         return $this->codDescCedula;
+    }
+    
+    /**
+     * Set poll
+     *
+     * @param \PROCERGS\VPR\CoreBundle\Entity\RlAgency $val
+     * @return PollOption
+     */
+    public function setRlAgency(\PROCERGS\VPR\CoreBundle\Entity\RlAgency $val = null)
+    {
+        $this->rlAgency = $val;
+    
+        return $this;
+    }
+    
+    /**
+     * @return \PROCERGS\VPR\CoreBundle\Entity\RlAgency
+     */
+    public function getRlAgency()
+    {
+        return $this->rlAgency;
     }
 
 }

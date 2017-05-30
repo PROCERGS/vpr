@@ -296,3 +296,10 @@ admin.stats2: Apuracao Parcial
 admin.csv: Exportar para csv
 admin.votes_total: Total de votos
 admin.transferYear: 'Exercicio PPP'
+admin.rlAgency: 'Secretaria'
+report.missio: 'Resultado Consulta'
+report.missio.criterio: 'Critério'
+report.missio.perc.mun: 'Perc. Munincípio e programa'
+report.missio.agency: 'Secretarias'
+report.missio.eleitores.muncipio: 'Eleitores x Munícipio'
+report.missio.votos: 'Votos'

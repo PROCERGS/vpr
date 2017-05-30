@@ -147,6 +147,15 @@ class Poll
     }
 
     /**
+     * @param int $val
+     * @return Poll
+     */
+    public function setId($val)
+    {
+        $this->id = $val;
+        return $this;
+    }
+    /**
      * Get id
      *
      * @return integer

@@ -1,0 +1,65 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'report.missio'|trans %}
+{% set actionName = 'report.missio.agency'|trans %}
+
+{% block content -%}
+<div class="navbar">
+	<a class="btn btn-default" href="{{ path('rlagency_new') }}?poll_id={{ currentPollId }}" role="button"><span class="glyphicon glyphicon-file"></span> {% trans %}admin.add{% endtrans %}</a>
+
+</div>
+
+{% for type, messages in app.session.flashbag.all() %}
+{% for message in messages %}
+<div class="alert alert-success alert-dismissable">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	{{ message }}
+</div>
+{% endfor %}
+{% endfor %}
+<div class="jumbotron">
+	<form method="GET" id="filter-form" action="{{ path('rlagency') }}" role="form">
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label>{{ 'admin.poll'|trans }}</label>
+				<div>
+					<select id="poll_id" name="poll_id" class="form-control">
+						{% for poll in polls %}
+						<option value="{{ poll.id }}" {{  poll.id == currentPollId ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="table-responsive">
+	<table class="table table-striped table-bordered table-hover records_list">
+		<thead>
+			<tr>
+				<th>{{ 'admin.name'|trans }}</th>
+				<th width="8%">{{ 'admin.actions'|trans }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for entity in entities %}
+			<tr>
+				<td>{{ entity.name }}</td>
+				<td class="text-center"><a title="{{ 'admin.edit'|trans }}" class="btn btn-default btn-sm" href="{{ path('rlagency_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+	$(function() {
+		$("#filter-form #poll_id").change(function(e) {
+			$("#filter-form").submit();
+		});
+	});
+</script>
+{% endblock %}
+
+

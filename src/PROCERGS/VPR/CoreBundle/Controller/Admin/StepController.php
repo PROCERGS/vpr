@@ -403,7 +403,13 @@ class StepController extends Controller
             $data['steps'][] = array('id'=>'','value'=>'');
             foreach($steps as $step){
                 $data['steps'][] = array('id'=>$step->getId(),'value'=>$step->getName());
+            }            
+            $rlAgencys = $em->getRepository('PROCERGSVPRCoreBundle:RlAgency')->findBy(array('poll' => $poll), array('name' => 'ASC'));
+            $data['rlAgencys'][] = array('id'=>'','value'=>'');
+            foreach($rlAgencys as $rlAgency){
+                $data['rlAgencys'][] = array('id'=>$rlAgency->getId(),'value'=>$rlAgency->getName());
             }
+            
             $data['success'] = true;
 
         } catch (\Exception $e) {

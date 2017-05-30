@@ -98,6 +98,14 @@
             {{ form_widget(edit_form.categorySorting, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
+    
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.rlAgency'|trans }}</label>
+        <div class="col-sm-7">
+            {{ form_errors(edit_form.rlAgency) }}
+            {{ form_widget(edit_form.rlAgency, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
 
     <div class="form-group form-actions">
         <div class="col-lg-10 col-lg-offset-2">

@@ -79,6 +79,7 @@ $(function() {
     $('form.poll-option select#poll_select').change(function(){
         var poll_id = $(this).val();
         var $elmStep = $('#procergs_vpr_corebundle_polloption_step');
+        var $elmRlAgency = $('#procergs_vpr_corebundle_polloption_rlAgency');
 
         $.ajax({
             url: loadPollStepsUrl,
@@ -86,6 +87,8 @@ $(function() {
             beforeSend: function(){
                 $elmStep.find('option').remove();
                 $elmStep.append(new Option('Aguarde...', ''));
+                $elmRlAgency.find('option').remove();
+                $elmRlAgency.append(new Option('Aguarde...', ''));
             },
             data: ({
                 poll_id: poll_id
@@ -93,14 +96,20 @@ $(function() {
             dataType: 'json',
             success: function(result) {
                 $elmStep.find('option').remove();
+                $elmRlAgency.find('option').remove();
 
                 if(result.success){
                     $.each(result.steps, function(i, data) {
                         $elmStep.append(new Option(data.value, data.id));
                     });
                     $elmStep.removeAttr('disabled');
+                    $.each(result.rlAgencys, function(i, data) {
+                    	$elmRlAgency.append(new Option(data.value, data.id));
+                    });
+                    $elmRlAgency.removeAttr('disabled');
                 }else{
                     $elmStep.attr('disabled','disabled');
+                    $elmRlAgency.attr('disabled','disabled');
                 }
             }
         });
