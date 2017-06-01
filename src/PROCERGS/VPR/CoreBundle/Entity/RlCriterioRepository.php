@@ -251,6 +251,61 @@ order by a1.corede_name, a1.option_name
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+    public function findEspecial5($id)
+    {
+        $em = $this->getEntityManager();
+        $conn = $em->getConnection();
+        $sql = '
+with tb1 as (
+select
+a1.poll_id
+, a1.corede_id
+, a4.name corede_name
+, a1.option_id
+, a2.title option_name
+, a2.rl_agency_id
+, a3.name rl_agency_name
+, sum(a1.tot) tot_corede
+, rank() OVER (partition by a1.corede_id order by sum(a1.tot) desc ) rank_in_corede
+from corede a4
+left join stats_prev_ppp2 a1 on a1.corede_id = a4.id and a1.poll_id = :poll_id and a1.option_id is not null
+left join poll_option a2 on a2.id = a1.option_id
+left join rl_agency a3 on a3.id = a2.rl_agency_id
+group by a1.poll_id, a1.corede_id, a4.name, a1.option_id, a2.title, a2.rl_agency_id, a3.name
+), tb2 as (
+select
+a1.*
+, case when a1.rank_in_corede <= a5.tot_program then \'SIM\' else \'NÃO\' end classificado
+,
+case when a1.rank_in_corede <= a5.tot_program then
+case a1.rank_in_corede
+when 1 then (a5.tot_value * a5.program1)/100
+when 2 then (a5.tot_value * a5.program2)/100
+when 3 then (a5.tot_value * a5.program3)/100
+when 4 then (a5.tot_value * a5.program4)/100
+end
+end tot_value_calc
+from tb1 a1
+left join rl_criterio a5 on a5.poll_id = a1.poll_id and a5.corede_id = a1.corede_id
+)
+select 
+rl_agency_id
+, rl_agency_name
+, option_name
+, coalesce(sum(case when classificado = \'SIM\' then tot_value_calc else null end),0) tot_value_calc
+from tb2
+group by 
+rl_agency_id
+, rl_agency_name
+, option_name
+
+order by option_name
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam('poll_id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
     
     public function saveComplete($pollId, $items)
     {

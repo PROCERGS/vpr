@@ -1164,4 +1164,67 @@ order by a2.sorting, a1.category_sorting
             return $response;
         }
     }
+    /**
+     * @Route("/rl/resumo-programas-valor", name="vpr_rl_resumo_programas_valor")
+     * @Template()
+     */
+    public function missioResumoProgramasValorAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $pollRepo PollRepository */
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        /* @var $rlCriterioRepo RlCriterioRepository */
+        $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+        $a = $request->get('poll_id');
+        if (!$a) {
+            return $this->redirect($this->generateUrl('vpr_rl_resumo_programas_valor', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        } else {
+            $currentPollId = $a;
+        }
+        $entities1 = $rlCriterioRepo->findEspecial5($currentPollId);
+        $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        return array(
+            'entities1' => $entities1,
+            'polls' => $polls,
+            'currentPollId' => $currentPollId,
+        );
+    }
+    /**
+     * @Route("/rl/resumo-programas-valor-csv", name="vpr_rl_resumo_programas_valor_csv")
+     */
+    public function missioResumoProgramasValorCsvAction(Request $request)
+    {
+        $currentPollId = $request->get('poll_id');
+        if ($currentPollId) {
+            $em = $this->getDoctrine()->getManager();
+            /* @var $rlCriterioRepo RlCriterioRepository */
+            $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+            $entities = $rlCriterioRepo->findEspecial5($currentPollId);
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                );
+            $response->sendHeaders();
+    
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array(
+                'SECRETARIA_ID'
+                , 'SECRETARIA_NOME'
+                , 'PROGRAMA_NOME'
+                , 'VALOR'
+            ), $sep);
+            foreach ($entities as $linha) {
+                fputcsv($output, array($linha['rl_agency_id']
+                    , utf8_decode($linha['rl_agency_name'])
+                    , utf8_decode($linha['option_name'])
+                    , $linha['tot_value_calc']
+                ), $sep);
+            }
+            return $response;
+        }
+    }
 }
