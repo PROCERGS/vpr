@@ -11,75 +11,115 @@
 </div>
 {% endfor %}
 {% endfor %}
+<div style="display: none;" id="city-all">
+{% for city in allCitys %}
+<option data-corede-id="{{ city.corede_id }}" value="{{ city.id }}">{{ city.name | trans }}</option>
+{% endfor %}
+</div>
 	<div class="jumbotron">
-		<form method="GET" id="filter-form" action="{{ path('vpr_rl_eleitores_municipio') }}" role="form">
+		<form class="form" method="POST" id="filter-form" action="{{ path('vpr_rl_eleitores_municipio') }}" role="form">
 			<div class="row">
-				<div class="form-group col-md-12">
+				<div class="form-group col-md-4">
 					<label>{{ 'admin.poll'|trans }}</label>
 					<div>
-						<select id="poll_id" name="poll_id" class="form-control">
+						<select id="poll_id" name="poll_id" class="form-control" required="required">
+							<option value="">Selecione</option>
 							{% for poll in polls %}
-							<option value="{{ poll.id }}" {{  poll.id == currentPollId ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+							<option value="{{ poll.id }}" {{  poll.id == filter.poll_id ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label>{{ 'admin.corede'|trans }}</label>
+					<div>
+						<select id="corede_id" name="corede_id" class="form-control">
+							<option value="">Selecione</option>
+							{% for corede in coredes %}
+							<option value="{{ corede.id }}" {{  corede.id == filter.corede_id ? ' selected="selected" ' : '' }}>{{ corede.name | trans }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label>{{ 'admin.city'|trans }}</label>
+					<div>
+						<select id="city_id" name="city_id" class="form-control">
+							<option value="">Selecione</option>
+							{% for city in citys %}
+							<option data-corede-id="{{ city.corede_id }}" value="{{ city.id }}" {{  city.id == filter.city_id ? ' selected="selected" ' : '' }}>{{ city.name | trans }}</option>
 							{% endfor %}
 						</select>
 					</div>
 				</div>
 			</div>
+			 <div class="row">
+                <div class="form-group col-md-12 text-right">
+                    <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+                </div>
+        	</div>
+			
 		</form>
 	</div>
+{% if filter.poll_id %}
 <div class="row">
 <div class="row-fluid col-md-3">
-	<a href="{{ path('vpr_rl_eleitores_municipio_csv') }}?poll_id={{ currentPollId }}" target="_blank">
+	<a href="{{ path('vpr_rl_eleitores_municipio_csv') }}" target="_blank">
 		<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
 	</a>
 </div>
 </div>
-	<form method="POST" id="table-form">
-		<div class="table-responsive">
-			<table class="table table-striped table-bordered table-hover records_list">
-				<thead>
-					<tr>
-						<th>COREDE</th>
-						<th>MUNICÍPIOS</th>
-						<th>Nº ELEITORES</th>
-						<th>Nº VOTANTES</th>
-						<th>PERCENTUAL CORTE MUNICÍPIOS</th>
-                        <th>CORTE MUNICÍPIOS</th>
-                        <th>PERCENTUAL CORTE PROGRAMAS</th>
-                        <th>TOTAL DE VOTOS</th>
-                        <th>PERCENTUAL DE VOTAÇÃO</th>
-                        <th>STATUS</th>
-                        <th>Nº PROGRAMAS CLASSIFICADOS</th>
-					</tr>
-				</thead>
-				<tbody>					
-					{% for entity in entities1 %}
-					<tr>
-						<td>{{ entity.corede_name }}</td>
-						<td>{{ entity.city_name }}</td>
-						<td>{{ entity.tot_pop|number_format(0, ',', '.') }}</td>						
-						<td>{{ entity.voters_total|number_format(0, ',', '.') }}</td>
-						<td>{{ entity.perc_pop|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.corte_mun|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.corte_prog|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.votes_total|number_format(0, ',', '.') }}</td>
-						<td>{{ entity.voters_perc|number_format(2, ',', '.') }}</td>
-						<td>{{ entity.status_corte_mun }}</td>
-						<td>{{ entity.tot_prog_classificados }}</td>
-					</tr>					
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</form>
+{% endif %}
+{% if entities1 %}
+	<div class="table-responsive">
+		<table class="table table-striped table-bordered table-hover records_list">
+			<thead>
+				<tr>
+					<th>COREDE</th>
+					<th>MUNICÍPIOS</th>
+					<th>Nº ELEITORES</th>
+					<th>Nº VOTANTES</th>
+					<th>PERCENTUAL CORTE MUNICÍPIOS</th>
+                    <th>CORTE MUNICÍPIOS</th>
+                    <th>PERCENTUAL CORTE PROGRAMAS</th>
+                    <th>TOTAL DE VOTOS</th>
+                    <th>PERCENTUAL DE VOTAÇÃO</th>
+                    <th>STATUS</th>
+                    <th>Nº PROGRAMAS CLASSIFICADOS</th>
+				</tr>
+			</thead>
+			<tbody>					
+				{% for entity in entities1 %}
+				<tr>
+					<td>{{ entity.corede_name }}</td>
+					<td>{{ entity.city_name }}</td>
+					<td>{{ entity.tot_pop|number_format(0, ',', '.') }}</td>						
+					<td>{{ entity.voters_total|number_format(0, ',', '.') }}</td>
+					<td>{{ entity.perc_pop|number_format(2, ',', '.') }}</td>
+					<td>{{ entity.corte_mun|number_format(2, ',', '.') }}</td>
+					<td>{{ entity.corte_prog|number_format(2, ',', '.') }}</td>
+					<td>{{ entity.votes_total|number_format(0, ',', '.') }}</td>
+					<td>{{ entity.voters_perc|number_format(2, ',', '.') }}</td>
+					<td>{{ entity.status_corte_mun }}</td>
+					<td>{{ entity.tot_prog_classificados }}</td>
+				</tr>					
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{%  endif %}
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
-<script type="text/javascript">
-	$(function() {
-		$("#filter-form #poll_id").change(function(e) {
-			$("#filter-form").submit();
-		});
+<script>
+$(function(){
+	$('#corede_id').change(function(){
+		var i = $(this).val();
+		$('#city_id option[data-corede-id]').remove();
+		if (i) {		
+			$('#city_id').append($('#city-all option[data-corede-id='+ i +']'));
+		} 
 	});
+});
 </script>
 {% endblock %}

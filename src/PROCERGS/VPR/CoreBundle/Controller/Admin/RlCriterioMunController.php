@@ -14,7 +14,7 @@ use PROCERGS\VPR\CoreBundle\Entity\RlCriterioMunRepository;
 /**
  * RlCriterioMun controller.
  *
- * @Route("/rlcriteriomun")
+ * @Route("/admin/rlcriteriomun")
  */
 class RlCriterioMunController extends Controller
 {
@@ -34,9 +34,18 @@ class RlCriterioMunController extends Controller
         $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterioMun');
         $a = $request->get('poll_id');
         if (!$a) {
-            return $this->redirect($this->generateUrl('rlcriteriomun', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+            $tempId = $this->get('session')->get('current_poll_id');
+            if ($tempId) {
+                return $this->redirect($this->generateUrl('rlcriteriomun', array(
+                    'poll_id' => $tempId
+                )));
+            } else {
+                return $this->redirect($this->generateUrl('rlcriteriomun', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+            }
+            
         } else {
             $currentPollId = $a;
+            $this->get('session')->set('current_poll_id', $currentPollId);
         }        
         if ($request->isMethod('POST')) {
             $b = $request->get('item1');

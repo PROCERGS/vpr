@@ -12,29 +12,48 @@
 {% endfor %}
 {% endfor %}
 	<div class="jumbotron">
-		<form method="GET" id="filter-form" action="{{ path('vpr_rl_programas_valor') }}" role="form">
+		<form method="POST" id="filter-form" action="{{ path('vpr_rl_programas_valor') }}" role="form">
 			<div class="row">
-				<div class="form-group col-md-12">
+				<div class="form-group col-md-6">
 					<label>{{ 'admin.poll'|trans }}</label>
 					<div>
-						<select id="poll_id" name="poll_id" class="form-control">
+						<select id="poll_id" name="poll_id" class="form-control" required="required">
+							<option value="">Selecione</option>
 							{% for poll in polls %}
-							<option value="{{ poll.id }}" {{  poll.id == currentPollId ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+							<option value="{{ poll.id }}" {{  poll.id == filter.poll_id ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-6">
+					<label>{{ 'admin.corede'|trans }}</label>
+					<div>
+						<select id="corede_id" name="corede_id" class="form-control">
+							<option value="">Selecione</option>
+							{% for corede in coredes %}
+							<option value="{{ corede.id }}" {{  corede.id == filter.corede_id ? ' selected="selected" ' : '' }}>{{ corede.name | trans }}</option>
 							{% endfor %}
 						</select>
 					</div>
 				</div>
 			</div>
+			 <div class="row">
+                <div class="form-group col-md-12 text-right">
+                    <button type="submit" class="btn btn-primary">{{ 'admin.filter'|trans }}</button>
+                </div>
+        	</div>
 		</form>
 	</div>
+{% if filter.poll_id %}
 <div class="row">
 <div class="row-fluid col-md-3">
-	<a href="{{ path('vpr_rl_programas_valor_csv') }}?poll_id={{ currentPollId }}" target="_blank">
+	<a href="{{ path('vpr_rl_programas_valor_csv') }}" target="_blank">
 		<button class="btn btn-success btn-form-type">{{ 'admin.csv'|trans }}</button>
 	</a>
 </div>
 </div>
-	<form method="POST" id="table-form">
+{% endif %}
+{% if entities1 %}
 		<div class="table-responsive">
 			<table class="table table-striped table-bordered table-hover records_list">
 				<thead>
@@ -63,15 +82,8 @@
 				</tbody>
 			</table>
 		</div>
-	</form>
+{% endif %}		
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
-<script type="text/javascript">
-	$(function() {
-		$("#filter-form #poll_id").change(function(e) {
-			$("#filter-form").submit();
-		});
-	});
-</script>
 {% endblock %}

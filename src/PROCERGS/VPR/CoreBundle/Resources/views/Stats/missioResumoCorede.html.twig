@@ -11,27 +11,43 @@
 </div>
 {% endfor %}
 {% endfor %}
+<div style="display: none;" id="city-all">
+{% for city in allCitys %}
+<option data-corede-id="{{ city.corede_id }}" value="{{ city.id }}">{{ city.name | trans }}</option>
+{% endfor %}
+</div>
 	<div class="jumbotron">
-		<form method="GET" id="filter-form" action="{{ path('vpr_rl_resumo_corede') }}" role="form">
+		<form method="POST" id="filter-form" action="{{ path('vpr_rl_resumo_corede') }}" role="form">
 			<div class="row">
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-4">
 					<label>{{ 'admin.poll'|trans }}</label>
 					<div>
 						<select id="poll_id" name="poll_id" class="form-control" required="required">
 							<option value="">Selecione</option>
 							{% for poll in polls %}
-							<option value="{{ poll.id }}" {{  poll.id == currentPollId ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
+							<option value="{{ poll.id }}" {{  poll.id == filter.poll_id ? ' selected="selected" ' : '' }}>{{ poll.name | trans }}</option>
 							{% endfor %}
 						</select>
 					</div>
 				</div>
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-4">
 					<label>{{ 'admin.corede'|trans }}</label>
 					<div>
 						<select id="corede_id" name="corede_id" class="form-control">
 							<option value="">Selecione</option>
 							{% for corede in coredes %}
-							<option value="{{ corede.id }}" {{  corede.id == currentCoredeId ? ' selected="selected" ' : '' }}>{{ corede.name | trans }}</option>
+							<option value="{{ corede.id }}" {{  corede.id == filter.corede_id ? ' selected="selected" ' : '' }}>{{ corede.name | trans }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label>{{ 'admin.city'|trans }}</label>
+					<div>
+						<select id="city_id" name="city_id" class="form-control">
+							<option value="">Selecione</option>
+							{% for city in citys %}
+							<option data-corede-id="{{ city.corede_id }}" value="{{ city.id }}" {{  city.id == filter.city_id ? ' selected="selected" ' : '' }}>{{ city.name | trans }}</option>
 							{% endfor %}
 						</select>
 					</div>
@@ -45,9 +61,9 @@
 		</form>
 	</div>
 <div class="row">
-{% if currentPollId %}
+{% if filter.poll_id %}
 <div class="row-fluid col-md-3">
-	<a href="{{ path('vpr_rl_resumo_corede_csv') }}?poll_id={{ currentPollId }}&corede_id={{ currentCoredeId }}" target="_blank">
+	<a href="{{ path('vpr_rl_resumo_corede_csv') }}" target="_blank">
 		<button class="btn btn-success btn-form-type">{{ 'admin.ods'|trans }}</button>
 	</a>
 </div>
@@ -61,4 +77,15 @@
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
+<script type="text/javascript">
+$(function(){
+	$('#corede_id').change(function(){
+		var i = $(this).val();
+		$('#city_id option[data-corede-id]').remove();
+		if (i) {		
+			$('#city_id').append($('#city-all option[data-corede-id='+ i +']'));
+		} 
+	});
+});
+</script>
 {% endblock %}

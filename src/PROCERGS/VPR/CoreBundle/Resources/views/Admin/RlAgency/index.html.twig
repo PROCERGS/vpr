@@ -5,7 +5,38 @@
 {% block content -%}
 <div class="navbar">
 	<a class="btn btn-default" href="{{ path('rlagency_new') }}?poll_id={{ currentPollId }}" role="button"><span class="glyphicon glyphicon-file"></span> {% trans %}admin.add{% endtrans %}</a>
-
+	<button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+  	Copiar itens para outra votação
+	</button>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<form method="POST" id="copy-form" action="{{ path('rlagency_copy') }}" role="form">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Copiar itens para outra votação</h4>
+				</div>
+				<div class="modal-body">
+					<label>Votação de destino:</label>
+					<div>
+						<input type="hidden" name="poll_id" value="{{ currentPollId }}">
+						<select id="target_poll_id" name="target_poll_id" class="form-control">
+							{% for poll in polls %}
+							<option value="{{ poll.id }}">{{ poll.name | trans }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="copiar-secretarias">Copiar</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
 
 {% for type, messages in app.session.flashbag.all() %}
@@ -54,11 +85,29 @@
 {% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
-	$(function() {
-		$("#filter-form #poll_id").change(function(e) {
-			$("#filter-form").submit();
-		});
+$(function() {
+	$("#filter-form #poll_id").change(function(e) {
+		$("#filter-form").submit();
 	});
+	$('#copiar-secretarias').click(function(e){
+		var p = $("#copy-form").serialize();
+        $.ajax({
+            url: $("#copy-form").attr('action'),
+            type: 'POST',
+            data: p,
+            dataType: 'json',
+            success: function (data) {
+            	$('#myModal').modal('hide');
+            	alert("Sucesso");
+            },
+            error: function(e) {
+        		alert(e.responseText);
+            },
+            complete: function(e) {
+            }
+        });
+	});
+});
 </script>
 {% endblock %}
 

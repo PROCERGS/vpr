@@ -31,6 +31,8 @@ use PROCERGS\VPR\CoreBundle\Entity\BallotBoxRepository;
 use PROCERGS\VPR\CoreBundle\Entity\StatsTotalCoredeVoteRepository;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
 use PROCERGS\VPR\CoreBundle\Entity\RlCriterioRepository;
+use PROCERGS\VPR\CoreBundle\Entity\Corede;
+use PROCERGS\VPR\CoreBundle\Entity\CityRepository;
 
 class StatsController extends Controller
 {
@@ -941,18 +943,39 @@ order by a2.sorting, a1.category_sorting
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
         /* @var $rlCriterioRepo RlCriterioRepository */        
         $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-        $a = $request->get('poll_id');
-        if (!$a) {
-            return $this->redirect($this->generateUrl('vpr_rl_eleitores_municipio', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        /* @var $coredeRepo Corede */
+        $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        /* @var $cityRepo CityRepository */
+        $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+        $filter = $this->montaFilterMissio();
+        $filter1 = $this->get('session')->get('filter_missio');
+        if ($request->isMethod('POST')) {
+            $filter['poll_id'] = $request->get('poll_id');
+            $filter['corede_id'] = $request->get('corede_id');
+            $filter['city_id'] = $request->get('city_id');
+            $entities1 = $rlCriterioRepo->findEspecial2($filter);
+            $this->get('session')->set('filter_missio', $filter);
+        } elseif ($filter1) {
+            $filter = $filter1;
+            $entities1 = $rlCriterioRepo->findEspecial2($filter);
         } else {
-            $currentPollId = $a;
+            $entities1 = array();
         }
-        $entities1 = $rlCriterioRepo->findEspecial2($currentPollId);
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        $coredes = $coredeRepo->findBy(array(),array('name' => 'asc'));
+        if ($filter['corede_id']) {
+            $citys = $cityRepo->findCombo1($filter['corede_id']);
+        } else {
+            $citys = array();
+        }
+        $allCitys = $cityRepo->findCombo1();
         return array(
             'entities1' => $entities1,
             'polls' => $polls,
-            'currentPollId' => $currentPollId,
+            'coredes' => $coredes,
+            'citys' => $citys,
+            'allCitys' => $allCitys,
+            'filter' => $filter,
         );
     }
     /**
@@ -960,18 +983,18 @@ order by a2.sorting, a1.category_sorting
      */
     public function missioEleitoresMunicipioCsvAction(Request $request)
     {
-        $currentPollId = $request->get('poll_id');
-        if ($currentPollId) {
+        $filter1 = $this->get('session')->get('filter_missio');
+        if (isset($filter1['poll_id'])) {
             $em = $this->getDoctrine()->getManager();
             /* @var $rlCriterioRepo RlCriterioRepository */
             $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-            $entities = $rlCriterioRepo->findEspecial2($currentPollId);
+            $entities = $rlCriterioRepo->findEspecial2($filter1);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                'attachment; filename="eleitores_municipio_'.$filter1['poll_id'] .'.csv";'
                 );
             $response->sendHeaders();
     
@@ -1024,18 +1047,39 @@ order by a2.sorting, a1.category_sorting
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
         /* @var $rlCriterioRepo RlCriterioRepository */
         $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-        $a = $request->get('poll_id');
-        if (!$a) {
-            return $this->redirect($this->generateUrl('vpr_rl_votos', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        /* @var $coredeRepo Corede */
+        $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        /* @var $cityRepo CityRepository */
+        $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+        $filter = $this->montaFilterMissio();
+        $filter1 = $this->get('session')->get('filter_missio');
+        if ($request->isMethod('POST')) {
+            $filter['poll_id'] = $request->get('poll_id');
+            $filter['corede_id'] = $request->get('corede_id');
+            $filter['city_id'] = $request->get('city_id');
+            $entities1 = $rlCriterioRepo->findEspecial3($filter)->fetchAll(\PDO::FETCH_ASSOC);;
+            $this->get('session')->set('filter_missio', $filter);
+        } elseif ($filter1) {
+            $filter = $filter1;
+            $entities1 = $rlCriterioRepo->findEspecial3($filter)->fetchAll(\PDO::FETCH_ASSOC);;
         } else {
-            $currentPollId = $a;
+            $entities1 = array();
         }
-        $entities1 = $rlCriterioRepo->findEspecial3($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        $coredes = $coredeRepo->findBy(array(),array('name' => 'asc'));
+        if ($filter['corede_id']) {
+            $citys = $cityRepo->findCombo1($filter['corede_id']);
+        } else {
+            $citys = array();
+        }
+        $allCitys = $cityRepo->findCombo1();
         return array(
             'entities1' => $entities1,
             'polls' => $polls,
-            'currentPollId' => $currentPollId,
+            'coredes' => $coredes,
+            'citys' => $citys,
+            'allCitys' => $allCitys,
+            'filter' => $filter,
         );
     }
     /**
@@ -1043,18 +1087,18 @@ order by a2.sorting, a1.category_sorting
      */
     public function missioVotosCsvAction(Request $request)
     {
-        $currentPollId = $request->get('poll_id');
-        if ($currentPollId) {
+        $filter1 = $this->get('session')->get('filter_missio');
+        if (isset($filter1['poll_id'])) {
             $em = $this->getDoctrine()->getManager();
             /* @var $rlCriterioRepo RlCriterioRepository */
             $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-            $entities = $rlCriterioRepo->findEspecial3($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
+            $entities = $rlCriterioRepo->findEspecial3($filter1)->fetchAll(\PDO::FETCH_ASSOC);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                'attachment; filename="eleitores_municipio_'.$filter1['poll_id'] .'.csv";'
                 );
             $response->sendHeaders();
     
@@ -1101,18 +1145,28 @@ order by a2.sorting, a1.category_sorting
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
         /* @var $rlCriterioRepo RlCriterioRepository */
         $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-        $a = $request->get('poll_id');
-        if (!$a) {
-            return $this->redirect($this->generateUrl('vpr_rl_programas_valor', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        /* @var $coredeRepo Corede */
+        $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        $filter = $this->montaFilterMissio();
+        $filter1 = $this->get('session')->get('filter_missio');
+        if ($request->isMethod('POST')) {
+            $filter['poll_id'] = $request->get('poll_id');
+            $filter['corede_id'] = $request->get('corede_id');
+            $entities1 = $rlCriterioRepo->findEspecial4($filter)->fetchAll(\PDO::FETCH_ASSOC);
+            $this->get('session')->set('filter_missio', $filter);
+        } elseif ($filter1) {
+            $filter = $filter1;
+            $entities1 = $rlCriterioRepo->findEspecial4($filter)->fetchAll(\PDO::FETCH_ASSOC);
         } else {
-            $currentPollId = $a;
+            $entities1 = array();
         }
-        $entities1 = $rlCriterioRepo->findEspecial4($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        $coredes = $coredeRepo->findBy(array(),array('name' => 'asc'));
         return array(
             'entities1' => $entities1,
             'polls' => $polls,
-            'currentPollId' => $currentPollId,
+            'coredes' => $coredes,
+            'filter' => $filter,
         );
     }
     /**
@@ -1120,18 +1174,18 @@ order by a2.sorting, a1.category_sorting
      */
     public function missioProgramasValorCsvAction(Request $request)
     {
-        $currentPollId = $request->get('poll_id');
-        if ($currentPollId) {
+        $filter1 = $this->get('session')->get('filter_missio');
+        if (isset($filter1['poll_id'])) {
             $em = $this->getDoctrine()->getManager();
             /* @var $rlCriterioRepo RlCriterioRepository */
             $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-            $entities = $rlCriterioRepo->findEspecial4($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
+            $entities = $rlCriterioRepo->findEspecial4($filter1)->fetchAll(\PDO::FETCH_ASSOC);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                'attachment; filename="eleitores_municipio_'.$filter1['poll_id'] .'.csv";'
                 );
             $response->sendHeaders();
     
@@ -1175,18 +1229,24 @@ order by a2.sorting, a1.category_sorting
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
         /* @var $rlCriterioRepo RlCriterioRepository */
         $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-        $a = $request->get('poll_id');
-        if (!$a) {
-            return $this->redirect($this->generateUrl('vpr_rl_resumo_programas_valor', array('poll_id' => $pollRepo->findLastPoll()->getId())));
+        
+        $filter = $this->montaFilterMissio();
+        $filter1 = $this->get('session')->get('filter_missio');
+        if ($request->isMethod('POST')) {
+            $filter['poll_id'] = $request->get('poll_id');
+            $entities1 = $rlCriterioRepo->findEspecial5($filter);
+            $this->get('session')->set('filter_missio', $filter);
+        } elseif ($filter1) {
+            $filter = $filter1;
+            $entities1 = $rlCriterioRepo->findEspecial5($filter);
         } else {
-            $currentPollId = $a;
+            $entities1 = array();
         }
-        $entities1 = $rlCriterioRepo->findEspecial5($currentPollId);
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
         return array(
             'entities1' => $entities1,
             'polls' => $polls,
-            'currentPollId' => $currentPollId,
+            'filter' => $filter,
         );
     }
     /**
@@ -1194,18 +1254,18 @@ order by a2.sorting, a1.category_sorting
      */
     public function missioResumoProgramasValorCsvAction(Request $request)
     {
-        $currentPollId = $request->get('poll_id');
-        if ($currentPollId) {
+        $filter1 = $this->get('session')->get('filter_missio');
+        if (isset($filter1['poll_id'])) {
             $em = $this->getDoctrine()->getManager();
             /* @var $rlCriterioRepo RlCriterioRepository */
             $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-            $entities = $rlCriterioRepo->findEspecial5($currentPollId);
+            $entities = $rlCriterioRepo->findEspecial5($filter1);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="eleitores_municipio_'.$currentPollId .'.csv";'
+                'attachment; filename="eleitores_municipio_'.$filter1['poll_id'] .'.csv";'
                 );
             $response->sendHeaders();
     
@@ -1227,13 +1287,22 @@ order by a2.sorting, a1.category_sorting
             return $response;
         }
     }
-    private function resumoCoredeEntities($currentPollId, $currentCoredeId = null)
+    private function montaFilterMissio()
+    {
+        $filter['poll_id'] = null;
+        $filter['corede_id'] = null;
+        $filter['city_id'] = null;
+        return $filter;
+    }
+    private function resumoCoredeEntities($filter)
     {
         $em = $this->getDoctrine()->getManager();
         /* @var $rlCriterioRepo RlCriterioRepository */
         $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-        $entities1 = $rlCriterioRepo->findEspecial4($currentPollId, array('corede_id' => $currentCoredeId, 'classificado' => 1))->fetchAll(\PDO::FETCH_GROUP);
-        $entities2 = $rlCriterioRepo->findEspecial3($currentPollId, array('corede_id' => $currentCoredeId))->fetchAll(\PDO::FETCH_GROUP);
+        $filter1 = $filter;
+        $filter1['classificado'] = 1;
+        $entities1 = $rlCriterioRepo->findEspecial4($filter1)->fetchAll(\PDO::FETCH_GROUP);
+        $entities2 = $rlCriterioRepo->findEspecial3($filter)->fetchAll(\PDO::FETCH_GROUP);
         $entities3 = array();
         $entities4 = array();
         foreach ($entities1 as $key1 => $val1) {
@@ -1300,27 +1369,44 @@ order by a2.sorting, a1.category_sorting
         $em = $this->getDoctrine()->getManager();
         /* @var $pollRepo PollRepository */
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
-        /* @var $pollRepo Corede */
+        $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+        /* @var $coredeRepo Corede */
         $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
-        $currentPollId = $request->get('poll_id');
-        $currentCoredeId = $request->get('corede_id');
-        if ($currentPollId) {
-            list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($currentPollId, $currentCoredeId);
+        /* @var $cityRepo CityRepository */
+        $cityRepo = $em->getRepository('PROCERGSVPRCoreBundle:City');
+        $filter = $this->montaFilterMissio();
+        $filter1 = $this->get('session')->get('filter_missio');
+        if ($request->isMethod('POST')) {
+            $filter['poll_id'] = $request->get('poll_id');
+            $filter['corede_id'] = $request->get('corede_id');
+            $filter['city_id'] = $request->get('city_id');
+            list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($filter);
+            $this->get('session')->set('filter_missio', $filter);
+        } elseif ($filter1) {
+            $filter = $filter1;
+            list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($filter);
         } else {
             $entities1 = array();
             $entities3 = array();
             $entities4 = array();
         }
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
-        $coredes = $coredeRepo->findBy(array(), array('name' => 'asc'));
+        $coredes = $coredeRepo->findBy(array(),array('name' => 'asc'));
+        if ($filter['corede_id']) {
+            $citys = $cityRepo->findCombo1($filter['corede_id']);
+        } else {
+            $citys = array();
+        }
+        $allCitys = $cityRepo->findCombo1();        
         return array(
             'entities1' => $entities1,
             'entities3' => $entities3,
             'entities4' => $entities4,
             'polls' => $polls,
             'coredes' => $coredes,
-            'currentPollId' => $currentPollId,
-            'currentCoredeId' => $currentCoredeId
+            'citys' => $citys,
+            'allCitys' => $allCitys,
+            'filter' => $filter,
         );
     }
     /**
@@ -1328,16 +1414,15 @@ order by a2.sorting, a1.category_sorting
      */
     public function missioResumoCoredeCsvAction(Request $request)
     {
-        $currentPollId = $request->get('poll_id');
-        $currentCoredeId = $request->get('corede_id');
-        if ($currentPollId) {
-            list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($currentPollId, $currentCoredeId);
+        $filter1 = $this->get('session')->get('filter_missio');
+        if (isset($filter1['poll_id'])) {
+            list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($filter1);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'application/vnd.oasis.opendocument.spreadsheet');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="resumo_corede_'.$currentPollId .'_'.$currentCoredeId.'.ods";'
+                'attachment; filename="resumo_corede_'.$filter1['poll_id'] .'.ods";'
                 );
             $response->sendHeaders();
             die(utf8_decode($this->renderView('PROCERGSVPRCoreBundle::Stats/missioResumoCoredeList.html.twig', array(

@@ -21,4 +21,13 @@ order by a1.name asc
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+    
+    public function copiarItens($pollId, $targetPollId)
+    {
+        $em = $this->getEntityManager();
+        $conn = $em->getConnection();
+        $sql = 'insert into rl_agency(poll_id, name) select :target_poll_id, name from rl_agency where poll_id = :poll_id';
+        $stmt = $conn->prepare($sql);        
+        return $stmt->execute(array('poll_id' => $pollId, 'target_poll_id' => $targetPollId));
+    }
 }

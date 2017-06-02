@@ -23,8 +23,12 @@ order by a1.id asc
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
     
-    public function findEspecial2($id)
+    public function findEspecial2($filter)
     {
+        if (!isset($filter['poll_id'])) {
+            return false;
+        }
+        $params = array('poll_id' => $filter['poll_id']);
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
         $sql = '
@@ -103,7 +107,17 @@ from tb2
 left join tb1 on tb1.city_id = tb2.city_id
 left join tb5 on tb5.city_id = tb2.city_id
 left join tb4 on tb4.city_id = tb2.city_id
-group by 
+where 1 = 1 ';
+        if (isset($filter['corede_id']) && $filter['corede_id']) {
+            $params['corede_id'] = $filter['corede_id'];
+            $sql .= "and tb2.corede_id = :corede_id ";
+        }
+        if (isset($filter['city_id']) && $filter['city_id']) {
+            $params['city_id'] = $filter['city_id'];
+            $sql .= "and tb2.city_id = :city_id ";
+        }
+
+$sql .= 'group by 
 tb2.city_id
 , tb2.city_name
 , tb2.ibge_code
@@ -116,16 +130,20 @@ tb2.city_id
 , tb5.votes_total
 order by tb2.city_name
         ';
+        
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam('poll_id', $id);
-        $stmt->execute();
+        $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
     /**
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function findEspecial3($pollId, $filter = null)
+    public function findEspecial3($filter)
     {
+        if (!isset($filter['poll_id'])) {
+            return false;
+        }
+        $params = array('poll_id' => $filter['poll_id']);
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
         $sql = '
@@ -211,10 +229,14 @@ left join tb5 on tb5.city_id = tb2.city_id
 left join tb4 on tb4.city_id = tb2.city_id
 where 1 = 1 
             ';
-        $params = array('poll_id' => $pollId);
+        
         if (isset($filter['corede_id']) && $filter['corede_id']) {
-            $sql .= 'and tb2.corede_id = :corede_id ';
             $params['corede_id'] = $filter['corede_id'];
+            $sql .= "and tb2.corede_id = :corede_id ";
+        }
+        if (isset($filter['city_id']) && $filter['city_id']) {
+            $params['city_id'] = $filter['city_id'];
+            $sql .= "and tb2.city_id = :city_id ";
         }
         $sql .= 'order by tb2.corede_name, tb2.city_name, tb4.option_name ';
         $stmt = $conn->prepare($sql);
@@ -224,8 +246,12 @@ where 1 = 1
     /**
      * @return \Doctrine\DBAL\Driver\Statement
      */
-    public function findEspecial4($pollId, $filter = null)
+    public function findEspecial4($filter)
     {
+        if (!isset($filter['poll_id'])) {
+            return false;
+        }
+        $params = array('poll_id' => $filter['poll_id']);
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
         $sql = '
@@ -279,7 +305,7 @@ from tb1 a1
 left join rl_criterio a5 on a5.poll_id = a1.poll_id and a5.corede_id = a1.corede_id
 where 1 = 1
         ';
-        $params = array('poll_id' => $pollId);
+        
         if (isset($filter['corede_id']) && $filter['corede_id']) {
             $sql .= 'and a1.corede_id = :corede_id ';
             $params['corede_id'] = $filter['corede_id'];
@@ -297,8 +323,12 @@ where 1 = 1
         return $stmt;
     }
     
-    public function findEspecial5($id)
+    public function findEspecial5($filter)
     {
+        if (!isset($filter['poll_id'])) {
+            return false;
+        }
+        $params = array('poll_id' => $filter['poll_id']);
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
         $sql = '
@@ -348,8 +378,7 @@ rl_agency_id
 order by option_name
         ';
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam('poll_id', $id);
-        $stmt->execute();
+        $stmt->execute($params);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
     
