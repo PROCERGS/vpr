@@ -28,7 +28,7 @@
 				<div class="form-group col-md-6">
 					<label>{{ 'admin.corede'|trans }}</label>
 					<div>
-						<select id="corede_id" name="corede_id" class="form-control" required="required">
+						<select id="corede_id" name="corede_id" class="form-control">
 							<option value="">Selecione</option>
 							{% for corede in coredes %}
 							<option value="{{ corede.id }}" {{  corede.id == currentCoredeId ? ' selected="selected" ' : '' }}>{{ corede.name | trans }}</option>
@@ -45,7 +45,7 @@
 		</form>
 	</div>
 <div class="row">
-{% if currentPollId and currentCoredeId %}
+{% if currentPollId %}
 <div class="row-fluid col-md-3">
 	<a href="{{ path('vpr_rl_resumo_corede_csv') }}?poll_id={{ currentPollId }}&corede_id={{ currentCoredeId }}" target="_blank">
 		<button class="btn btn-success btn-form-type">{{ 'admin.ods'|trans }}</button>

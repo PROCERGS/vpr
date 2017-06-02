@@ -1227,7 +1227,7 @@ order by a2.sorting, a1.category_sorting
             return $response;
         }
     }
-    private function resumoCoredeEntities($currentPollId, $currentCoredeId)
+    private function resumoCoredeEntities($currentPollId, $currentCoredeId = null)
     {
         $em = $this->getDoctrine()->getManager();
         /* @var $rlCriterioRepo RlCriterioRepository */
@@ -1239,33 +1239,55 @@ order by a2.sorting, a1.category_sorting
         foreach ($entities1 as $key1 => $val1) {
             $total = 0;
             $total2 = 0;
+            $item = array();
             foreach ($val1 as $val2) {
                 $total =+ $val2['tot_value_calc'];
                 $total2++;
             }
-            $entities3[$key1]['corede_id'] = $key1;
-            $entities3[$key1]['corede_name'] = $val1[0]['corede_name'];
-            $entities3[$key1]['total'] =+ $total;
-            $entities3[$key1]['total_cols'] = $total2;
+            $item['corede_id'] = $key1;
+            $item['corede_name'] = $val1[0]['corede_name'];
+            $item['total'] =+ $total;
+            $item['total_cols'] = $total2;
+            $entities3[$key1] = $item;
         }
         foreach ($entities2 as $key1 => $val1) {
-            $entities4[$key1]['city_id'] = $key1;
-            $entities4[$key1]['city_name'] = $val1[0]['city_name'];
-            $entities4[$key1]['status_corte_mun'] = $val1[0]['status_corte_mun'];
-            $entities4[$key1]['total_cols'] = $total2;
-            foreach ($val1 as $val2) {
-                if ($val2['rank_in_corede'] <= 4) {
-                    $entities4[$key1]['program' . $val2['rank_in_corede']] = $val2['tot_in_city'];
-                    $entities4[$key1]['status_program' . $val2['rank_in_corede']] = $val2['status_combinado_prog_classificados'];
+            $item = array();
+            $first = $val1[0];
+            $currentCoredeId1 = $first['corede_id'];
+            $item['city_id'] = $key1;
+            $item['city_name'] = $first['city_name'];
+            $item['status_corte_mun'] = $first['status_corte_mun'];
+            $item['total_cols'] = $entities3[$currentCoredeId1]['total_cols']; 
+            $currentTotalCols = $item['total_cols'];
+            $item['cols'] = array();
+            foreach ($entities3 as $key3 => $val3) {
+                if ($key3 == $currentCoredeId1) {
+                    $a = array();
+                    foreach ($val1 as $val2) {                        
+                        if ($val2['rank_in_corede'] <= $currentTotalCols) {
+                            $a[$val2['rank_in_corede']*1] = array(
+                                'program' => $val2['tot_in_city'], 
+                                'status_program' => $val2['status_combinado_prog_classificados']
+                            );
+                        }
+                    }
+                    for ($i =1; $i <= $currentTotalCols; $i++) {
+                        if (!isset($a[$i])) {
+                            $a[$i] = array('program' => null, 'status_program' => null);
+                        }
+                    }
+                    ksort($a);
+                    foreach ($a as $b) {
+                        $item['cols'][] = $b;
+                    }
+                } else {
+                    for ($i =0; $i< $val3['total_cols']; $i++) {
+                        $item['cols'][] = array('program' => null, 'status_program' => null);
+                    }
                 }
             }
-            for($i=1; $i <= 4; $i++) {
-                if (!isset($entities4[$key1]['program' . $i])) {
-                    $entities4[$key1]['program' . $i] = null;
-                    $entities4[$key1]['status_program' . $i] = null;
-        
-                }
-            }
+            $entities4[$key1] = $item;
+            unset($entities2[$key1]);
         }
         return array($entities1, $entities3, $entities4);
     }
@@ -1282,7 +1304,7 @@ order by a2.sorting, a1.category_sorting
         $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
         $currentPollId = $request->get('poll_id');
         $currentCoredeId = $request->get('corede_id');
-        if ($currentPollId && $currentCoredeId) {
+        if ($currentPollId) {
             list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($currentPollId, $currentCoredeId);
         } else {
             $entities1 = array();
@@ -1308,7 +1330,7 @@ order by a2.sorting, a1.category_sorting
     {
         $currentPollId = $request->get('poll_id');
         $currentCoredeId = $request->get('corede_id');
-        if ($currentPollId && $currentCoredeId) {
+        if ($currentPollId) {
             list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($currentPollId, $currentCoredeId);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
@@ -1318,12 +1340,6 @@ order by a2.sorting, a1.category_sorting
                 'attachment; filename="resumo_corede_'.$currentPollId .'_'.$currentCoredeId.'.ods";'
                 );
             $response->sendHeaders();
-            function array_decode(&$arr){
-                array_walk_recursive($arr, function(&$val, $key){
-                    $val = utf8_decode($val);
-                });
-                    return $arr;
-            }
             die(utf8_decode($this->renderView('PROCERGSVPRCoreBundle::Stats/missioResumoCoredeList.html.twig', array(
                 'entities1' => ($entities1),
                 'entities3' => ($entities3),
