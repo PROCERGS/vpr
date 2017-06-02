@@ -5,13 +5,13 @@
 					<th rowspan="7" bgcolor="#EEEE15"></th>
 					<th bgcolor="#EEEE15">Corede</th>
 					{% for entity in entities3 %}
-						<th colspan="4" bgcolor="#EEEE15">{{ entity.corede_name }}</th>
+						<th colspan="{{ entity.total_cols }}" bgcolor="#EEEE15">{{ entity.corede_name }}</th>
 					{% endfor %}
 				</tr>
 				<tr>
 					<th bgcolor="#EEEE15">Valor destinado ao Corede</th>
 					{% for entity in entities3 %}
-						<td colspan="4" bgcolor="#EEEE15">{{ entity.total|number_format(2, ',', '.') }}</td>
+						<td colspan="{{ entity.total_cols }}" bgcolor="#EEEE15">{{ entity.total|number_format(2, ',', '.') }}</td>
 					{% endfor %}
 				</tr>
 				<tr>
@@ -57,7 +57,9 @@
 				<tr>
 					<th bgcolor="#FFA500">MUNICÍPIOS</th>
 					<th bgcolor="#FFA500">CLASSIFICAÇÃO DOS MUNICÍPIOS</th>
-					<th colspan="4" bgcolor="#FFA500"></th>					
+					{% for entity in entities3 %}
+						<th colspan="{{ entity.total_cols }}" bgcolor="#FFA500"></th>
+					{% endfor %}					
 				</tr>		
 			</thead>
 			<tbody>					
@@ -68,8 +70,10 @@
 					<td bgcolor="{{ (entity.status_corte_mun=='CLASSIFICADO' ? '#90EE90' : '#FFE1EC') }}">{{ entity.status_corte_mun }}</td>
 					<td bgcolor="{{ (entity.status_program1=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program1|number_format(0, ',', '.') }}</td>
 					<td bgcolor="{{ (entity.status_program2=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program2|number_format(0, ',', '.') }}</td>
-					<td bgcolor="{{ (entity.status_program3=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program3|number_format(0, ',', '.') }}</td>						
-					<td bgcolor="{{ (entity.status_program4=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program4|number_format(0, ',', '.') }}</td>						
+					<td bgcolor="{{ (entity.status_program3=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program3|number_format(0, ',', '.') }}</td>
+					{% if entity.total_cols == 4 %}						
+						<td bgcolor="{{ (entity.status_program4=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program4|number_format(0, ',', '.') }}</td>
+					{% endif %}						
 				</tr>					
 				{% endfor %}
 			</tbody>

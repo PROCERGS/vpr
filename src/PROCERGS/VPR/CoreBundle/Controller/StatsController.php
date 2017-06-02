@@ -1238,17 +1238,21 @@ order by a2.sorting, a1.category_sorting
         $entities4 = array();
         foreach ($entities1 as $key1 => $val1) {
             $total = 0;
+            $total2 = 0;
             foreach ($val1 as $val2) {
                 $total =+ $val2['tot_value_calc'];
+                $total2++;
             }
             $entities3[$key1]['corede_id'] = $key1;
             $entities3[$key1]['corede_name'] = $val1[0]['corede_name'];
             $entities3[$key1]['total'] =+ $total;
+            $entities3[$key1]['total_cols'] = $total2;
         }
         foreach ($entities2 as $key1 => $val1) {
             $entities4[$key1]['city_id'] = $key1;
             $entities4[$key1]['city_name'] = $val1[0]['city_name'];
             $entities4[$key1]['status_corte_mun'] = $val1[0]['status_corte_mun'];
+            $entities4[$key1]['total_cols'] = $total2;
             foreach ($val1 as $val2) {
                 if ($val2['rank_in_corede'] <= 4) {
                     $entities4[$key1]['program' . $val2['rank_in_corede']] = $val2['tot_in_city'];
