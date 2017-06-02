@@ -1,0 +1,77 @@
+{% if entities1 and entities4 %}
+		<table class="table table-bordered records_list" border="1">
+			<thead>
+				<tr>
+					<th rowspan="7" bgcolor="#EEEE15"></th>
+					<th bgcolor="#EEEE15">Corede</th>
+					{% for entity in entities3 %}
+						<th colspan="4" bgcolor="#EEEE15">{{ entity.corede_name }}</th>
+					{% endfor %}
+				</tr>
+				<tr>
+					<th bgcolor="#EEEE15">Valor destinado ao Corede</th>
+					{% for entity in entities3 %}
+						<td colspan="4" bgcolor="#EEEE15">{{ entity.total|number_format(2, ',', '.') }}</td>
+					{% endfor %}
+				</tr>
+				<tr>
+					<th bgcolor="#EEEE15">Classificação dos programas</th>
+					{% for entity in entities1 %}
+					    {% for subentity in entity %}
+							<td>{{ subentity.rank_in_corede }}</td>
+						{% endfor %}
+					{% endfor %}
+				</tr>
+				<tr>
+					<th bgcolor="#EEEE15">Programas eleitos</th>
+					{% for entity in entities1 %}
+					    {% for subentity in entity %}
+							<td>{{ subentity.option_name }}</td>
+						{% endfor %}
+					{% endfor %}
+				</tr>
+				<tr>
+					<th bgcolor="#EEEE15">Percentual de divisão</th>
+					{% for entity in entities1 %}
+					    {% for subentity in entity %}
+							<td>{{ subentity.perc_value_calc|number_format(2, ',', '.') }}</td>
+						{% endfor %}
+					{% endfor %}
+				</tr>
+				<tr>
+					<th bgcolor="#EEEE15">Valor destinado ao programa</th>
+					{% for entity in entities1 %}
+					    {% for subentity in entity %}
+							<td>{{ subentity.tot_value_calc|number_format(2, ',', '.') }}</td>
+						{% endfor %}
+					{% endfor %}						
+				</tr>
+				<tr>
+					<th bgcolor="#EEEE15">Nº Votos do Programa na Região</th>
+					{% for entity in entities1 %}
+					    {% for subentity in entity %}
+							<td>{{ subentity.tot_corede|number_format(0, ',', '.') }}</td>
+						{% endfor %}
+					{% endfor %}						
+				</tr>
+				<tr>
+					<th bgcolor="#FFA500">MUNICÍPIOS</th>
+					<th bgcolor="#FFA500">CLASSIFICAÇÃO DOS MUNICÍPIOS</th>
+					<th colspan="4" bgcolor="#FFA500"></th>
+				</tr>		
+			</thead>
+			<tbody>					
+				{% for entity in entities4 %}
+				<tr>
+					<td>{{ entity.city_name }}</td>
+					
+					<td bgcolor="{{ (entity.status_corte_mun=='CLASSIFICADO' ? '#90EE90' : '#FFE1EC') }}">{{ entity.status_corte_mun }}</td>
+					<td bgcolor="{{ (entity.status_program1=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program1|number_format(0, ',', '.') }}</td>
+					<td bgcolor="{{ (entity.status_program2=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program2|number_format(0, ',', '.') }}</td>
+					<td bgcolor="{{ (entity.status_program3=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program3|number_format(0, ',', '.') }}</td>						
+					<td bgcolor="{{ (entity.status_program4=='CLASSIFICADO' ? '#008000' : '#FFFFFF') }}">{{ entity.program4|number_format(0, ',', '.') }}</td>						
+				</tr>					
+				{% endfor %}
+			</tbody>
+		</table>
+{% endif %}

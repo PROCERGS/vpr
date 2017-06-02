@@ -1030,7 +1030,7 @@ order by a2.sorting, a1.category_sorting
         } else {
             $currentPollId = $a;
         }
-        $entities1 = $rlCriterioRepo->findEspecial3($currentPollId);
+        $entities1 = $rlCriterioRepo->findEspecial3($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
         return array(
             'entities1' => $entities1,
@@ -1048,7 +1048,7 @@ order by a2.sorting, a1.category_sorting
             $em = $this->getDoctrine()->getManager();
             /* @var $rlCriterioRepo RlCriterioRepository */
             $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-            $entities = $rlCriterioRepo->findEspecial3($currentPollId);
+            $entities = $rlCriterioRepo->findEspecial3($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
@@ -1107,7 +1107,7 @@ order by a2.sorting, a1.category_sorting
         } else {
             $currentPollId = $a;
         }
-        $entities1 = $rlCriterioRepo->findEspecial4($currentPollId);
+        $entities1 = $rlCriterioRepo->findEspecial4($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
         $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
         return array(
             'entities1' => $entities1,
@@ -1125,7 +1125,7 @@ order by a2.sorting, a1.category_sorting
             $em = $this->getDoctrine()->getManager();
             /* @var $rlCriterioRepo RlCriterioRepository */
             $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
-            $entities = $rlCriterioRepo->findEspecial4($currentPollId);
+            $entities = $rlCriterioRepo->findEspecial4($currentPollId)->fetchAll(\PDO::FETCH_ASSOC);
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
@@ -1225,6 +1225,106 @@ order by a2.sorting, a1.category_sorting
                 ), $sep);
             }
             return $response;
+        }
+    }
+    private function resumoCoredeEntities($currentPollId, $currentCoredeId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $rlCriterioRepo RlCriterioRepository */
+        $rlCriterioRepo = $em->getRepository('PROCERGSVPRCoreBundle:RlCriterio');
+        $entities1 = $rlCriterioRepo->findEspecial4($currentPollId, array('corede_id' => $currentCoredeId, 'classificado' => 1))->fetchAll(\PDO::FETCH_GROUP);
+        $entities2 = $rlCriterioRepo->findEspecial3($currentPollId, array('corede_id' => $currentCoredeId))->fetchAll(\PDO::FETCH_GROUP);
+        $entities3 = array();
+        $entities4 = array();
+        foreach ($entities1 as $key1 => $val1) {
+            $total = 0;
+            foreach ($val1 as $val2) {
+                $total =+ $val2['tot_value_calc'];
+            }
+            $entities3[$key1]['corede_id'] = $key1;
+            $entities3[$key1]['corede_name'] = $val1[0]['corede_name'];
+            $entities3[$key1]['total'] =+ $total;
+        }
+        foreach ($entities2 as $key1 => $val1) {
+            $entities4[$key1]['city_id'] = $key1;
+            $entities4[$key1]['city_name'] = $val1[0]['city_name'];
+            $entities4[$key1]['status_corte_mun'] = $val1[0]['status_corte_mun'];
+            foreach ($val1 as $val2) {
+                if ($val2['rank_in_corede'] <= 4) {
+                    $entities4[$key1]['program' . $val2['rank_in_corede']] = $val2['tot_in_city'];
+                    $entities4[$key1]['status_program' . $val2['rank_in_corede']] = $val2['status_combinado_prog_classificados'];
+                }
+            }
+            for($i=1; $i <= 4; $i++) {
+                if (!isset($entities4[$key1]['program' . $i])) {
+                    $entities4[$key1]['program' . $i] = null;
+                    $entities4[$key1]['status_program' . $i] = null;
+        
+                }
+            }
+        }
+        return array($entities1, $entities3, $entities4);
+    }
+    /**
+     * @Route("/rl/resumo-corede", name="vpr_rl_resumo_corede")
+     * @Template()
+     */
+    public function missioResumoCoredeAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        /* @var $pollRepo PollRepository */
+        $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        /* @var $pollRepo Corede */
+        $coredeRepo = $em->getRepository('PROCERGSVPRCoreBundle:Corede');
+        $currentPollId = $request->get('poll_id');
+        $currentCoredeId = $request->get('corede_id');
+        if ($currentPollId && $currentCoredeId) {
+            list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($currentPollId, $currentCoredeId);
+        } else {
+            $entities1 = array();
+            $entities3 = array();
+            $entities4 = array();
+        }
+        $polls = $pollRepo->findBy(array(),array('openingTime' => 'desc'));
+        $coredes = $coredeRepo->findBy(array(), array('name' => 'asc'));
+        return array(
+            'entities1' => $entities1,
+            'entities3' => $entities3,
+            'entities4' => $entities4,
+            'polls' => $polls,
+            'coredes' => $coredes,
+            'currentPollId' => $currentPollId,
+            'currentCoredeId' => $currentCoredeId
+        );
+    }
+    /**
+     * @Route("/rl/resumo-corede-csv", name="vpr_rl_resumo_corede_csv")
+     */
+    public function missioResumoCoredeCsvAction(Request $request)
+    {
+        $currentPollId = $request->get('poll_id');
+        $currentCoredeId = $request->get('corede_id');
+        if ($currentPollId && $currentCoredeId) {
+            list($entities1, $entities3, $entities4) = $this->resumoCoredeEntities($currentPollId, $currentCoredeId);
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'application/vnd.oasis.opendocument.spreadsheet');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="resumo_corede_'.$currentPollId .'_'.$currentCoredeId.'.ods";'
+                );
+            $response->sendHeaders();
+            function array_decode(&$arr){
+                array_walk_recursive($arr, function(&$val, $key){
+                    $val = utf8_decode($val);
+                });
+                    return $arr;
+            }
+            die(utf8_decode($this->renderView('PROCERGSVPRCoreBundle::Stats/missioResumoCoredeList.html.twig', array(
+                'entities1' => ($entities1),
+                'entities3' => ($entities3),
+                'entities4' => ($entities4),
+            ))));
         }
     }
 }

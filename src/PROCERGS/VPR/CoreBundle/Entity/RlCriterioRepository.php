@@ -121,7 +121,10 @@ order by tb2.city_name
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-    public function findEspecial3($id)
+    /**
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    public function findEspecial3($pollId, $filter = null)
     {
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
@@ -159,6 +162,7 @@ inner join corede a2 on a2.id = a1.corede_id
 -- start prog --
 tb3 as (
 select corede_id, option_id, sum(tot) tot_corede
+, rank() OVER (partition by corede_id order by sum(tot) desc ) rank_in_corede
 from stats_prev_ppp2 
 where poll_id = :poll_id
 group by corede_id, option_id
@@ -171,6 +175,7 @@ a1.corede_id
 , a1.tot tot_in_city
 , a2.title option_name
 , (a1.tot::numeric*100)/tb3.tot_corede perc_in_corede
+, tb3.rank_in_corede
 from stats_prev_ppp2 a1
 inner join poll_option a2 on a2.id = a1.option_id
 inner join tb3 on tb3.corede_id = a1.corede_id and tb3.option_id = a1.option_id
@@ -196,19 +201,30 @@ tb2.city_id
 , tb4.option_id
 , tb4.option_name
 , tb4.perc_in_corede
+, tb4.rank_in_corede            
 , case when tb4.perc_in_corede >= (tb2.perc_prog) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_prog_classificados
+, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_corte_mun
+, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) and tb4.perc_in_corede >= (tb2.perc_prog) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_combinado_prog_classificados
 from tb2 
 left join tb1 on tb1.city_id = tb2.city_id
 left join tb5 on tb5.city_id = tb2.city_id
 left join tb4 on tb4.city_id = tb2.city_id
-order by tb2.corede_name, tb2.city_name, tb4.option_name
-        ';
+where 1 = 1 
+            ';
+        $params = array('poll_id' => $pollId);
+        if (isset($filter['corede_id']) && $filter['corede_id']) {
+            $sql .= 'and tb2.corede_id = :corede_id ';
+            $params['corede_id'] = $filter['corede_id'];
+        }
+        $sql .= 'order by tb2.corede_name, tb2.city_name, tb4.option_name ';
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam('poll_id', $id);
-        $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $stmt->execute($params);
+        return $stmt;
     }
-    public function findEspecial4($id)
+    /**
+     * @return \Doctrine\DBAL\Driver\Statement
+     */
+    public function findEspecial4($pollId, $filter = null)
     {
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
@@ -231,7 +247,15 @@ left join rl_agency a3 on a3.id = a2.rl_agency_id
 group by a1.poll_id, a1.corede_id, a4.name, a1.option_id, a2.title, a2.rl_agency_id, a3.name
 )
 select 
-a1.*
+a1.corede_id
+, a1.corede_name
+, a1.option_id
+, a1.option_name
+, a1.rl_agency_id
+, a1.rl_agency_name
+, a1.tot_corede
+, a1.rank_in_corede
+, a5.tot_program
 , case when a1.rank_in_corede <= a5.tot_program then \'SIM\' else \'NÃO\' end classificado
 , 
 case when a1.rank_in_corede <= a5.tot_program then
@@ -242,15 +266,37 @@ when 3 then (a5.tot_value * a5.program3)/100
 when 4 then (a5.tot_value * a5.program4)/100
 end 
 end tot_value_calc
+, 
+case when a1.rank_in_corede <= a5.tot_program then
+case a1.rank_in_corede 
+when 1 then a5.program1 
+when 2 then a5.program2 
+when 3 then a5.program3 
+when 4 then a5.program4
+end 
+end perc_value_calc            
 from tb1 a1
 left join rl_criterio a5 on a5.poll_id = a1.poll_id and a5.corede_id = a1.corede_id
-order by a1.corede_name, a1.option_name
+where 1 = 1
         ';
+        $params = array('poll_id' => $pollId);
+        if (isset($filter['corede_id']) && $filter['corede_id']) {
+            $sql .= 'and a1.corede_id = :corede_id ';
+            $params['corede_id'] = $filter['corede_id'];
+        }
+        if (isset($filter['classificado']) && $filter['classificado']) {
+            if ($filter['classificado'] == 1) {
+                $sql .= 'and a1.rank_in_corede <= a5.tot_program ';
+            } else {
+                $sql .= 'and a1.rank_in_corede > a5.tot_program ';
+            }
+        }
+        $sql .= 'order by a1.corede_name, a1.rank_in_corede ';
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam('poll_id', $id);
-        $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $stmt->execute($params);
+        return $stmt;
     }
+    
     public function findEspecial5($id)
     {
         $em = $this->getEntityManager();
