@@ -12,6 +12,7 @@ class CheckPollHelper
         $this->em = $em;
     }
 
+    private static $_stat1;
     public function checkBlocked($id, $type = null)
     {
 
@@ -42,24 +43,35 @@ SELECT exists
               case 'ballotbox':
                 $statement = $connection->prepare('
                     select
-                        exists(select id from ballot_box b where b.id = :ballotbox and b.setup_at is not null) as downloaded,
-                        exists(select v.id from vote v where v.ballot_box_id = :ballotbox) as voted
+                        exists(select 1 from ballot_box b where b.id = :ballotbox and b.setup_at is not null limit 1) as downloaded,
+                        exists(select 1 from vote v where v.ballot_box_id = :ballotbox limit 1) as voted
                 ');
                 $statement->bindParam('ballotbox', $id);
                 break;
             default:
-                $statement = $connection->prepare('
-                    select
-                        exists(select id from ballot_box b where b.poll_id = :poll and b.setup_at is not null) as downloaded,
-                        exists(select v.id from vote v inner join ballot_box b on b.id = v.ballot_box_id and b.poll_id = :poll) as voted
-                ');
-                $statement->bindParam('poll', $id);
+                if (self::$_stat1 === null) {
+                    self::$_stat1 = $connection->prepare('
+                         with a1 as (
+ select id from ballot_box where poll_id = :poll
+ )
+                    select case when (select 1 from ballot_box b where b.poll_id = :poll and b.setup_at is not null limit 1) = 1 or (select 1 from vote v inner join a1 on a1.id = v.ballot_box_id limit 1) = 1 then 1 else 0 end bloqueado
+                    ');
+                }
+                self::$_stat1->execute(array('poll'=> $id));
+                
+                $result = self::$_stat1->fetch(\PDO::FETCH_ASSOC);
+                
+                if ($result["bloqueado"]) {
+                    return true;
+                } else {
+                    return false;
+                }
                 break;
         }
 
         $statement->execute();
 
-        $result = $statement->fetch();
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
 
         if ($result["downloaded"] || $result["voted"]) {
             return true;
