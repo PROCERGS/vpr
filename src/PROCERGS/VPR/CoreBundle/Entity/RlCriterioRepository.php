@@ -12,7 +12,7 @@ class RlCriterioRepository extends EntityRepository
         $em = $this->getEntityManager();
         $conn = $em->getConnection();
         $sql = '
-select a1.id corede_id, a1.name corede_name, a2.tot_value, a2.tot_program, a2.program1, a2.program2, a2.program3, a2.program4
+select a1.id corede_id, a1.name corede_name, a2.tot_value, a2.tot_program, a2.program1, a2.program2, a2.program3, a2.program4, a2.program5
 from corede a1
 left join rl_criterio a2 on a2.corede_id = a1.id and a2.poll_id = :poll_id
 order by a1.id asc
@@ -290,6 +290,7 @@ when 1 then (a5.tot_value * a5.program1)/100
 when 2 then (a5.tot_value * a5.program2)/100 
 when 3 then (a5.tot_value * a5.program3)/100 
 when 4 then (a5.tot_value * a5.program4)/100
+when 5 then (a5.tot_value * a5.program5)/100
 end 
 end tot_value_calc
 , 
@@ -299,6 +300,7 @@ when 1 then a5.program1
 when 2 then a5.program2 
 when 3 then a5.program3 
 when 4 then a5.program4
+when 5 then a5.program5
 end 
 end perc_value_calc            
 from tb1 a1
@@ -359,6 +361,7 @@ when 1 then (a5.tot_value * a5.program1)/100
 when 2 then (a5.tot_value * a5.program2)/100
 when 3 then (a5.tot_value * a5.program3)/100
 when 4 then (a5.tot_value * a5.program4)/100
+when 5 then (a5.tot_value * a5.program5)/100
 end
 end tot_value_calc
 from tb1 a1
@@ -404,10 +407,10 @@ order by option_name
             $stmt->bindParam('poll_id', $pollId);
             $stmt->execute();
             
-            $sql = 'insert into rl_criterio (corede_id, poll_id, tot_value, tot_program, program1, program2, program3, program4) values (?,?,?,?,?,?,?,?)';
+            $sql = 'insert into rl_criterio (corede_id, poll_id, tot_value, tot_program, program1, program2, program3, program4, program5) values (?,?,?,?,?,?,?,?,?)';
             $stmt = $conn->prepare($sql);
             foreach ($items as $key => $val) {                
-                $stmt->execute(array($key, n($pollId), n($val['tot_value']), n($val['tot_program']), n($val['program1']), n($val['program2']), n($val['program3']), n($val['program4'])));
+                $stmt->execute(array($key, n($pollId), n($val['tot_value']), n($val['tot_program']), n($val['program1']), n($val['program2']), n($val['program3']), n($val['program4']), n($val['program5'])));
             }
             $conn->commit();            
         } catch (\Exception $e) {

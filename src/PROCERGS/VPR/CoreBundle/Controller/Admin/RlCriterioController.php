@@ -89,9 +89,9 @@ class RlCriterioController extends Controller
             
             $output = fopen('php://output', 'w');
             $sep = ';';
-            fputcsv($output, array('corede_id', 'corede_name', 'tot_value', 'tot_program', 'program1', 'program2', 'program3', 'program4'), $sep);
+            fputcsv($output, array('corede_id', 'corede_name', 'tot_value', 'tot_program', 'program1', 'program2', 'program3', 'program4', 'program5'), $sep);
             foreach ($entities as $linha) {
-                fputcsv($output, array($linha['corede_id'], utf8_decode($linha['corede_name']), $linha['tot_value'], $linha['tot_program'], $linha['program1'], $linha['program2'], $linha['program3'], $linha['program4']), $sep);
+                fputcsv($output, array($linha['corede_id'], utf8_decode($linha['corede_name']), $linha['tot_value'], $linha['tot_program'], $linha['program1'], $linha['program2'], $linha['program3'], $linha['program4'], $linha['program5']), $sep);
             }
             return $response;
         }

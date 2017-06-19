@@ -43,7 +43,7 @@
 						<th>Corede</th>
 						<th>Valor</th>
 						<th>Programas</th>
-						<th colspan="4">Distribuição</th>
+						<th colspan="5">Distribuição</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -54,11 +54,12 @@
 						<td>{{ entity.corede_id }}</td>
 						<td>{{ entity.corede_name }}</td>
 						<td><input class="form-control money" maxlength="10" autocomplete="off" type="text" name="item[{{ entity.corede_id }}][tot_value]" value="{{ entity.tot_value }}"></td>
-						<td><input class="form-control" type="number" min="0" max="4" name="item[{{ entity.corede_id }}][tot_program]" value="{{ entity.tot_program }}"></td>
+						<td><input class="form-control" type="number" min="0" max="5" name="item[{{ entity.corede_id }}][tot_program]" value="{{ entity.tot_program }}"></td>
 						<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item[{{ entity.corede_id }}][program1]" value="{{ entity.program1 }}"></td>
 						<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item[{{ entity.corede_id }}][program2]" value="{{ entity.program2 }}"></td>
 						<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item[{{ entity.corede_id }}][program3]" value="{{ entity.program3 }}"></td>
 						<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item[{{ entity.corede_id }}][program4]" value="{{ entity.program4 }}"></td>
+						<td><input class="form-control percentual" maxlength="5" autocomplete="off" type="text" name="item[{{ entity.corede_id }}][program5]" value="{{ entity.program5 }}"></td>
 					</tr>
 					{% endfor %}
 					{% if totValues > 0 %}
@@ -66,6 +67,7 @@
 						<td></td>
 						<td></td>
 						<td>{{ totValues|number_format(2, ',', '.') }}</td>
+						<td></td>
 						<td></td>
 						<td></td>
 						<td></td>

@@ -53,6 +53,12 @@ class RlCriterio
      * @ORM\Column(name="program4", type="decimal", precision=5, scale=2, nullable=true)
      */
     private $program4;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="program5", type="decimal", precision=5, scale=2, nullable=true)
+     */
+    private $program5;
 
     /**
      * @var integer
@@ -222,6 +228,29 @@ class RlCriterio
     public function getProgram4()
     {
         return $this->program4;
+    }
+    
+    /**
+     * Set program5
+     *
+     * @param string $program5
+     * @return RlCriterio
+     */
+    public function setProgram5($program5)
+    {
+        $this->program5 = $program5;
+    
+        return $this;
+    }
+    
+    /**
+     * Get program5
+     *
+     * @return string
+     */
+    public function getProgram5()
+    {
+        return $this->program5;
     }
 
     /**
