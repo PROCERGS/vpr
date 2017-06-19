@@ -82,6 +82,7 @@
 					<th>PERCENTUAL CORTE MUNICÍPIOS</th>
                     <th>CORTE MUNICÍPIOS</th>
                     <th>PERCENTUAL CORTE PROGRAMAS</th>
+                    <th>CORTE PROGRAMAS</th>
                     <th>TOTAL DE VOTOS</th>
                     <th>PERCENTUAL DE VOTAÇÃO</th>
                     <th>STATUS</th>
@@ -97,6 +98,7 @@
 					<td>{{ entity.voters_total|number_format(0, ',', '.') }}</td>
 					<td>{{ entity.perc_pop|number_format(2, ',', '.') }}</td>
 					<td>{{ entity.corte_mun|number_format(2, ',', '.') }}</td>
+					<td>{{ entity.perc_prog|number_format(2, ',', '.') }}</td>
 					<td>{{ entity.corte_prog|number_format(2, ',', '.') }}</td>
 					<td>{{ entity.votes_total|number_format(0, ',', '.') }}</td>
 					<td>{{ entity.voters_perc|number_format(2, ',', '.') }}</td>
