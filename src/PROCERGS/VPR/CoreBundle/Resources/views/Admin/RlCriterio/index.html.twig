@@ -39,6 +39,7 @@
 			<table class="table table-striped table-bordered table-hover records_list">
 				<thead>
 					<tr>
+						<th>Cód. Corede</th>
 						<th>Corede</th>
 						<th>Valor</th>
 						<th>Programas</th>
@@ -50,6 +51,7 @@
 					{% for entity in entities %}
 					{% set totValues = totValues + entity.tot_value %}
 					<tr>
+						<td>{{ entity.corede_id }}</td>
 						<td>{{ entity.corede_name }}</td>
 						<td><input class="form-control money" maxlength="10" autocomplete="off" type="text" name="item[{{ entity.corede_id }}][tot_value]" value="{{ entity.tot_value }}"></td>
 						<td><input class="form-control" type="number" min="0" max="4" name="item[{{ entity.corede_id }}][tot_program]" value="{{ entity.tot_program }}"></td>
@@ -61,6 +63,7 @@
 					{% endfor %}
 					{% if totValues > 0 %}
 					<tr>
+						<td></td>
 						<td></td>
 						<td>{{ totValues|number_format(2, ',', '.') }}</td>
 						<td></td>
