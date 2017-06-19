@@ -1009,6 +1009,7 @@ order by a2.sorting, a1.category_sorting
                 , 'N_VOTANTES'
                 , 'PERCENTUAL_CORTE_MUNICIPIOS'
                 , 'CORTE_MUNICIPIOS'
+                , 'CORTE_FAIXA_ANTECEDENTE'
                 , 'PERCENTUAL_CORTE_PROGRAMAS'
                 , 'CORTE_PROGRAMAS'
                 , 'TOTAL_DE_VOTOS'
@@ -1026,6 +1027,7 @@ order by a2.sorting, a1.category_sorting
                     , $linha['voters_total']
                     , $linha['perc_pop']
                     , $linha['corte_mun']
+                    , $linha['corte_ult_criterio']
                     , $linha['perc_prog']
                     , $linha['corte_prog']
                     , $linha['votes_total']

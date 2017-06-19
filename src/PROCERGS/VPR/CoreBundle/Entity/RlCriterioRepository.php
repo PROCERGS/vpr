@@ -87,6 +87,10 @@ from stats_prev_ppp a1
 where a1.poll_id = :poll_id
 group by a1.city_id
 )
+,tb6 as (
+select perc_pop, (max(tot_pop)*perc_pop)/100 tot_pop_next from tb2
+group by perc_pop
+)
 select 
 tb2.city_id
 , tb2.city_name
@@ -101,7 +105,10 @@ tb2.city_id
 , tb1.voters_total
 , tb5.votes_total
 , (tb1.voters_total::decimal*100)/tb2.tot_pop voters_perc
-, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_corte_mun
+, coalesce((select tb6.tot_pop_next from tb6 where tb6.perc_pop > tb2.perc_pop order by perc_pop limit 1),0) corte_ult_criterio
+, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) 
+and tb1.voters_total >= coalesce((select tb6.tot_pop_next from tb6 where tb6.perc_pop > tb2.perc_pop order by perc_pop limit 1), 0)            
+then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_corte_mun
 , coalesce(sum(case when tb4.perc_in_corede >= (tb2.perc_prog) then 1 else null end),0) tot_prog_classificados
 from tb2 
 left join tb1 on tb1.city_id = tb2.city_id
@@ -208,6 +215,10 @@ from stats_prev_ppp a1
 where a1.poll_id = :poll_id
 group by a1.city_id
 )
+,tb6 as (
+select perc_pop, (max(tot_pop)*perc_pop)/100 tot_pop_next from tb2
+group by perc_pop
+)
 select 
 tb2.city_id
 , tb2.city_name
@@ -221,8 +232,12 @@ tb2.city_id
 , tb4.perc_in_corede
 , tb4.rank_in_corede            
 , case when tb4.perc_in_corede >= (tb2.perc_prog) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_prog_classificados
-, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_corte_mun
-, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) and tb4.perc_in_corede >= (tb2.perc_prog) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_combinado_prog_classificados
+, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100) 
+and tb1.voters_total >= coalesce((select tb6.tot_pop_next from tb6 where tb6.perc_pop > tb2.perc_pop order by perc_pop limit 1), 0)            
+then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_corte_mun
+, case when tb1.voters_total >= ((tb2.tot_pop*tb2.perc_pop)/100)
+and tb1.voters_total >= coalesce((select tb6.tot_pop_next from tb6 where tb6.perc_pop > tb2.perc_pop order by perc_pop limit 1), 0)
+and tb4.perc_in_corede >= (tb2.perc_prog) then \'CLASSIFICADO\' ELSE \'DESCLASSIFICADO\' END status_combinado_prog_classificados
 from tb2 
 left join tb1 on tb1.city_id = tb2.city_id
 left join tb5 on tb5.city_id = tb2.city_id
