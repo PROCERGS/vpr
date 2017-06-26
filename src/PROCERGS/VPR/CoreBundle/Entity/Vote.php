@@ -474,8 +474,11 @@ class Vote
         return $this->lastStep;
     }
 
-    public function addPollOption($options = array())
+    public function addPollOption($options = null)
     {
+        if (null == $options) {
+            $options = array();
+        }
         if (!$this->pollOption) {
             $this->pollOption = $options;
         } else {
