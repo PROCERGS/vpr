@@ -394,6 +394,27 @@ class APIController extends FOSRestController
         $response->setContent(readfile($zipFilename));
         return $response;
     }
+    
+    /**
+     * @REST\Get("/uploads/{pin}", name="vpr_uploads")
+     * @REST\View
+     */
+    public function uploadsAction($pin)
+    {
+        $zipFilename = realpath('../uploads').DIRECTORY_SEPARATOR.$pin;    
+        
+        $response = new \Symfony\Component\HttpFoundation\Response();
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', mime_content_type($zipFilename));
+        $response->headers->set('Content-Disposition',
+            'attachment; filename="'.basename($zipFilename).'";');
+        $response->headers->set('Content-length', filesize($zipFilename));
+    
+        $response->sendHeaders();
+    
+        $response->setContent(readfile($zipFilename));
+        return $response;
+    }
 
     private function parseHumanBytes($val)
     {

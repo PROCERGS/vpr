@@ -402,6 +402,7 @@ class BallotBoxController extends Controller
         $entity = new BallotBox();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        
 
         try {
             if ($form->isValid()) {
@@ -437,9 +438,13 @@ class BallotBoxController extends Controller
                         ) {
                         throw new \Exception("cabecalho diferente de " . $header);
                     }
-                    $filenameErros = tempnam(ini_get('upload_tmp_dir'), "errors_");
+                    $filenameErrosName = "erros_cadastro_".date('YmdHis').".csv";
+                    $filenameErros = realpath('../uploads').DIRECTORY_SEPARATOR.$filenameErrosName;
                     
                     $fileError = fopen($filenameErros, "wb");
+                    if (!$fileError) {
+                        throw new \Exception("Nao deu para abrir o arquivo");
+                    }
                     $headerCsv[6] = "Mensagem";
                     fputcsv($fileError, $headerCsv);
                     $hasErros = false;
@@ -483,8 +488,9 @@ class BallotBoxController extends Controller
                                 $entity2->setDdd(null);
                                 $entity2->setFone(null);
                             }
-                            if (filter_var($linha[5], FILTER_VALIDATE_EMAIL)) {
-                                $entity2->setEmail($linha[5]);                                
+                            $email = trim($linha[5]);
+                            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                                $entity2->setEmail($email);                                
                             } else {
                                 $entity2->setEmail(null);
                             }
@@ -511,21 +517,10 @@ class BallotBoxController extends Controller
                     fclose($fileError);
                     if (!$hasErros) {
                         $this->get('session')->getFlashBag()->add('success', "Tudo ok");
-                        @unlink($filenameErros);
-                        return $this->redirect($this->generateUrl('admin_ballotbox'));
+                        @unlink($filenameErros);                        
                     } else {
-                        $this->get('session')->getFlashBag()->add('danger', "Teve registros com erros");
-                        $response = new \Symfony\Component\HttpFoundation\Response();
-                        $response->headers->set('Cache-Control', 'private');
-                        $response->headers->set('Content-type', 'text/csv');
-                        $response->headers->set(
-                            'Content-Disposition',
-                            'attachment; filename="erros_cadastro.csv";'
-                            );
-                        $response->sendHeaders();
-                        echo (file_get_contents($filenameErros));
-                        @unlink($filenameErros);
-                        die();
+                        $this->get('session')->getFlashBag()->add('danger', "Teve seguintes registros com erros. <a target='_blank' href='/uploads/".$filenameErrosName."'>Baixar lista</a>");
+                        return $this->redirect($this->generateUrl('admin_ballotbox'));
                     }
                 } else {
                     $pin = $repo->generateUniquePin($entity->getPoll(), 4);
