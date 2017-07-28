@@ -154,6 +154,13 @@
             {{ form_widget(edit_form.email, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
+        <div class="form-group ballotbox-offline-itens">
+        <label class="col-sm-2 control-label">{{ 'Arquivo em lote'|trans }}</label>
+        <div class="col-sm-4">
+            {{ form_errors(edit_form.lote) }}
+            {{ form_widget(edit_form.lote) }}
+        </div>
+    </div>
 
     {# {% if entity.id is empty %}
         <div class="row">
@@ -187,6 +194,10 @@
     {{ parent() }}
     <script type="text/javascript">
         var admin_select_poll = '{{ path('admin_select_poll') }}';
+        $(form).submit(function() {
+            alert('clicou');
+        	$("body").append("<div class='ajax-bg'><div class='ajax-loader'></div><div class='ajax-txt'>Aguarde...</div></div>");
+        });
     </script>
     {% javascripts '@PROCERGSVPRCoreBundle/Resources/public/js/admin/ballotbox.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

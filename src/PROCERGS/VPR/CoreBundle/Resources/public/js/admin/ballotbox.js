@@ -90,5 +90,8 @@ $(function() {
 
     $('#procergs_vpr_corebundle_ballotbox_isOnline').trigger('change');
     $('#chkDtDiffPoll').trigger('change');
+    $('form').submit(function(){            
+    	$("body").append("<div class='ajax-bg'><div class='ajax-loader'></div><div class='ajax-txt'>Aguarde...</div></div>");
+    });
 
 });

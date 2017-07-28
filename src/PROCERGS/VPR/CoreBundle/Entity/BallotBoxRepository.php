@@ -79,5 +79,18 @@ class BallotBoxRepository extends EntityRepository
                                 'SELECT b FROM PROCERGSVPRCoreBundle:BallotBox b ORDER BY b.id DESC'
                         )->setMaxResults(1)->getOneOrNullResult();
     }
+    
+    public function salva(BallotBox &$obj)
+    {
+        if (null === self::$_findEspecial2) {
+            $em = $this->getEntityManager();
+            $conn = $em->getConnection();
+            $sql = 'select a1.id from city a1 where lower_unaccent(name) = lower_unaccent(?) limit 1';
+            self::$_findEspecial2 = $conn->prepare($sql);
+        }
+        self::$_findEspecial2->execute(array($cityName));
+        return current(self::$_findEspecial2->fetchAll(\PDO::FETCH_CLASS, 'PROCERGS\VPR\CoreBundle\Entity\City'));
+    }
+    
 
 }

@@ -19,6 +19,7 @@ use PROCERGS\VPR\CoreBundle\Entity\BallotBox;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxType;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
 use PROCERGS\VPR\CoreBundle\Entity\SentMessage;
+use PROCERGS\VPR\CoreBundle\Entity\CityRepository;
 
 /**
  * BallotBox controller.
@@ -28,7 +29,7 @@ use PROCERGS\VPR\CoreBundle\Entity\SentMessage;
 class BallotBoxController extends Controller
 {
 
-    private static function isValid1(&$entity, EntityManager $em)
+    private static function isValid1(&$entity, EntityManager $em, &$file = null)
     {
         if ($entity->getIsOnline()) {
             $ballotBox = $em->getRepository(
@@ -59,8 +60,12 @@ class BallotBoxController extends Controller
                 }
             }
         } else {
-            if (!$entity->getCity()) {
-                throw new \Exception("Precisa selecionar uma cidade");
+            if ($file) {
+                
+            } else {
+                if (!$entity->getCity()) {
+                    throw new \Exception("Precisa selecionar uma cidade");
+                }
             }
             if ($entity->getOpeningTime() || $entity->getClosingTime()) {
                 if (!($entity->getOpeningTime() && $entity->getClosingTime())) {
@@ -401,14 +406,134 @@ class BallotBoxController extends Controller
         try {
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
-
+                /* @var $repo BallotBoxRepository */
                 $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
-                self::isValid1($entity, $em);
-                $pin = $repo->generateUniquePin($entity->getPoll(), 4);
-                $entity->setPin($pin);
-                $entity->setKeys();
-                $em->persist($entity);
-                $em->flush();
+                /* @var $repo2 CityRepository */                
+                $repo2 = $em->getRepository('PROCERGSVPRCoreBundle:City');
+                /* @var $file UploadedFile */
+                $hasFile = $form->get('lote')->getData() != null;
+                self::isValid1($entity, $em, $hasFile);                
+                if ($hasFile) {
+                    set_time_limit(0);
+                    ignore_user_abort(true);
+                    if (!isset($_FILES['procergs_vpr_corebundle_ballotbox']['tmp_name']['lote'])) {
+                        throw new \Exception("Nao encontrei o arquivo");
+                    }
+                    $filename = $_FILES['procergs_vpr_corebundle_ballotbox']['tmp_name']['lote'];
+                    $f = fopen($filename, 'rb');
+                    if (!$f) {
+                        throw new \Exception("Nao deu para abrir o arquivo");
+                    }
+                    $headerCsv = fgetcsv($f);
+                    if (!$headerCsv) {
+                        throw new \Exception("Arquivo em branco");
+                    }
+                    $header = "Indicação de data e hora,Nome,Município,DDD,Telefone,Email";
+                    if ($headerCsv[1] != "Nome" 
+                        || $headerCsv[2] != "Município" 
+                        || $headerCsv[3] != "DDD"
+                        || $headerCsv[4] != "Telefone"
+                        || $headerCsv[5] != "Email"                        
+                        ) {
+                        throw new \Exception("cabecalho diferente de " . $header);
+                    }
+                    $filenameErros = tempnam(ini_get('upload_tmp_dir'), "errors_");
+                    
+                    $fileError = fopen($filenameErros, "wb");
+                    $headerCsv[6] = "Mensagem";
+                    fputcsv($fileError, $headerCsv);
+                    $hasErros = false;
+                    $batchSize = 100;  
+                    $cidades = array();
+                    $i = 0;
+                    while ($linha = fgetcsv($f)) {
+                        try {
+                            if (!isset($linha[5])) {
+                                throw new \Exception("Faltando campos nessa linha");
+                            }
+                            $entity2 = new BallotBox();
+                            $entity2->setSecret($entity->generatePassphrase());
+                            $entity2->setIsOnline(false);
+                            $entity2->setOpeningTime($entity->getOpeningTime());
+                            $entity2->setClosingTime($entity->getClosingTime());
+                            $entity2->setPoll($entity->getPoll());
+                            if (trim($linha[1]) == "") {
+                                throw new \Exception("Nome faltando");
+                            } else  {
+                                $entity2->setName(trim($linha[1]));
+                            }
+                            $cityName = trim($linha[2]);
+                            if ($cityName == "") {
+                                throw new \Exception("Cidade faltando");
+                            }
+                            if (!isset($cidades[$cityName])) {
+                                $city = $repo2->findEspecial3($cityName);
+                                if (!$city) {
+                                    throw new \Exception("Cidade nao localizada");
+                                }
+                                $cidades[$cityName] = $city;
+                            }
+                            $entity2->setCity($cidades[$cityName]);
+                            
+                            $telefone = substr(str_replace(array('.', ',', '-', ' ','(',')'), array('', '', '', '','',''), trim($linha[4])), -9);
+                            if (is_numeric($linha[3]) && is_numeric($telefone) && strlen($linha[3]) == 2 && strlen($telefone) == 9) {
+                                $entity2->setDdd($linha[3]);
+                                $entity2->setFone($telefone);
+                            } else {
+                                $entity2->setDdd(null);
+                                $entity2->setFone(null);
+                            }
+                            if (filter_var($linha[5], FILTER_VALIDATE_EMAIL)) {
+                                $entity2->setEmail($linha[5]);                                
+                            } else {
+                                $entity2->setEmail(null);
+                            }
+                            if (!$entity2->getFone() && !$entity2->getEmail()) {
+                                throw new \Exception("Deve ser informado um telefone ou e-mail validos");
+                            }
+                            $pin = $repo->generateUniquePin($entity->getPoll(), 4);
+                            $entity2->setPin($pin);
+                            $entity2->setKeys();
+                            $em->persist($entity2);
+                            $em->flush($entity2);
+                            if (($i++ % $batchSize) === 0) {
+                                $this->get('logger')->error('Ja foram ' . $i);                                
+                            }
+                        } catch (\Exception $e) {
+                            $hasErros = true;
+                            $linha[6] = $e->getMessage();
+                            fputcsv($fileError, $linha);
+                        }
+                    }
+                    $em->flush();
+                    $em->clear();
+                    fclose($f);
+                    fclose($fileError);
+                    if (!$hasErros) {
+                        $this->get('session')->getFlashBag()->add('success', "Tudo ok");
+                        @unlink($filenameErros);
+                        return $this->redirect($this->generateUrl('admin_ballotbox'));
+                    } else {
+                        $this->get('session')->getFlashBag()->add('danger', "Teve registros com erros");
+                        $response = new \Symfony\Component\HttpFoundation\Response();
+                        $response->headers->set('Cache-Control', 'private');
+                        $response->headers->set('Content-type', 'text/csv');
+                        $response->headers->set(
+                            'Content-Disposition',
+                            'attachment; filename="erros_cadastro.csv";'
+                            );
+                        $response->sendHeaders();
+                        echo (file_get_contents($filenameErros));
+                        @unlink($filenameErros);
+                        die();
+                    }
+                } else {
+                    $pin = $repo->generateUniquePin($entity->getPoll(), 4);
+                    $entity->setPin($pin);
+                    $entity->setKeys();
+                    $em->persist($entity);
+                    $em->flush();
+                }
 
                 $translator = $this->get('translator');
                 $this->get('session')->getFlashBag()->add(
@@ -461,7 +586,7 @@ class BallotBoxController extends Controller
             'lastBallotbox' => $lastBallotbox
         );
     }
-
+    
     /**
      * Finds and displays a BallotBox entity.
      *

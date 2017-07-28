@@ -71,6 +71,7 @@ class BallotBoxType extends AbstractType
             ->add('email', 'email', array('max_length' => 255, 'required' => false))
             ->add('fone', 'text', array('max_length' => 9, 'pattern'=>"\d*{8,}", 'required' => false))
             ->add('ddd', 'text', array('max_length' => 2, 'pattern'=>"\d*{8,}", 'required' => false))
+            ->add('lote', 'file', array('mapped' => false, 'label' => 'Arquivo em lote', 'required' => false))
         ;
     }
 

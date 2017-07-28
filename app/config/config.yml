@@ -120,6 +120,8 @@ doctrine:
             string_functions:
                 group_concat:   Oro\ORM\Query\AST\Functions\String\GroupConcat
                 cast:           Oro\ORM\Query\AST\Functions\Cast
+                unaccent1: PROCERGS\VPR\CoreBundle\DoctrineExtensions\Query\PostgreSQL\Unaccent1
+                
 
 # Swiftmailer Configuration
 swiftmailer:
