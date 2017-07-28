@@ -519,9 +519,9 @@ class BallotBoxController extends Controller
                         $this->get('session')->getFlashBag()->add('success', "Tudo ok");
                         @unlink($filenameErros);                        
                     } else {
-                        $this->get('session')->getFlashBag()->add('danger', "Teve seguintes registros com erros. <a target='_blank' href='/uploads/".$filenameErrosName."'>Baixar lista</a>");
-                        return $this->redirect($this->generateUrl('admin_ballotbox'));
+                        $this->get('session')->getFlashBag()->add('danger', "Teve seguintes registros com erros. <a target='_blank' href='/uploads/".$filenameErrosName."'>Baixar lista</a>");                        
                     }
+                    return $this->redirect($this->generateUrl('admin_ballotbox'));
                 } else {
                     $pin = $repo->generateUniquePin($entity->getPoll(), 4);
                     $entity->setPin($pin);
