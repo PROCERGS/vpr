@@ -1,0 +1,40 @@
+{% extends 'PROCERGSVPRCoreBundle::base.admin.html.twig' %}
+{% set contentName = 'report.missio'|trans %}
+{% set actionName = 'report.missio.agency'|trans %}
+
+{% block content -%}
+    <div class="navbar">
+        <a class="btn btn-default" href="{{ path('ballotboxbatch') }}?poll_id={{ entity.poll.id }}" role="button"><span
+                    class="glyphicon glyphicon-arrow-left"></span> {% trans %}admin.back_to_list{% endtrans %}</a>
+    </div>
+
+<form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
+
+<div class="form-group ballotbox-offline-itens" style="display: block;">
+        <label class="col-sm-2 control-label">Arquivo em lote</label>
+        <div class="col-sm-4">
+            <input id="lote" name="lote" type="file">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.opening_time'|trans }}</label>
+        <div class="col-sm-7">
+        	<input type="text" name="opening_time" id="opening_time" class="form-control" value="{{ entity.openingTime|date('d/m/Y H:i:s') }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">{{ 'admin.closing_time'|trans }}</label>
+        <div class="col-sm-7">
+        	<input type="text" name="closing_time" id="closing_time" class="form-control" value="{{ entity.closingTime|date('d/m/Y H:i:s') }}">
+        </div>
+    </div>
+    <div class="form-group form-actions">
+        <div class="col-lg-10 col-lg-offset-2">
+        	<button type="submit" class="btn btn-success btn-sm btn-save">{{ 'admin.save'| trans }}</button>
+        	{% if entity.id > 0 %}
+        	<a class="btn btn-danger btn-sm btn-delete" href="{{ path('ballotboxbatch_delete', {'id' : entity.id}) }}">{{ 'admin.delete'|trans }}</a>
+            {% endif %}
+        </div>
+    </div>
+    </form>
+{% endblock %}
