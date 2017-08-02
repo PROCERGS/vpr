@@ -108,15 +108,14 @@ class DefaultController extends Controller
                     $event);
                 $em = $this->getDoctrine()->getManager();
 
-                /* just think
-                  $votingSession = $this->container->get('vpr_voting_session_provider');
-                  $ballotBox = $vote->getBallotBox();
-                  $votingSession->checkExistingVotes($user, $ballotBox, $vote);
-
-                  if ($vote->getCorede()->getId() != $user->getTreVoter()->getCity()->getCorede()->getId()) {
-                  return $this->redirect($this->generateUrl('procergsvpr_core_reinforce_doc_choise'));
-                  }
-                 */
+                $votingSession = $this->container->get('vpr_voting_session_provider');
+                $ballotBox = $vote->getBallotBox();
+                $votingSession->checkExistingVotes($user, $ballotBox, $vote);
+                if ($vote->getCorede()->getId() != $user->getTreVoter()->getCity()->getCorede()->getId()) {
+                    $this->addFlash('notice', 'Infelizmente você votou num cedula que não pertencia ao seu titulo. Por favor, vote novamente com essa cedula correta.');
+                    $session->set('vote', null);
+                    return $this->indexAction();
+                }
 
                 $vote = $em->merge($vote);
                 $vote->setVoterRegistration($form->get('trevoter')->getData());
