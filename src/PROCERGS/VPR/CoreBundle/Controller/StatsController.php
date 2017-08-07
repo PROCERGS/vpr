@@ -1189,7 +1189,7 @@ order by a2.sorting, a1.category_sorting
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="eleitores_municipio_'.$filter1['poll_id'] .'.csv";'
+                'attachment; filename="programas_valor_'.$filter1['poll_id'] .'.csv";'
                 );
             $response->sendHeaders();
     
@@ -1216,7 +1216,7 @@ order by a2.sorting, a1.category_sorting
                     , $linha['tot_corede']
                     , $linha['rank_in_corede']
                     , utf8_decode($linha['classificado'])
-                    , $linha['tot_value_calc']
+                    , number_format($linha['tot_value_calc'], 2, ',', '.')
                 ), $sep);
             }
             return $response;
@@ -1314,12 +1314,12 @@ order by a2.sorting, a1.category_sorting
             $total2 = 0;
             $item = array();
             foreach ($val1 as $val2) {
-                $total =+ $val2['tot_value_calc'];
+                $total += $val2['tot_value_calc'];
                 $total2++;
             }
             $item['corede_id'] = $key1;
             $item['corede_name'] = $val1[0]['corede_name'];
-            $item['total'] =+ $total;
+            $item['total'] = $total;
             $item['total_cols'] = $total2;
             $entities3[$key1] = $item;
         }
