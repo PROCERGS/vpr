@@ -1269,7 +1269,7 @@ order by a2.sorting, a1.category_sorting
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="eleitores_municipio_'.$filter1['poll_id'] .'.csv";'
+                'attachment; filename="resumo_programa_'.$filter1['poll_id'] .'.csv";'
                 );
             $response->sendHeaders();
     
@@ -1285,7 +1285,7 @@ order by a2.sorting, a1.category_sorting
                 fputcsv($output, array($linha['rl_agency_id']
                     , utf8_decode($linha['rl_agency_name'])
                     , utf8_decode($linha['option_name'])
-                    , $linha['tot_value_calc']
+                    , number_format($linha['tot_value_calc'], 2, ',', '.')
                 ), $sep);
             }
             return $response;
