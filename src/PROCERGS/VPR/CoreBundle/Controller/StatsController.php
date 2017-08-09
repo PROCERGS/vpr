@@ -1025,13 +1025,13 @@ order by a2.sorting, a1.category_sorting
                     , $linha['ibge_code']
                     , $linha['tot_pop']
                     , $linha['voters_total']
-                    , $linha['perc_pop']
-                    , $linha['corte_mun']
-                    , $linha['corte_ult_criterio']
-                    , $linha['perc_prog']
-                    , $linha['corte_prog']
+                    , number_format($linha['perc_pop'], 2, ',', '.')
+                    , number_format($linha['corte_mun'], 2, ',', '.')
+                    , number_format($linha['corte_ult_criterio'], 2, ',', '.')
+                    , number_format($linha['perc_prog'], 2, ',', '.')
+                    , number_format($linha['corte_prog'], 2, ',', '.')
                     , $linha['votes_total']
-                    , $linha['voters_perc']
+                    , number_format($linha['voters_perc'], 2, ',', '.')
                     , utf8_decode($linha['status_corte_mun'])
                     , $linha['tot_prog_classificados']
                 ), $sep);
@@ -1102,7 +1102,7 @@ order by a2.sorting, a1.category_sorting
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="eleitores_municipio_'.$filter1['poll_id'] .'.csv";'
+                'attachment; filename="votos_'.$filter1['poll_id'] .'.csv";'
                 );
             $response->sendHeaders();
     
@@ -1129,8 +1129,8 @@ order by a2.sorting, a1.category_sorting
                     , $linha['option_id']
                     , utf8_decode($linha['option_name'])
                     , $linha['tot_in_city']
-                    , $linha['perc_in_corede']
-                    , $linha['perc_prog']
+                    , number_format($linha['perc_in_corede'], 2, ',', '.')
+                    , number_format($linha['perc_prog'], 2, ',', '.')
                     , utf8_decode($linha['status_prog_classificados'])
                 ), $sep);
             }
