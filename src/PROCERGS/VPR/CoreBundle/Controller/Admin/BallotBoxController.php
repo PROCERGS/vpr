@@ -20,6 +20,8 @@ use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxType;
 use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
 use PROCERGS\VPR\CoreBundle\Entity\SentMessage;
 use PROCERGS\VPR\CoreBundle\Entity\CityRepository;
+use Symfony\Component\HttpFoundation\Response;
+use PROCERGS\VPR\CoreBundle\Entity\PollRepository;
 
 /**
  * BallotBox controller.
@@ -392,6 +394,105 @@ class BallotBoxController extends Controller
     /**
      * Creates a new BallotBox entity.
      *
+     * @Route("/ajax", name="admin_ballotbox_create2")
+     * @Method("POST")
+     */    
+    public function createAction2(Request $request)
+    {
+        session_write_close();
+        $em = $this->getDoctrine()->getManager();
+        /* @var $repo BallotBoxRepository */
+        $repo = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox');
+        /* @var $repo2 CityRepository */
+        $repo2 = $em->getRepository('PROCERGSVPRCoreBundle:City');
+        /* @var $repo3 PollRepository */        
+        $repo3 = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
+        try {
+            $this->denyAccessUnlessGranted('ROLE_BALLOTBOX_CREATE');
+            $linha = array();
+            $linha[1] = $request->get('nome');
+            $linha[2] = $request->get('municipio');
+            $linha[3] = $request->get('ddd');
+            $linha[4] = $request->get('telefone');
+            $linha[5] = $request->get('email');
+            $openingTime = $request->get("opening_time");
+            if ($openingTime) {
+                $openingTime = \DateTime::createFromFormat('Y-m-d H:i:s', $openingTime);
+                if (!$openingTime) {
+                    throw new \Exception("Data de abertura invalida");
+                }
+            }
+            $closingTime = $request->get("closing_time");
+            if ($closingTime) {
+                $closingTime = \DateTime::createFromFormat('Y-m-d H:i:s', $closingTime);
+                if (!$closingTime) {
+                    throw new \Exception("Data de encerramento invalida");
+                }
+            }
+            $pollId = $request->get("poll_id");
+            if (!$pollId) {
+                throw new \Exception("Precisa selecionar uma votacao");
+            }
+            $poll = $repo3->findOneBy(array('id' => $pollId));
+            if (!$poll) {
+                throw new \Exception("Nao encontrei a votacao indicada");
+            }
+            
+            $entity2 = new BallotBox();
+            $entity2->setSecret($entity2->generatePassphrase());
+            $entity2->setIsOnline(false);
+            $entity2->setOpeningTime($openingTime);
+            $entity2->setClosingTime($closingTime);
+            $entity2->setPoll($poll);
+            if (trim($linha[1]) == "") {
+                throw new \Exception("Nome faltando");
+            } else  {
+                $entity2->setName(trim($linha[1]));
+            }
+            $cityName = trim($linha[2]);
+            if ($cityName == "") {
+                throw new \Exception("Cidade faltando");
+            }
+            if (!isset($cidades[$cityName])) {
+                $city = $repo2->findEspecial3($cityName);
+                if (!$city) {
+                    throw new \Exception("Cidade nao localizada");
+                }
+                $cidades[$cityName] = $city;
+            }
+            $entity2->setCity($cidades[$cityName]);
+            
+            $telefone = substr(str_replace(array('.', ',', '-', ' ','(',')'), array('', '', '', '','',''), trim($linha[4])), -9);
+            if (is_numeric($linha[3]) && is_numeric($telefone) && strlen($linha[3]) == 2 && strlen($telefone) == 9) {
+                $entity2->setDdd($linha[3]);
+                $entity2->setFone($telefone);
+            } else {
+                $entity2->setDdd(null);
+                $entity2->setFone(null);
+            }
+            $email = trim($linha[5]);
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $entity2->setEmail($email);
+            } else {
+                $entity2->setEmail(null);
+            }
+            if (!$entity2->getFone() && !$entity2->getEmail()) {
+                throw new \Exception("Deve ser informado um telefone ou e-mail validos");
+            }
+            $pin = $repo->generateUniquePin($entity2->getPoll(), 4);
+            $entity2->setPin($pin);
+            $entity2->setKeys();
+            $em->persist($entity2);
+            $em->flush($entity2);
+            return new Response($entity2->getPin(), Response::HTTP_OK, array('content-type' => 'text/plain'));
+        } catch (\Exception $e) {
+            return new Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, array('content-type' => 'text/plain'));
+        }
+    }
+
+    /**
+     * Creates a new BallotBox entity.
+     *
      * @Route("/", name="admin_ballotbox_create")
      * @Method("POST")
      * @Template("PROCERGSVPRCoreBundle:Admin\BallotBox:edit.html.twig")
@@ -415,6 +516,7 @@ class BallotBoxController extends Controller
                 $hasFile = $form->get('lote')->getData() != null;
                 self::isValid1($entity, $em, $hasFile);                
                 if ($hasFile) {
+                    die('adsf');
                     set_time_limit(0);
                     ignore_user_abort(true);
                     if (!isset($_FILES['procergs_vpr_corebundle_ballotbox']['tmp_name']['lote'])) {
