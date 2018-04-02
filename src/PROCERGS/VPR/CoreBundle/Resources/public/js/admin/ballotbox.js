@@ -158,7 +158,7 @@ $(function() {
     	
     $('form').on('submit', function(evt){    	
     	var files = evt.target.procergs_vpr_corebundle_ballotbox_lote.files; // FileList object    
-    	if (files) {
+    	if (files.length) {
     		try {
         	    for (var i = 0, f; f = files[i]; i++) {
         	    	var reader = new FileReader(); 
