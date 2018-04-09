@@ -50,6 +50,9 @@ class SmsService implements LoggerAwareInterface
     /** @var LoggerInterface */
     protected $logger;
 
+    protected $soe_organizacao;
+    protected $soe_matricula;
+    protected $soe_senha;
     /**
      * SmsService constructor.
      * @param RestClient $restClient
@@ -67,6 +70,9 @@ class SmsService implements LoggerAwareInterface
         $this->systemId = $options['system_id'];
         $this->fromString = $options['from_string'];
         $this->serviceOrder = $options['service_order'];
+        $this->soe_organizacao = $options['soe_organizacao'];
+        $this->soe_matricula = $options['soe_matricula'];
+        $this->soe_senha = $options['soe_senha'];
 
         if (array_key_exists('authentication', $options)) {
             $auth = $options['authentication'];
@@ -92,30 +98,38 @@ class SmsService implements LoggerAwareInterface
         }
 
         $client = $this->restClient;
-
+        
         $payload = json_encode(
             [
-                'aplicacao' => $this->systemId,
-                'ordemServico' => $this->serviceOrder,
-                'remetente' => $sms->getFrom(),
-                'texto' => $sms->getMessage(),
-                'ddd' => $sms->getTo()->getAreaCode(),
-                'numero' => $sms->getTo()->getSubscriberNumber(),
+                'send' => true,
+                'text' => $sms->getMessage(),
+                'to' => $sms->getTo()->getAreaCode().$sms->getTo()->getSubscriberNumber(),
+                'beginTime' => '00:00',
+                'endTime' => '23:59',
             ]
+        );
+        $options = array(
+            CURLOPT_HTTPHEADER => array(
+                'accept: application/json',
+                'organizacao: ' . $this->soe_organizacao,
+                'matricula: ' . $this->soe_matricula,
+                'senha: ' . $this->soe_senha,
+                'Content-Type: application/json'
+            )
         );
 
         $this->logger->info("Sending SMS to {$sms->getTo()->toE164()}: {$sms->getMessage()}");
         try {
-            $response = $client->post($this->sendUrl, $payload);
-            $json = json_decode($response->getContent());
-            if ($response->isOk() && property_exists($json, 'protocolo')) {
+            $response = $client->post($this->sendUrl, $payload, $options);
+            $protocolo = ($response->getContent());
+            if ($response->isOk() && is_numeric($protocolo)) {
                 $this->logger->info("SMS sent to {$sms->getTo()->toE164()}: {$sms->getMessage()}");
                 $this->circuitBreaker->reportSuccess(self::CB_SERVICE_SMS_SEND);
 
-                return $json->protocolo;
+                return $protocolo;
             } else {
                 $this->logger->error("Error sending SMS to {$sms->getTo()->toE164()}");
-                $this->handleException($response, $json);
+                $this->handleException($response, $protocolo);
             }
         } catch (CurlException $e) {
             $this->circuitBreaker->reportFailure(self::CB_SERVICE_SMS_SEND);
@@ -144,12 +158,21 @@ class SmsService implements LoggerAwareInterface
 
         $params = compact('tag');
         if ($lastId !== null) {
-            $params['ultimoId'] = $lastId;
+            $params['firstId'] = $lastId;
         }
+        $options = array(
+            CURLOPT_HTTPHEADER => array(
+                'accept: application/json',
+                'organizacao: ' . $this->soe_organizacao,
+                'matricula: ' . $this->soe_matricula,
+                'senha: ' . $this->soe_senha,
+                'Content-Type: application/json'
+            )
+        );
 
         $this->logger->info("Fetching SMS for tag $tag...");
         try {
-            $response = $client->get($this->receiveUrl."?".http_build_query($params));
+            $response = $client->get($this->receiveUrl."?".http_build_query($params),$options);
             $json = json_decode($response->getContent());
             if ($response->isOk() && $json !== null && is_array($json)) {
                 usort(

@@ -65,6 +65,9 @@ parameters:
     tpd_from_string: FROMSTRING
     tpd_system_key: TDPKeyHere
     tpd_sms_tag: VOTE
+    tpd_soe_organizacao: STRING
+    tpd_soe_matricula: STRING
+    tpd_soe_senha: STRING
 
     test.tpd.sms_tag: %tpd_sms_tag%_TEST
     test.tpd.to_phone.country_code: 55

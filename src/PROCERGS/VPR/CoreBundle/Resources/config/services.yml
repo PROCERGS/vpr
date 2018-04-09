@@ -183,6 +183,6 @@ services:
         arguments:
             - "@circle.restclient"
             - "@circuitBreaker"
-            - { send_url: %tpd_post_endpoint%, receive_url: %tpd_get_endpoint%, status_url: %tpd_status_endpoint%, system_id: %tpd_system_id%, from_string: %tpd_from_string%, service_order: %tpd_service_order% }
+            - { send_url: %tpd_post_endpoint%, receive_url: %tpd_get_endpoint%, status_url: %tpd_status_endpoint%, system_id: %tpd_system_id%, from_string: %tpd_from_string%, service_order: %tpd_service_order%, soe_organizacao: %tpd_soe_organizacao%, soe_matricula: %tpd_soe_matricula%, soe_senha: %tpd_soe_senha% }
         calls:
             - [setLogger, ["@logger"]]

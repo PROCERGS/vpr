@@ -10,20 +10,20 @@ class TPDSmsVoteFactory
      */
     public static function createSmsVote($sms)
     {
-        if (!$sms->dataHoraRecebimento) {
+        if (!$sms->date) {
             throw new \Exception("Nao foi enviado data hora recebimento ");
         }
-        $date = \DateTime::createFromFormat('Y-m-d\TH:i:s', substr($sms->dataHoraRecebimento, 0, 19) );
+        $date = \DateTime::createFromFormat('Y-m-d\TH:i:s', substr($sms->date, 0, 19) );
         if (!$date) {
-            throw new \Exception("Formato de hora invalida: " . $sms->dataHoraRecebimento);
+            throw new \Exception("Formato de hora invalida: " . $sms->date);
         }
-        $to = BrazilianPhoneNumberFactory::createFromE164("+{$sms->de}");
+        $to = BrazilianPhoneNumberFactory::createFromE164("+{$sms->from}");
 
         $smsVote = new SmsVote();
         $smsVote
             ->setSmsId($sms->id)
             ->setSender($to->toE164())
-            ->setMessage($sms->mensagem)
+            ->setMessage($sms->text)
             ->setReceivedAt($date);
 
         return $smsVote;
