@@ -127,25 +127,25 @@ class APIController extends FOSRestController
         	$privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
         			$passphrase);
         	if ($privateKey === false) {
-        		throw new AccessDeniedHttpException("Invalid credentials");
+        		return new JsonResponse(array('code' => 403, 'message' => "Senha inválida."), 403);
         	}
         } else {
 	        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
         	->findByPinAndPollFilteredByCorede($pin);
 	        if (!$ballotBox) {
-	        	throw new AccessDeniedHttpException("Pin informado não existe.");
+	        	return new JsonResponse(array('code' => 403, 'message' => "Pin informado não existe."), 403);
 	        }
 	        if ($ballotBox->getSetupAt() instanceof \DateTime) {
-	            throw new AccessDeniedHttpException("Não é possivel utilizar essa Urna, pois ela ja foi utilizada.");
+	        	return new JsonResponse(array('code' => 403, 'message' => "Não é possivel utilizar essa Urna, pois ela ja foi utilizada."), 403);
 	        }
 	        if ($ballotBox->getClosedAt() instanceof \DateTime) {
-	        	throw new AccessDeniedHttpException("Não é possivel utilizar essa Urna, pois ela ja foi utilizada e transmitida.");
+	        	return new JsonResponse(array('code' => 403, 'message' => "Não é possivel utilizar essa Urna, pois ela ja foi utilizada e transmitida."), 403);
 	        }	
 	        $passphrase = $request->get('passphrase', null);
 	        $privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
 	            $passphrase);
 	        if ($privateKey === false) {
-	            throw new AccessDeniedHttpException("Senha inválida");
+	        	return new JsonResponse(array('code' => 403, 'message' => "Senha inválida"), 403);
 	        }
 	
 	        $ballotBox->setSetupAt(new \DateTime());
@@ -178,10 +178,10 @@ class APIController extends FOSRestController
         $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
             ->findOneByPin($pin);
 		if (!$ballotBox) {
-			throw new AccessDeniedHttpException("Pin informado não existe.");
+			return new JsonResponse(array('code' => 403, 'message' => "Pin informado não existe."), 403);
 		}
         if ($ballotBox->getClosedAt() instanceof \DateTime) {
-            throw new AccessDeniedHttpException("Urna ja foi transmitida.");
+        	return new JsonResponse(array('code' => 403, 'message' => "Urna ja foi transmitida."), 403);
         }
 
         $logger = $this->getLogger();
