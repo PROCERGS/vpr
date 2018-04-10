@@ -123,6 +123,7 @@ order by a2.sorting, a1.category_sorting
      */
     public function reportOptionsCityAction(Request $request, $cityId, $pollId)
     {
+    	set_time_limit(0);
         $this->checkAccess($request);
         $em = $this->getDoctrine()->getManager();
         $pollRepo = $em->getRepository('PROCERGSVPRCoreBundle:Poll');
@@ -171,7 +172,7 @@ order by a2.sorting, a1.category_sorting
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="'.$pollId . '_' .$city->getIbgeCode().'";'
+                'attachment; filename="'.$pollId . '_' .$city->getIbgeCode().'".csv;'
             );
             $response->sendHeaders();
             $output = fopen('php://output', 'w');
@@ -221,7 +222,7 @@ order by tb1.name, a1.created_at
             $response->headers->set('Content-type', 'text/csv');
             $response->headers->set(
                 'Content-Disposition',
-                'attachment; filename="'.$pollId . '_' .$city->getIbgeCode().'";'
+                'attachment; filename="'.$pollId . '_' .$city->getIbgeCode().'".csv;'
                 );
             $response->sendHeaders();
             $output = fopen('php://output', 'w');
