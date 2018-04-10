@@ -165,7 +165,7 @@ order by a2.sorting, a1.category_sorting
         $stmt1 = $connection->prepare($sql);
         $stmt1->execute(array($poll->getId(), $cityId));
         
-        if ($request->get('csv')) {
+        if ($request->get('csv') == 1) {
             $response = new \Symfony\Component\HttpFoundation\Response();
             $response->headers->set('Cache-Control', 'private');
             $response->headers->set('Content-type', 'text/csv');
@@ -182,6 +182,67 @@ order by a2.sorting, a1.category_sorting
             }   
             fputcsv($output, array($city->getIbgeCode(), 'Total Votantes', '', $cityTotal), $sep);
             return $response;
+        } elseif ($request->get('csv') == 2) {
+            $sql2 = "
+with tb1 as (
+select a1.* from tre_voter a1 where a1.city_id = :city_id 
+), tb2 as (
+select a1.id
+, case when a1.is_online = true then 'online' when a1.is_sms = true then 'sms' else 'offline' end tipo_urna
+, a2.name nome_cidade
+, a3.name nome_corede
+from ballot_box a1 
+left join city a2 on a2.id = a1.city_id
+left join corede a3 on a3.id = a2.corede_id
+where a1.poll_id = :poll_id 
+)
+select 
+tb1.id titulo
+, tb1.name nome
+, a1.created_at criado_em
+, a1.auth_type autenticado_com
+, a1.login_cidadao_id
+, a1.vote_invalid_id codigo_erro
+, a1.ip_address endereco_ip
+, tb2.tipo_urna
+, tb2.nome_cidade
+, tb2.nome_corede
+--, case a1.vote_invalid_id when 
+from vote a1 
+inner join tb2 on tb2.id = a1.ballot_box_id
+inner join tb1 on tb1.id = a1.voter_registration
+order by tb1.name, a1.created_at
+            ";
+            $stmt2 = $connection->prepare($sql2);
+            $stmt2->execute(array('poll_id' => $poll->getId(), 'city_id' => $cityId));
+            
+            $response = new \Symfony\Component\HttpFoundation\Response();
+            $response->headers->set('Cache-Control', 'private');
+            $response->headers->set('Content-type', 'text/csv');
+            $response->headers->set(
+                'Content-Disposition',
+                'attachment; filename="'.$pollId . '_' .$city->getIbgeCode().'";'
+                );
+            $response->sendHeaders();
+            $output = fopen('php://output', 'w');
+            $sep = ';';
+            fputcsv($output, array('titulo', 'nome', 'criado_em', 'autenticado_com', 'login_cidadao_id', 'codigo_erro', 'endereco_ip', 'tipo_urna', 'nome_cidade', 'nome_corede'), $sep);
+            while ($linha = $stmt2->fetch(\PDO::FETCH_ASSOC)) {
+                fputcsv($output, array(
+                    (string)utf8_decode($linha['titulo']),
+                    utf8_decode($linha['nome']),
+                    utf8_decode($linha['criado_em']),
+                    utf8_decode($linha['autenticado_com']),
+                    utf8_decode($linha['login_cidadao_id']),
+                    utf8_decode($linha['codigo_erro']),
+                    utf8_decode($linha['endereco_ip']),
+                    utf8_decode($linha['tipo_urna']),
+                    utf8_decode($linha['nome_cidade']),
+                    utf8_decode($linha['nome_corede']),
+                ), $sep);
+            }            
+            return $response;
+            
         } else {
             $results = $stmt1->fetchAll(\PDO::FETCH_ASSOC|\PDO::FETCH_GROUP);
         }
