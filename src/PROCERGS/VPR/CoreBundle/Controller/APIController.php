@@ -132,17 +132,20 @@ class APIController extends FOSRestController
         } else {
 	        $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
         	->findByPinAndPollFilteredByCorede($pin);
-	
-	        if ($ballotBox->getSetupAt() instanceof \DateTime ||
-	            $ballotBox->getClosedAt() instanceof \DateTime) {
-	            throw new AccessDeniedHttpException("Ballot box already downloaded.");
+	        if (!$ballotBox) {
+	        	throw new AccessDeniedHttpException("Pin informado não existe.");
 	        }
-	
+	        if ($ballotBox->getSetupAt() instanceof \DateTime) {
+	            throw new AccessDeniedHttpException("Não é possivel utilizar essa Urna, pois ela ja foi utilizada.");
+	        }
+	        if ($ballotBox->getClosedAt() instanceof \DateTime) {
+	        	throw new AccessDeniedHttpException("Não é possivel utilizar essa Urna, pois ela ja foi utilizada e transmitida.");
+	        }	
 	        $passphrase = $request->get('passphrase', null);
 	        $privateKey = openssl_pkey_get_private($ballotBox->getPrivateKey(),
 	            $passphrase);
 	        if ($privateKey === false) {
-	            throw new AccessDeniedHttpException("Invalid credentials");
+	            throw new AccessDeniedHttpException("Senha inválida");
 	        }
 	
 	        $ballotBox->setSetupAt(new \DateTime());
@@ -174,9 +177,11 @@ class APIController extends FOSRestController
         $em        = $this->getDoctrine()->getManager();
         $ballotBox = $em->getRepository('PROCERGSVPRCoreBundle:BallotBox')
             ->findOneByPin($pin);
-
+		if (!$ballotBox) {
+			throw new AccessDeniedHttpException("Pin informado não existe.");
+		}
         if ($ballotBox->getClosedAt() instanceof \DateTime) {
-            throw new AccessDeniedHttpException("Ballot box already closed.");
+            throw new AccessDeniedHttpException("Urna ja foi transmitida.");
         }
 
         $logger = $this->getLogger();
