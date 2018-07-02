@@ -198,7 +198,7 @@ a1.corede_id
 ,a1.city_id
 , a1.option_id
 , a1.tot tot_in_city
-, a2.title option_name
+, a2.category_sorting || \' - \' || a2.title option_name
 , (a1.tot::numeric*100)/tb3.tot_corede perc_in_corede
 , tb3.rank_in_corede
 from stats_prev_ppp2 a1
@@ -276,7 +276,7 @@ a1.poll_id
 , a1.corede_id
 , a4.name corede_name
 , a1.option_id
-, a2.title option_name
+, a2.category_sorting || \' - \' || a2.title option_name
 , a2.rl_agency_id
 , a3.name rl_agency_name
 , sum(a1.tot) tot_corede
@@ -285,7 +285,7 @@ from corede a4
 left join stats_prev_ppp2 a1 on a1.corede_id = a4.id and a1.poll_id = :poll_id and a1.option_id is not null
 left join poll_option a2 on a2.id = a1.option_id
 left join rl_agency a3 on a3.id = a2.rl_agency_id
-group by a1.poll_id, a1.corede_id, a4.name, a1.option_id, a2.title, a2.rl_agency_id, a3.name
+group by a1.poll_id, a1.corede_id, a4.name, a1.option_id, a2.category_sorting, a2.title, a2.rl_agency_id, a3.name
 )
 select 
 a1.corede_id
