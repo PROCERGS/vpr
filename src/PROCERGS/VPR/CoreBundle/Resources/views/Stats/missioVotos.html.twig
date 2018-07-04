@@ -90,7 +90,7 @@
 						<td>{{ entity.city_name }}</td>
 						<td>{{ entity.option_name }}</td>
 						<td>{{ entity.tot_in_city|number_format(0, ',', '.') }}</td>
-						<td>{{ entity.perc_in_corede|number_format(2, ',', '.') }}</td>						
+						<td>{{ entity.perc_in_corede|numberFormatPrecision(2, '.') }}</td>						
 						<td>{{ entity.perc_prog|number_format(2, ',', '.') }}</td>						
 						<td>{{ entity.status_prog_classificados }}</td>
 					</tr>					

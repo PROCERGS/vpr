@@ -24,6 +24,22 @@ class VPRExtension extends \Twig_Extension
             ))
         );
     }
+    public function getFilters()
+    {
+        return array(
+            new \Twig_SimpleFilter('numberFormatPrecision', array($this, 'numberFormatPrecision')),
+        );
+    }
+    public function numberFormatPrecision($number, $precision = 2, $separator = '.')
+    {
+        $numberParts = explode($separator, $number);
+        $response = $numberParts[0];
+        if(count($numberParts)>1){
+            $response .= $separator;
+            $response .= substr($numberParts[1], 0, $precision);
+        }
+        return $response;
+    }
 	
     private static $_poll = null;
     public function getActiveOrLastPoll()
