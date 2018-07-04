@@ -33,6 +33,7 @@ use PROCERGS\VPR\CoreBundle\Form\Type\Admin\BallotBoxFilterType;
 use PROCERGS\VPR\CoreBundle\Entity\RlCriterioRepository;
 use PROCERGS\VPR\CoreBundle\Entity\Corede;
 use PROCERGS\VPR\CoreBundle\Entity\CityRepository;
+use PROCERGS\VPR\CoreBundle\Twig\VPRExtension;
 
 class StatsController extends Controller
 {
@@ -1191,7 +1192,7 @@ order by tb1.name, a1.created_at
                     , $linha['option_id']
                     , utf8_decode($linha['option_name'])
                     , $linha['tot_in_city']
-                    , number_format($linha['perc_in_corede'], 2, ',', '.')
+                    , VPRExtension::numberFormatPrecision($linha['perc_in_corede'], 2, ',', '.')
                     , number_format($linha['perc_prog'], 2, ',', '.')
                     , utf8_decode($linha['status_prog_classificados'])
                 ), $sep);

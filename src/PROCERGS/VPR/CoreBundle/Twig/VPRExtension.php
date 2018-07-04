@@ -30,15 +30,15 @@ class VPRExtension extends \Twig_Extension
             new \Twig_SimpleFilter('numberFormatPrecision', array($this, 'numberFormatPrecision')),
         );
     }
-    public function numberFormatPrecision($number, $precision = 2, $separator = '.')
+    public static function numberFormatPrecision($number, $decimals  = 2, $dec_point = '.', $thousands_sep = ",")
     {
-        $numberParts = explode($separator, $number);
+        $numberParts = explode('.', $number);
         $response = $numberParts[0];
         if(count($numberParts)>1){
-            $response .= $separator;
-            $response .= substr($numberParts[1], 0, $precision);
+            $response .= '.';
+            $response .= substr($numberParts[1], 0, $decimals );
         }
-        return $response;
+        return number_format($response, $decimals, $dec_point, $thousands_sep);
     }
 	
     private static $_poll = null;
