@@ -20,3 +20,6 @@
 /batch/config.ini
 .idea/
 
+/src/PROCERGS/VPR/CoreBundle/Resources/public/images/logo-consulta-popular-sem-fundo.png
+/.vs/slnx.sqlite
+/compila_e_gera_assents.bat

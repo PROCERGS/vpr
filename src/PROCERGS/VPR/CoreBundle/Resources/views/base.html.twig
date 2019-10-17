@@ -65,14 +65,15 @@
     <footer>
         <div class="container">
             <div class="row images">
+
                 <div class="col-xs-4 col-sm-4 text-center">
-                    {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-Coredes.png' %}
-                    <img src="{{ asset_url }}" alt="{%trans%}COREDES{%endtrans%}" class="img-responsive">
-                    {% endimage %}
+					{% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-Coredes.png' %}
+					<img src="{{ asset_url }}" alt="{%trans%}COREDES{%endtrans%}" class="img-responsive">
+					{% endimage %}
                 </div>
 
                 <div class="col-xs-4 col-sm-4 text-center">
-                    <a href="http://www2.cp.rs.gov.br" target="_blank">
+                    <a href="http://www.consultapopular.rs.gov.br" target="_blank">
                         {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-PPCF.png' %}
                         <img src="{{ asset_url }}" alt="{%trans%}PPC{%endtrans%}" class="img-responsive">
                         {% endimage %}
@@ -80,9 +81,11 @@
                 </div>
 
                 <div class="col-xs-4 col-sm-4 text-center">
-                    {% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-gov.png' %}
-                    <img src="{{ asset_url }}" alt="{%trans%}Rio Grande do Sul{%endtrans%}" class="img-responsive">
-                    {% endimage %}
+					<a href="https://www.estado.rs.gov.br/inicial" target="_blank">
+						{% image '@PROCERGSVPRCoreBundle/Resources/public/images/logo-gov.png' %}
+						<img src="{{ asset_url }}" alt="{%trans%}Rio Grande do Sul{%endtrans%}" class="img-responsive">
+						{% endimage %}
+					</a>	
                 </div>
             </div>
         </div>
